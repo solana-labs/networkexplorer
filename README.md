@@ -5,7 +5,7 @@ Part 1 - Configuring the Block Explorer Inbound Stream
 * Ensure prerequisites are installed (Redis, NodeJS, Yarn):
 * On Ubuntu, ```apt-get install redis-server```; On OS X, ```brew install redis```
 * Install node.js via your favorite mechanism
-* Install yarn (typically ```npm install -g yarn``)
+* Install yarn (typically ```npm install -g yarn```)
 * Run `yarn` in all block-explorer- subdirectories
 * Run `./run.sh` in the block-explorer-inbound-service directory
 
