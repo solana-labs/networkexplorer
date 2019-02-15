@@ -1,3 +1,8 @@
+[![Build status][travis-image]][travis-url]
+
+[travis-image]: https://api.travis-ci.org/solana-labs/blockexplorer.svg?branch=master
+[travis-url]: https://travis-ci.org/solana-labs/blockexplorer
+
 # Working with Block Explorer
 
 Part 1 - Configuring the Block Explorer Inbound Stream
