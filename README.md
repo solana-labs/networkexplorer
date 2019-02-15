@@ -6,7 +6,8 @@ Part 1 - Configuring the Block Explorer Inbound Stream
 * On Ubuntu, ```apt-get install redis-server```; On OS X, ```brew install redis```
 * Install node.js via your favorite mechanism
 * Install yarn (typically ```npm install -g yarn```)
-* Run `yarn` in all block-explorer- subdirectories
+* Run `./install.sh`
+* Start redis: `redis-server`
 * Run `./run.sh` in the block-explorer-inbound-service directory
 
 Part 2 - Configuring Solana:
