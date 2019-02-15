@@ -1,0 +1,18 @@
+sudo: required
+language: node_js
+node_js:
+   - "node"
+
+services:
+  - docker
+  - redis-server
+
+cache:
+  directories:
+    - ~/.npm
+    - node_modules
+
+notifications:
+  email: false
+
+script: ./install.sh
