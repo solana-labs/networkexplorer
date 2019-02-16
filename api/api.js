@@ -1,3 +1,8 @@
+/*
+   This component is a Node.JS server that implements
+   API handler methods to support the Block Explorer
+   Web UI.
+ */
 const express = require('express');
 const nocache = require('nocache');
 const cors = require('cors');

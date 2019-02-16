@@ -1,16 +1,25 @@
+/*
+  This component is a Node.JS service that listens for events from
+  the Solana EntryStream class. It runs a main event loop listening to
+  a TCP, UDP, and/or Unix Domain Socket and dispatches events to one
+  or more handlers (typically Redis for event aggregation and realtime
+  streaming).
+*/
 import Base58 from 'base-58';
 import dgram from 'dgram';
 import net from 'net';
 import redis from 'redis';
 import {Transaction} from '@solana/web3.js';
 import _ from 'lodash';
+import fs from 'fs';
 const b58e = Base58.encode;
+import ip from 'ip';
 
-import config from '../config.js';
+import config from './config.js';
 
 class BridgeFn {
-  constructor(props) {
-    this.node_id = props.node.id;
+  constructor() {
+    this.node_id = 'node@' + ip.address();
     this.process = this.process.bind(this);
   }
 
@@ -243,13 +252,11 @@ class RedisHandler {
   }
 }
 
-console.log('starting: ' + config.node.id);
-
 const UDP_ENABLED = false;
 const TCP_ENABLED = false;
 const UNIX_DS_ENABLED = true;
 
-const bridgeFn = new BridgeFn(config);
+const bridgeFn = new BridgeFn();
 const handlers = [new RedisHandler(config.redis)];
 
 if (UDP_ENABLED) {
@@ -352,7 +359,9 @@ if (TCP_ENABLED) {
 }
 
 if (UNIX_DS_ENABLED) {
-  makeServer().listen('/tmp/streamtap.sock', () => {
-    console.log('UNIX_DS listening on /tmp/streamtap.sock');
+  const socket = '/tmp/streamtap.sock';
+  fs.unlinkSync(socket);
+  makeServer().listen(socket, () => {
+    console.log('UNIX_DS listening on', socket);
   });
 }

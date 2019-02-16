@@ -1,8 +1,4 @@
-const nodeInfo = JSON.parse(process.env.NODE_INFO);
-nodeInfo.id = 'node@' + nodeInfo.info.ip;
-
 export default {
-  node: nodeInfo,
   service: {
     tcp: false,
     udp: false,

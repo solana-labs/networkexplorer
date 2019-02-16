@@ -5,53 +5,48 @@
 
 # Working with Block Explorer
 
-Part 1 - Configuring the Block Explorer Inbound Stream
+## Prerequisites
 
-* Ensure prerequisites are installed (Redis, NodeJS, Yarn):
-* On Ubuntu, ```apt-get install redis-server```; On OS X, ```brew install redis```
+### Redis
+* Ubuntu: `apt-get install redis-server`
+* MacOS: `brew install redis`
+
+### NodeJS
 * Install node.js via your favorite mechanism
-* Install yarn (typically ```npm install -g yarn```)
-* Run `yarn` to install all node dependencies
-* Start redis: `redis-server`
-* Run `./inbound-stream.sh`
+* Install yarn (typically `npm install -g yarn`)
 
-Part 2 - Configuring Solana:
+## Quick Start
+Setup the workspace, ensure Redis is running
+```bash
+$ yarn
+$ redis-server &
+```
 
-* Ensure that Solana has a version with EntryStream support
-* Configure the leader fullnode with ```--entry-stream /tmp/streamtap.sock``` and ```--no-leader-rotation```
-* Configure the client with throttling ```--tx_count 40```, ```--threads 2```, ```-z 400``` (if desired for UI testing)
-* Setup the demo: ./multinode-demo/setup.sh ; ./multinode-demo/bootstrap-leader.sh ; ./multinode-demo/client.sh
+Start the inbound stream service:
+```
+$ yarn start:stream
+```
 
-Part 3 - Configuring the Web API & Web App
-* Follow directions below
+Configure and start a local Solana node.  From the main solana repository:
+```bash
+$ ./multinode-demo/setup.sh
+$ ./multinode-demo/drone.sh
+$ ./multinode-demo/bootstrap-leader.sh
+$ ./multinode-demo/fullnode.sh --entry-stream /tmp/streamtap.sock
+```
 
-# Block Explorer API Server
+Start the API service:
+```bash
+$ yarn start:api
+```
 
-This component is a Node.JS server that implements
-API handler methods to support the Block Explorer
-Web UI.
+Start the Web UI:
+```bash
+$ PORT=9090 yarn start
+```
 
-Prerequisites:
-* Redis/Inbound Stream Service running locally
-
-# BlockExplorer Inbound Stream: Service
-
-This component is a Node.JS service that listens for events from
-the Solana EntryStream class. It runs a main event loop listening to
-a TCP, UDP, and/or Unix Domain Socket and dispatches events to one
-or more handlers (typically Redis for event aggregation and realtime
-streaming).
-
-# Block Explorer Web UI
-
-Prerequisites
-
-* Ensure Block Explorer API Server is running (typically on port 3000)
-* Update src/EndpointConfig.js to point to the proper API server URL
-
-Running Block Explorer Web UI
-
-* Run `yarn` from directory to install dependencies
-* Run `PORT=9090 yarn run start` to run webapp
-* View app on `http://127.0.0.1:9090/`
+Finally if desired for UI testing, from the main solana repository:
+```bash
+$ ./multinode-demo/client.sh --tx_count 40 --threads 2 -z 400
+```
 
