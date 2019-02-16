@@ -25,14 +25,13 @@ $ redis-server &
 Start the API service and Web UI:
 ```bash
 $ yarn start:api
-$ PORT=9090 yarn start:ui
+$ yarn start:ui
 ```
 
 Then configure and start a local Solana node.  From the main solana repository:
 ```bash
-$ ./multinode-demo/setup.sh
-$ ./multinode-demo/drone.sh
-$ ./multinode-demo/bootstrap-leader.sh --entry-stream /tmp/streamtap.sock
+$ cargo build --all
+$ ./run.sh --entry-stream /tmp/streamtap.sock
 ```
 and if desired for UI testing:
 ```bash
