@@ -1,6 +1,6 @@
 {
-  "name": "solana-blockexplorer",
-  "version": "1.0.0",
+  "name": "@solana/blockexplorer",
+  "version": "0.0.1",
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^3.9.0",
