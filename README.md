@@ -23,5 +23,35 @@ Part 2 - Configuring Solana:
 * Setup the demo: ./multinode-demo/setup.sh ; ./multinode-demo/bootstrap-leader.sh ; ./multinode-demo/client.sh
 
 Part 3 - Configuring the Web API & Web App
+* Follow directions below
 
-* Follow directions in README files
+# Block Explorer API Server
+
+This component is a Node.JS server that implements
+API handler methods to support the Block Explorer
+Web UI.
+
+Prerequisites:
+* Redis/Inbound Stream Service running locally
+
+# BlockExplorer Inbound Stream: Service
+
+This component is a Node.JS service that listens for events from
+the Solana EntryStream class. It runs a main event loop listening to
+a TCP, UDP, and/or Unix Domain Socket and dispatches events to one
+or more handlers (typically Redis for event aggregation and realtime
+streaming).
+
+# Block Explorer Web UI
+
+Prerequisites
+
+* Ensure Block Explorer API Server is running (typically on port 3000)
+* Update src/EndpointConfig.js to point to the proper API server URL
+
+Running Block Explorer Web UI
+
+* Run `yarn` from directory to install dependencies
+* Run `PORT=9090 yarn run start` to run webapp
+* View app on `http://127.0.0.1:9090/`
+
