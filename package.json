@@ -29,7 +29,7 @@
   "scripts": {
     "start:stream": "set -ex; redis-cli ping; babel-node --presets env api/inbound-stream.js",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
-    "pretty": "prettier --write '{,{api,webapp,inbound-stream}/**/}*.js'",
+    "pretty": "prettier --write '{,{api,src}/**/}*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test"
