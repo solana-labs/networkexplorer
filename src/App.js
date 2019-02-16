@@ -6,7 +6,7 @@ import BxDialog from './BxDialog';
 import BxStatsTable from './BxStatsTable';
 import BxTransactionChart from './BxTransactionChart';
 import BxDataTable from './BxDataTable';
-import {createMuiTheme} from '@material-ui/core/styles';
+//import {createMuiTheme} from '@material-ui/core/styles';
 import EndpointConfig from './EndpointConfig';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import Grid from '@material-ui/core/Grid';
@@ -94,6 +94,7 @@ const BxStatsTableThemed = withStyles(styles)(BxStatsTable);
 const BxTransactionChartThemed = withStyles(styles)(BxTransactionChart);
 const BxDataTableThemed = withStyles(styles)(BxDataTable);
 
+/*
 const theme = createMuiTheme({
   palette: {
     type: 'dark', // Switching the dark mode on is a single property value change.
@@ -103,6 +104,7 @@ const theme = createMuiTheme({
   },
   typography: {useNextVariants: true},
 });
+*/
 
 class App extends Component {
   constructor(props) {

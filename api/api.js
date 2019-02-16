@@ -32,7 +32,6 @@ let client = getClient();
 
 app.use(nocache());
 app.use(cors());
-var expressWs = require('express-ws')(app);
 
 app.get('/', (req, res) => {
   res.send('The Server is running! Try GET /txn-stats or /global-stats');
