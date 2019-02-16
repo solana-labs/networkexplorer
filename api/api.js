@@ -14,19 +14,16 @@ const _ = require('lodash');
 
 require('./inbound-stream');
 
-const port = 3000;
+const port = 3001;
 const MINUTE_MS = 60 * 1000;
 
-let props = {
+let redisConfig = {
   host: '127.0.0.1',
   port: 6379,
 };
 
 let getClient = () => {
-  return redis.createClient({
-    host: props.host,
-    port: props.port,
-  });
+  return redis.createClient(redisConfig);
 };
 
 let client = getClient();
@@ -243,4 +240,4 @@ app.get('/txn/:id', (req, res) => {
   });
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Listening on port ${port}!`));
