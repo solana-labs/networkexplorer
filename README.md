@@ -31,8 +31,7 @@ Configure and start a local Solana node.  From the main solana repository:
 ```bash
 $ ./multinode-demo/setup.sh
 $ ./multinode-demo/drone.sh
-$ ./multinode-demo/bootstrap-leader.sh
-$ ./multinode-demo/fullnode.sh --entry-stream /tmp/streamtap.sock
+$ ./multinode-demo/bootstrap-leader.sh --entry-stream /tmp/streamtap.sock
 ```
 
 Start the API service:
