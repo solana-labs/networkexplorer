@@ -37,3 +37,7 @@ and if desired for UI testing:
 ```bash
 $ ./multinode-demo/client.sh --tx_count 40 --threads 2 -z 400
 ```
+
+## Running the production Web UI
+$ yarn build:ui
+$ PORT=80 npx serve -s build

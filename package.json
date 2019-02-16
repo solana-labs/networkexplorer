@@ -36,14 +36,19 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "watch": "^1.0.2"
   },
+  "bin": {
+    "solana-blockexplorer": "bin/blockexplorer.sh"
+  },
   "scripts": {
+    "build": "set -ex; npm run build:ui; npm run build:api",
+    "build:api": "babel --presets env api/* -d build",
+    "build:ui": "react-scripts build",
     "lint": "set -ex; npm run pretty; eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:watch": "watch 'npm run lint:fix' . --wait=1",
-    "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "pretty": "prettier --write '{,{api,src}/**/}*.js'",
+    "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:ui": "react-scripts start",
-    "build:ui": "react-scripts build",
     "test:ui": "react-scripts test"
   },
   "eslintConfig": {
