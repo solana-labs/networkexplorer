@@ -8,4 +8,4 @@ export NODE_INFO
 set -x
 redis-cli ping
 rm -f /tmp/streamtap.sock
-yarn run babel-node --presets env index.js
+yarn run babel-node --presets env inbound-stream/index.js

@@ -6,7 +6,7 @@ import {Transaction} from '@solana/web3.js';
 import _ from 'lodash';
 const b58e = Base58.encode;
 
-import config from './config.js';
+import config from '../config.js';
 
 class BridgeFn {
   constructor(props) {
