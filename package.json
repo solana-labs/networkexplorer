@@ -40,12 +40,11 @@
     "lint": "set -ex; npm run pretty; eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:watch": "watch 'npm run lint:fix' . --wait=1",
-    "start:stream": "set -ex; redis-cli ping; babel-node --presets env api/inbound-stream.js",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "pretty": "prettier --write '{,{api,src}/**/}*.js'",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
+    "start:ui": "react-scripts start",
+    "build:ui": "react-scripts build",
+    "test:ui": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"

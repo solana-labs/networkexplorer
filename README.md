@@ -25,7 +25,7 @@ $ redis-server &
 Start the API service and Web UI:
 ```bash
 $ yarn start:api
-$ PORT=9090 yarn start
+$ PORT=9090 yarn start:ui
 ```
 
 Then configure and start a local Solana node.  From the main solana repository:
