@@ -26,6 +26,7 @@
     "robust-websocket": "^1.0.0"
   },
   "scripts": {
+    "start:api": "babel-node --presets env api/api.js",
     "pretty": "prettier --write '{,{api,webapp,inbound-stream}/**/}*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
