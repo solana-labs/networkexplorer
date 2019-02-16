@@ -12,8 +12,9 @@ const app = express();
 
 const _ = require('lodash');
 
-const port = 3000;
+require('./inbound-stream');
 
+const port = 3000;
 const MINUTE_MS = 60 * 1000;
 
 let props = {
