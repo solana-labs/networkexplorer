@@ -30,7 +30,7 @@ class BridgeFn {
       node_id: this.node_id,
     };
 
-    if (inMessage.t == 'entry') {
+    if (inMessage.t === 'entry') {
       outMessage.h = inMessage.entry.tick_height;
       outMessage.s = inMessage.s;
       outMessage.l = inMessage.l;
@@ -68,7 +68,7 @@ class BridgeFn {
       });
     }
 
-    if (inMessage.t == 'block') {
+    if (inMessage.t === 'block') {
       outMessage.h = inMessage.h;
       outMessage.s = inMessage.s;
       outMessage.l = inMessage.l;
@@ -97,7 +97,7 @@ class RedisHandler {
     let commands = [];
     commands.push(['set', '!global-node-id', message.node_id]);
 
-    if (message.t == 'block') {
+    if (message.t === 'block') {
       const msgJson = JSON.stringify(message);
       let blkMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
         message.id
@@ -135,14 +135,14 @@ class RedisHandler {
           this.innerClient.batch(commands).exec((err2, results2) => {
             // fire and forget
             if (err2) {
-              comsole.log('ERR!', err2);
+              console.log('ERR!', err2);
             }
           });
         }
       });
     }
 
-    if (message.t == 'entry') {
+    if (message.t === 'entry') {
       let txns = message.transactions;
       let txCount = txns.length;
 
