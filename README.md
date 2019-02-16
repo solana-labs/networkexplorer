@@ -13,7 +13,7 @@ Part 1 - Configuring the Block Explorer Inbound Stream
 * Install yarn (typically ```npm install -g yarn```)
 * Run `./install.sh`
 * Start redis: `redis-server`
-* Run `./run.sh` in the block-explorer-inbound-service directory
+* Run `./run.sh` in the inbound-service directory
 
 Part 2 - Configuring Solana:
 
