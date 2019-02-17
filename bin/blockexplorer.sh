@@ -44,7 +44,12 @@ redis-cli ping
 node build/api/api.js &
 api=$!
 
-PORT=80 npx serve -s build &
+maybeSudo=
+if [[ $(uname) = Linux ]]; then
+  # Run as root for port 80 access
+  maybeSudo=sudo
+fi
+$maybeSudo npm run serve:ui &
 ui=$!
 
 wait "$ui"

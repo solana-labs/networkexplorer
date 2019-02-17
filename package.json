@@ -20,7 +20,8 @@
     "ip": "^1.1.5",
     "lodash": "^4.17.11",
     "nocache": "^2.0.0",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "serve": "^10.1.2"
   },
   "devDependencies": {
     "@material-ui/core": "^3.9.0",
@@ -61,6 +62,7 @@
     "re": "semantic-release --repository-url git@github.com:solana-labs/blockexplorer.git",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:ui": "react-scripts start",
+    "serve": "serve -l 80 -s build",
     "test:ui": "react-scripts test"
   },
   "files": [
