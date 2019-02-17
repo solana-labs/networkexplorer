@@ -1,6 +1,6 @@
 {
   "name": "@solana/blockexplorer",
-  "version": "0.0.3",
+  "version": "0.0.0-development",
   "license": "MIT",
   "author": "Solana Labs, Inc",
   "homepage": "https://solana.com/",
@@ -43,6 +43,7 @@
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.5",
     "robust-websocket": "^1.0.0",
+    "semantic-release": "^15.13.3",
     "watch": "^1.0.2"
   },
   "bin": {
@@ -57,6 +58,7 @@
     "lint:watch": "watch 'npm run lint:fix' . --wait=1",
     "prepack": "set -ex; npm run lint; npm run build",
     "pretty": "prettier --write '{,{api,src}/**/}*.js'",
+    "re": "semantic-release --repository-url git@github.com:solana-labs/blockexplorer.git",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:ui": "react-scripts start",
     "test:ui": "react-scripts test"

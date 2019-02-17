@@ -4,7 +4,6 @@ node_js:
    - "node"
 
 services:
-  - docker
   - redis-server
 
 cache:
@@ -18,3 +17,12 @@ notifications:
 script:
   - yarn
   - yarn lint
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - npx semantic-release
+    on:
+      branch: master
+      node_js: "node"
