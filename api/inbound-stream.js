@@ -14,7 +14,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import ip from 'ip';
 
-import config from './config.js';
+import config from './config';
 const b58e = Base58.encode;
 
 class BridgeFn {
@@ -359,7 +359,7 @@ if (TCP_ENABLED) {
 }
 
 if (UNIX_DS_ENABLED) {
-  const socket = '/tmp/streamtap.sock';
+  const {socket} = config.service;
   fs.unlinkSync(socket);
   makeServer().listen(socket, () => {
     console.log('UNIX_DS listening on', socket);
