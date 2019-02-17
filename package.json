@@ -46,7 +46,7 @@
     "lint": "set -ex; npm run pretty; eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:watch": "watch 'npm run lint:fix' . --wait=1",
-    "prepare": "set -ex; npm run lint; npm run build",
+    "prepack": "set -ex; npm run lint; npm run build",
     "pretty": "prettier --write '{,{api,src}/**/}*.js'",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:ui": "react-scripts start",
