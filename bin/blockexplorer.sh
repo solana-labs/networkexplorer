@@ -4,12 +4,12 @@ set -e
 rootDir=$(
   cd "$(dirname "$0")";
   node -p '
-    let p;
-    try {
-      p = require.resolve("../lib/node_modules/@solana/blockexplorer/package.json");
-    } catch (err) {
-      p = require.resolve("../package.json");
-    }
+    let p = [
+      "../lib/node_modules/@solana/blockexplorer/package.json",
+      "../@solana/blockexplorer/package.json",
+      "../package.json"
+    ].find(require("fs").existsSync);
+    if (!p) throw new Error("Unable to locate blockexplorer directory");
     require("path").dirname(p)
   '
 )
