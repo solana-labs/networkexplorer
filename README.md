@@ -1,7 +1,12 @@
 [![Build status][travis-image]][travis-url]
+[![npm][npm-image]][npm-url]
+[![npm-downloads][npm-downloads-image]][npm-url]
 
 [travis-image]: https://api.travis-ci.org/solana-labs/blockexplorer.svg?branch=master
 [travis-url]: https://travis-ci.org/solana-labs/blockexplorer
+[npm-image]: https://img.shields.io/npm/v/@solana/blockexplorer.svg?style=flat
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/blockexplorer.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/blockexplorer
 
 # Solana Block Explorer
 ## Prerequisites
