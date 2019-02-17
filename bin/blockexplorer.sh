@@ -20,8 +20,15 @@ if [[ ! -d build || ! -f build/api/api.js ]]; then
   exit 1
 fi
 
-set -x
+cleanup() {
+  set +e
+  for pid in "$api" "$ui"; do
+    [[ -z $pid ]] || kill "$pid"
+  done
+}
+trap cleanup SIGINT SIGTERM
 
+set -x
 redis-cli ping
 
 node build/api/api.js &
@@ -30,10 +37,6 @@ api=$!
 PORT=80 npx serve -s build &
 ui=$!
 
-abort() {
-  kill "$api" "$ui"
-}
-
-trap abort SIGINT SIGTERM
 wait "$ui"
-kill "$api" "$ui"
+ui=
+cleanup
