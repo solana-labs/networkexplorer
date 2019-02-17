@@ -62,7 +62,7 @@
     "re": "semantic-release --repository-url git@github.com:solana-labs/blockexplorer.git",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:ui": "react-scripts start",
-    "serve": "serve -l 80 -s build",
+    "serve:ui": "serve -l 80 -s build",
     "test:ui": "react-scripts test"
   },
   "files": [
