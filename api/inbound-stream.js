@@ -360,7 +360,9 @@ if (TCP_ENABLED) {
 
 if (UNIX_DS_ENABLED) {
   const {socket} = config.service;
-  fs.unlinkSync(socket);
+  if (fs.existsSync(socket)) {
+    fs.unlinkSync(socket);
+  }
   makeServer().listen(socket, () => {
     console.log('UNIX_DS listening on', socket);
   });
