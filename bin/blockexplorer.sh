@@ -7,7 +7,7 @@ rootDir=$(
   node -p '
     let p;
     try {
-      p = require.resolve("@solana/blockexplorer");
+      p = require.resolve("../lib/node_modules/@solana/blockexplorer");
     } catch (err) {
       p = require.resolve("../package.json");
     }
