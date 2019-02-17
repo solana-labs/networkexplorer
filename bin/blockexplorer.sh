@@ -16,6 +16,11 @@ rootDir=$(
 )
 cd "$rootDir"
 
+if [[ ! -d build || ! -f build/api/api.js ]]; then
+  echo "Error: build/ artifacts missing"
+  exit 1
+fi
+
 node build/api/api.js &
 api=$!
 
