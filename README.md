@@ -31,7 +31,7 @@ $ yarn start:ui
 Then configure and start a local Solana node.  From the main solana repository:
 ```bash
 $ cargo build --all
-$ ./run.sh --entry-stream /tmp/streamtap.sock
+$ ./run.sh
 ```
 and if desired for UI testing:
 ```bash
