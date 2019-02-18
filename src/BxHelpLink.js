@@ -6,7 +6,7 @@ class BxHelpLink extends React.Component {
 
     return (
       <a
-        href={`https://solana-labs.github.io/book/terminology.html#${term}`}
+        href={`https://solana-labs.github.io/book-edge/terminology.html#${term}`}
         target="_new"
       >
         <i className={'fa fa-question'} title={text} />
