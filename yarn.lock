@@ -758,7 +758,7 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-transform-typescript" "^7.1.0"
 
-"@babel/runtime@7.3.1", "@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0":
+"@babel/runtime@7.3.1", "@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
   integrity sha512-7jGW8ppV0ant637pIqAcFfQDDH1orEPGJb8aXfUozuCU3QqX7rX4DA8iwrbPrR1hcH0FTTHz47yQnk+bl5xHQA==
@@ -983,12 +983,12 @@
     into-stream "^4.0.0"
     lodash "^4.17.4"
 
-"@solana/web3.js@^0.14.9":
-  version "0.14.9"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.14.9.tgz#31e2328dab4aef1874a8db109e96bb7e8b56456c"
-  integrity sha512-yqnscx3p0hXRafqjL/dWrw4RhDdaaGSB1050c6D+LBPw/qyBtIuDSzGHlMPJwK6SSZrK6BLqk1MVdiMqqF+pkA==
+"@solana/web3.js@^0.14.10":
+  version "0.14.10"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.14.10.tgz#d8b60573308d662cfa61d05ac52d404232568753"
+  integrity sha512-YkVlYXMu0GDf7Zf/ZBO3SbAZUK678x/FKwU/VJQoN7aaBGw8JsjIfQ57iWvib1PG2jUTK0MbNFUBnmP4V/FmJA==
   dependencies:
-    babel-runtime "^6.26.0"
+    "@babel/runtime" "^7.3.1"
     bn.js "^4.11.8"
     bs58 "^4.0.1"
     buffer-layout "^1.2.0"
