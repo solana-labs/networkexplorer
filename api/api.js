@@ -3,32 +3,26 @@
    API handler methods to support the Block Explorer
    Web UI.
  */
-const express = require('express');
-const nocache = require('nocache');
-const cors = require('cors');
-const redis = require('redis');
-const WebSocket = require('ws');
+import config from './config';
+import express from 'express';
+import nocache from 'nocache';
+import cors from 'cors';
+import redis from 'redis';
+import WebSocket from 'ws';
+import _ from 'lodash';
+import './inbound-stream';
+import expressWs from 'express-ws';
+
 const app = express();
-
-const _ = require('lodash');
-
-require('./inbound-stream');
 
 const port = 3001;
 const MINUTE_MS = 60 * 1000;
 
-let redisConfig = {
-  host: '127.0.0.1',
-  port: 6379,
-};
+function getClient() {
+  return redis.createClient(config.redis);
+}
 
-let getClient = () => {
-  return redis.createClient(redisConfig);
-};
-
-let client = getClient();
-require('express-ws')(app);
-
+expressWs(app);
 app.use(nocache());
 app.use(cors());
 
@@ -53,18 +47,19 @@ let handleRedis = type => (channel, message) => {
   });
 };
 
-let blocksClient = getClient();
-let entriesClient = getClient();
+const client = getClient();
+const blocksClient = getClient();
+const entriesClient = getClient();
 
 blocksClient.on('message', handleRedis('blk'));
 blocksClient.subscribe('@blocks');
 entriesClient.on('message', handleRedis('ent'));
 entriesClient.subscribe('@entries');
 
-let fixupJsonData = val => {
+function fixupJsonData(val) {
   val.data = JSON.parse(val.data);
   return val;
-};
+}
 
 let id = 0;
 
