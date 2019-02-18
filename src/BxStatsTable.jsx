@@ -23,11 +23,11 @@ class BxStatsTable extends React.Component {
                     <Card>
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                This Node
-                                <BxHelpLink text="Node" term="node"/>
+                                Current Leader
+                                <BxHelpLink text="Leader" term="leader"/>
                             </Typography>
-                            <Typography component="p" title="<shows extended node information>">
-                                {globalStats['!global-node-id']}
+                            <Typography component="p">
+                                {globalStats['!ent-last-leader']}
                             </Typography>
                         </CardContent>
                     </Card>
