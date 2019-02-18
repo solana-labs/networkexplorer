@@ -6,7 +6,7 @@ import BxDialog from './BxDialog';
 import BxStatsTable from './BxStatsTable';
 import BxTransactionChart from './BxTransactionChart';
 import BxDataTable from './BxDataTable';
-//import {createMuiTheme} from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import EndpointConfig from './EndpointConfig';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import Grid from '@material-ui/core/Grid';
@@ -94,17 +94,15 @@ const BxStatsTableThemed = withStyles(styles)(BxStatsTable);
 const BxTransactionChartThemed = withStyles(styles)(BxTransactionChart);
 const BxDataTableThemed = withStyles(styles)(BxDataTable);
 
-/*
 const theme = createMuiTheme({
   palette: {
-    type: 'dark', // Switching the dark mode on is a single property value change.
+    type: 'dark',
     primary: {
       main: '#000000',
     },
   },
   typography: {useNextVariants: true},
 });
-*/
 
 class App extends Component {
   constructor(props) {
@@ -470,53 +468,55 @@ class App extends Component {
   render() {
     const self = this;
     return (
-      <div className="App">
-        <BxAppBarThemed
-          handleSearch={self.handleSearch(self)}
-          enabled={this.state.enabled}
-          handleSwitch={this.toggleEnabled(self)}
-        />
-        <div>
-          <BxDialogThemed
-            selectedValue={this.state.selectedValue}
-            open={this.state.dialogOpen}
-            onClose={this.handleDialogClose}
+      <MuiThemeProvider theme={theme}>
+        <div className="App">
+          <BxAppBarThemed
+            handleSearch={self.handleSearch(self)}
+            enabled={this.state.enabled}
+            handleSwitch={this.toggleEnabled(self)}
           />
+          <div>
+            <BxDialogThemed
+              selectedValue={this.state.selectedValue}
+              open={this.state.dialogOpen}
+              onClose={this.handleDialogClose}
+            />
+          </div>
+          <p />
+          <BxStatsTableThemed globalStats={this.state.globalStats} />
+          <p />
+          <BxTransactionChartThemed txnStats={this.state.txnStats} />
+          <p />
+          <Grid container spacing={16} justify="center">
+            <Grid item style={{width: '1460px'}}>
+              <BxDataTableThemed
+                dataType="blk"
+                dataItems={this.state.blocks}
+                handleClickOpen={self.handleClickOpen}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={16} justify="center">
+            <Grid item style={{width: '1460px'}}>
+              <BxDataTableThemed
+                dataType="ent"
+                dataItems={this.state.entries}
+                handleClickOpen={self.handleClickOpen}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={16} justify="center">
+            <Grid item style={{width: '1460px'}}>
+              <BxDataTableThemed
+                dataType="txn"
+                dataItems={this.state.transactions}
+                handleClickOpen={self.handleClickOpen}
+              />
+            </Grid>
+          </Grid>
+          <p />
         </div>
-        <p />
-        <BxStatsTableThemed globalStats={this.state.globalStats} />
-        <p />
-        <BxTransactionChartThemed txnStats={this.state.txnStats} />
-        <p />
-        <Grid container spacing={16} justify="center">
-          <Grid item style={{width: '1460px'}}>
-            <BxDataTableThemed
-              dataType="blk"
-              dataItems={this.state.blocks}
-              handleClickOpen={self.handleClickOpen}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={16} justify="center">
-          <Grid item style={{width: '1460px'}}>
-            <BxDataTableThemed
-              dataType="ent"
-              dataItems={this.state.entries}
-              handleClickOpen={self.handleClickOpen}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={16} justify="center">
-          <Grid item style={{width: '1460px'}}>
-            <BxDataTableThemed
-              dataType="txn"
-              dataItems={this.state.transactions}
-              handleClickOpen={self.handleClickOpen}
-            />
-          </Grid>
-        </Grid>
-        <p />
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
