@@ -12,7 +12,6 @@ import redis from 'redis';
 import {Transaction} from '@solana/web3.js';
 import _ from 'lodash';
 import fs from 'fs';
-import ip from 'ip';
 
 import config from './config';
 const b58e = Base58.encode;
