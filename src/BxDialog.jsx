@@ -1,4 +1,5 @@
 import React from "react";
+import BxDateTime from "./BxDateTime";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
@@ -31,7 +32,7 @@ class BxDialog extends React.Component {
         rows.push(["Slot #", value.s]);
         rows.push(["Tick #", value.h]);
 
-        rows.push(["Timestamp (approx)", value.dt]);
+        rows.push(["Timestamp (approx)", BxDateTime.formatDateTime(value.dt), value.dt]);
 
         if (value.t === "txn") {
             title = "Transaction";
@@ -72,7 +73,7 @@ class BxDialog extends React.Component {
                             {rows.map(row => (
                                 <TableRow key={JSON.stringify(row)}>
                                     <TableCell component="th" scope="row">{row[0]}:</TableCell>
-                                    <TableCell align="right">{row[1]}</TableCell>
+                                    <TableCell align="right" title={row[2]}>{row[1]}</TableCell>
                                 </TableRow>
                             ))}
                             <TableRow>

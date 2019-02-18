@@ -1,4 +1,5 @@
 import React from "react";
+import BxDateTime from "./BxDateTime";
 import {Line} from 'react-chartjs-2';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -62,9 +63,10 @@ class BxTransactionChart extends React.Component {
                 <Typography>No Data Present - Loading...</Typography>
             </Paper>);
         }
+        let theLabels = _.keys(txnStats).map((x) => BxDateTime.formatDateTime(x));
         let theData = _(txnStats).values().map((x) => parseInt(x || "0")).value();
         let data = {
-            labels: _.keys(txnStats),
+            labels: theLabels,
             datasets: [{
                 label: "Transactions Per Minute",
                 data: theData

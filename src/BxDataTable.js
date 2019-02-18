@@ -1,4 +1,5 @@
 import React from 'react';
+import BxDateTime from './BxDateTime';
 import BxHelpLink from './BxHelpLink';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -44,7 +45,9 @@ class BxDataTable extends React.Component {
                   <code>{row.id}</code>
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
-                <TableCell align="right">{row.dt}</TableCell>
+                <TableCell align="right">
+                  <BxDateTime dateTime={row.dt} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -97,7 +100,9 @@ class BxDataTable extends React.Component {
                 <TableCell align="right">{row.s}</TableCell>
                 <TableCell align="right">{row.h}</TableCell>
                 <TableCell align="right">{row.txn_count}</TableCell>
-                <TableCell align="right">{row.dt}</TableCell>
+                <TableCell align="right">
+                  <BxDateTime dateTime={row.dt} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -140,7 +145,9 @@ class BxDataTable extends React.Component {
                   <code>{row.id}</code>
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
-                <TableCell align="right">{row.dt}</TableCell>
+                <TableCell align="right">
+                  <BxDateTime dateTime={row.dt} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
