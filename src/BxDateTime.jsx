@@ -2,20 +2,33 @@ import React from 'react';
 import moment from 'moment';
 
 class BxDateTime extends React.Component {
-  static formatDateTime(dateTime, fromnow) {
-    if (fromnow) {
+  static DEFAULT_FMT = 'lll Z';
+  static COMPACT_FMT = 'lll Z';
+  static ISO8601_FMT = 'YYYY-MM-DD HH:mm';
+
+  static formatDateTime(dateTime, options) {
+    let {fromNow, style, local} = (options || {});
+    let theDateTime = moment.utc(dateTime);
+
+    if (fromNow) {
       return moment(dateTime).fromNow();
     }
 
-    return moment(dateTime).format('LLL Z');
+    if (!style) {
+      style = BxDateTime.DEFAULT_FMT;
+    }
+
+    if (local) {
+      theDateTime = theDateTime.local();
+    }
+
+    return theDateTime.format(style);
   }
 
   render() {
-    const {dateTime, fromNow} = this.props;
-
     return (
-      <span title={dateTime}>
-        {BxDateTime.formatDateTime(dateTime, fromNow)}
+      <span title={this.props.dateTime}>
+        {BxDateTime.formatDateTime(this.props.dateTime, this.props)}
       </span>
     );
   }

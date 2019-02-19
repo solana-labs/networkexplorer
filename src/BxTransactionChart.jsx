@@ -63,7 +63,7 @@ class BxTransactionChart extends React.Component {
                 <Typography>No Data Present - Loading...</Typography>
             </Paper>);
         }
-        let theLabels = _.keys(txnStats).map((x) => BxDateTime.formatDateTime(x));
+        let theLabels = _.keys(txnStats).map((x) => BxDateTime.formatDateTime(x, {style:BxDateTime.ISO8601_FMT, local:true}));
         let theData = _(txnStats).values().map((x) => parseInt(x || "0")).value();
         let data = {
             labels: theLabels,

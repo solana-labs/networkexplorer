@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import axios from 'axios';
+import {Router, Route, Link} from 'react-router-dom';
 import BxAppBar from './BxAppBar';
 import BxDialog from './BxDialog';
 import BxStatsTable from './BxStatsTable';
@@ -13,8 +14,11 @@ import Grid from '@material-ui/core/Grid';
 import RobustWebSocket from 'robust-websocket';
 import {withStyles} from '@material-ui/core/styles';
 import _ from 'lodash';
-
+import {matchPath} from 'react-router';
 import './App.css';
+import createBrowserHistory from 'history/createBrowserHistory';
+
+const history = createBrowserHistory();
 
 const styles = theme => ({
   root: {
@@ -32,6 +36,9 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
+  },
+  link: {
+    color: theme.palette.primary.light
   },
   search: {
     position: 'relative',
@@ -114,7 +121,8 @@ class App extends Component {
       enabled: true,
       dialogOpen: false,
       selectedValue: null,
-      globalNode: {},
+      currentMatch: null,
+      stateLoading: false,
       globalStats: {},
       txnStats: {},
       users: [],
@@ -393,7 +401,10 @@ class App extends Component {
     this.updateStateAttributes({
       selectedValue: null,
       dialogOpen: false,
+      currentMatch: null,
+      stateLoading: false,
     });
+    history.push('/');
   };
 
   toggleEnabled = self => event => {
@@ -408,14 +419,15 @@ class App extends Component {
 
   handleSearch = self => event => {
     let value = event.target.value;
+    event.target.value = '';
 
     if (value.length > 80) {
-      event.target.value = '';
-      return self.handleClickOpen(value, 'txn')();
+        history.push(`/txn/${value}`);
+        return;
     }
 
-    event.target.value = '';
-    return self.handleClickOpen(value, 'blk', 'ent')();
+    history.push(`/ent/${value}`);
+    return;
   };
 
   handleClickOpen = (value, type, altType) => () => {
@@ -438,7 +450,6 @@ class App extends Component {
     };
 
     let url = mkUrl(value, type);
-    let altUrl = mkUrl(value, altType);
 
     const self = this;
 
@@ -446,6 +457,7 @@ class App extends Component {
       self.updateStateAttributes({
         selectedValue: newVal,
         dialogOpen: true,
+        stateLoading: false,
       });
     };
 
@@ -455,67 +467,86 @@ class App extends Component {
         updateState(response.data);
       })
       .catch(() => {
-        if (!altUrl) {
-          return;
-        }
-
-        axios.get(altUrl).then(response => {
-          updateState(response.data);
-        });
+          history.goBack();
       });
   };
 
   render() {
     const self = this;
+
+    if (window.location.pathname !== '/') {
+      if (!this.state.currentMatch && !this.state.stateLoading) {
+        let pathMatch = matchPath(window.location.pathname, {
+          path: '/:type/:id',
+          exact: false,
+          strict: false,
+        });
+
+        if (pathMatch) {
+          this.handleClickOpen(pathMatch.params.id, pathMatch.params.type)();
+          this.updateStateAttributes({
+            currentMatch: pathMatch,
+            stateLoading: true,
+          });
+        }
+      }
+    } else if (this.state.selectedValue !== null) {
+        this.updateStateAttributes({
+            selectedValue: null,
+            dialogOpen: false,
+            currentMatch: null,
+            stateLoading: false,
+        });
+    }
+
     return (
       <MuiThemeProvider theme={theme}>
-        <div className="App">
-          <BxAppBarThemed
-            handleSearch={self.handleSearch(self)}
-            enabled={this.state.enabled}
-            handleSwitch={this.toggleEnabled(self)}
-          />
-          <div>
-            <BxDialogThemed
-              selectedValue={this.state.selectedValue}
-              open={this.state.dialogOpen}
-              onClose={this.handleDialogClose}
+        <Router history={history}>
+          <div className="App">
+            <BxAppBarThemed
+              handleSearch={self.handleSearch(self)}
+              enabled={this.state.enabled}
+              handleSwitch={this.toggleEnabled(self)}
             />
+            <div>
+              <BxDialogThemed
+                selectedValue={this.state.selectedValue}
+                open={this.state.dialogOpen}
+                onClose={this.handleDialogClose}
+              />
+            </div>
+            <p />
+            <BxStatsTableThemed globalStats={this.state.globalStats} />
+            <p />
+            <BxTransactionChartThemed txnStats={this.state.txnStats} />
+            <p />
+            <Grid container spacing={16} justify="center">
+              <Grid item style={{width: '1460px'}}>
+                <BxDataTableThemed
+                  dataType="blk"
+                  dataItems={this.state.blocks}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={16} justify="center">
+              <Grid item style={{width: '1460px'}}>
+                <BxDataTableThemed
+                  dataType="ent"
+                  dataItems={this.state.entries}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={16} justify="center">
+              <Grid item style={{width: '1460px'}}>
+                <BxDataTableThemed
+                  dataType="txn"
+                  dataItems={this.state.transactions}
+                />
+              </Grid>
+            </Grid>
+            <p />
           </div>
-          <p />
-          <BxStatsTableThemed globalStats={this.state.globalStats} />
-          <p />
-          <BxTransactionChartThemed txnStats={this.state.txnStats} />
-          <p />
-          <Grid container spacing={16} justify="center">
-            <Grid item style={{width: '1460px'}}>
-              <BxDataTableThemed
-                dataType="blk"
-                dataItems={this.state.blocks}
-                handleClickOpen={self.handleClickOpen}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={16} justify="center">
-            <Grid item style={{width: '1460px'}}>
-              <BxDataTableThemed
-                dataType="ent"
-                dataItems={this.state.entries}
-                handleClickOpen={self.handleClickOpen}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={16} justify="center">
-            <Grid item style={{width: '1460px'}}>
-              <BxDataTableThemed
-                dataType="txn"
-                dataItems={this.state.transactions}
-                handleClickOpen={self.handleClickOpen}
-              />
-            </Grid>
-          </Grid>
-          <p />
-        </div>
+        </Router>
       </MuiThemeProvider>
     );
   }

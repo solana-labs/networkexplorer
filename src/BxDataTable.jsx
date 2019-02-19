@@ -1,5 +1,6 @@
 import React from 'react';
 import BxDateTime from './BxDateTime';
+import BxEntityLink from './BxEntityLink';
 import BxHelpLink from './BxHelpLink';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -12,7 +13,7 @@ import _ from 'lodash';
 
 class BxDataTable extends React.Component {
   renderBlocks() {
-    const {dataItems, handleClickOpen} = this.props;
+    const {dataItems} = this.props;
 
     return (
       <Paper>
@@ -37,16 +38,12 @@ class BxDataTable extends React.Component {
           <TableBody>
             {_.map(dataItems, row => (
               <TableRow key={row.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  onClick={handleClickOpen(row.id, row.t)}
-                >
-                  <code>{row.id}</code>
+                <TableCell component="th" scope="row">
+                  <BxEntityLink blk={row.id} />
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
                 <TableCell align="right">
-                  <BxDateTime dateTime={row.dt} />
+                  <BxDateTime dateTime={row.dt} local />
                 </TableCell>
               </TableRow>
             ))}
@@ -57,7 +54,7 @@ class BxDataTable extends React.Component {
   }
 
   renderEntries() {
-    const {dataItems, handleClickOpen} = this.props;
+    const {dataItems} = this.props;
 
     return (
       <Paper>
@@ -90,18 +87,14 @@ class BxDataTable extends React.Component {
           <TableBody>
             {_.map(dataItems, row => (
               <TableRow key={row.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  onClick={handleClickOpen(row.id, row.t)}
-                >
-                  <code>{row.id}</code>
+                <TableCell component="th" scope="row">
+                  <BxEntityLink ent={row.id} />
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
                 <TableCell align="right">{row.h}</TableCell>
                 <TableCell align="right">{row.txn_count}</TableCell>
                 <TableCell align="right">
-                  <BxDateTime dateTime={row.dt} />
+                  <BxDateTime dateTime={row.dt} local />
                 </TableCell>
               </TableRow>
             ))}
@@ -112,7 +105,7 @@ class BxDataTable extends React.Component {
   }
 
   renderTransactions() {
-    const {dataItems, handleClickOpen} = this.props;
+    const {dataItems} = this.props;
 
     return (
       <Paper>
@@ -137,16 +130,12 @@ class BxDataTable extends React.Component {
           <TableBody>
             {_.map(dataItems, row => (
               <TableRow key={row.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  onClick={handleClickOpen(row.id, row.t)}
-                >
-                  <code>{row.id}</code>
+                <TableCell component="th" scope="row">
+                  <BxEntityLink txn={row.id} />
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
                 <TableCell align="right">
-                  <BxDateTime dateTime={row.dt} />
+                  <BxDateTime dateTime={row.dt} local />
                 </TableCell>
               </TableRow>
             ))}
