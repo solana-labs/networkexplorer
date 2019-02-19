@@ -1,7 +1,9 @@
 import React from "react";
 import BxDateTime from "./BxDateTime";
+import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import QRCode from 'qrcode.react';
 import PropTypes from "prop-types";
@@ -9,6 +11,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 
 const location = window.location.href;
 
@@ -60,7 +63,12 @@ class BxDialog extends React.Component {
 
         return (
             <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" fullWidth={true} maxWidth={"lg"} {...other}>
-                <DialogTitle id="simple-dialog-title" title={JSON.stringify(value)}>{title} Detail</DialogTitle>
+                <DialogTitle id="simple-dialog-title" title={JSON.stringify(value)}>
+                    <Typography variant="h6">{title} Detail</Typography>
+                    <IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
                 <Paper>
                     <Table>
                         <TableBody>
