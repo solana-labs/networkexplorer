@@ -37,6 +37,12 @@ const styles = theme => ({
       display: 'block',
     },
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit,
+    top: theme.spacing.unit,
+    color: theme.palette.grey[500],
+  },
   link: {
     color: theme.palette.primary.light
   },
