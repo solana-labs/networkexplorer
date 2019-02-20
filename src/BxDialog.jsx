@@ -64,7 +64,7 @@ class BxDialog extends React.Component {
         return (
             <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" fullWidth={true} maxWidth={"lg"} {...other}>
                 <DialogTitle id="simple-dialog-title" title={JSON.stringify(value)}>
-                    <Typography variant="h6">{title} Detail</Typography>
+                    {title} Detail
                     <IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleClose}>
                         <CloseIcon />
                     </IconButton>
