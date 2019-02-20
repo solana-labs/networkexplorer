@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 //import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+// import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
 
@@ -93,12 +93,12 @@ class BxAppBar extends React.Component {
                 {/*</IconButton>*/}
                 {/*<p>Notifications</p>*/}
                 {/*</MenuItem>*/}
-                <MenuItem onClick={this.handleProfileMenuOpen}>
-                    <IconButton color="inherit">
-                        <AccountCircle/>
-                    </IconButton>
-                    <p>Profile</p>
-                </MenuItem>
+                {/*<MenuItem onClick={this.handleProfileMenuOpen}>*/}
+                    {/*<IconButton color="inherit">*/}
+                        {/*<AccountCircle/>*/}
+                    {/*</IconButton>*/}
+                    {/*<p>Profile</p>*/}
+                {/*</MenuItem>*/}
             </Menu>
         );
 
@@ -147,15 +147,15 @@ class BxAppBar extends React.Component {
                                     {/*</Badge>*/}
                                     {/*</IconButton>*/}
                                     <Switch checked={this.props.enabled} onChange={this.handleSwitch}
-                                            color="secondary"/>
-                                    <IconButton
-                                        aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                                        aria-haspopup="true"
-                                        onClick={this.handleProfileMenuOpen}
-                                        color="inherit"
-                                    >
-                                        <AccountCircle/>
-                                    </IconButton>
+                                            color="secondary" title={(this.props.enabled ? "Pause" : "Resume") + " realtime updates"} />
+                                    {/*<IconButton*/}
+                                        {/*aria-owns={isMenuOpen ? 'material-appbar' : undefined}*/}
+                                        {/*aria-haspopup="true"*/}
+                                        {/*onClick={this.handleProfileMenuOpen}*/}
+                                        {/*color="inherit"*/}
+                                    {/*>*/}
+                                        {/*<AccountCircle/>*/}
+                                    {/*</IconButton>*/}
                                 </div>
                                 <div className={classes.sectionMobile}>
                                     <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen}

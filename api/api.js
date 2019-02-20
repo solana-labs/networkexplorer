@@ -114,7 +114,7 @@ app.get('/global-stats', (req, res) => {
     .toISOString()
     .substring(0, 19);
   let stat_keys = [
-    `!global-node-id`,
+    `!ent-last-leader`,
     `!blk-last-slot`,
     `!blk-last-id`,
     `!txn-per-sec-max`,

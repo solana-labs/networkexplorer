@@ -1,4 +1,6 @@
 import React from "react";
+import BxDateTime from "./BxDateTime";
+import BxEntityLink from "./BxEntityLink";
 import BxHelpLink from "./BxHelpLink";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -23,11 +25,11 @@ class BxStatsTable extends React.Component {
                     <Card>
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                This Node
-                                <BxHelpLink text="Node" term="node"/>
+                                Current Leader
+                                <BxHelpLink text="Leader" term="leader"/>
                             </Typography>
-                            <Typography component="p" title="<shows extended node information>">
-                                {globalStats['!global-node-id']}
+                            <Typography component="p">
+                                <BxEntityLink node={globalStats['!ent-last-leader']} />
                             </Typography>
                         </CardContent>
                     </Card>
@@ -107,7 +109,7 @@ class BxStatsTable extends React.Component {
                                 Updated
                             </Typography>
                             <Typography component="p">
-                                {globalStats['!ent-last-dt']}
+                                <BxDateTime dateTime={globalStats['!ent-last-dt']} fromNow />
                             </Typography>
                         </CardContent>
                     </Card>

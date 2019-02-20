@@ -12,14 +12,12 @@ import redis from 'redis';
 import {Transaction} from '@solana/web3.js';
 import _ from 'lodash';
 import fs from 'fs';
-import ip from 'ip';
 
 import config from './config';
 const b58e = Base58.encode;
 
 class BridgeFn {
   constructor() {
-    this.node_id = 'node@' + ip.address();
     this.process = this.process.bind(this);
   }
 
@@ -27,7 +25,6 @@ class BridgeFn {
     let outMessage = {
       t: inMessage.t,
       dt: inMessage.dt,
-      node_id: this.node_id,
     };
 
     if (inMessage.t === 'entry') {
@@ -95,7 +92,6 @@ class RedisHandler {
     const txn_hour = message.dt.substring(0, 13);
 
     let commands = [];
-    commands.push(['set', '!global-node-id', message.node_id]);
 
     if (message.t === 'block') {
       const msgJson = JSON.stringify(message);
@@ -149,6 +145,7 @@ class RedisHandler {
       delete message.transactions;
       const msgJson = JSON.stringify(message);
 
+      commands.push(['set', '!ent-last-leader', message.l]);
       commands.push(['set', '!ent-last-id', message.id]);
       commands.push(['set', '!ent-last-dt', message.dt]);
       commands.push(['set', '!ent-height', message.h]);
