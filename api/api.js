@@ -3,7 +3,6 @@
    API handler methods to support the Block Explorer
    Web UI.
  */
-import config from './config';
 import express from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
@@ -12,6 +11,8 @@ import WebSocket from 'ws';
 import _ from 'lodash';
 import './inbound-stream';
 import expressWs from 'express-ws';
+
+import config from './config';
 
 const app = express();
 
@@ -34,11 +35,11 @@ let listeners = {};
 let handleRedis = type => (channel, message) => {
   let outMessage = {t: type, m: message};
 
-  _.forEach(listeners, (ws, k) => {
+  _.forEach(listeners, ws => {
     if (ws.readyState !== WebSocket.OPEN) {
       return;
     }
-    ws.send(JSON.stringify(outMessage), (err, result) => {
+    ws.send(JSON.stringify(outMessage), err => {
       // send complete - check error
       if (err) {
         delete listeners[ws.my_id];
@@ -63,7 +64,7 @@ function fixupJsonData(val) {
 
 let id = 0;
 
-app.ws('/', function(ws, req) {
+app.ws('/', function(ws) {
   ws.my_id = id;
   id += 1;
   listeners[ws.my_id] = ws;
