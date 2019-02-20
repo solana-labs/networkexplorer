@@ -49,4 +49,11 @@ module.exports = {
     'require-await': ['error'],
     semi: ['error', 'always'],
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx'],
+      },
+    },
+  },
 };

@@ -1,22 +1,25 @@
 import React, {Component} from 'react';
-
 import axios from 'axios';
-import {Router, Route, Link} from 'react-router-dom';
-import BxAppBar from './BxAppBar';
-import BxDialog from './BxDialog';
-import BxStatsTable from './BxStatsTable';
-import BxTransactionChart from './BxTransactionChart';
-import BxDataTable from './BxDataTable';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
-import EndpointConfig from './EndpointConfig';
+import {Router} from 'react-router-dom';
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  withStyles,
+} from '@material-ui/core/styles';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import Grid from '@material-ui/core/Grid';
 import RobustWebSocket from 'robust-websocket';
-import {withStyles} from '@material-ui/core/styles';
 import _ from 'lodash';
 import {matchPath} from 'react-router';
 import './App.css';
 import createBrowserHistory from 'history/createBrowserHistory';
+
+import EndpointConfig from './EndpointConfig';
+import BxDataTable from './BxDataTable';
+import BxTransactionChart from './BxTransactionChart';
+import BxStatsTable from './BxStatsTable';
+import BxDialog from './BxDialog';
+import BxAppBar from './BxAppBar';
 
 const history = createBrowserHistory();
 
@@ -44,7 +47,7 @@ const styles = theme => ({
     color: theme.palette.grey[500],
   },
   link: {
-    color: theme.palette.primary.light
+    color: theme.palette.primary.light,
   },
   search: {
     position: 'relative',
@@ -304,8 +307,8 @@ class App extends Component {
     );
   }
 
-  handleLocationChange = () => (location, action) => {
-    if ((location.pathname === "/") && (this.selectedValue !== null)) {
+  handleLocationChange = () => location => {
+    if (location.pathname === '/' && this.selectedValue !== null) {
       this.updateStateAttributes({
         selectedValue: null,
         dialogOpen: false,
@@ -329,14 +332,14 @@ class App extends Component {
         });
       }
     }
-  }
+  };
 
-  componentWillMount() {
+  componentDidMount() {
     const self = this;
 
     let ws = new RobustWebSocket(`ws:${BLOCK_EXPLORER_API_BASE}/`);
 
-    ws.addEventListener('open', function(event) {
+    ws.addEventListener('open', function() {
       ws.send('<client_hello>');
     });
 
@@ -455,20 +458,20 @@ class App extends Component {
     });
   };
 
-  handleSearch = self => event => {
+  handleSearch = () => event => {
     let value = event.target.value;
     event.target.value = '';
 
     if (value.length > 80) {
-        history.push(`/txn/${value}`);
-        return;
+      history.push(`/txn/${value}`);
+      return;
     }
 
     history.push(`/ent/${value}`);
     return;
   };
 
-  handleClickOpen = (value, type, altType) => () => {
+  handleClickOpen = (value, type) => () => {
     let mkUrl = (id, type) => {
       let url = null;
 
@@ -505,7 +508,7 @@ class App extends Component {
         updateState(response.data);
       })
       .catch(() => {
-          history.goBack();
+        history.goBack();
       });
   };
 
