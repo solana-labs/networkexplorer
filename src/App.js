@@ -304,6 +304,33 @@ class App extends Component {
     );
   }
 
+  handleLocationChange = () => (location, action) => {
+    if ((location.pathname === "/") && (this.selectedValue !== null)) {
+      this.updateStateAttributes({
+        selectedValue: null,
+        dialogOpen: false,
+        currentMatch: null,
+        stateLoading: false,
+      });
+    }
+
+    if (location.pathname !== '/') {
+      let pathMatch = matchPath(window.location.pathname, {
+        path: '/:type/:id',
+        exact: false,
+        strict: false,
+      });
+
+      if (pathMatch) {
+        this.handleClickOpen(pathMatch.params.id, pathMatch.params.type)();
+        this.updateStateAttributes({
+          currentMatch: pathMatch,
+          stateLoading: true,
+        });
+      }
+    }
+  }
+
   componentWillMount() {
     const self = this;
 
@@ -322,6 +349,11 @@ class App extends Component {
     });
 
     this.ws = ws;
+
+    let locationListener = this.handleLocationChange();
+
+    history.listen(locationListener);
+    locationListener(window.location);
   }
 
   componentWillUnmount() {
@@ -479,31 +511,6 @@ class App extends Component {
 
   render() {
     const self = this;
-
-    if (window.location.pathname !== '/') {
-      if (!this.state.currentMatch && !this.state.stateLoading) {
-        let pathMatch = matchPath(window.location.pathname, {
-          path: '/:type/:id',
-          exact: false,
-          strict: false,
-        });
-
-        if (pathMatch) {
-          this.handleClickOpen(pathMatch.params.id, pathMatch.params.type)();
-          this.updateStateAttributes({
-            currentMatch: pathMatch,
-            stateLoading: true,
-          });
-        }
-      }
-    } else if (this.state.selectedValue !== null) {
-        this.updateStateAttributes({
-            selectedValue: null,
-            dialogOpen: false,
-            currentMatch: null,
-            stateLoading: false,
-        });
-    }
 
     return (
       <MuiThemeProvider theme={theme}>
