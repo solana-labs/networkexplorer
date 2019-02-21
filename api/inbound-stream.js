@@ -28,7 +28,7 @@ class BridgeFn {
     };
 
     if (inMessage.t === 'entry') {
-      outMessage.h = inMessage.entry.tick_height;
+      outMessage.h = inMessage.h;
       outMessage.s = inMessage.s;
       outMessage.l = inMessage.l;
       outMessage.id = b58e(inMessage.entry.id);
