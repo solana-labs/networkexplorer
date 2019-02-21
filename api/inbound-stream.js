@@ -86,7 +86,7 @@ class RedisHandler {
     this.process = this.process.bind(this);
   }
 
-  process(message, _remote) {
+  process(message) {
     const txn_sec = message.dt.substring(0, 19);
     const txn_min = message.dt.substring(0, 16);
     const txn_hour = message.dt.substring(0, 13);
@@ -128,7 +128,7 @@ class RedisHandler {
             commands.push(['hset', `!ent:${x}`, 'block_id', message.id]);
             commands.push(['sadd', `!blk-ent:${message.id}`, x]);
           });
-          this.innerClient.batch(commands).exec((err2, results2) => {
+          this.innerClient.batch(commands).exec(err2 => {
             // fire and forget
             if (err2) {
               console.log('ERR!', err2);
@@ -231,7 +231,7 @@ class RedisHandler {
 
       var self = this;
 
-      this.innerClient.batch(commands).exec((err, results) => {
+      this.innerClient.batch(commands).exec(() => {
         // maybe update tps max
         self.innerClient.mget(
           [`!txn-per-sec-max`, `!txn-per-sec:${txn_sec}`],
@@ -267,7 +267,7 @@ if (UDP_ENABLED) {
     );
   });
 
-  udpServer.on('message', function(data, remote) {
+  udpServer.on('message', function(data) {
     //console.log(["!ent", data].join("\t"));
     let t1 = new Date().getTime();
     let realMessage = bridgeFn.process(JSON.parse(data));
