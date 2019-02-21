@@ -5,7 +5,7 @@ export default {
     unixds: true,
     host: '127.0.0.1',
     port: 7654,
-    socket: '/tmp/solana-entry-stream.sock',
+    socket: '/tmp/solana-blockstream.sock',
   },
   redis: {
     host: '127.0.0.1',
