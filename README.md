@@ -74,7 +74,7 @@ $ ./multinode-demo/client.sh --tx_count 40 --threads 2 -z 400
 
 Redis is known as a very fast in-memory data structure server. To keep up with Solana
 speeds, it may be useful to enable Unix Domain Socket communication for added performance
-(in our unscientific testing, it gives about 10-40% or more depending on the operations).
+(potentially 10-40% or more depending on the operations).
 
 Add configuration similar to the following to your `/etc/redis/redis.conf` (or equivalent):
 ```
@@ -82,7 +82,7 @@ unixsocket /var/run/redis/redis-server.sock
 unixsocketperm 770
 ```
 
-We also found these parameters to be super useful on linux:
+Increasing max socket connections on Linux may also prove useful:
 ```bash
 sudo sysctl net.core.somaxconn=16384
 ```
