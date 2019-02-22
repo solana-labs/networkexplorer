@@ -20,7 +20,11 @@ const port = 3001;
 const MINUTE_MS = 60 * 1000;
 
 function getClient() {
-  return redis.createClient(config.redis);
+  let props = config.redis.path
+    ? {path: config.redis.path}
+    : {host: config.redis.host, port: config.redis.port};
+
+  return redis.createClient(props);
 }
 
 expressWs(app);
