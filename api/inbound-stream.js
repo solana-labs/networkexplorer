@@ -91,14 +91,19 @@ class RedisHandler {
     const txn_sec = message.dt.substring(0, 19);
     const txn_min = message.dt.substring(0, 16);
     const txn_hour = message.dt.substring(0, 13);
+    const txn_day = message.dt.substring(0, 10);
 
     let commands = [];
 
     if (message.t === 'block') {
       const msgJson = JSON.stringify(message);
-      let blkMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
-        message.id
-      }`;
+      let blkMsg = [
+        message.h,
+        message.l,
+        message.s,
+        message.dt,
+        message.id,
+      ].join('#');
       commands.push(['lpush', '!blk-timeline', blkMsg]);
       commands.push(['publish', '@blocks', blkMsg]);
 
@@ -167,9 +172,14 @@ class RedisHandler {
       ]);
 
       // append block height:dt:id to timeline
-      let entMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
-        message.id
-      }#${txCount}`;
+      let entMsg = [
+        message.h,
+        message.l,
+        message.s,
+        message.dt,
+        message.id,
+        txCount,
+      ].join('#');
       commands.push(['lpush', '!ent-timeline', entMsg]);
       commands.push(['publish', '@entries', entMsg]);
 
@@ -208,12 +218,25 @@ class RedisHandler {
         ]);
 
         // append block hexHeight:dt:id to timeline
-        let txnMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
-          message.id
-        }#${tx.id}`;
+        let txnMsg = [
+          message.h,
+          message.l,
+          message.s,
+          message.dt,
+          message.id,
+          tx.instructions[0].program_id,
+          tx.instructions[0].keys[0],
+          tx.id,
+        ].join('#');
         commands.push(['sadd', `!ent-txn:${message.id}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);
+
         commands.push(['publish', '@transactions', txnMsg]);
+        commands.push([
+          'publish',
+          `@program_id:${tx.instructions[0].program_id}`,
+          txnMsg,
+        ]);
       });
 
       if (txCount > 0) {
@@ -225,6 +248,9 @@ class RedisHandler {
 
         // increment txn hour count
         commands.push(['incrby', `!txn-per-hour:${txn_hour}`, txCount]);
+
+        // increment txn day count
+        commands.push(['incrby', `!txn-per-day:${txn_day}`, txCount]);
 
         // increment txn all-time count
         commands.push(['incrby', `!txn-count`, txCount]);
