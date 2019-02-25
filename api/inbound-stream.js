@@ -78,10 +78,11 @@ class BridgeFn {
 
 class RedisHandler {
   constructor(props) {
-    this.innerClient = redis.createClient({
-      host: props.host,
-      port: props.port,
-    });
+    const config = props.path
+      ? {path: props.path}
+      : {host: props.host, port: props.port};
+
+    this.innerClient = redis.createClient(config);
 
     this.process = this.process.bind(this);
   }
