@@ -10,7 +10,7 @@ import {fade} from '@material-ui/core/styles/colorManipulator';
 import Grid from '@material-ui/core/Grid';
 import RobustWebSocket from 'robust-websocket';
 import _ from 'lodash';
-import {matchPath} from 'react-router';
+import {matchPath, Route} from 'react-router';
 import './App.css';
 import createBrowserHistory from 'history/createBrowserHistory';
 
@@ -19,6 +19,7 @@ import BxDataTable from './BxDataTable';
 import BxTransactionChart from './BxTransactionChart';
 import BxStatsTable from './BxStatsTable';
 import BxDialog from './BxDialog';
+import BxDialogTransactions from './BxDialogTransactions';
 import BxAppBar from './BxAppBar';
 
 const history = createBrowserHistory();
@@ -106,6 +107,7 @@ const BLOCK_EXPLORER_API_BASE = EndpointConfig.BLOCK_EXPLORER_API_BASE;
 
 const BxAppBarThemed = withStyles(styles)(BxAppBar);
 const BxDialogThemed = withStyles(styles)(BxDialog);
+const BxDialogTransactionsThemed = withStyles(styles)(BxDialogTransactions);
 const BxStatsTableThemed = withStyles(styles)(BxStatsTable);
 const BxTransactionChartThemed = withStyles(styles)(BxTransactionChart);
 const BxDataTableThemed = withStyles(styles)(BxDataTable);
@@ -130,6 +132,7 @@ class App extends Component {
       enabled: true,
       dialogOpen: false,
       selectedValue: null,
+      selectedTransactions: [],
       currentMatch: null,
       stateLoading: false,
       globalStats: {},
@@ -138,7 +141,6 @@ class App extends Component {
       userState: {},
       transactions: [],
       blocks: [],
-      entries: [],
     };
 
     const self = this;
@@ -154,18 +156,6 @@ class App extends Component {
     }, 22000);
 
     self.updateBlocks();
-
-    //
-    // POLLING vs. live
-    //
-    // setInterval(() => {
-    //     self.updateBlocks();
-    // }, 10000);
-    //
-    // self.updateEntries();
-    // setInterval(() => {
-    //     self.updateEntries();
-    // }, 10000);
 
     self.updateTransactions();
     setInterval(() => {
@@ -251,34 +241,6 @@ class App extends Component {
     );
   }
 
-  updateEntries() {
-    if (!this.state.enabled) {
-      return;
-    }
-
-    let entFun = v => {
-      let newObj = {};
-      let fields = v.split('#');
-
-      newObj.t = 'ent';
-      newObj.h = fields[0];
-      newObj.l = fields[1];
-      newObj.s = fields[2];
-      newObj.dt = fields[3];
-      newObj.id = fields[4];
-      newObj.txn_count = parseInt(fields[5] || '0');
-
-      return newObj;
-    };
-
-    this.getRemoteState(
-      'entries',
-      `http:${BLOCK_EXPLORER_API_BASE}/ent-timeline`,
-      entFun,
-      10,
-    );
-  }
-
   updateTransactions() {
     if (!this.state.enabled) {
       return;
@@ -294,7 +256,9 @@ class App extends Component {
       newObj.s = fields[2];
       newObj.dt = fields[3];
       newObj.entry_id = fields[4];
-      newObj.id = fields[5];
+      newObj.program_id = fields[5];
+      newObj.keys = fields[6].split(',');
+      newObj.id = fields[7];
 
       return newObj;
     };
@@ -311,6 +275,7 @@ class App extends Component {
     if (location.pathname === '/' && this.selectedValue !== null) {
       this.updateStateAttributes({
         selectedValue: null,
+        selectedTransactions: [],
         dialogOpen: false,
         currentMatch: null,
         stateLoading: false,
@@ -325,6 +290,18 @@ class App extends Component {
       });
 
       if (pathMatch) {
+        if (pathMatch.params.type !== 'txns-by-prgid') {
+          this.unsubscribeWebSocketTransactionsByProgramId();
+        }
+
+        this.updateStateAttributes({
+          selectedValue: null,
+          selectedTransactions: [],
+          dialogOpen: false,
+          currentMatch: pathMatch,
+          stateLoading: true,
+        });
+
         this.handleClickOpen(pathMatch.params.id, pathMatch.params.type)();
         this.updateStateAttributes({
           currentMatch: pathMatch,
@@ -337,26 +314,32 @@ class App extends Component {
   componentDidMount() {
     const self = this;
 
-    let ws = new RobustWebSocket(`ws:${BLOCK_EXPLORER_API_BASE}/`);
+    if (!self.ws) {
+      let ws = new RobustWebSocket(`ws:${BLOCK_EXPLORER_API_BASE}/`);
 
-    ws.addEventListener('open', function() {
-      ws.send('<client_hello>');
-    });
+      ws.addEventListener('open', function() {
+        ws.send(JSON.stringify({hello: 'world'}));
+      });
 
-    ws.addEventListener('message', function(event) {
-      if (!self.state.enabled) {
-        return;
-      }
+      ws.addEventListener('message', function(event) {
+        if (!self.state.enabled) {
+          return;
+        }
 
-      self.onMessage(JSON.parse(event.data));
-    });
+        self.onMessage(JSON.parse(event.data));
+      });
 
-    this.ws = ws;
+      self.ws = ws;
+    }
 
-    let locationListener = this.handleLocationChange();
+    if (!self.locationListener) {
+      let locationListener = this.handleLocationChange();
 
-    history.listen(locationListener);
-    locationListener(window.location);
+      history.listen(locationListener);
+      locationListener(window.location);
+
+      self.locationListener = locationListener;
+    }
   }
 
   componentWillUnmount() {
@@ -371,55 +354,44 @@ class App extends Component {
     }
 
     let type = data.t;
-    let message = data.m;
-    let fields = message.split('#');
 
     if (type === 'blk') {
-      let block = {
-        t: 'blk',
-        h: parseInt(fields[0]),
-        l: fields[1],
-        s: parseInt(fields[2]),
-        dt: fields[3],
-        id: fields[4],
-      };
-
-      this.addBlock(block);
+      this.addBlock(this.parseBlockMessage(data.m));
     }
 
-    if (type === 'ent') {
-      let entry = {
-        t: 'ent',
-        h: parseInt(fields[0]),
-        l: fields[1],
-        s: parseInt(fields[2]),
-        dt: fields[3],
-        id: fields[4],
-        txn_count: parseInt(fields[5]),
-      };
-
-      this.addEntry(entry);
+    if (type === 'txns-by-prgid') {
+      console.log('msg', data);
+      this.addTransactionByProgramId(this.parseTransactionMessage(data.m));
     }
   };
 
-  addEntry(entry) {
-    let entries = [...this.state.entries];
+  parseBlockMessage(message) {
+    let fields = message.split('#');
 
-    if (entries.length >= 10) {
-      entries.pop();
-    }
+    return {
+      t: 'blk',
+      h: parseInt(fields[0]),
+      l: fields[1],
+      s: parseInt(fields[2]),
+      dt: fields[3],
+      id: fields[4],
+    };
+  }
 
-    entries.unshift(entry);
+  parseTransactionMessage(message) {
+    let fields = message.split('#');
 
-    this.updateStateAttributes({entries: entries});
-
-    if (entry.h > this.state.globalStats['!ent-height']) {
-      this.updateSpecificGlobalStateAttribute('!ent-height', entry.h);
-    }
-
-    if (entry.dt > this.state.globalStats['!ent-last-dt']) {
-      this.updateSpecificGlobalStateAttribute('!ent-last-dt', entry.dt);
-    }
+    return {
+      t: 'txn',
+      h: parseInt(fields[0]),
+      l: fields[1],
+      s: parseInt(fields[2]),
+      dt: fields[3],
+      entry_id: fields[4],
+      program_id: fields[5],
+      keys: fields[6].split(','),
+      id: fields[7],
+    };
   }
 
   addBlock(block) {
@@ -432,19 +404,56 @@ class App extends Component {
     blocks.unshift(block);
 
     this.updateStateAttributes({blocks: blocks});
+  }
 
-    if (block.s > this.state.globalStats['!blk-slot']) {
-      this.updateSpecificGlobalStateAttribute('!blk-slot', block.s);
+  addTransactionByProgramId(txn) {
+    let txns = [...this.state.selectedTransactions];
+
+    if (txns.length >= 100) {
+      txns.pop();
     }
+
+    txns.unshift(txn);
+
+    this.updateStateAttributes({selectedTransactions: txns});
+  }
+
+  unsubscribeWebSocketTransactionsByProgramId() {
+    if (
+      !this.state.selectedValue ||
+      this.state.selectedValue.t !== 'txns-by-prgid'
+    ) {
+      return;
+    }
+
+    let msg = JSON.stringify({
+      action: 'unsubscribe',
+      type: this.state.selectedValue.t,
+      id: this.state.selectedValue.id,
+    });
+
+    console.log('unsubscribe ' + msg);
+    this.ws.send(msg);
   }
 
   handleDialogClose = () => {
+    console.log('dialog close');
+
+    if (
+      this.state.selectedValue &&
+      this.state.selectedValue.t === 'txns-by-prgid'
+    ) {
+      this.unsubscribeWebSocketTransactionsByProgramId();
+    }
+
     this.updateStateAttributes({
       selectedValue: null,
+      selectedTransactions: [],
       dialogOpen: false,
       currentMatch: null,
       stateLoading: false,
     });
+
     history.push('/');
   };
 
@@ -462,18 +471,32 @@ class App extends Component {
     let value = event.target.value;
     event.target.value = '';
 
-    if (value.length > 80) {
-      history.push(`/txn/${value}`);
+    if (value === null || value.length === 0) {
       return;
     }
 
-    history.push(`/ent/${value}`);
-    return;
+    let url = `${BLOCK_EXPLORER_API_BASE}/search/${value}`;
+
+    axios.get(url).then(response => {
+      let result = response.data;
+
+      if (result.t === 'prg_id') {
+        history.push(`/txns-by-prgid/${result.id}`);
+      } else {
+        history.push(`/${result.t}/${result.id}`);
+      }
+    });
   };
 
   handleClickOpen = (value, type) => () => {
+    const self = this;
+
     let mkUrl = (id, type) => {
       let url = null;
+
+      if (type === 'txns-by-prgid') {
+        url = `${BLOCK_EXPLORER_API_BASE}/txns-by-prgid/${id}`;
+      }
 
       if (type === 'txn') {
         url = `${BLOCK_EXPLORER_API_BASE}/txn/${id}`;
@@ -492,14 +515,40 @@ class App extends Component {
 
     let url = mkUrl(value, type);
 
-    const self = this;
-
     let updateState = newVal => {
-      self.updateStateAttributes({
-        selectedValue: newVal,
-        dialogOpen: true,
-        stateLoading: false,
-      });
+      if (type === 'txns-by-prgid') {
+        let msg = JSON.stringify({
+          action: 'subscribe',
+          type: type,
+          id: value,
+        });
+
+        console.log('subscribe', msg);
+        self.ws.send(msg);
+
+        let newSelectedValue = {
+          t: type,
+          id: value,
+        };
+
+        let txns = _(newVal)
+          .reverse()
+          .slice(0, 100)
+          .map(v => this.parseTransactionMessage(v));
+
+        self.updateStateAttributes({
+          selectedValue: newSelectedValue,
+          selectedTransactions: txns,
+          dialogOpen: true,
+          stateLoading: false,
+        });
+      } else {
+        self.updateStateAttributes({
+          selectedValue: newVal,
+          dialogOpen: true,
+          stateLoading: false,
+        });
+      }
     };
 
     axios
@@ -507,13 +556,14 @@ class App extends Component {
       .then(response => {
         updateState(response.data);
       })
-      .catch(() => {
+      .catch((resp, err) => {
+        console.log('oops', resp, err);
         history.goBack();
       });
   };
 
   render() {
-    const self = this;
+    let self = this;
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -525,10 +575,50 @@ class App extends Component {
               handleSwitch={this.toggleEnabled(self)}
             />
             <div>
-              <BxDialogThemed
-                selectedValue={this.state.selectedValue}
-                open={this.state.dialogOpen}
-                onClose={this.handleDialogClose}
+              <Route
+                path="/txn/:id"
+                exact
+                render={() => (
+                  <BxDialogThemed
+                    selectedValue={self.state.selectedValue}
+                    open={self.state.dialogOpen}
+                    onClose={self.handleDialogClose}
+                  />
+                )}
+              />
+              <Route
+                path="/blk/:id"
+                exact
+                render={() => (
+                  <BxDialogThemed
+                    selectedValue={self.state.selectedValue}
+                    open={self.state.dialogOpen}
+                    onClose={self.handleDialogClose}
+                  />
+                )}
+              />
+              <Route
+                path="/ent/:id"
+                exact
+                render={() => (
+                  <BxDialogThemed
+                    selectedValue={self.state.selectedValue}
+                    open={self.state.dialogOpen}
+                    onClose={self.handleDialogClose}
+                  />
+                )}
+              />
+              <Route
+                path="/txns-by-prgid/:id"
+                exact
+                render={() => (
+                  <BxDialogTransactionsThemed
+                    selectedValue={self.state.selectedValue}
+                    selectedTransactions={self.state.selectedTransactions}
+                    open={self.state.dialogOpen}
+                    onClose={self.handleDialogClose}
+                  />
+                )}
               />
             </div>
             <p />
@@ -541,14 +631,6 @@ class App extends Component {
                 <BxDataTableThemed
                   dataType="blk"
                   dataItems={this.state.blocks}
-                />
-              </Grid>
-            </Grid>
-            <Grid container spacing={16} justify="center">
-              <Grid item style={{width: '1460px'}}>
-                <BxDataTableThemed
-                  dataType="ent"
-                  dataItems={this.state.entries}
                 />
               </Grid>
             </Grid>
