@@ -54,17 +54,34 @@ let handleRedis = type => (channel, message) => {
 
 const client = getClient();
 const blocksClient = getClient();
-const entriesClient = getClient();
 
 blocksClient.on('message', handleRedis('blk'));
 blocksClient.subscribe('@blocks');
-entriesClient.on('message', handleRedis('ent'));
-entriesClient.subscribe('@entries');
 
 function fixupJsonData(val) {
   val.data = JSON.parse(val.data);
   return val;
 }
+
+let txnListeners = {};
+let handleTxnRedis = type => (channel, message) => {
+  let outMessage = {t: type, m: message};
+
+  _.forEach(txnListeners[channel], ws => {
+    if (ws.readyState !== WebSocket.OPEN) {
+      return;
+    }
+    ws.send(JSON.stringify(outMessage), err => {
+      // send complete - check error
+      if (err) {
+        delete txnListeners[channel][ws.my_id];
+      }
+    });
+  });
+};
+
+const txnsClient = getClient();
+txnsClient.on('message', handleTxnRedis('txns-by-prgid'));
 
 let id = 0;
 
@@ -76,6 +93,34 @@ app.ws('/', function(ws) {
   console.log(
     new Date().toISOString() + ' ws peer [' + ws.my_id + '] connected.',
   );
+
+  ws.on('message', function(data) {
+    console.log(new Date().toISOString() + ' ws peer msg: ' + data);
+
+    let value = JSON.parse(data);
+
+    if (value.type === 'txns-by-prgid') {
+      let chanKey = `@program_id:${value.id}`;
+
+      if ((value.action === 'subscribe') && (!txnListeners[chanKey] || !txnListeners[chanKey][ws.my_id])) {
+        if (!txnListeners[chanKey]) {
+          txnListeners[chanKey] = {};
+          txnsClient.subscribe(chanKey);
+        }
+        txnListeners[chanKey][ws.my_id] = ws;
+      }
+
+      if ((value.action === 'unsubscribe') && txnListeners[chanKey] && txnListeners[chanKey][ws.my_id]) {
+        if (txnListeners[chanKey] && txnListeners[chanKey][ws.my_id]) {
+          delete txnListeners[chanKey][ws.my_id];
+	}
+        if (txnListeners[chanKey] && !txnListeners[chanKey].length) {
+          delete txnListeners[chanKey];
+          txnsClient.unsubscribe(chanKey);
+        }
+      }
+    }
+  });
 
   ws.on('close', function(reasonCode, description) {
     console.log(
@@ -177,6 +222,18 @@ app.get('/txn-timeline', (req, res) => {
   });
 });
 
+app.get('/txns-by-prgid/:id', (req, res) => {
+  client.lrange(`!txns-by-prgid-timeline:${req.params.id}`, 0, 99, (err, val) => {
+    if (err) {
+      res.status(500).send('{"error":"server_error"}\n');
+    } else if (val) {
+      res.send(JSON.stringify(val) + '\n');
+    } else {
+      res.status(404).send('{"error":"not_found"}\n');
+    }
+  });
+});
+
 app.get('/blk/:id', (req, res) => {
   client.hgetall(`!blk:${req.params.id}`, (err, val) => {
     if (err) {
@@ -237,6 +294,45 @@ app.get('/txn/:id', (req, res) => {
     } else {
       res.status(404).send('{"error":"not_found"}\n');
     }
+  });
+});
+
+app.get('/search/:id', (req, res) => {
+  client.exists(`!txn:${req.params.id}`, (e1, v1) => {
+    if (e1) {
+      res.status(500).send('{"error":"server_error"}\n');
+    } else if (v1) {
+      res.send(JSON.stringify({t:'txn',id:req.params.id}) + '\n');
+      return;
+    }
+    client.exists(`!blk:${req.params.id}`, (e2, v2) => {
+      if (e2) {
+        res.status(500).send('{"error":"server_error"}\n');
+      } else if (v2) {
+        res.send(JSON.stringify({t:'blk',id:req.params.id}) + '\n');
+	return;
+      }
+      client.exists(`!ent:${req.params.id}`, (e3, v3) => {
+        if (e3) {
+          res.status(500).send('{"error":"server_error"}\n');
+        } else if (v3) {
+          res.send(JSON.stringify({t:'ent',id:req.params.id}) + '\n');
+          return;
+        }
+        client.exists(`!txns-by-prgid-timeline:${req.params.id}`, (e4, v4) => {
+          if (e4) {
+            res.status(500).send('{"error":"server_error"}\n');
+          } else if (v4) {
+            res.send(JSON.stringify({t:'prg_id',id:req.params.id}) + '\n');
+            return;
+          }
+
+          // give up
+          res.status(404).send('{"error":"not_found"}\n');
+          return;
+        });
+      });
+    });
   });
 });
 
