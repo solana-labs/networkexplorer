@@ -64,11 +64,11 @@ class BxTransactionChart extends React.Component {
             </Paper>);
         }
         let theLabels = _.keys(txnStats).map((x) => BxDateTime.formatDateTime(x, {style:BxDateTime.ISO8601_FMT, local:true}));
-        let theData = _(txnStats).values().map((x) => parseInt(x || "0")).value();
+        let theData = _(txnStats).values().map((x) => parseFloat(x || "0.0") / 60.0).value();
         let data = {
             labels: theLabels,
             datasets: [{
-                label: "Transactions Per Minute",
+                label: "Average TPS",
                 data: theData
             }]
         };
