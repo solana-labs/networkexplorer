@@ -12,7 +12,7 @@
     "url": "http://github.com/solana-labs/blockexplorer/issues"
   },
   "dependencies": {
-    "@solana/web3.js": "^0.14.10",
+    "@solana/web3.js": "^0.14.11",
     "base-58": "^0.0.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
