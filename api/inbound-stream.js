@@ -31,7 +31,7 @@ class BridgeFn {
       outMessage.h = inMessage.h;
       outMessage.s = inMessage.s;
       outMessage.l = inMessage.l;
-      outMessage.id = b58e(inMessage.entry.id);
+      outMessage.id = b58e(inMessage.entry.hash);
 
       outMessage.transactions = _.map(inMessage.entry.transactions, x => {
         let txn = Transaction.from(Buffer.from(x));
