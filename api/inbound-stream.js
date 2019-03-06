@@ -31,7 +31,7 @@ class BridgeFn {
       outMessage.h = inMessage.h;
       outMessage.s = inMessage.s;
       outMessage.l = inMessage.l;
-      outMessage.id = b58e(inMessage.entry.hash);
+      outMessage.hash = b58e(inMessage.entry.hash);
 
       outMessage.transactions = _.map(inMessage.entry.transactions, x => {
         let txn = Transaction.from(Buffer.from(x));
@@ -41,7 +41,7 @@ class BridgeFn {
         tx.h = outMessage.h;
         tx.id = b58e(txn.signatures[0].signature);
         tx.s = outMessage.s;
-        tx.e = outMessage.id;
+        tx.e = outMessage.hash;
         tx.signatures = _.map(txn.signatures, y => {
           return {signature: b58e(y.signature), public_key: y.publicKey._bn};
         });
@@ -69,7 +69,7 @@ class BridgeFn {
       outMessage.h = inMessage.h;
       outMessage.s = inMessage.s;
       outMessage.l = inMessage.l;
-      outMessage.id = inMessage.id;
+      outMessage.hash = inMessage.hash;
     }
 
     return outMessage;
@@ -97,23 +97,23 @@ class RedisHandler {
     if (message.t === 'block') {
       const msgJson = JSON.stringify(message);
       let blkMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
-        message.id
+        message.hash
       }`;
       commands.push(['lpush', '!blk-timeline', blkMsg]);
       commands.push(['publish', '@blocks', blkMsg]);
 
-      commands.push(['set', '!blk-last-id', message.id]);
+      commands.push(['set', '!blk-last-id', message.hash]);
       commands.push(['set', '!blk-last-slot', message.s]);
       commands.push([
         'hmset',
-        `!blk:${message.id}`,
+        `!blk:${message.hash}`,
         {
           t: 'blk',
           dt: message.dt,
           h: message.h,
           l: message.l,
           s: message.s,
-          id: message.id,
+          id: message.hash,
           data: msgJson,
         },
       ]);
@@ -126,8 +126,8 @@ class RedisHandler {
 
         if (result && result.length > 0) {
           _.forEach(result, x => {
-            commands.push(['hset', `!ent:${x}`, 'block_id', message.id]);
-            commands.push(['sadd', `!blk-ent:${message.id}`, x]);
+            commands.push(['hset', `!ent:${x}`, 'block_id', message.hash]);
+            commands.push(['sadd', `!blk-ent:${message.hash}`, x]);
           });
           this.innerClient.batch(commands).exec(err2 => {
             // fire and forget
@@ -147,33 +147,33 @@ class RedisHandler {
       const msgJson = JSON.stringify(message);
 
       commands.push(['set', '!ent-last-leader', message.l]);
-      commands.push(['set', '!ent-last-id', message.id]);
+      commands.push(['set', '!ent-last-id', message.hash]);
       commands.push(['set', '!ent-last-dt', message.dt]);
       commands.push(['set', '!ent-height', message.h]);
 
-      // store entry data under entry id
+      // store entry data under entry hash
       commands.push([
         'hmset',
-        `!ent:${message.id}`,
+        `!ent:${message.hash}`,
         {
           t: 'ent',
           dt: message.dt,
           h: message.h,
           l: message.l,
           s: message.s,
-          id: message.id,
+          id: message.hash,
           data: msgJson,
         },
       ]);
 
       // append block height:dt:id to timeline
       let entMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
-        message.id
+        message.hash
       }#${txCount}`;
       commands.push(['lpush', '!ent-timeline', entMsg]);
       commands.push(['publish', '@entries', entMsg]);
 
-      commands.push(['sadd', `!ent-by-slot:${message.s}`, message.id]);
+      commands.push(['sadd', `!ent-by-slot:${message.s}`, message.hash]);
 
       // store transaction data under transaction id
       _.forEach(txns, txn => {
@@ -184,7 +184,7 @@ class RedisHandler {
         tx.s = message.s;
         tx.dt = message.dt;
         tx.id = txn.id;
-        tx.entry_id = message.id;
+        tx.entry_id = message.hash;
         tx.instructions = txn.instructions;
         tx.fee = txn.fee;
         tx.last_id = txn.last_id;
@@ -209,9 +209,9 @@ class RedisHandler {
 
         // append block hexHeight:dt:id to timeline
         let txnMsg = `${message.h}#${message.l}#${message.s}#${message.dt}#${
-          message.id
+          message.hash
         }#${tx.id}`;
-        commands.push(['sadd', `!ent-txn:${message.id}`, tx.id]);
+        commands.push(['sadd', `!ent-txn:${message.hash}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);
         commands.push(['publish', '@transactions', txnMsg]);
       });
@@ -289,7 +289,7 @@ if (UDP_ENABLED) {
         realMessage.s,
         realMessage.h,
         realMessage.t,
-        realMessage.id,
+        realMessage.hash,
         txCount,
         'took ' + (t2 - t1) + 'ms',
       ].join(', '),
@@ -336,7 +336,7 @@ function makeServer() {
           realMessage.s,
           realMessage.h,
           realMessage.t,
-          realMessage.id,
+          realMessage.hash,
           txCount,
           'took ' + (t2 - t1) + 'ms',
         ].join(', '),
