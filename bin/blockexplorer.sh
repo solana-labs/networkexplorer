@@ -36,7 +36,7 @@ cleanup() {
     [[ -z $pid ]] || kill "$pid"
   done
 }
-trap cleanup SIGINT SIGTERM
+trap cleanup SIGINT SIGTERM ERR
 
 set -x
 redis-cli ping
@@ -44,7 +44,7 @@ redis-cli ping
 node build/api/api.js &
 api=$!
 
-npm run serve:ui "$@" &
+npm run serve:ui &
 ui=$!
 
 wait "$ui"
