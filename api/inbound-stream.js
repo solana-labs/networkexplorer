@@ -53,7 +53,7 @@ class BridgeFn {
             return z.toBase58();
           });
           inst.program_id = y.programId.toBase58();
-          inst.userdata = y.userdata.data;
+          inst.data = b58e(y.data);
 
           return inst;
         });
@@ -178,7 +178,7 @@ class RedisHandler {
         message.l,
         message.s,
         message.dt,
-        message.hash
+        message.hash,
         txCount,
       ].join('#');
 
