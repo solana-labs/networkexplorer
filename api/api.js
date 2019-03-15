@@ -102,7 +102,10 @@ app.ws('/', function(ws) {
     if (value.type === 'txns-by-prgid') {
       let chanKey = `@program_id:${value.id}`;
 
-      if ((value.action === 'subscribe') && (!txnListeners[chanKey] || !txnListeners[chanKey][ws.my_id])) {
+      if (
+        value.action === 'subscribe' &&
+        (!txnListeners[chanKey] || !txnListeners[chanKey][ws.my_id])
+      ) {
         if (!txnListeners[chanKey]) {
           txnListeners[chanKey] = {};
           txnsClient.subscribe(chanKey);
@@ -110,10 +113,14 @@ app.ws('/', function(ws) {
         txnListeners[chanKey][ws.my_id] = ws;
       }
 
-      if ((value.action === 'unsubscribe') && txnListeners[chanKey] && txnListeners[chanKey][ws.my_id]) {
+      if (
+        value.action === 'unsubscribe' &&
+        txnListeners[chanKey] &&
+        txnListeners[chanKey][ws.my_id]
+      ) {
         if (txnListeners[chanKey] && txnListeners[chanKey][ws.my_id]) {
           delete txnListeners[chanKey][ws.my_id];
-	}
+        }
         if (txnListeners[chanKey] && !txnListeners[chanKey].length) {
           delete txnListeners[chanKey];
           txnsClient.unsubscribe(chanKey);
@@ -223,15 +230,20 @@ app.get('/txn-timeline', (req, res) => {
 });
 
 app.get('/txns-by-prgid/:id', (req, res) => {
-  client.lrange(`!txns-by-prgid-timeline:${req.params.id}`, 0, 99, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      res.send(JSON.stringify(val) + '\n');
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  client.lrange(
+    `!txns-by-prgid-timeline:${req.params.id}`,
+    0,
+    99,
+    (err, val) => {
+      if (err) {
+        res.status(500).send('{"error":"server_error"}\n');
+      } else if (val) {
+        res.send(JSON.stringify(val) + '\n');
+      } else {
+        res.status(404).send('{"error":"not_found"}\n');
+      }
+    },
+  );
 });
 
 app.get('/blk/:id', (req, res) => {
@@ -302,28 +314,28 @@ app.get('/search/:id', (req, res) => {
     if (e1) {
       res.status(500).send('{"error":"server_error"}\n');
     } else if (v1) {
-      res.send(JSON.stringify({t:'txn',id:req.params.id}) + '\n');
+      res.send(JSON.stringify({t: 'txn', id: req.params.id}) + '\n');
       return;
     }
     client.exists(`!blk:${req.params.id}`, (e2, v2) => {
       if (e2) {
         res.status(500).send('{"error":"server_error"}\n');
       } else if (v2) {
-        res.send(JSON.stringify({t:'blk',id:req.params.id}) + '\n');
-	return;
+        res.send(JSON.stringify({t: 'blk', id: req.params.id}) + '\n');
+        return;
       }
       client.exists(`!ent:${req.params.id}`, (e3, v3) => {
         if (e3) {
           res.status(500).send('{"error":"server_error"}\n');
         } else if (v3) {
-          res.send(JSON.stringify({t:'ent',id:req.params.id}) + '\n');
+          res.send(JSON.stringify({t: 'ent', id: req.params.id}) + '\n');
           return;
         }
         client.exists(`!txns-by-prgid-timeline:${req.params.id}`, (e4, v4) => {
           if (e4) {
             res.status(500).send('{"error":"server_error"}\n');
           } else if (v4) {
-            res.send(JSON.stringify({t:'prg_id',id:req.params.id}) + '\n');
+            res.send(JSON.stringify({t: 'prg_id', id: req.params.id}) + '\n');
             return;
           }
 
