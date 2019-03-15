@@ -1,6 +1,7 @@
 import React from 'react';
 import BxDataTable from './BxDataTable';
 import CloseIcon from '@material-ui/icons/Close';
+import debounceRender from 'react-debounce-render';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,10 +18,10 @@ const location = window.location.href;
 
 class BxDialogTransactions extends React.Component {
   renderTable() {
-    const {selectedTransactions} = this.props;
+    const {selectedValue} = this.props;
 
-    if (selectedTransactions && selectedTransactions.length) {
-      return (<BxDataTable dataType="txn" dataItems={selectedTransactions} onClose={this.handleClose} noTitle/>);
+    if (selectedValue && selectedValue.transactions && selectedValue.transactions.length) {
+      return (<BxDataTable dataType="txn" dataItems={selectedValue.transactions} onClose={this.handleClose} noTitle/>);
     } else {
       return (<Typography>No Transactions. Yet.</Typography>);
     }
@@ -67,7 +68,6 @@ BxDialogTransactions.propTypes = {
   classes: PropTypes.object.isRequired,
   onClose: PropTypes.func,
   selectedValue: PropTypes.object,
-  selectedTransactions: PropTypes.array,
 };
 
-export default BxDialogTransactions;
+export default debounceRender(BxDialogTransactions, 250, { leading: false });

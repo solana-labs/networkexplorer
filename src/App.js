@@ -132,7 +132,6 @@ class App extends Component {
       enabled: true,
       dialogOpen: false,
       selectedValue: null,
-      selectedTransactions: [],
       currentMatch: null,
       stateLoading: false,
       globalStats: {},
@@ -275,7 +274,6 @@ class App extends Component {
     if (location.pathname === '/' && this.selectedValue !== null) {
       this.updateStateAttributes({
         selectedValue: null,
-        selectedTransactions: [],
         dialogOpen: false,
         currentMatch: null,
         stateLoading: false,
@@ -296,7 +294,6 @@ class App extends Component {
 
         this.updateStateAttributes({
           selectedValue: null,
-          selectedTransactions: [],
           dialogOpen: false,
           currentMatch: pathMatch,
           stateLoading: true,
@@ -360,7 +357,6 @@ class App extends Component {
     }
 
     if (type === 'txns-by-prgid') {
-      console.log('msg', data);
       this.addTransactionByProgramId(this.parseTransactionMessage(data.m));
     }
   };
@@ -407,15 +403,17 @@ class App extends Component {
   }
 
   addTransactionByProgramId(txn) {
-    let txns = [...this.state.selectedTransactions];
+    let newValue = {...this.state.selectedValue};
+    let newTxns = [...newValue.transactions];
 
-    if (txns.length >= 100) {
-      txns.pop();
+    if (newTxns.length >= 100) {
+      newTxns.pop();
     }
 
-    txns.unshift(txn);
+    newTxns.unshift(txn);
+    newValue.transactions = newTxns;
 
-    this.updateStateAttributes({selectedTransactions: txns});
+    this.updateStateAttributes({selectedValue: newValue});
   }
 
   unsubscribeWebSocketTransactionsByProgramId() {
@@ -448,7 +446,6 @@ class App extends Component {
 
     this.updateStateAttributes({
       selectedValue: null,
-      selectedTransactions: [],
       dialogOpen: false,
       currentMatch: null,
       stateLoading: false,
@@ -526,19 +523,18 @@ class App extends Component {
         console.log('subscribe', msg);
         self.ws.send(msg);
 
+        let txns = _(newVal)
+          .map(v => this.parseTransactionMessage(v))
+          .value();
+
         let newSelectedValue = {
           t: type,
           id: value,
+          transactions: txns,
         };
-
-        let txns = _(newVal)
-          .reverse()
-          .slice(0, 100)
-          .map(v => this.parseTransactionMessage(v));
 
         self.updateStateAttributes({
           selectedValue: newSelectedValue,
-          selectedTransactions: txns,
           dialogOpen: true,
           stateLoading: false,
         });
@@ -614,7 +610,6 @@ class App extends Component {
                 render={() => (
                   <BxDialogTransactionsThemed
                     selectedValue={self.state.selectedValue}
-                    selectedTransactions={self.state.selectedTransactions}
                     open={self.state.dialogOpen}
                     onClose={self.handleDialogClose}
                   />
