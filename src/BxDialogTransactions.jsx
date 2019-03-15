@@ -70,4 +70,4 @@ BxDialogTransactions.propTypes = {
   selectedValue: PropTypes.object,
 };
 
-export default debounceRender(BxDialogTransactions, 250, { leading: false });
+export default debounceRender(BxDialogTransactions, 100, { leading: true });
