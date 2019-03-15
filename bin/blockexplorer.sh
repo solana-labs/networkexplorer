@@ -36,7 +36,7 @@ cleanup() {
     [[ -z $pid ]] || kill "$pid"
   done
 }
-trap cleanup SIGINT SIGTERM
+trap cleanup SIGINT SIGTERM ERR
 
 set -x
 redis-cli ping
@@ -44,12 +44,7 @@ redis-cli ping
 node build/api/api.js &
 api=$!
 
-maybeSudo=
-if [[ $(uname) = Linux ]]; then
-  # Run as root for port 80 access
-  maybeSudo=sudo
-fi
-$maybeSudo npm run serve:ui &
+npm run serve:ui &
 ui=$!
 
 wait "$ui"
