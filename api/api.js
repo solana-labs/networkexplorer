@@ -6,6 +6,7 @@
 import express from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
+import {promisify} from 'util';
 import redis from 'redis';
 import WebSocket from 'ws';
 import _ from 'lodash';
@@ -14,7 +15,6 @@ import expressWs from 'express-ws';
 
 import config from './config';
 
-const {promisify} = require('util');
 const app = express();
 
 const port = 3001;
@@ -55,7 +55,6 @@ let handleRedis = type => (channel, message) => {
 
 const client = getClient();
 
-const getAsync = promisify(client.get).bind(client);
 const mgetAsync = promisify(client.mget).bind(client);
 const existsAsync = promisify(client.exists).bind(client);
 const lrangeAsync = promisify(client.lrange).bind(client);
@@ -210,7 +209,7 @@ async function sendLrangeResult(key, first, last, res) {
       res.status(404).send('{"error":"not_found"}\n');
     }
   } catch (err) {
-      res.status(500).send('{"error":"server_error"}\n');
+    res.status(500).send('{"error":"server_error"}\n');
   }
 }
 
@@ -243,9 +242,9 @@ async function sendBlockResult(req, res) {
       return;
     }
   } catch (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-      return;
-  } 
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
   res.status(404).send('{"error":"not_found"}\n');
 }
 
@@ -269,9 +268,9 @@ async function sendEntryResult(req, res) {
       return;
     }
   } catch (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-      return;
-  } 
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
   res.status(404).send('{"error":"not_found"}\n');
 }
 
@@ -296,9 +295,9 @@ async function sendTransactionResult(req, res) {
       return;
     }
   } catch (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-      return;
-  } 
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
   res.status(404).send('{"error":"not_found"}\n');
 }
 
@@ -307,14 +306,15 @@ app.get('/txn/:id', (req, res) => {
 });
 
 async function sendSearchResults(req, res) {
-  let types = ['txn','blk','ent', 'txns-by-prgid-timeline'];
+  let types = ['txn', 'blk', 'ent', 'txns-by-prgid-timeline'];
   try {
     for (let i = 0; i < types.length; i++) {
       let key = `!${types[i]}:${req.params.id}`;
       let result = await existsAsync(key);
 
       if (result) {
-	let outType = (types[i] === 'txns-by-prgid-timeline') ? 'txns-by-prgid' : types[i];
+        let outType =
+          types[i] === 'txns-by-prgid-timeline' ? 'txns-by-prgid' : types[i];
         res.send(JSON.stringify({t: outType, id: req.params.id}) + '\n');
         return;
       }

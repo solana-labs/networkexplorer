@@ -227,12 +227,16 @@ class RedisHandler {
           message.dt,
           message.hash,
           tx.instructions[0].program_id,
-          tx.instructions[0].keys.join(","),
+          tx.instructions[0].keys.join(','),
           tx.id,
         ].join('#');
         commands.push(['sadd', `!ent-txn:${message.hash}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);
-        commands.push(['lpush', `!txns-by-prgid-timeline:${tx.instructions[0].program_id}`, txnMsg]);
+        commands.push([
+          'lpush',
+          `!txns-by-prgid-timeline:${tx.instructions[0].program_id}`,
+          txnMsg,
+        ]);
         commands.push([
           'publish',
           `@program_id:${tx.instructions[0].program_id}`,
