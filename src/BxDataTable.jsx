@@ -17,7 +17,7 @@ class BxDataTable extends React.Component {
 
     return (
       <Paper>
-        <Typography variant="h6" id="tableTitle" style={{textAlign: 'left'}}>
+        <Typography variant="h6" id="tableTitle" style={{textAlign: 'left', padding:"16px"}}>
           Latest Blocks
           <BxHelpLink text="Block" term="block"/>
         </Typography>
@@ -59,7 +59,7 @@ class BxDataTable extends React.Component {
     return (
       <Paper>
         {!noTitle && (
-          <Typography variant="h6" id="tableTitle" style={{textAlign: 'left'}}>
+          <Typography variant="h6" id="tableTitle" style={{textAlign: 'left', padding:"16px"}}>
             Transactions
             <BxHelpLink text="Transaction" term="transaction"/>
           </Typography>
@@ -101,12 +101,20 @@ class BxDataTable extends React.Component {
                     </span>
                   ))}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="right" style={{verticalAlign:"middle"}}>
                   <BxEntityLink prg_id={row.program_id}/>
+                  <br/>
+                  <span>&nbsp;</span> 
                 </TableCell>
-                <TableCell align="right">{row.s}</TableCell>
+                <TableCell align="right">
+                  {row.s}
+                  <br/>
+                  <span>&nbsp;</span> 
+                </TableCell>
                 <TableCell align="right">
                   <BxDateTime dateTime={row.dt} local/>
+                  <br/>
+                  <span>&nbsp;</span> 
                 </TableCell>
               </TableRow>
             ))}
