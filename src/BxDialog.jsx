@@ -134,8 +134,8 @@ class BxDialog extends React.Component {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell component="th" scope="row">Raw Data:</TableCell>
-                <TableCell align="right" title={url}>
+                <TableCell component="th" scope="row" style={{verticalAlign:'top'}}>Raw Data:</TableCell>
+                <TableCell align="left" title={url} style={{fontFamily:'"Roboto Mono", monospace', whiteSpace:'pre'}}>
                   {JSON.stringify(value, null, 2)}
                 </TableCell>
               </TableRow>
