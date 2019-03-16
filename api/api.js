@@ -152,7 +152,7 @@ app.ws('/', function(ws) {
   });
 });
 
-async function sendMgetKeysZipValuesResult(keys, res) {
+async function sendMgetKeysZipValuesResult(keys, displayKeys, res) {
   try {
     let result = await mgetAsync(keys);
 
@@ -178,7 +178,7 @@ app.get('/txn-stats', (req, res) => {
 
   let pure_keys = _.map(min_keys, x => x.substring(13));
 
-  sendMgetKeysZipValuesResult(pure_keys, res);
+  sendMgetKeysZipValuesResult(min_keys, pure_keys, res);
 });
 
 app.get('/global-stats', (req, res) => {
@@ -197,7 +197,7 @@ app.get('/global-stats', (req, res) => {
     `!ent-last-id`,
   ];
 
-  sendMgetKeysZipValuesResult(stat_keys, res);
+  sendMgetKeysZipValuesResult(stat_keys, stat_keys, res);
 });
 
 async function sendLrangeResult(key, first, last, res) {
