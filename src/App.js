@@ -476,12 +476,7 @@ class App extends Component {
 
     axios.get(url).then(response => {
       let result = response.data;
-
-      if (result.t === 'prg_id') {
-        history.push(`/txns-by-prgid/${result.id}`);
-      } else {
-        history.push(`/${result.t}/${result.id}`);
-      }
+      history.push(`/${result.t}/${result.id}`);
     });
   };
 
