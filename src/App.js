@@ -26,7 +26,7 @@ const history = createBrowserHistory();
 
 const styles = theme => ({
   root: {
-    width:"95%",
+    width: '95%',
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
