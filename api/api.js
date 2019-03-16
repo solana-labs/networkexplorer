@@ -6,6 +6,7 @@
 import express from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
+import {promisify} from 'util';
 import redis from 'redis';
 import WebSocket from 'ws';
 import _ from 'lodash';
@@ -53,18 +54,42 @@ let handleRedis = type => (channel, message) => {
 };
 
 const client = getClient();
+
+const mgetAsync = promisify(client.mget).bind(client);
+const existsAsync = promisify(client.exists).bind(client);
+const lrangeAsync = promisify(client.lrange).bind(client);
+const hgetallAsync = promisify(client.hgetall).bind(client);
+const smembersAsync = promisify(client.smembers).bind(client);
+
 const blocksClient = getClient();
-const entriesClient = getClient();
 
 blocksClient.on('message', handleRedis('blk'));
 blocksClient.subscribe('@blocks');
-entriesClient.on('message', handleRedis('ent'));
-entriesClient.subscribe('@entries');
 
 function fixupJsonData(val) {
   val.data = JSON.parse(val.data);
   return val;
 }
+
+let txnListeners = {};
+let handleTxnRedis = type => (channel, message) => {
+  let outMessage = {t: type, m: message};
+
+  _.forEach(txnListeners[channel], ws => {
+    if (ws.readyState !== WebSocket.OPEN) {
+      return;
+    }
+    ws.send(JSON.stringify(outMessage), err => {
+      // send complete - check error
+      if (err) {
+        delete txnListeners[channel][ws.my_id];
+      }
+    });
+  });
+};
+
+const txnsClient = getClient();
+txnsClient.on('message', handleTxnRedis('txns-by-prgid'));
 
 let id = 0;
 
@@ -76,6 +101,41 @@ app.ws('/', function(ws) {
   console.log(
     new Date().toISOString() + ' ws peer [' + ws.my_id + '] connected.',
   );
+
+  ws.on('message', function(data) {
+    console.log(new Date().toISOString() + ' ws peer msg: ' + data);
+
+    let value = JSON.parse(data);
+
+    if (value.type === 'txns-by-prgid') {
+      let chanKey = `@program_id:${value.id}`;
+
+      if (
+        value.action === 'subscribe' &&
+        (!txnListeners[chanKey] || !txnListeners[chanKey][ws.my_id])
+      ) {
+        if (!txnListeners[chanKey]) {
+          txnListeners[chanKey] = {};
+          txnsClient.subscribe(chanKey);
+        }
+        txnListeners[chanKey][ws.my_id] = ws;
+      }
+
+      if (
+        value.action === 'unsubscribe' &&
+        txnListeners[chanKey] &&
+        txnListeners[chanKey][ws.my_id]
+      ) {
+        if (txnListeners[chanKey] && txnListeners[chanKey][ws.my_id]) {
+          delete txnListeners[chanKey][ws.my_id];
+        }
+        if (txnListeners[chanKey] && !txnListeners[chanKey].length) {
+          delete txnListeners[chanKey];
+          txnsClient.unsubscribe(chanKey);
+        }
+      }
+    }
+  });
 
   ws.on('close', function(reasonCode, description) {
     console.log(
@@ -91,6 +151,20 @@ app.ws('/', function(ws) {
   });
 });
 
+async function sendMgetKeysZipValuesResult(keys, displayKeys, res) {
+  try {
+    let result = await mgetAsync(keys);
+
+    if (result) {
+      res.send(JSON.stringify(_.zipObject(keys, result)) + '\n');
+    } else {
+      res.status(404).send('{"error":"not_found"}\n');
+    }
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+  }
+}
+
 app.get('/txn-stats', (req, res) => {
   let now_min = (new Date().getTime() - 1000) / MINUTE_MS;
   let base_min = now_min - 60;
@@ -101,17 +175,9 @@ app.get('/txn-stats', (req, res) => {
     return `!txn-per-min:${ts}`;
   });
 
-  client.mget(min_keys, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      let pure_keys = _.map(min_keys, x => x.substring(13));
+  let pure_keys = _.map(min_keys, x => x.substring(13));
 
-      res.send(JSON.stringify(_.zipObject(pure_keys, val)) + '\n');
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  sendMgetKeysZipValuesResult(min_keys, pure_keys, res);
 });
 
 app.get('/global-stats', (req, res) => {
@@ -130,114 +196,140 @@ app.get('/global-stats', (req, res) => {
     `!ent-last-id`,
   ];
 
-  client.mget(stat_keys, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      res.send(JSON.stringify(_.zipObject(stat_keys, val)) + '\n');
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  sendMgetKeysZipValuesResult(stat_keys, stat_keys, res);
 });
 
-app.get('/blk-timeline', (req, res) => {
-  client.lrange(`!blk-timeline`, 0, 99, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      res.send(JSON.stringify(val) + '\n');
+async function sendLrangeResult(key, first, last, res) {
+  try {
+    let result = await lrangeAsync(key, first, last);
+
+    if (result) {
+      res.send(JSON.stringify(result) + '\n');
     } else {
       res.status(404).send('{"error":"not_found"}\n');
     }
-  });
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+  }
+}
+
+app.get('/blk-timeline', (req, res) => {
+  sendLrangeResult(`!blk-timeline`, 0, 99, res);
 });
 
 app.get('/ent-timeline', (req, res) => {
-  client.lrange(`!ent-timeline`, 0, 99, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      res.send(JSON.stringify(val) + '\n');
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  sendLrangeResult(`!ent-timeline`, 0, 99, res);
 });
 
 app.get('/txn-timeline', (req, res) => {
-  client.lrange(`!txn-timeline`, 0, 99, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      res.send(JSON.stringify(val) + '\n');
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  sendLrangeResult(`!txn-timeline`, 0, 99, res);
 });
+
+app.get('/txns-by-prgid/:id', (req, res) => {
+  let key = `!txns-by-prgid-timeline:${req.params.id}`;
+  sendLrangeResult(key, 0, 99, res);
+});
+
+async function sendBlockResult(req, res) {
+  try {
+    let result = await hgetallAsync(`!blk:${req.params.id}`);
+    if (result) {
+      let entries = await smembersAsync(`!ent-by-slot:${result.s}`);
+      if (entries) {
+        result.entries = entries;
+      }
+      res.send(JSON.stringify(fixupJsonData(result)) + '\n');
+      return;
+    }
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
+  res.status(404).send('{"error":"not_found"}\n');
+}
 
 app.get('/blk/:id', (req, res) => {
-  client.hgetall(`!blk:${req.params.id}`, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      client.smembers(`!ent-by-slot:${val.s}`, (err2, val2) => {
-        if (val2) {
-          val.entries = val2;
-        }
-        res.send(JSON.stringify(fixupJsonData(val)) + '\n');
-      });
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  sendBlockResult(req, res);
 });
+
+async function sendEntryResult(req, res) {
+  try {
+    let result = await hgetallAsync(`!ent:${req.params.id}`);
+    if (result) {
+      let transactions = await smembersAsync(`!ent-txn:${result.id}`);
+      if (transactions) {
+        result.transactions = transactions;
+      }
+      let block = await hgetallAsync(`!blk:${result.block_id}`);
+      if (block) {
+        result.block = block;
+      }
+      res.send(JSON.stringify(fixupJsonData(result)) + '\n');
+      return;
+    }
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
+  res.status(404).send('{"error":"not_found"}\n');
+}
 
 app.get('/ent/:id', (req, res) => {
-  client.hgetall(`!ent:${req.params.id}`, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      client.smembers(`!ent-txn:${val.id}`, (err2, val2) => {
-        if (val2) {
-          val.transactions = val2;
-        }
-        client.hgetall(`!blk:${val.block_id}`, (err3, val3) => {
-          if (val3) {
-            val.block = val3;
-          }
-          res.send(JSON.stringify(fixupJsonData(val)) + '\n');
-        });
-      });
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
-    }
-  });
+  sendEntryResult(req, res);
 });
 
-app.get('/txn/:id', (req, res) => {
-  client.hgetall(`!txn:${req.params.id}`, (err, val) => {
-    if (err) {
-      res.status(500).send('{"error":"server_error"}\n');
-    } else if (val) {
-      client.hgetall(`!ent:${val.entry_id}`, (err2, val2) => {
-        if (val2) {
-          val.entry = fixupJsonData(val2);
-          client.hgetall(`!blk:${val2.block_id}`, (err3, val3) => {
-            if (val3) {
-              val.block = fixupJsonData(val3);
-            }
-            res.send(JSON.stringify(fixupJsonData(val)) + '\n');
-          });
-          return;
+async function sendTransactionResult(req, res) {
+  try {
+    let result = await hgetallAsync(`!txn:${req.params.id}`);
+    if (result) {
+      let entry = await hgetallAsync(`!ent:${result.entry_id}`);
+      if (entry) {
+        result.entry = fixupJsonData(entry);
+
+        let block = await hgetallAsync(`!blk:${entry.block_id}`);
+        if (block) {
+          result.block = fixupJsonData(block);
         }
-        res.send(JSON.stringify(fixupJsonData(val)) + '\n');
-      });
-    } else {
-      res.status(404).send('{"error":"not_found"}\n');
+      }
+      res.send(JSON.stringify(fixupJsonData(result)) + '\n');
+      return;
     }
-  });
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
+  res.status(404).send('{"error":"not_found"}\n');
+}
+
+app.get('/txn/:id', (req, res) => {
+  sendTransactionResult(req, res);
+});
+
+async function sendSearchResults(req, res) {
+  let types = ['txn', 'blk', 'ent', 'txns-by-prgid-timeline'];
+  try {
+    for (let i = 0; i < types.length; i++) {
+      let key = `!${types[i]}:${req.params.id}`;
+      let result = await existsAsync(key);
+
+      if (result) {
+        let outType =
+          types[i] === 'txns-by-prgid-timeline' ? 'txns-by-prgid' : types[i];
+        res.send(JSON.stringify({t: outType, id: req.params.id}) + '\n');
+        return;
+      }
+    }
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+    return;
+  }
+
+  // give up
+  res.status(404).send('{"error":"not_found"}\n');
+}
+
+app.get('/search/:id', (req, res) => {
+  sendSearchResults(req, res);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

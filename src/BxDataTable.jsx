@@ -19,18 +19,18 @@ class BxDataTable extends React.Component {
       <Paper>
         <Typography variant="h6" id="tableTitle" style={{textAlign: 'left'}}>
           Latest Blocks
-          <BxHelpLink text="Block" term="block" />
+          <BxHelpLink text="Block" term="block"/>
         </Typography>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
                 Block ID
-                <BxHelpLink text="Block ID" term="block" />
+                <BxHelpLink text="Block ID" term="block"/>
               </TableCell>
               <TableCell align="right">
                 Block Height
-                <BxHelpLink text="Block Height" term="block-height" />
+                <BxHelpLink text="Block Height" term="block-height"/>
               </TableCell>
               <TableCell align="right">Timestamp (approx)</TableCell>
             </TableRow>
@@ -39,62 +39,11 @@ class BxDataTable extends React.Component {
             {_.map(dataItems, row => (
               <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
-                  <BxEntityLink blk={row.id} />
+                  <BxEntityLink blk={row.id}/>
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
                 <TableCell align="right">
-                  <BxDateTime dateTime={row.dt} local />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    );
-  }
-
-  renderEntries() {
-    const {dataItems} = this.props;
-
-    return (
-      <Paper>
-        <Typography variant="h6" id="tableTitle" style={{textAlign: 'left'}}>
-          Latest Entries
-          <BxHelpLink text="Entry" term="entry" />
-        </Typography>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Entry ID
-                <BxHelpLink text="Entry ID" term="entry" />
-              </TableCell>
-              <TableCell align="right">
-                Block Height
-                <BxHelpLink text="Block Height" term="block-height" />
-              </TableCell>
-              <TableCell align="right">
-                Tick Height
-                <BxHelpLink text="Tick Height" term="tick-height" />
-              </TableCell>
-              <TableCell align="right">
-                Transaction Count
-                <BxHelpLink text="Transaction" term="transaction" />
-              </TableCell>
-              <TableCell align="right">Timestamp (approx)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {_.map(dataItems, row => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  <BxEntityLink ent={row.id} />
-                </TableCell>
-                <TableCell align="right">{row.s}</TableCell>
-                <TableCell align="right">{row.h}</TableCell>
-                <TableCell align="right">{row.txn_count}</TableCell>
-                <TableCell align="right">
-                  <BxDateTime dateTime={row.dt} local />
+                  <BxDateTime dateTime={row.dt} local/>
                 </TableCell>
               </TableRow>
             ))}
@@ -105,24 +54,36 @@ class BxDataTable extends React.Component {
   }
 
   renderTransactions() {
-    const {dataItems} = this.props;
+    const {dataItems, noTitle} = this.props;
 
     return (
       <Paper>
-        <Typography variant="h6" id="tableTitle" style={{textAlign: 'left'}}>
-          Sample Transactions (updated every 10s)
-          <BxHelpLink text="Transaction" term="transaction" />
-        </Typography>
+        {!noTitle && (
+          <Typography variant="h6" id="tableTitle" style={{textAlign: 'left'}}>
+            Transactions
+            <BxHelpLink text="Transaction" term="transaction"/>
+          </Typography>
+        )}
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
-                Transaction ID
-                <BxHelpLink text="Transaction" term="transaction" />
+                <div>
+                  Transaction ID
+                  <BxHelpLink text="Transaction" term="transaction"/>
+                </div>
+                <div>
+                  Account ID(s)
+                  <BxHelpLink text="Account" term="account"/>
+                </div>
+              </TableCell>
+              <TableCell>
+                Program ID
+                <BxHelpLink text="Program" term="program-id"/>
               </TableCell>
               <TableCell align="right">
                 Block Height
-                <BxHelpLink text="Block Height" term="block-height" />
+                <BxHelpLink text="Block Height" term="block-height"/>
               </TableCell>
               <TableCell align="right">Timestamp (approx)</TableCell>
             </TableRow>
@@ -131,11 +92,21 @@ class BxDataTable extends React.Component {
             {_.map(dataItems, row => (
               <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
-                  <BxEntityLink txn={row.id} />
+                  <BxEntityLink txn={row.id}/>
+                  <br/>
+                  {_.map(row.keys, key => (
+                    <span key={key}>
+                      <BxEntityLink acct_id={key}/>
+                      <span> </span>
+                    </span>
+                  ))}
+                </TableCell>
+                <TableCell align="right">
+                  <BxEntityLink prg_id={row.program_id}/>
                 </TableCell>
                 <TableCell align="right">{row.s}</TableCell>
                 <TableCell align="right">
-                  <BxDateTime dateTime={row.dt} local />
+                  <BxDateTime dateTime={row.dt} local/>
                 </TableCell>
               </TableRow>
             ))}
@@ -150,10 +121,6 @@ class BxDataTable extends React.Component {
 
     if (dataType === 'blk') {
       return this.renderBlocks();
-    }
-
-    if (dataType === 'ent') {
-      return this.renderEntries();
     }
 
     if (dataType === 'txn') {

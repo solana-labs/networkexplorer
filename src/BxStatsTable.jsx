@@ -89,19 +89,6 @@ class BxStatsTable extends React.Component {
                 <Grid item>
                     <Card>
                         <CardContent>
-                            <Typography variant="h5" component="h2">
-                                Tick Height
-                                <BxHelpLink text="Tick Height" term="tick-height"/>
-                            </Typography>
-                            <Typography component="p">
-                                {globalStats['!ent-height']}
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item>
-                    <Card>
-                        <CardContent>
                             <Typography
                                 variant="h5"
                                 component="h2">

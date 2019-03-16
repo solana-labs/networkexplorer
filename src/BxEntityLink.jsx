@@ -33,8 +33,22 @@ class BxEntityLink extends React.Component {
         );
     }
 
+    renderAccountId() {
+        return (
+          <code title={this.props.acct_id}>{this.props.acct_id.substring(0, 22) + (this.props.acct_id.length > 22 ? "\u2026" : "")}</code>
+        );
+    }
+
+    renderProgramId() {
+        return (
+          <Link component={RouterLink} to={"/txns-by-prgid/" + this.props.prg_id}>
+              <code title={this.props.prg_id}>{this.props.prg_id.substring(0, 22) + (this.props.prg_id.length > 22 ? "\u2026" : "")}</code>
+          </Link>
+        );
+    }
+
     render() {
-        const {node, ent, blk, txn} = this.props;
+        const {node, ent, blk, txn, acct_id, prg_id} = this.props;
 
         if (node) {
             return this.renderNode();
@@ -50,6 +64,14 @@ class BxEntityLink extends React.Component {
 
         if (txn) {
             return this.renderTransaction();
+        }
+
+        if (acct_id) {
+            return this.renderAccountId();
+        }
+
+        if (prg_id) {
+            return this.renderProgramId();
         }
 
         return (
