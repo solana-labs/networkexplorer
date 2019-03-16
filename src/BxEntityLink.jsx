@@ -11,7 +11,7 @@ class BxEntityLink extends React.Component {
 
     renderBlock() {
         return (
-            <Link component={RouterLink} to={"/blk/" + this.props.blk}>
+            <Link component={RouterLink} to={"/blk/" + this.props.blk} color="secondary">
                 <code title={this.props.blk}>{this.props.blk}</code>
             </Link>
         );
@@ -19,7 +19,7 @@ class BxEntityLink extends React.Component {
 
     renderEntry() {
         return (
-            <Link component={RouterLink} to={"/ent/" + this.props.ent}>
+            <Link component={RouterLink} to={"/ent/" + this.props.ent} color="secondary">
                 <code title={this.props.ent}>{this.props.ent}</code>
             </Link>
         );
@@ -27,7 +27,7 @@ class BxEntityLink extends React.Component {
 
     renderTransaction() {
         return (
-            <Link component={RouterLink} to={"/txn/" + this.props.txn}>
+            <Link component={RouterLink} to={"/txn/" + this.props.txn} color="secondary">
                 <code title={this.props.txn}>{this.props.txn}</code>
             </Link>
         );

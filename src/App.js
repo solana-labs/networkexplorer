@@ -26,7 +26,9 @@ const history = createBrowserHistory();
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
   },
   grow: {
     flexGrow: 1,
@@ -46,9 +48,6 @@ const styles = theme => ({
     right: theme.spacing.unit,
     top: theme.spacing.unit,
     color: theme.palette.grey[500],
-  },
-  link: {
-    color: theme.palette.primary.light,
   },
   search: {
     position: 'relative',
@@ -117,6 +116,9 @@ const theme = createMuiTheme({
     type: 'dark',
     primary: {
       main: '#000000',
+    },
+    secondary: {
+      main: '#2BFEBC',
     },
   },
   typography: {useNextVariants: true},
