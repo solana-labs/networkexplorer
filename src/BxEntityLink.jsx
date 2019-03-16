@@ -41,7 +41,7 @@ class BxEntityLink extends React.Component {
 
     renderProgramId() {
         return (
-          <Link component={RouterLink} to={"/txns-by-prgid/" + this.props.prg_id}>
+          <Link component={RouterLink} to={"/txns-by-prgid/" + this.props.prg_id} color="secondary">
               <code title={this.props.prg_id}>{this.props.prg_id.substring(0, 22) + (this.props.prg_id.length > 22 ? "\u2026" : "")}</code>
           </Link>
         );
