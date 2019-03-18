@@ -11,6 +11,7 @@ class BxHelpLink extends React.Component {
     return (
         <Link
           href={`https://solana-labs.github.io/${BOOK_VERSION}/terminology.html#${term}`}
+          title={'Click for more info about: ' + text}
           target="_new"
         >
           <InfoIcon fontSize="small" color="disabled" style={{padding:"5px", verticalAlign:'middle'}} />
