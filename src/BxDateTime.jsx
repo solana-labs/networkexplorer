@@ -4,7 +4,7 @@ import moment from 'moment';
 class BxDateTime extends React.Component {
   static DEFAULT_FMT = 'lll Z';
   static COMPACT_FMT = 'lll Z';
-  static ISO8601_FMT = 'YYYY-MM-DD HH:mm';
+  static ISO8601_FMT = 'YYYY/MM/DD HH:mm';
 
   static formatDateTime(dateTime, options) {
     let {fromNow, style, local} = (options || {});

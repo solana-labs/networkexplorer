@@ -26,7 +26,10 @@ const history = createBrowserHistory();
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: '95%',
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
   },
   grow: {
     flexGrow: 1,
@@ -47,9 +50,6 @@ const styles = theme => ({
     top: theme.spacing.unit,
     color: theme.palette.grey[500],
   },
-  link: {
-    color: theme.palette.primary.light,
-  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -59,14 +59,13 @@ const styles = theme => ({
     },
     marginRight: theme.spacing.unit * 2,
     marginLeft: 0,
-    width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing.unit * 3,
-      width: 'auto',
+      width: '740px',
     },
   },
   searchIcon: {
-    width: theme.spacing.unit * 9,
+    width: theme.spacing.unit * 5,
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -82,11 +81,11 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
+    paddingLeft: theme.spacing.unit * 5,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: 200,
+      width: '100%',
     },
   },
   sectionDesktop: {
@@ -117,6 +116,9 @@ const theme = createMuiTheme({
     type: 'dark',
     primary: {
       main: '#000000',
+    },
+    secondary: {
+      main: '#2BFEBC',
     },
   },
   typography: {useNextVariants: true},

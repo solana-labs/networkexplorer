@@ -156,7 +156,7 @@ async function sendMgetKeysZipValuesResult(keys, displayKeys, res) {
     let result = await mgetAsync(keys);
 
     if (result) {
-      res.send(JSON.stringify(_.zipObject(keys, result)) + '\n');
+      res.send(JSON.stringify(_.zipObject(displayKeys, result)) + '\n');
     } else {
       res.status(404).send('{"error":"not_found"}\n');
     }

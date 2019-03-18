@@ -11,7 +11,7 @@ class BxEntityLink extends React.Component {
 
     renderBlock() {
         return (
-            <Link component={RouterLink} to={"/blk/" + this.props.blk}>
+            <Link component={RouterLink} to={"/blk/" + this.props.blk} color="secondary">
                 <code title={this.props.blk}>{this.props.blk}</code>
             </Link>
         );
@@ -19,7 +19,7 @@ class BxEntityLink extends React.Component {
 
     renderEntry() {
         return (
-            <Link component={RouterLink} to={"/ent/" + this.props.ent}>
+            <Link component={RouterLink} to={"/ent/" + this.props.ent} color="secondary">
                 <code title={this.props.ent}>{this.props.ent}</code>
             </Link>
         );
@@ -27,7 +27,7 @@ class BxEntityLink extends React.Component {
 
     renderTransaction() {
         return (
-            <Link component={RouterLink} to={"/txn/" + this.props.txn}>
+            <Link component={RouterLink} to={"/txn/" + this.props.txn} color="secondary">
                 <code title={this.props.txn}>{this.props.txn}</code>
             </Link>
         );
@@ -41,7 +41,7 @@ class BxEntityLink extends React.Component {
 
     renderProgramId() {
         return (
-          <Link component={RouterLink} to={"/txns-by-prgid/" + this.props.prg_id}>
+          <Link component={RouterLink} to={"/txns-by-prgid/" + this.props.prg_id} color="secondary">
               <code title={this.props.prg_id}>{this.props.prg_id.substring(0, 22) + (this.props.prg_id.length > 22 ? "\u2026" : "")}</code>
           </Link>
         );
