@@ -28,7 +28,7 @@ class BxDataTable extends React.Component {
                 Block ID
                 <BxHelpLink text="Block ID" term="block"/>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 Block Height
                 <BxHelpLink text="Block Height" term="block-height"/>
               </TableCell>
@@ -41,7 +41,7 @@ class BxDataTable extends React.Component {
                 <TableCell component="th" scope="row">
                   <BxEntityLink blk={row.id}/>
                 </TableCell>
-                <TableCell align="right">{row.s}</TableCell>
+                <TableCell align="center">{row.s}</TableCell>
                 <TableCell align="right">
                   <BxDateTime dateTime={row.dt} local/>
                 </TableCell>
@@ -81,7 +81,7 @@ class BxDataTable extends React.Component {
                 Program ID
                 <BxHelpLink text="Program" term="program-id"/>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 Block Height
                 <BxHelpLink text="Block Height" term="block-height"/>
               </TableCell>
@@ -106,7 +106,7 @@ class BxDataTable extends React.Component {
                   <br/>
                   <span>&nbsp;</span> 
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                   {row.s}
                   <br/>
                   <span>&nbsp;</span> 
