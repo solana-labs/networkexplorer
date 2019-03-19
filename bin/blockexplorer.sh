@@ -43,10 +43,10 @@ trap cleanup SIGINT SIGTERM ERR
 set -x
 redis-cli ping
 
-node build/api/api.js 2>&1 | tee "$cwd"/solana-blockexplorer-api.log &
+npm run start-prod:api 2>&1 | tee "$cwd"/solana-blockexplorer-api.log &
 api=$!
 
-npm run serve:ui 2>&1 | tee "$cwd"/solana-blockexplorer-ui.log &
+npm run start-prod:ui 2>&1 | tee "$cwd"/solana-blockexplorer-ui.log &
 ui=$!
 
 wait "$ui"
