@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+cwd=$PWD
+
 rootDir=$(
   cd "$(dirname "$0")";
   node -p '
@@ -26,7 +28,7 @@ rootDir=$(
 cd "$rootDir"
 
 if [[ ! -d build || ! -f build/api/api.js ]]; then
-  echo "Error: build/ artifacts missing"
+  echo "Error: build/ artifacts missing.  Run |yarn run build| to create them"
   exit 1
 fi
 
@@ -41,10 +43,10 @@ trap cleanup SIGINT SIGTERM ERR
 set -x
 redis-cli ping
 
-node build/api/api.js &
+node build/api/api.js 2>&1 | tee "$cwd"/solana-blockexplorer-api.log &
 api=$!
 
-npm run serve:ui &
+npm run serve:ui 2>&1 | tee "$cwd"/solana-blockexplorer-ui.log &
 ui=$!
 
 wait "$ui"
