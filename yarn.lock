@@ -10698,10 +10698,10 @@ react-app-polyfill@^0.2.2:
     raf "3.4.1"
     whatwg-fetch "3.0.0"
 
-react-chartjs-2@^2.7.5:
-  version "2.7.5"
-  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.7.5.tgz#75b1408e0f02c35a04386d4d0731aaaade72e471"
-  integrity sha512-BQvz/aCOxXXmY9DFZzAQChDfq2ve/WCBQ+A8d7EkF+1gy7EGNh3BwxRpWu2It9y+O4K27WvWUJEI5Sz4UhO3QA==
+react-chartjs-2@^2.7.6:
+  version "2.7.6"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.7.6.tgz#b8cd29bed00bf55b9e8172b06466b4ecf2b86bfb"
+  integrity sha512-xDr0jhgt/o26atftXxTVsepz+QYZI2GNKBYpxtLvYgwffLUm18a9n562reUJAHvuwKsy2v+qMlK5HyjFtSW0mg==
   dependencies:
     lodash "^4.17.4"
     prop-types "^15.5.8"
