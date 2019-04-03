@@ -23,7 +23,7 @@
     "nocache": "^2.0.0",
     "react-debounce-render": "^5.0.0",
     "redis": "^2.8.0",
-    "serve": "^10.1.2"
+    "serve": "^11.0.0"
   },
   "devDependencies": {
     "@material-ui/core": "^3.9.3",
