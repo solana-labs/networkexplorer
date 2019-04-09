@@ -59,7 +59,7 @@ class BridgeFn {
         });
 
         tx.fee = txn.fee;
-        tx.last_id = txn.lastId;
+        tx.recent_blockhash = txn.recentBlockhash;
 
         return tx;
       });
@@ -199,7 +199,7 @@ class RedisHandler {
         tx.entry_id = message.hash;
         tx.instructions = txn.instructions;
         tx.fee = txn.fee;
-        tx.last_id = txn.last_id;
+        tx.recent_blockhash = txn.recent_blockhash;
 
         let txnJson = JSON.stringify(tx);
 
@@ -226,22 +226,34 @@ class RedisHandler {
           message.s,
           message.dt,
           message.hash,
-          tx.instructions[0].program_id,
-          tx.instructions[0].keys.join(','),
-          tx.id,
-        ].join('#');
+        ];
+        if (tx.instructions.length > 0) {
+          txnMsg.push(tx.instructions[0].program_id);
+          txnMsg.push(tx.instructions[0].keys.join(','));
+        } else {
+          // Transactions should always have at least one instruction.  But if
+          // the Transaction was not deserialized correctly we could end up
+          // here.
+          txnMsg.push('');
+          txnMsg.push('');
+        }
+        txnMsg.push(tx.id);
+        txnMsg = txnMsg.join('#');
+
         commands.push(['sadd', `!ent-txn:${message.hash}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);
-        commands.push([
-          'lpush',
-          `!txns-by-prgid-timeline:${tx.instructions[0].program_id}`,
-          txnMsg,
-        ]);
-        commands.push([
-          'publish',
-          `@program_id:${tx.instructions[0].program_id}`,
-          txnMsg,
-        ]);
+        if (tx.instructions.length > 0) {
+          commands.push([
+            'lpush',
+            `!txns-by-prgid-timeline:${tx.instructions[0].program_id}`,
+            txnMsg,
+          ]);
+          commands.push([
+            'publish',
+            `@program_id:${tx.instructions[0].program_id}`,
+            txnMsg,
+          ]);
+        }
       });
 
       if (txCount > 0) {
