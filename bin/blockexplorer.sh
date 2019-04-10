@@ -37,18 +37,37 @@ cleanup() {
   for pid in "$api" "$ui"; do
     [[ -z $pid ]] || kill "$pid"
   done
+  exit 1
 }
 trap cleanup SIGINT SIGTERM ERR
 
-set -x
-redis-cli ping
+(
+  set -x
+  redis-cli ping
+)
 
-npm run start-prod:api 2>&1 | tee "$cwd"/solana-blockexplorer-api.log &
-api=$!
+rm -f "$cwd"/solana-blockexplorer-{api,ui}.log
 
-npm run start-prod:ui 2>&1 | tee "$cwd"/solana-blockexplorer-ui.log &
-ui=$!
-
-wait "$ui"
+api=
 ui=
-cleanup
+while true; do
+  if [[ -z $api ]] || ! kill -0 "$api"; then
+    logfile="$cwd"/solana-blockexplorer-api.log
+    echo "Starting api process (logfile: $logfile)"
+    date >> "$logfile"
+    npm run start-prod:api >> "$logfile" 2>&1 &
+    api=$!
+    echo "  pid: $api"
+  fi
+
+  if [[ -z $ui ]] || ! kill -0 "$ui"; then
+    logfile="$cwd"/solana-blockexplorer-ui.log
+    echo "Starting ui process (logfile: $logfile)"
+    date >> "$logfile"
+    npm run start-prod:ui >> "$logfile" 2>&1 &
+    ui=$!
+    echo "  pid: $ui"
+  fi
+
+  sleep 1
+done
