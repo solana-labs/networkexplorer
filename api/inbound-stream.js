@@ -50,7 +50,7 @@ class BridgeFn {
           let inst = {};
 
           inst.keys = _.map(y.keys, z => {
-            return z.toBase58();
+            return `${z.pubkey.toBase58()} (is_signer=${z.isSigner})`;
           });
           inst.program_id = y.programId.toBase58();
           inst.data = b58e(y.data);
