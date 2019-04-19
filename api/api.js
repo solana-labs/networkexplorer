@@ -384,14 +384,11 @@ async function sendAccountResult(req, res) {
       console.log(`${id} creating...`);
       return new Promise((resolve, reject) => {
         const connection = new solanaWeb3.Connection(url);
-        console.log(`${id} executing...`);
 	return connection.getBalance(new solanaWeb3.PublicKey(id)).then(balance => {
-          console.log(`${id} has a balance of ${balance}`);
           return resolve({id:id, balance: balance});
         });
       });
     });
-    console.log(thePromises);
 
     return Promise.all(thePromises).then(values => {
       let consolidated = _.reduce(values, (a, v) => {
