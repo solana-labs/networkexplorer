@@ -381,7 +381,6 @@ async function sendAccountResult(req, res) {
     let ids = idsStr.split(",");
 
     let thePromises = _.map(ids, id => {
-      console.log(`${id} creating...`);
       return new Promise((resolve, reject) => {
         const connection = new solanaWeb3.Connection(url);
 	return connection.getBalance(new solanaWeb3.PublicKey(id)).then(balance => {
