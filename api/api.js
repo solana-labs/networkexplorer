@@ -16,6 +16,12 @@ import geoip from 'geoip-lite';
 import YAML from 'yaml';
 import fs from 'fs';
 import assert from 'assert';
+let solanaWeb3 = require('@solana/web3.js');
+
+//
+// FIXME: make configurable
+//
+let FULLNODE_URL = 'http://localhost:8899';
 
 import config from './config';
 
@@ -367,6 +373,45 @@ async function sendSearchResults(req, res) {
 
 app.get('/search/:id', (req, res) => {
   sendSearchResults(req, res);
+});
+
+async function sendAccountResult(req, res) {
+  try {
+    let idsStr = req.params.ids;
+    let ids = idsStr.split(",");
+
+    let thePromises = _.map(ids, id => {
+      console.log(`${id} creating...`);
+      return new Promise((resolve, reject) => {
+        const connection = new solanaWeb3.Connection(url);
+        console.log(`${id} executing...`);
+	return connection.getBalance(new solanaWeb3.PublicKey(id)).then(balance => {
+          console.log(`${id} has a balance of ${balance}`);
+          return resolve({id:id, balance: balance});
+        });
+      });
+    });
+    console.log(thePromises);
+
+    return Promise.all(thePromises).then(values => {
+      let consolidated = _.reduce(values, (a, v) => {
+        a[v.id] = v.balance;
+        return a;
+      }, {});
+
+      res.send(JSON.stringify(consolidated) + '\n');
+    });
+  } catch (err) {
+    res.status(500).send(`{"error":"server_error","err":"${err}"}\n`);
+    return;
+  }
+
+  // give up
+  res.status(404).send('{"error":"not_found"}\n');
+}
+
+app.get('/accts_bal/:ids', (req, res) => {
+  sendAccountResult(req, res);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
