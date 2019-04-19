@@ -6,6 +6,7 @@
 import express from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
+import expressWs from 'express-ws';
 import {promisify} from 'util';
 import redis from 'redis';
 import WebSocket from 'ws';
@@ -29,6 +30,11 @@ const app = express();
 
 const port = 3001;
 const MINUTE_MS = 60 * 1000;
+
+//
+// FIXME: make configurable
+//
+const FULLNODE_URL = 'http://localhost:8899';
 
 function getClient() {
   let props = config.redis.path
@@ -375,25 +381,37 @@ app.get('/search/:id', (req, res) => {
   sendSearchResults(req, res);
 });
 
-async function sendAccountResult(req, res) {
+function sendAccountResult(req, res) {
+  if (!req.params.ids) {
+    // give up
+    res.status(404).send('{"error":"not_found"}\n');
+    return;
+  }
+
   try {
     let idsStr = req.params.ids;
-    let ids = idsStr.split(",");
+    let ids = idsStr.split(',');
 
     let thePromises = _.map(ids, id => {
-      return new Promise((resolve, reject) => {
-        const connection = new solanaWeb3.Connection(url);
-	return connection.getBalance(new solanaWeb3.PublicKey(id)).then(balance => {
-          return resolve({id:id, balance: balance});
-        });
+      return new Promise(resolve => {
+        const connection = new solanaWeb3.Connection(FULLNODE_URL);
+        return connection
+          .getBalance(new solanaWeb3.PublicKey(id))
+          .then(balance => {
+            return resolve({id: id, balance: balance});
+          });
       });
     });
 
     return Promise.all(thePromises).then(values => {
-      let consolidated = _.reduce(values, (a, v) => {
-        a[v.id] = v.balance;
-        return a;
-      }, {});
+      let consolidated = _.reduce(
+        values,
+        (a, v) => {
+          a[v.id] = v.balance;
+          return a;
+        },
+        {},
+      );
 
       res.send(JSON.stringify(consolidated) + '\n');
     });
@@ -401,9 +419,6 @@ async function sendAccountResult(req, res) {
     res.status(500).send(`{"error":"server_error","err":"${err}"}\n`);
     return;
   }
-
-  // give up
-  res.status(404).send('{"error":"not_found"}\n');
 }
 
 app.get('/accts_bal/:ids', (req, res) => {
