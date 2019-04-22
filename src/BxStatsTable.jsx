@@ -7,8 +7,18 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import _ from 'lodash';
+import copy from 'copy-to-clipboard';
 
 class BxStatsTable extends React.Component {
+
+    copyLeaderPublickey() {
+      const leader = this.props.globalStats['!ent-last-leader'];
+      if (leader) {
+        console.log(`Copied ${leader} to clipboard`);
+        copy(leader);
+      }
+    }
+
     render() {
         const {globalStats} = this.props;
 
@@ -23,7 +33,7 @@ class BxStatsTable extends React.Component {
             <Grid container justify="center" spacing={24} className="sideBySide">
                 <Grid item>
                     <Card>
-                        <CardContent>
+                        <CardContent onClick={() => this.copyLeaderPublickey()}>
                             <Typography variant="h5" component="h2" align="center">
                                 Current Leader
                                 <BxHelpLink text="Leader" term="leader"/>
