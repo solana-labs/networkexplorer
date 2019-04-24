@@ -19,7 +19,7 @@ class BxStatsTable extends React.Component {
   }
 
   render() {
-    const {globalStats} = this.props;
+    const {globalStats, nodeCount} = this.props;
 
     let currentTpsKey = null;
     _.forEach(globalStats, (v, k) => {
@@ -51,7 +51,7 @@ class BxStatsTable extends React.Component {
                 <BxHelpLink text="Node Count" term="node-count" />
               </Typography>
               <Typography component="p" align="center">
-                {globalStats['node-count']}
+                {nodeCount}
               </Typography>
             </CardContent>
           </Card>

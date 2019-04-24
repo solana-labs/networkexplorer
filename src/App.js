@@ -21,6 +21,7 @@ import BxTransactionChart from './BxTransactionChart';
 import BxStatsTable from './BxStatsTable';
 import BxDialog from './BxDialog';
 import BxDialogTransactions from './BxDialogTransactions';
+import BxDialogWorldMap from './BxDialogWorldMap';
 import BxAppBar from './BxAppBar';
 
 const history = createBrowserHistory();
@@ -103,11 +104,35 @@ const styles = theme => ({
   },
 });
 
+async function geoip(ip: string) {
+  let lat = 11.6065;
+  let lng = 165.3768;
+
+  try {
+    const result = await window.fetch(
+      `http:${BLOCK_EXPLORER_API_BASE}/geoip/${ip}`,
+    );
+    if (result.status === 200) {
+      const json = await result.json();
+      lat = json[0];
+      lng = json[1];
+      console.log(ip, 'at', lat, lng);
+    }
+  } catch (err) {
+    console.log('geoip of', ip, 'failed with:', err);
+  }
+
+  // Add some Math.random() to prevent nodes in the same data center from fully
+  // overlaying each other
+  return [lat + Math.random() / 10 - 0.05, lng + Math.random() / 10 - 0.05];
+}
+
 const BLOCK_EXPLORER_API_BASE = EndpointConfig.BLOCK_EXPLORER_API_BASE;
 
 const BxAppBarThemed = withStyles(styles)(BxAppBar);
 const BxDialogThemed = withStyles(styles)(BxDialog);
 const BxDialogTransactionsThemed = withStyles(styles)(BxDialogTransactions);
+const BxDialogWorldMapThemed = withStyles(styles)(BxDialogWorldMap);
 const BxStatsTableThemed = withStyles(styles)(BxStatsTable);
 const BxTransactionChartThemed = withStyles(styles)(BxTransactionChart);
 const BxDataTableThemed = withStyles(styles)(BxDataTable);
@@ -138,8 +163,9 @@ class App extends Component {
       selectedValue: null,
       currentMatch: null,
       stateLoading: false,
+      nodes: [],
       globalStats: {
-        'node-count': 0,
+        '!ent-last-leader': null,
         '!blk-last-slot': 0,
         '!txn-count': 0,
         '!txn-per-sec-max': 0,
@@ -215,11 +241,31 @@ class App extends Component {
     );
 
     try {
-      const nodes = await this.connection.getClusterNodes();
-      this.updateSpecificGlobalStateAttribute('node-count', nodes.length);
+      const oldNodes = this.state.nodes;
+      const newNodes = await this.connection.getClusterNodes();
+
+      let modified = oldNodes.length !== newNodes.length;
+      for (const newNode of newNodes) {
+        const oldNode = oldNodes.find(node => node.id === newNode.id);
+        if (oldNode) {
+          newNode.lat = oldNode.lat;
+          newNode.lng = oldNode.lng;
+        } else {
+          const ip = newNode.gossip.split(':')[0];
+          const [lat, lng] = await geoip(ip);
+          newNode.lat = lat;
+          newNode.lng = lng;
+          modified = true;
+        }
+      }
+
+      if (modified) {
+        console.log('newNodes', newNodes);
+        this.setState({nodes: newNodes});
+      }
     } catch (err) {
-      this.updateSpecificGlobalStateAttribute('node-count', '?');
-      console.log(err);
+      this.setState({nodes: []});
+      console.log('getClusterNodes failed:', err.message);
     }
   }
 
@@ -471,6 +517,10 @@ class App extends Component {
     history.push('/');
   };
 
+  showMap = () => () => {
+    history.push(`/map`);
+  };
+
   toggleEnabled = self => event => {
     if (event.target.checked === self.state.enabled) {
       return;
@@ -581,8 +631,20 @@ class App extends Component {
               handleSearch={self.handleSearch(self)}
               enabled={this.state.enabled}
               handleSwitch={this.toggleEnabled(self)}
+              handleMap={this.showMap(self)}
             />
             <div>
+              <Route
+                path="/map"
+                render={() => (
+                  <BxDialogWorldMapThemed
+                    open={true}
+                    onClose={self.handleDialogClose}
+                    nodes={this.state.nodes}
+                    leaderId={this.state.globalStats['!ent-last-leader']}
+                  />
+                )}
+              />
               <Route
                 path="/txn/:id"
                 exact
@@ -629,7 +691,10 @@ class App extends Component {
               />
             </div>
             <p />
-            <BxStatsTableThemed globalStats={this.state.globalStats} />
+            <BxStatsTableThemed
+              globalStats={this.state.globalStats}
+              nodeCount={this.state.nodes.length}
+            />
             <p />
             <BxTransactionChartThemed txnStats={this.state.txnStats} />
             <p />
