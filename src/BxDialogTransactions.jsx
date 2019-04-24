@@ -20,10 +20,21 @@ class BxDialogTransactions extends React.Component {
   renderTable() {
     const {selectedValue} = this.props;
 
-    if (selectedValue && selectedValue.transactions && selectedValue.transactions.length) {
-      return (<BxDataTable dataType="txn" dataItems={selectedValue.transactions} onClose={this.handleClose} noTitle/>);
+    if (
+      selectedValue &&
+      selectedValue.transactions &&
+      selectedValue.transactions.length
+    ) {
+      return (
+        <BxDataTable
+          dataType="txn"
+          dataItems={selectedValue.transactions}
+          onClose={this.handleClose}
+          noTitle
+        />
+      );
     } else {
-      return (<Typography>No Transactions. Yet.</Typography>);
+      return <Typography>No Transactions. Yet.</Typography>;
     }
   }
 
@@ -37,27 +48,40 @@ class BxDialogTransactions extends React.Component {
     }
 
     return (
-      <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" fullWidth={true} maxWidth={'xl'} {...other}>
+      <Dialog
+        onClose={onClose}
+        aria-labelledby="simple-dialog-title"
+        fullWidth={true}
+        maxWidth={'xl'}
+        {...other}
+      >
         <DialogTitle id="simple-dialog-title" title={JSON.stringify(value)}>
           Transactions for Program ID: {value.id}
-          <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-            <CloseIcon/>
+          <IconButton
+            aria-label="Close"
+            className={classes.closeButton}
+            onClick={onClose}
+          >
+            <CloseIcon />
           </IconButton>
         </DialogTitle>
         <Paper>
           <Table>
             <TableBody>
               <TableRow>
-                <TableCell component="th" scope="row">QR Code:</TableCell>
+                <TableCell component="th" scope="row">
+                  QR Code:
+                </TableCell>
                 <TableCell align="right" title={url}>
-                  <QRCode value={url} style={{width: '120px', height: '120px'}}/>
+                  <QRCode
+                    value={url}
+                    style={{width: '120px', height: '120px'}}
+                  />
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
-          {
-            this.renderTable()
-          }
+          {this.renderTable()}
         </Paper>
       </Dialog>
     );
@@ -70,4 +94,4 @@ BxDialogTransactions.propTypes = {
   selectedValue: PropTypes.object,
 };
 
-export default debounceRender(BxDialogTransactions, 100, { leading: true });
+export default debounceRender(BxDialogTransactions, 100, {leading: true});
