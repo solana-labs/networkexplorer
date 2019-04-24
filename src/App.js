@@ -12,7 +12,7 @@ import RobustWebSocket from 'robust-websocket';
 import _ from 'lodash';
 import {matchPath, Route} from 'react-router';
 import './App.css';
-import createBrowserHistory from 'history/createBrowserHistory';
+import {createBrowserHistory} from 'history';
 import {Connection} from '@solana/web3.js';
 
 import EndpointConfig from './EndpointConfig';
