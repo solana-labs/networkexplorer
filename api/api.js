@@ -12,6 +12,7 @@ import WebSocket from 'ws';
 import _ from 'lodash';
 import './inbound-stream';
 import expressWs from 'express-ws';
+import geoip from 'geoip-lite';
 
 import config from './config';
 
@@ -250,6 +251,16 @@ async function sendBlockResult(req, res) {
 
 app.get('/blk/:id', (req, res) => {
   sendBlockResult(req, res);
+});
+
+app.get('/geoip/:ip', (req, res) => {
+  const {ip} = req.params;
+  const geo = geoip.lookup(ip);
+  if (geo === null) {
+    res.status(404).send('{"error":"not_found"}\n');
+  } else {
+    res.send(JSON.stringify(geo.ll) + '\n');
+  }
 });
 
 async function sendEntryResult(req, res) {

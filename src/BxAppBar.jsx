@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 //import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import MapIcon from '@material-ui/icons/Map';
 // import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
@@ -18,6 +19,12 @@ class BxAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+  };
+
+  handleMap = event => {
+    if (this.props.handleMap) {
+      this.props.handleMap(event);
+    }
   };
 
   handleSearch = event => {
@@ -144,16 +151,9 @@ class BxAppBar extends React.Component {
                 </div>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                  {/*<IconButton color="inherit">*/}
-                  {/*<Badge badgeContent={4} color="secondary">*/}
-                  {/*<MailIcon />*/}
-                  {/*</Badge>*/}
-                  {/*</IconButton>*/}
-                  {/*<IconButton color="inherit">*/}
-                  {/*<Badge badgeContent={17} color="secondary">*/}
-                  {/*<NotificationsIcon />*/}
-                  {/*</Badge>*/}
-                  {/*</IconButton>*/}
+                  <IconButton color="inherit" onClick={this.handleMap}>
+                    <MapIcon />
+                  </IconButton>
                   <Switch
                     checked={this.props.enabled}
                     onChange={this.handleSwitch}
