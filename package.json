@@ -64,7 +64,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:watch": "watch 'npm run lint:fix' . --wait=1",
     "prepack": "set -ex; npm run lint; npm run build",
-    "pretty": "prettier --write '{,{api,src}/**/}*.js'",
+    "pretty": "prettier --write '{,{api,src}/**/}*.js{,x}'",
     "re": "semantic-release --repository-url git@github.com:solana-labs/blockexplorer.git",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:ui": "react-scripts start",
