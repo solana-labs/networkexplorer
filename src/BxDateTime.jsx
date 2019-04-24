@@ -7,7 +7,7 @@ class BxDateTime extends React.Component {
   static ISO8601_FMT = 'YYYY/MM/DD HH:mm';
 
   static formatDateTime(dateTime, options) {
-    let {fromNow, style, local} = (options || {});
+    let {fromNow, style, local} = options || {};
     let theDateTime = moment.utc(dateTime);
 
     if (fromNow) {
