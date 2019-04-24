@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {matchPath, Route} from 'react-router';
 import './App.css';
 import createBrowserHistory from 'history/createBrowserHistory';
+import {Connection} from '@solana/web3.js';
 
 import EndpointConfig from './EndpointConfig';
 import BxDataTable from './BxDataTable';
@@ -129,6 +130,7 @@ class App extends Component {
     super(props);
 
     this.ws = null;
+    this.connection = new Connection(EndpointConfig.BLOCK_EXPLORER_RPC_URL);
 
     this.state = {
       enabled: true,
@@ -136,7 +138,12 @@ class App extends Component {
       selectedValue: null,
       currentMatch: null,
       stateLoading: false,
-      globalStats: {},
+      globalStats: {
+        'node-count': 0,
+        '!blk-last-slot': 0,
+        '!txn-count': 0,
+        '!txn-per-sec-max': 0,
+      },
       txnStats: {},
       users: [],
       userState: {},
@@ -201,11 +208,19 @@ class App extends Component {
     });
   }
 
-  updateGlobalStats() {
+  async updateGlobalStats() {
     this.getRemoteState(
       'globalStats',
       `http:${BLOCK_EXPLORER_API_BASE}/global-stats`,
     );
+
+    try {
+      const nodes = await this.connection.getClusterNodes();
+      this.updateSpecificGlobalStateAttribute('node-count', nodes.length);
+    } catch (err) {
+      this.updateSpecificGlobalStateAttribute('node-count', '?');
+      console.log(err);
+    }
   }
 
   updateTxnStats() {

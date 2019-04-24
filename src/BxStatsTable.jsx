@@ -35,11 +35,24 @@ class BxStatsTable extends React.Component {
                     <Card>
                         <CardContent onClick={() => this.copyLeaderPublickey()}>
                             <Typography variant="h5" component="h2" align="center">
-                                Current Leader
+                                Leader
                                 <BxHelpLink text="Leader" term="leader"/>
                             </Typography>
                             <Typography component="p" align="center">
                                 <BxEntityLink node={globalStats['!ent-last-leader']} />
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5" component="h2">
+                                Node Count
+                                <BxHelpLink text="Node Count" term="node-count"/>
+                            </Typography>
+                            <Typography component="p" align="center">
+                                {globalStats['node-count']}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -87,7 +100,7 @@ class BxStatsTable extends React.Component {
                     <Card>
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                Total Transactions
+                                Transactions
                                 <BxHelpLink text="All-Time Total Transactions" term="transaction"/>
                             </Typography>
                             <Typography component="p" align="center">
