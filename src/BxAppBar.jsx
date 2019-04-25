@@ -10,15 +10,28 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 //import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import MapIcon from '@material-ui/icons/Map';
 // import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
 
+
 class BxAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+  };
+
+  handleDashboard = event => {
+    const matches = window.location.hostname.match('([.*]).testnet.solana.com');
+    let url = 'https://metrics.solana.com:3000/d/testnet-edge/testnet-monitor-edge?refresh=60s';
+    if (matches) {
+      const testnet = matches[1];
+      url += `&var-testnet=testnet-${testnet}`;
+    }
+
+    window.open(url);
   };
 
   handleMap = event => {
@@ -151,6 +164,9 @@ class BxAppBar extends React.Component {
                 </div>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
+                  <IconButton color="inherit" onClick={this.handleDashboard}>
+                    <DashboardIcon />
+                  </IconButton>
                   <IconButton color="inherit" onClick={this.handleMap}>
                     <MapIcon />
                   </IconButton>
