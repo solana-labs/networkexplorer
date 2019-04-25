@@ -1,6 +1,7 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import ComputerIcon from '@material-ui/icons/Computer';
+import PowerOffIcon from '@material-ui/icons/PowerOff';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
@@ -43,6 +44,8 @@ class Node extends React.Component {
         const result = await connection.fullnodeExit();
         if (!result) {
           window.alert('Node declined to exit');
+        } else {
+          node.terminated = true;
         }
       }
     } catch (err) {
@@ -67,7 +70,7 @@ class Node extends React.Component {
           onClick={this.handleClick}
           {...other}
         >
-          <ComputerIcon />
+          {node.terminated ? <PowerOffIcon /> : <ComputerIcon />}
         </Fab>
         <Popover
           id="simple-popper"
@@ -88,7 +91,7 @@ class Node extends React.Component {
             <br />
             <b>Gossip:</b> {node.gossip}
           </Typography>
-          {node.rpc && (
+          {node.rpc && !node.terminated && (
             <div style={{textAlign: 'center'}}>
               <p />
               <Button onClick={this.handleTerminate}>Terminate Node</Button>
