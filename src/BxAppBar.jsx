@@ -125,7 +125,7 @@ class BxAppBar extends React.Component {
                 >
                   <a href="https://solana.com" target="_new">
                     <img
-                      src="/solana-logo.svg"
+                      src="/solana-logo-teal.svg"
                       alt="Solana Logo"
                       style={{width: '54px'}}
                     />

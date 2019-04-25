@@ -1,6 +1,5 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import ComputerIcon from '@material-ui/icons/Computer';
 import PowerOffIcon from '@material-ui/icons/PowerOff';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -70,7 +69,17 @@ class Node extends React.Component {
           onClick={this.handleClick}
           {...other}
         >
-          {node.terminated ? <PowerOffIcon /> : <ComputerIcon />}
+          {node.terminated ? (
+            <PowerOffIcon />
+          ) : (
+            <img
+              src={
+                isLeader ? '/solana-logo-black.svg' : '/solana-logo-teal.svg'
+              }
+              alt="Solana Logo"
+              style={{width: '28px'}}
+            />
+          )}
         </Fab>
         <Popover
           id="simple-popper"
