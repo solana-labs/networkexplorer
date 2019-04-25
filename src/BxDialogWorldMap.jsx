@@ -119,10 +119,10 @@ Node.propTypes = {
 export default class BxDialogWorldMap extends React.Component {
   static defaultProps = {
     center: {
-      lat: 38.747,
+      lat: 0,
       lng: -120.6743,
     },
-    zoom: 1,
+    zoom: 0,
   };
 
   render() {
