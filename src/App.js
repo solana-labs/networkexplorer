@@ -250,6 +250,7 @@ class App extends Component {
         if (oldNode) {
           newNode.lat = oldNode.lat;
           newNode.lng = oldNode.lng;
+          newNode.terminated = oldNode.terminated;
         } else {
           const ip = newNode.gossip.split(':')[0];
           const [lat, lng] = await geoip(ip);
