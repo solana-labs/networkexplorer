@@ -12,7 +12,9 @@ import {Connection} from '@solana/web3.js';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-const mapApiKey = process.env.REACT_APP_MAP_API_KEY || 'AIzaSyArM4e0n53tWyK5drjXP03OmovvVJHk8OU';
+const mapApiKey =
+  process.env.REACT_APP_MAP_API_KEY ||
+  'AIzaSyArM4e0n53tWyK5drjXP03OmovvVJHk8OU';
 
 class Node extends React.Component {
   state = {
@@ -114,6 +116,17 @@ export default class BxDialogWorldMap extends React.Component {
   render() {
     const {classes, onClose, leaderId, nodes, ...other} = this.props;
 
+    const sortedNodes = nodes.slice(0);
+    sortedNodes.sort((a, b) => {
+      if (a.id === leaderId) {
+        return 1;
+      } else if (b.id === leaderId) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+
     return (
       <Dialog
         onClose={onClose}
@@ -137,7 +150,7 @@ export default class BxDialogWorldMap extends React.Component {
             defaultCenter={this.props.center}
             defaultZoom={this.props.zoom}
           >
-            {nodes.map(node => {
+            {sortedNodes.map(node => {
               return (
                 <Node
                   key={node.id}

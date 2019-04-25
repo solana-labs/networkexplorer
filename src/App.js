@@ -623,6 +623,8 @@ class App extends Component {
   render() {
     let self = this;
 
+    const leaderId = this.state.globalStats['!ent-last-leader'];
+
     return (
       <MuiThemeProvider theme={theme}>
         <Router history={history}>
@@ -641,7 +643,7 @@ class App extends Component {
                     open={true}
                     onClose={self.handleDialogClose}
                     nodes={this.state.nodes}
-                    leaderId={this.state.globalStats['!ent-last-leader']}
+                    leaderId={leaderId}
                   />
                 )}
               />
