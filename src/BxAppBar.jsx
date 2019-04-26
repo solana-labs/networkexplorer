@@ -16,7 +16,6 @@ import MapIcon from '@material-ui/icons/Map';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
 
-
 class BxAppBar extends React.Component {
   state = {
     anchorEl: null,
@@ -24,8 +23,9 @@ class BxAppBar extends React.Component {
   };
 
   handleDashboard = event => {
-    const matches = window.location.hostname.match('([.*]).testnet.solana.com');
-    let url = 'https://metrics.solana.com:3000/d/testnet-edge/testnet-monitor-edge?refresh=60s';
+    const matches = window.location.hostname.match('(.*).testnet.solana.com');
+    let url =
+      'https://metrics.solana.com:3000/d/testnet-edge/testnet-monitor-edge?refresh=60s';
     if (matches) {
       const testnet = matches[1];
       url += `&var-testnet=testnet-${testnet}`;
