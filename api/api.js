@@ -13,6 +13,9 @@ import _ from 'lodash';
 import './inbound-stream';
 import expressWs from 'express-ws';
 import geoip from 'geoip-lite';
+import YAML from 'yaml';
+import fs from 'fs';
+import assert from 'assert';
 
 import config from './config';
 
@@ -253,8 +256,26 @@ app.get('/blk/:id', (req, res) => {
   sendBlockResult(req, res);
 });
 
+let geoipWhitelist = {};
+if (fs.existsSync('blockexplorer-geoip.yml')) {
+  try {
+    const file = fs.readFileSync('blockexplorer-geoip.yml', 'utf8');
+    geoipWhitelist = YAML.parse(file);
+    console.log('geoip whitelist:', geoipWhitelist);
+    assert(typeof geoipWhitelist === 'object');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 app.get('/geoip/:ip', (req, res) => {
   const {ip} = req.params;
+
+  if (geoipWhitelist[ip]) {
+    res.send(JSON.stringify(geoipWhitelist[ip]) + '\n');
+    return;
+  }
+
   const geo = geoip.lookup(ip);
   if (geo === null) {
     res.status(404).send('{"error":"not_found"}\n');
