@@ -3,6 +3,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import PowerOffIcon from '@material-ui/icons/PowerOff';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
@@ -62,6 +63,7 @@ class Node extends React.Component {
       <div>
         <Fab
           size="small"
+          diableRipple="true"
           color={isLeader ? 'secondary' : 'primary'}
           aria-owns={open ? 'simple-popper' : undefined}
           aria-haspopup="true"
@@ -74,7 +76,11 @@ class Node extends React.Component {
           ) : (
             <img
               src={
-                isLeader ? '/solana-logo-black.svg' : '/solana-logo-teal.svg'
+                open
+                  ? '/solana-logo-blue.svg'
+                  : isLeader
+                  ? '/solana-logo-black.svg'
+                  : '/solana-logo-teal.svg'
               }
               alt="Solana Logo"
               style={{width: '28px'}}
@@ -95,23 +101,23 @@ class Node extends React.Component {
             horizontal: 'center',
           }}
         >
-          <Typography>
+          <Typography style={{padding: '15px'}}>
             <b>Node:</b> {node.id}
             <br />
             <b>Gossip:</b> {node.gossip}
+            {node.rpc && !node.terminated && (
+              <div style={{textAlign: 'center'}}>
+                <p />
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={this.handleTerminate}
+                >
+                  Terminate Node
+                </Button>
+              </div>
+            )}
           </Typography>
-          {node.rpc && !node.terminated && (
-            <div style={{textAlign: 'center'}}>
-              <p />
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={this.handleTerminate}
-              >
-                Terminate Node
-              </Button>
-            </div>
-          )}
         </Popover>
       </div>
     );
@@ -153,7 +159,7 @@ export default class BxDialogWorldMap extends React.Component {
         {...other}
       >
         <DialogTitle id="simple-dialog-title">
-          Cluster Map: <i>{nodes.length} nodes</i>
+          Node Cluster Map
           <IconButton
             aria-label="Close"
             className={classes.closeButton}
@@ -162,26 +168,29 @@ export default class BxDialogWorldMap extends React.Component {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <div style={{height: '90vh', width: '100%'}}>
-          <GoogleMapReact
-            bootstrapURLKeys={{key: mapApiKey}}
-            defaultCenter={this.props.center}
-            defaultZoom={this.props.zoom}
-          >
-            {sortedNodes.map(node => {
-              return (
-                <Node
-                  key={node.id}
-                  node={node}
-                  isLeader={node.id === leaderId}
-                  lat={node.lat}
-                  lng={node.lng}
-                  classes={classes}
-                />
-              );
-            })}
-          </GoogleMapReact>
-        </div>
+        <DialogContent>
+          <div style={{height: '85vh', width: '100%'}}>
+            <Typography>{nodes.length} nodes</Typography>
+            <GoogleMapReact
+              bootstrapURLKeys={{key: mapApiKey}}
+              defaultCenter={this.props.center}
+              defaultZoom={this.props.zoom}
+            >
+              {sortedNodes.map(node => {
+                return (
+                  <Node
+                    key={node.id}
+                    node={node}
+                    isLeader={node.id === leaderId}
+                    lat={node.lat}
+                    lng={node.lng}
+                    classes={classes}
+                  />
+                );
+              })}
+            </GoogleMapReact>
+          </div>
+        </DialogContent>
       </Dialog>
     );
   }
