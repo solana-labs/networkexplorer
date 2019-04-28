@@ -25,7 +25,7 @@ class BxAppBar extends React.Component {
   handleDashboard = event => {
     const matches = window.location.hostname.match('(.*).testnet.solana.com');
     let url =
-      'https://metrics.solana.com:3000/d/testnet-edge/testnet-monitor-edge?refresh=60s';
+      'https://metrics.solana.com:3000/d/testnet-beta/testnet-monitor-beta?refresh=5s&from=now-5m&to=now';
     if (matches) {
       const testnet = matches[1];
       url += `&var-testnet=testnet-${testnet}`;
