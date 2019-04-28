@@ -2,7 +2,6 @@ import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import PowerOffIcon from '@material-ui/icons/PowerOff';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
@@ -12,6 +11,8 @@ import Popover from '@material-ui/core/Popover';
 import {Connection} from '@solana/web3.js';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const mapApiKey =
   process.env.REACT_APP_MAP_API_KEY ||
@@ -128,6 +129,10 @@ Node.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
+
 export default class BxDialogWorldMap extends React.Component {
   static defaultProps = {
     center: {
@@ -155,21 +160,20 @@ export default class BxDialogWorldMap extends React.Component {
       <Dialog
         onClose={onClose}
         aria-labelledby="simple-dialog-title"
-        fullScreen={true}
+        fullScreen
         {...other}
+        TransitionComponent={Transition}
       >
-        <DialogTitle id="simple-dialog-title">
-          Node Cluster Map
-          <IconButton
-            aria-label="Close"
-            className={classes.closeButton}
-            onClick={onClose}
-          >
+        <Toolbar>
+          <IconButton onClick={onClose} aria-label="Close">
             <CloseIcon />
           </IconButton>
-        </DialogTitle>
+          <Typography variant="h5" className={classes.flex}>
+            Node Cluster Map
+          </Typography>
+        </Toolbar>
         <DialogContent>
-          <div style={{height: '85vh', width: '100%'}}>
+          <div style={{height: '100%', width: '100%'}}>
             <Typography>{nodes.length} nodes</Typography>
             <GoogleMapReact
               bootstrapURLKeys={{key: mapApiKey}}
