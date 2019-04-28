@@ -103,7 +103,13 @@ class Node extends React.Component {
           {node.rpc && !node.terminated && (
             <div style={{textAlign: 'center'}}>
               <p />
-              <Button onClick={this.handleTerminate}>Terminate Node</Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={this.handleTerminate}
+              >
+                Terminate Node
+              </Button>
             </div>
           )}
         </Popover>
