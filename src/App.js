@@ -235,29 +235,32 @@ class App extends Component {
     try {
       const oldNodes = this.state.nodes;
       const newNodes = await this.connection.getClusterNodes();
+      const nodes = [];
 
       let modified = oldNodes.length !== newNodes.length;
+
+      const maybeSetState = () => {
+        if (modified) {
+          this.setState({nodes});
+          modified = false;
+        }
+      };
       for (const newNode of newNodes) {
         const oldNode = oldNodes.find(node => node.id === newNode.id);
         if (oldNode) {
-          newNode.lat = oldNode.lat;
-          newNode.lng = oldNode.lng;
-          newNode.terminated = oldNode.terminated;
+          nodes.push(oldNode);
         } else {
           const ip = newNode.gossip.split(':')[0];
           const [lat, lng] = await geoip(ip);
           newNode.lat = lat;
           newNode.lng = lng;
+          nodes.push(newNode);
           modified = true;
         }
+        maybeSetState();
       }
-
-      if (modified) {
-        console.log('newNodes', newNodes);
-        this.setState({nodes: newNodes});
-      }
+      maybeSetState();
     } catch (err) {
-      this.setState({nodes: []});
       console.log('getClusterNodes failed:', err.message);
     }
 
