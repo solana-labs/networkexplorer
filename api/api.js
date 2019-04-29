@@ -12,29 +12,23 @@ import redis from 'redis';
 import WebSocket from 'ws';
 import _ from 'lodash';
 import './inbound-stream';
-import expressWs from 'express-ws';
 import geoip from 'geoip-lite';
 import YAML from 'yaml';
 import fs from 'fs';
 import assert from 'assert';
-let solanaWeb3 = require('@solana/web3.js');
+import * as solanaWeb3 from '@solana/web3.js';
+
+import config from './config';
 
 //
 // FIXME: make configurable
 //
 let FULLNODE_URL = 'http://localhost:8899';
 
-import config from './config';
-
 const app = express();
 
 const port = 3001;
 const MINUTE_MS = 60 * 1000;
-
-//
-// FIXME: make configurable
-//
-const FULLNODE_URL = 'http://localhost:8899';
 
 function getClient() {
   let props = config.redis.path

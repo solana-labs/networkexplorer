@@ -221,19 +221,19 @@ class RedisHandler {
 
         // append block hexHeight:dt:id to timeline
         // append block hexHeight:dt:id to timeline
-        let txInst = _.map(tx.instructions, (i) => {
-          return [i.program_id, i.keys.join(","), i.data].join("@");
-        }).join("|");
+        let txInst = _.map(tx.instructions, i => {
+          return [i.program_id, i.keys.join(','), i.data].join('@');
+        }).join('|');
 
-         let txnMsg = [
-           message.h,
-           message.l,
-           message.s,
-           message.dt,
-           message.hash,
-           tx.id,
-           txInst
-         ].join('#');
+        let txnMsg = [
+          message.h,
+          message.l,
+          message.s,
+          message.dt,
+          message.hash,
+          tx.id,
+          txInst,
+        ].join('#');
 
         commands.push(['sadd', `!ent-txn:${message.hash}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);

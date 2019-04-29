@@ -428,13 +428,13 @@ class App extends Component {
   parseTransactionMessage(message) {
     let fields = message.split('#');
 
-    let instructions = _.map(fields[6].split("|"), (i) => {
-      let instParts = i.split("@");
+    let instructions = _.map(fields[6].split('|'), i => {
+      let instParts = i.split('@');
 
       return {
         program_id: instParts[0],
-        keys: instParts[1].split(","),
-        data: instParts[2]
+        keys: instParts[1].split(','),
+        data: instParts[2],
       };
     });
 
@@ -446,7 +446,7 @@ class App extends Component {
       dt: fields[3],
       entry_id: fields[4],
       id: fields[5],
-      instructions
+      instructions,
     };
   }
 

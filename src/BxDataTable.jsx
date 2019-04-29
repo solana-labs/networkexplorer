@@ -60,12 +60,19 @@ class BxDataTable extends React.Component {
   renderTransactions() {
     const {dataItems, noTitle} = this.props;
 
-    let collectProgramIds = (tx) => {
-      return _.chain(tx.instructions).map((x) => x.program_id).uniq().value();
+    let collectProgramIds = tx => {
+      return _.chain(tx.instructions)
+        .map(x => x.program_id)
+        .uniq()
+        .value();
     };
 
-    let collectKeys = (tx) => {
-      return _.chain(tx.instructions).map((x) => x.keys).flatten().uniq().value();
+    let collectKeys = tx => {
+      return _.chain(tx.instructions)
+        .map(x => x.keys)
+        .flatten()
+        .uniq()
+        .value();
     };
 
     return (
@@ -120,8 +127,8 @@ class BxDataTable extends React.Component {
                 <TableCell align="right" style={{verticalAlign: 'middle'}}>
                   {_.map(collectProgramIds(row), program_id => (
                     <span key={program_id}>
-                      <BxEntityLink prg_id={program_id}/>
-                      <br/>
+                      <BxEntityLink prg_id={program_id} />
+                      <br />
                     </span>
                   ))}
                 </TableCell>
