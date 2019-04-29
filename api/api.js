@@ -256,15 +256,20 @@ app.get('/blk/:id', (req, res) => {
   sendBlockResult(req, res);
 });
 
+const geoipWhitelistFile =
+  process.env.BLOCKEXPLORER_GEOIP_WHITELIST || 'blockexplorer-geoip.yml';
 let geoipWhitelist = {};
-if (fs.existsSync('blockexplorer-geoip.yml')) {
+if (fs.existsSync(geoipWhitelistFile)) {
   try {
-    const file = fs.readFileSync('blockexplorer-geoip.yml', 'utf8');
+    const file = fs.readFileSync(geoipWhitelistFile, 'utf8');
     geoipWhitelist = YAML.parse(file);
-    console.log('geoip whitelist:', geoipWhitelist);
+    console.log(
+      `Loaded geoip whitelist from ${geoipWhitelistFile}:`,
+      geoipWhitelist,
+    );
     assert(typeof geoipWhitelist === 'object');
   } catch (err) {
-    console.log(err);
+    console.log(`Failed to process ${geoipWhitelistFile}:`, err);
   }
 }
 
