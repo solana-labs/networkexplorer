@@ -307,21 +307,10 @@ class App extends Component {
       return;
     }
 
+    let self = this;
+
     let txnFun = v => {
-      let newObj = {};
-      let fields = v.split('#');
-
-      newObj.t = 'txn';
-      newObj.h = fields[0];
-      newObj.l = fields[1];
-      newObj.s = fields[2];
-      newObj.dt = fields[3];
-      newObj.entry_id = fields[4];
-      newObj.program_id = fields[5];
-      newObj.keys = fields[6].split(',');
-      newObj.id = fields[7];
-
-      return newObj;
+      return self.parseTransactionMessage(v);
     };
 
     this.getRemoteState(
@@ -439,6 +428,16 @@ class App extends Component {
   parseTransactionMessage(message) {
     let fields = message.split('#');
 
+    let instructions = _.map(fields[6].split("|"), (i) => {
+      let instParts = i.split("@");
+
+      return {
+        program_id: instParts[0],
+        keys: instParts[1].split(","),
+        data: instParts[2]
+      };
+    });
+
     return {
       t: 'txn',
       h: parseInt(fields[0]),
@@ -446,9 +445,8 @@ class App extends Component {
       s: parseInt(fields[2]),
       dt: fields[3],
       entry_id: fields[4],
-      program_id: fields[5],
-      keys: fields[6].split(','),
-      id: fields[7],
+      id: fields[5],
+      instructions
     };
   }
 
