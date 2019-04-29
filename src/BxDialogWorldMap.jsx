@@ -136,7 +136,7 @@ function Transition(props) {
 export default class BxDialogWorldMap extends React.Component {
   static defaultProps = {
     center: {
-      lat: 0,
+      lat: 17,
       lng: -120.6743,
     },
     zoom: 0,
