@@ -180,15 +180,7 @@ class App extends Component {
     const self = this;
 
     self.updateGlobalStats();
-    setInterval(() => {
-      self.updateGlobalStats();
-    }, 1200);
-
     self.updateTxnStats();
-    setInterval(() => {
-      self.updateTxnStats();
-    }, 22000);
-
     self.updateBlocks();
 
     self.updateTransactions();
@@ -268,6 +260,8 @@ class App extends Component {
       this.setState({nodes: []});
       console.log('getClusterNodes failed:', err.message);
     }
+
+    setTimeout(() => this.updateGlobalStats(), 1200);
   }
 
   updateTxnStats() {
@@ -275,6 +269,7 @@ class App extends Component {
       'txnStats',
       `http:${BLOCK_EXPLORER_API_BASE}/txn-stats`,
     );
+    setTimeout(() => this.updateTxnStats(), 22000);
   }
 
   updateBlocks() {
