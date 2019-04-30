@@ -6,18 +6,24 @@
 import express from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
+import expressWs from 'express-ws';
 import {promisify} from 'util';
 import redis from 'redis';
 import WebSocket from 'ws';
 import _ from 'lodash';
 import './inbound-stream';
-import expressWs from 'express-ws';
 import geoip from 'geoip-lite';
 import YAML from 'yaml';
 import fs from 'fs';
 import assert from 'assert';
+import * as solanaWeb3 from '@solana/web3.js';
 
 import config from './config';
+
+//
+// FIXME: make configurable
+//
+let FULLNODE_URL = 'http://localhost:8899';
 
 const app = express();
 
@@ -367,6 +373,50 @@ async function sendSearchResults(req, res) {
 
 app.get('/search/:id', (req, res) => {
   sendSearchResults(req, res);
+});
+
+function sendAccountResult(req, res) {
+  if (!req.params.ids) {
+    // give up
+    res.status(404).send('{"error":"not_found"}\n');
+    return;
+  }
+
+  try {
+    let idsStr = req.params.ids;
+    let ids = idsStr.split(',');
+
+    let thePromises = _.map(ids, id => {
+      return new Promise(resolve => {
+        const connection = new solanaWeb3.Connection(FULLNODE_URL);
+        return connection
+          .getBalance(new solanaWeb3.PublicKey(id))
+          .then(balance => {
+            return resolve({id: id, balance: balance});
+          });
+      });
+    });
+
+    return Promise.all(thePromises).then(values => {
+      let consolidated = _.reduce(
+        values,
+        (a, v) => {
+          a[v.id] = v.balance;
+          return a;
+        },
+        {},
+      );
+
+      res.send(JSON.stringify(consolidated) + '\n');
+    });
+  } catch (err) {
+    res.status(500).send(`{"error":"server_error","err":"${err}"}\n`);
+    return;
+  }
+}
+
+app.get('/accts_bal/:ids', (req, res) => {
+  sendAccountResult(req, res);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

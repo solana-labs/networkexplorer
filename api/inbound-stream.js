@@ -50,7 +50,7 @@ class BridgeFn {
           let inst = {};
 
           inst.keys = _.map(y.keys, z => {
-            return `${z.pubkey.toBase58()} (is_signer=${z.isSigner})`;
+            return z.pubkey.toBase58();
           });
           inst.program_id = y.programId.toBase58();
           inst.data = b58e(y.data);
@@ -219,29 +219,30 @@ class RedisHandler {
           },
         ]);
 
-        // append block hexHeight:dt:id to timeline
         let txnMsg = [
           message.h,
           message.l,
           message.s,
           message.dt,
           message.hash,
+          tx.id,
         ];
         if (tx.instructions.length > 0) {
-          txnMsg.push(tx.instructions[0].program_id);
-          txnMsg.push(tx.instructions[0].keys.join(','));
+          let txInst = _.map(tx.instructions, i => {
+            return [i.program_id, i.keys.join(','), i.data].join('@');
+          }).join('|');
+          txnMsg.push(txInst);
         } else {
           // Transactions should always have at least one instruction.  But if
           // the Transaction was not deserialized correctly we could end up
           // here.
           txnMsg.push('');
-          txnMsg.push('');
         }
-        txnMsg.push(tx.id);
         txnMsg = txnMsg.join('#');
 
         commands.push(['sadd', `!ent-txn:${message.hash}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);
+
         if (tx.instructions.length > 0) {
           commands.push([
             'lpush',
