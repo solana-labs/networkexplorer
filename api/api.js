@@ -274,6 +274,9 @@ if (fs.existsSync(geoipWhitelistFile)) {
       geoipWhitelist,
     );
     assert(typeof geoipWhitelist === 'object');
+    if (geoipWhitelist === null) {
+      geoipWhitelist = {};
+    }
   } catch (err) {
     console.log(`Failed to process ${geoipWhitelistFile}:`, err);
   }
