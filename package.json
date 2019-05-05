@@ -23,7 +23,7 @@
     "google-map-react": "^1.1.4",
     "ip": "^1.1.5",
     "lodash": "^4.17.11",
-    "nocache": "^2.0.0",
+    "nocache": "^2.1.0",
     "react-debounce-render": "^5.0.0",
     "redis": "^2.8.0",
     "serve": "^11.0.0",
