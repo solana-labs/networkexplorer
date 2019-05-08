@@ -12,7 +12,7 @@
     "url": "http://github.com/solana-labs/blockexplorer/issues"
   },
   "dependencies": {
-    "@solana/web3.js": "^0.15.2",
+    "@solana/web3.js": "^0.15.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "base-58": "^0.0.1",
     "copy-to-clipboard": "^3.2.0",
