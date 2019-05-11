@@ -12,6 +12,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import BxEntityLink from './BxEntityLink';
+import YAML from 'yaml';
 
 const location = window.location.href;
 
@@ -91,27 +92,39 @@ class BxDialog extends React.Component {
               {value.t === 'txn' && (
                 <TableRow>
                   <TableCell component="th" scope="row">
-                    Program ID:
+                    Program ID{value.data.instructions.length > 1 ? 's' : ''}:
                   </TableCell>
                   <TableCell align="right">
-                    <BxEntityLink
-                      prg_id={value.data.instructions[0].program_id}
-                    />
+                    {value.data.instructions.map((instruction, i) => (
+                      <div>
+                        <BxEntityLink prg_id={instruction.program_id} />{' '}
+                        {value.data.instructions.length > 1
+                          ? ` (instruction #${i})`
+                          : ''}
+                        <br />
+                      </div>
+                    ))}
                   </TableCell>
                 </TableRow>
               )}
               {value.t === 'txn' && (
                 <TableRow>
                   <TableCell component="th" scope="row">
-                    Account ID(s):
+                    Account ID
+                    {value.data.instructions[0].keys.length > 1 ? 's' : ''}:
                   </TableCell>
                   <TableCell align="right">
-                    {value.data.instructions[0].keys.map(key => (
-                      <span key={key}>
-                        <BxEntityLink acct_id={key} />
-                        <span> </span>
-                      </span>
-                    ))}
+                    {value.data.instructions.map((instruction, i) => {
+                      return instruction.keys.map(key => (
+                        <span key={key}>
+                          <BxEntityLink acct_id={key} />
+                          {value.data.instructions.length > 1
+                            ? ` (instruction #${i})`
+                            : ''}
+                          <br />
+                        </span>
+                      ));
+                    })}
                   </TableCell>
                 </TableRow>
               )}
@@ -172,15 +185,20 @@ class BxDialog extends React.Component {
                 >
                   Raw Data:
                 </TableCell>
-                <TableCell
-                  align="left"
-                  title={url}
-                  style={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    whiteSpace: 'pre',
-                  }}
-                >
-                  {JSON.stringify(value, null, 2)}
+                <TableCell align="left" title={url}>
+                  <textarea
+                    readonly
+                    resize="none"
+                    wrap="off"
+                    rows="25"
+                    cols="120"
+                    style={{
+                      fontFamily: '"Roboto Mono", monospace',
+                      whiteSpace: 'pre',
+                    }}
+                  >
+                    {YAML.stringify(value, null, 2)}
+                  </textarea>
                 </TableCell>
               </TableRow>
             </TableBody>
