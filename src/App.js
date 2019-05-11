@@ -23,6 +23,7 @@ import BxDialog from './BxDialog';
 import BxDialogTransactions from './BxDialogTransactions';
 import BxDialogWorldMap from './BxDialogWorldMap';
 import BxAppBar from './BxAppBar';
+import {sleep} from './sleep';
 
 const history = createBrowserHistory();
 
@@ -571,7 +572,7 @@ class App extends Component {
 
     let url = mkUrl(value, type);
 
-    let updateState = newVal => {
+    let updateState = async newVal => {
       if (type === 'txns-by-prgid') {
         let msg = JSON.stringify({
           action: 'subscribe',
@@ -580,6 +581,10 @@ class App extends Component {
         });
 
         console.log('subscribe', msg);
+        while (self.ws.readyState !== 1 /*OPEN*/) {
+          console.log('Waiting for ws.readyState to be 1: ', self.ws.readyState);
+          await sleep(250);
+        }
         self.ws.send(msg);
 
         let txns = _(newVal)
@@ -608,12 +613,9 @@ class App extends Component {
 
     axios
       .get(url)
-      .then(response => {
-        updateState(response.data);
-      })
+      .then(response => updateState(response.data))
       .catch((resp, err) => {
-        console.log('oops', resp, err);
-        history.goBack();
+        console.error('oops', resp, err);
       });
   };
 
