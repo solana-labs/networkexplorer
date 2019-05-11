@@ -581,8 +581,11 @@ class App extends Component {
         });
 
         console.log('subscribe', msg);
-        while (self.ws.readyState !== 1 /*OPEN*/) {
-          console.log('Waiting for ws.readyState to be 1: ', self.ws.readyState);
+        while (self.ws.readyState !== WebSocket.OPEN) {
+          console.log(
+            'Waiting for ws.readyState to be OPEN (1): ',
+            self.ws.readyState,
+          );
           await sleep(250);
         }
         self.ws.send(msg);
