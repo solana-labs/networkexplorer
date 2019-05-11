@@ -243,18 +243,18 @@ class RedisHandler {
         commands.push(['sadd', `!ent-txn:${message.hash}`, tx.id]);
         commands.push(['lpush', '!txn-timeline', txnMsg]);
 
-        if (tx.instructions.length > 0) {
+        tx.instructions.forEach(instruction => {
           commands.push([
             'lpush',
-            `!txns-by-prgid-timeline:${tx.instructions[0].program_id}`,
+            `!txns-by-prgid-timeline:${instruction.program_id}`,
             txnMsg,
           ]);
           commands.push([
             'publish',
-            `@program_id:${tx.instructions[0].program_id}`,
+            `@program_id:${instruction.program_id}`,
             txnMsg,
           ]);
-        }
+        });
       });
 
       if (txCount > 0) {
