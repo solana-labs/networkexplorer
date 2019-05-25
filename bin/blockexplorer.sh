@@ -54,7 +54,7 @@ while true; do
   if [[ -z $api ]] || ! kill -0 "$api"; then
     logfile="$cwd"/solana-blockexplorer-api.log
     echo "Starting api process (logfile: $logfile)"
-    date >> "$logfile"
+    date | tee -a "$logfile"
     npm run start-prod:api >> "$logfile" 2>&1 &
     api=$!
     echo "  pid: $api"
@@ -63,7 +63,7 @@ while true; do
   if [[ -z $ui ]] || ! kill -0 "$ui"; then
     logfile="$cwd"/solana-blockexplorer-ui.log
     echo "Starting ui process (logfile: $logfile)"
-    date >> "$logfile"
+    date | tee -a "$logfile"
     npm run start-prod:ui >> "$logfile" 2>&1 &
     ui=$!
     echo "  pid: $ui"
