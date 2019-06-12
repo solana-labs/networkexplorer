@@ -106,6 +106,18 @@ class Node extends React.Component {
             <b>Node:</b> {node.pubkey}
             <br />
             <b>Gossip:</b> {node.gossip}
+            <br />
+            {node.voteAccount && (
+              <div>
+                <hr />
+                <b>Stake:</b> {node.voteAccount.stake}
+                <br />
+                <b>Commission:</b>{' '}
+                {(100 * (node.voteAccount.commission / 0xffffffff)).toFixed(3)}%
+                <br />
+                <b>Vote Account:</b> {node.voteAccount.votePubkey}
+              </div>
+            )}
             {node.rpc && !node.terminated && (
               <div style={{textAlign: 'center'}}>
                 <p />
