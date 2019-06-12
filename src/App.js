@@ -234,6 +234,9 @@ class App extends Component {
     );
 
     try {
+      const [/*blockhash*/, feeCalculator] = await this.connection.getRecentBlockhash();
+      this.setState({feeCalculator});
+
       const oldNodes = this.state.nodes;
       const newNodes = await this.connection.getClusterNodes();
       const nodes = [];
@@ -711,6 +714,7 @@ class App extends Component {
             <BxStatsTableThemed
               globalStats={this.state.globalStats}
               nodeCount={this.state.nodes.length}
+              feeCalculator={this.state.feeCalculator}
             />
             <p />
             <BxTransactionChartThemed txnStats={this.state.txnStats} />
