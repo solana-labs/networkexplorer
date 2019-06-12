@@ -238,6 +238,10 @@ class App extends Component {
       const newNodes = await this.connection.getClusterNodes();
       const nodes = [];
 
+      // TODO: Don't bother updating vote accounts so much.  They only change
+      // once an epoch
+      const voteAccounts = await this.connection.getEpochVoteAccounts();
+
       let modified = oldNodes.length !== newNodes.length;
 
       const maybeSetState = () => {
@@ -248,16 +252,25 @@ class App extends Component {
       };
       for (const newNode of newNodes) {
         const oldNode = oldNodes.find(node => node.pubkey === newNode.pubkey);
+        const voteAccount = voteAccounts.find(
+          voteAccount => voteAccount.nodePubkey === newNode.pubkey,
+        );
         if (oldNode) {
+          oldNode.voteAccount = voteAccount;
           nodes.push(oldNode);
         } else {
           const ip = newNode.gossip.split(':')[0];
           const [lat, lng] = await geoip(ip);
           newNode.lat = lat;
           newNode.lng = lng;
+          newNode.voteAccount = voteAccount;
           nodes.push(newNode);
           modified = true;
         }
+        // Always setState() at least once to ensure voteAccount updates are
+        // propagated.
+        // TODO: Don't bother updating vote accounts so much
+        modified = true;
         maybeSetState();
       }
       maybeSetState();
