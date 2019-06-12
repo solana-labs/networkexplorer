@@ -103,7 +103,7 @@ class Node extends React.Component {
           }}
         >
           <Typography style={{padding: '15px'}}>
-            <b>Node:</b> {node.id}
+            <b>Node:</b> {node.pubkey}
             <br />
             <b>Gossip:</b> {node.gossip}
             {node.rpc && !node.terminated && (
@@ -147,9 +147,9 @@ export default class BxDialogWorldMap extends React.Component {
 
     const sortedNodes = nodes.slice(0);
     sortedNodes.sort((a, b) => {
-      if (a.id === leaderId) {
+      if (a.pubkey === leaderId) {
         return 1;
-      } else if (b.id === leaderId) {
+      } else if (b.pubkey === leaderId) {
         return -1;
       } else {
         return 0;
@@ -183,9 +183,9 @@ export default class BxDialogWorldMap extends React.Component {
               {sortedNodes.map(node => {
                 return (
                   <Node
-                    key={node.id}
+                    key={node.pubkey}
                     node={node}
-                    isLeader={node.id === leaderId}
+                    isLeader={node.pubkey === leaderId}
                     lat={node.lat}
                     lng={node.lng}
                     classes={classes}

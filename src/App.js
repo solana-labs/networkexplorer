@@ -247,7 +247,7 @@ class App extends Component {
         }
       };
       for (const newNode of newNodes) {
-        const oldNode = oldNodes.find(node => node.id === newNode.id);
+        const oldNode = oldNodes.find(node => node.pubkey === newNode.pubkey);
         if (oldNode) {
           nodes.push(oldNode);
         } else {
