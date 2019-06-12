@@ -19,7 +19,7 @@ class BxStatsTable extends React.Component {
   }
 
   render() {
-    const {globalStats, nodeCount} = this.props;
+    const {globalStats, nodeCount, feeCalculator} = this.props;
 
     let currentTpsKey = null;
     _.forEach(globalStats, (v, k) => {
@@ -117,6 +117,21 @@ class BxStatsTable extends React.Component {
             </CardContent>
           </Card>
         </Grid>
+        {feeCalculator && (
+          <Grid item>
+            <Card>
+              <CardContent>
+                <Typography component="p" align="left">
+                  Current Signature Fee: {feeCalculator.lamportsPerSignature}
+                  <br />
+                  Target Signature Fee: {feeCalculator.targetLamportsPerSignature}
+                  <br />
+                  Target Signatures Per Slot: {feeCalculator.targetSignaturesPerSlot}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
         <Grid item>
           <Card>
             <CardContent>
