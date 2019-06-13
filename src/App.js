@@ -270,10 +270,6 @@ class App extends Component {
           nodes.push(newNode);
           modified = true;
         }
-        // Always setState() at least once to ensure voteAccount updates are
-        // propagated.
-        // TODO: Don't bother updating vote accounts so much
-        modified = true;
         maybeSetState();
       }
       maybeSetState();
