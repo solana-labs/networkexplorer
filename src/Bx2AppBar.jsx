@@ -16,7 +16,7 @@ import MapIcon from '@material-ui/icons/Map';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
 
-class BxAppBar extends React.Component {
+class Bx2AppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
@@ -208,8 +208,8 @@ class BxAppBar extends React.Component {
   }
 }
 
-BxAppBar.propTypes = {
+Bx2AppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default BxAppBar;
+export default Bx2AppBar;
