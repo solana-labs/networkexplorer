@@ -24,6 +24,12 @@ import BxDialogTransactions from './BxDialogTransactions';
 import BxDialogWorldMap from './BxDialogWorldMap';
 import BxAppBar from './BxAppBar';
 import {sleep} from './sleep';
+import {Drawer, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import { Link } from "react-router-dom";
+
+import Bx2AppBar from './BxAppBar';
+import Bx2BlankComponent from './Bx2BlankComponent';
 
 const history = createBrowserHistory();
 
@@ -137,6 +143,9 @@ const BxDialogWorldMapThemed = withStyles(styles)(BxDialogWorldMap);
 const BxStatsTableThemed = withStyles(styles)(BxStatsTable);
 const BxTransactionChartThemed = withStyles(styles)(BxTransactionChart);
 const BxDataTableThemed = withStyles(styles)(BxDataTable);
+
+const Bx2AppBarThemed = withStyles(styles)(Bx2AppBar);
+const Bx2BlankComponentThemed = withStyles(styles)(Bx2BlankComponent);
 
 const theme = createMuiTheme({
   palette: {
@@ -634,7 +643,11 @@ class App extends Component {
       });
   };
 
-  render() {
+  isV2() {
+    return window.location.pathname.startsWith('/v2/');
+  }
+
+  renderV1() {
     let self = this;
 
     const leaderId = this.state.globalStats['!ent-last-leader'];
@@ -736,6 +749,71 @@ class App extends Component {
         </Router>
       </MuiThemeProvider>
     );
+  }
+
+  renderV2() {
+    let self = this;
+
+    const leaderId = this.state.globalStats['!ent-last-leader'];
+
+    //
+    // open questions
+    //
+    // - able to integrate tachyons CSS?
+    // - keep using material-ui for component behavior?
+    //
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Router history={history}>
+          <div className="App">
+            <Bx2AppBarThemed
+              handleSearch={self.handleSearch(self)}
+              enabled={this.state.enabled}
+              handleSwitch={this.toggleEnabled(self)}
+              handleMap={this.showMap(self)}
+            />
+            <Drawer open={true}>
+              <List>
+                <ListItem key='Item A' component={Link} to="/v2/itemA">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Item A' />
+                </ListItem>
+                <ListItem key='Item B' component={Link} to="/v2/itemB">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Item B' />
+                </ListItem>
+              </List>
+            </Drawer>
+            <div>
+              <Route
+                path="/v2/itemA"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed
+                    message='Hello Item A'
+                  />
+                )} />
+              <Route
+                path="/v2/itemB"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed
+                    message='Hello Item B'
+                  />
+                )} />
+            </div>
+          </div>
+        </Router>
+      </MuiThemeProvider>
+    );
+  }
+
+  render() {
+    return this.isV2() ? this.renderV2() : this.renderV1();
   }
 }
 
