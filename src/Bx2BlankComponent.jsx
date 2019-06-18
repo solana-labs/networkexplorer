@@ -6,10 +6,8 @@ import Typography from '@material-ui/core/Typography';
 class Bx2BlankComponent extends React.Component {
   render() {
     return (
-      <Paper style={{margin:'180px',padding:'32px'}}>
-        <Typography variant="h6">
-          {this.props.message}
-        </Typography>
+      <Paper style={{margin: '180px', padding: '32px'}}>
+        <Typography variant="h6">{this.props.message}</Typography>
       </Paper>
     );
   }

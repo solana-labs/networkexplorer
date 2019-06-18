@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {Router} from 'react-router-dom';
+import {Router, Link} from 'react-router-dom';
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -14,6 +14,14 @@ import {matchPath, Route} from 'react-router';
 import './App.css';
 import {createBrowserHistory} from 'history';
 import {Connection} from '@solana/web3.js';
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@material-ui/core';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import EndpointConfig from './EndpointConfig';
 import BxDataTable from './BxDataTable';
@@ -24,11 +32,7 @@ import BxDialogTransactions from './BxDialogTransactions';
 import BxDialogWorldMap from './BxDialogWorldMap';
 import BxAppBar from './BxAppBar';
 import {sleep} from './sleep';
-import {Drawer, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import { Link } from "react-router-dom";
-
-import Bx2AppBar from './BxAppBar';
+import Bx2AppBar from './Bx2AppBar';
 import Bx2BlankComponent from './Bx2BlankComponent';
 
 const history = createBrowserHistory();
@@ -243,7 +247,10 @@ class App extends Component {
     );
 
     try {
-      const [/*blockhash*/, feeCalculator] = await this.connection.getRecentBlockhash();
+      const [
+        ,
+        /*blockhash*/ feeCalculator,
+      ] = await this.connection.getRecentBlockhash();
       this.setState({feeCalculator});
 
       const oldNodes = this.state.nodes;
@@ -754,14 +761,6 @@ class App extends Component {
   renderV2() {
     let self = this;
 
-    const leaderId = this.state.globalStats['!ent-last-leader'];
-
-    //
-    // open questions
-    //
-    // - able to integrate tachyons CSS?
-    // - keep using material-ui for component behavior?
-    //
     return (
       <MuiThemeProvider theme={theme}>
         <Router history={history}>
@@ -774,17 +773,17 @@ class App extends Component {
             />
             <Drawer open={true}>
               <List>
-                <ListItem key='Item A' component={Link} to="/v2/itemA">
+                <ListItem key="Item A" component={Link} to="/v2/itemA">
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>
-                  <ListItemText primary='Item A' />
+                  <ListItemText primary="Item A" />
                 </ListItem>
-                <ListItem key='Item B' component={Link} to="/v2/itemB">
+                <ListItem key="Item B" component={Link} to="/v2/itemB">
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>
-                  <ListItemText primary='Item B' />
+                  <ListItemText primary="Item B" />
                 </ListItem>
               </List>
             </Drawer>
@@ -793,18 +792,16 @@ class App extends Component {
                 path="/v2/itemA"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed
-                    message='Hello Item A'
-                  />
-                )} />
+                  <Bx2BlankComponentThemed message="Hello Item A" />
+                )}
+              />
               <Route
                 path="/v2/itemB"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed
-                    message='Hello Item B'
-                  />
-                )} />
+                  <Bx2BlankComponentThemed message="Hello Item B" />
+                )}
+              />
             </div>
           </div>
         </Router>
