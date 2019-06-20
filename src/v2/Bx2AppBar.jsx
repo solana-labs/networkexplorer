@@ -8,11 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-//import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import MapIcon from '@material-ui/icons/Map';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
 
@@ -95,41 +93,15 @@ class Bx2AppBar extends React.Component {
         transformOrigin={{vertical: 'top', horizontal: 'right'}}
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
-      >
-        {/*<MenuItem onClick={this.handleMobileMenuClose}>*/}
-        {/*<IconButton color="inherit">*/}
-        {/*<Badge badgeContent={4} color="secondary">*/}
-        {/*<MailIcon />*/}
-        {/*</Badge>*/}
-        {/*</IconButton>*/}
-        {/*<p>Messages</p>*/}
-        {/*</MenuItem>*/}
-        {/*<MenuItem onClick={this.handleMobileMenuClose}>*/}
-        {/*<IconButton color="inherit">*/}
-        {/*<Badge badgeContent={11} color="secondary">*/}
-        {/*<NotificationsIcon />*/}
-        {/*</Badge>*/}
-        {/*</IconButton>*/}
-        {/*<p>Notifications</p>*/}
-        {/*</MenuItem>*/}
-        {/*<MenuItem onClick={this.handleProfileMenuOpen}>*/}
-        {/*<IconButton color="inherit">*/}
-        {/*<AccountCircle/>*/}
-        {/*</IconButton>*/}
-        {/*<p>Profile</p>*/}
-        {/*</MenuItem>*/}
-      </Menu>
+      ></Menu>
     );
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Grid container justify="center">
             <Grid item style={{width: '1520px'}}>
               <Toolbar>
-                {/*<IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">*/}
-                {/*<MenuIcon/>*/}
-                {/*</IconButton>*/}
                 <Typography
                   className={classes.title}
                   variant="h6"
@@ -179,14 +151,6 @@ class Bx2AppBar extends React.Component {
                       ' realtime updates'
                     }
                   />
-                  {/*<IconButton*/}
-                  {/*aria-owns={isMenuOpen ? 'material-appbar' : undefined}*/}
-                  {/*aria-haspopup="true"*/}
-                  {/*onClick={this.handleProfileMenuOpen}*/}
-                  {/*color="inherit"*/}
-                  {/*>*/}
-                  {/*<AccountCircle/>*/}
-                  {/*</IconButton>*/}
                 </div>
                 <div className={classes.sectionMobile}>
                   <IconButton

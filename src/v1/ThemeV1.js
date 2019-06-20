@@ -10,17 +10,19 @@ const themeV1 = createMuiTheme({
     secondary: {
       main: '#2BFEBC',
     },
+    background: {
+      default: '#000000',
+    },
   },
   typography: {useNextVariants: true},
 });
 
 const stylesV1 = theme => ({
   root: {
-    width: '100%',
-    backgroundColor: 'black',
+    width: '95%',
     ...theme.mixins.gutters(),
-    // paddingTop: theme.spacing.unit * 2,
-    // paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
   },
   grow: {
     flexGrow: 1,
@@ -93,7 +95,4 @@ const stylesV1 = theme => ({
   },
 });
 
-export {
-  stylesV1,
-  themeV1
-};
+export {stylesV1, themeV1};

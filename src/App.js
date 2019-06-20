@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Router, Link} from 'react-router-dom';
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-  withStyles,
-} from '@material-ui/core/styles';
-import {fade} from '@material-ui/core/styles/colorManipulator';
+import {MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import RobustWebSocket from 'robust-websocket';
 import _ from 'lodash';
@@ -15,6 +10,7 @@ import './App.css';
 import {createBrowserHistory} from 'history';
 import {Connection} from '@solana/web3.js';
 import {
+  CssBaseline,
   Drawer,
   List,
   ListItem,
@@ -23,97 +19,23 @@ import {
 } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
-import EndpointConfig from './EndpointConfig';
-import BxDataTable from './BxDataTable';
-import BxTransactionChart from './BxTransactionChart';
-import BxStatsTable from './BxStatsTable';
-import BxDialog from './BxDialog';
-import BxDialogTransactions from './BxDialogTransactions';
-import BxDialogWorldMap from './BxDialogWorldMap';
-import BxAppBar from './BxAppBar';
 import {sleep} from './sleep';
-import Bx2AppBar from './Bx2AppBar';
-import Bx2BlankComponent from './Bx2BlankComponent';
+import EndpointConfig from './EndpointConfig';
+// v1 components
+import BxDataTable from './v1/BxDataTable';
+import BxTransactionChart from './v1/BxTransactionChart';
+import BxStatsTable from './v1/BxStatsTable';
+import BxDialog from './v1/BxDialog';
+import BxDialogTransactions from './v1/BxDialogTransactions';
+import BxDialogWorldMap from './v1/BxDialogWorldMap';
+import BxAppBar from './v1/BxAppBar';
+import {stylesV1, themeV1} from './v1/ThemeV1';
+// v2 components
+import Bx2AppBar from './v2/Bx2AppBar';
+import Bx2BlankComponent from './v2/Bx2BlankComponent';
+import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
-
-const styles = theme => ({
-  root: {
-    width: '95%',
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
-    color: theme.palette.grey[500],
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing.unit * 2,
-    marginLeft: 0,
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit * 3,
-      width: '740px',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 5,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 5,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '100%',
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-});
 
 async function geoip(ip: string) {
   let lat = 11.6065;
@@ -140,29 +62,16 @@ async function geoip(ip: string) {
 
 const BLOCK_EXPLORER_API_BASE = EndpointConfig.BLOCK_EXPLORER_API_BASE;
 
-const BxAppBarThemed = withStyles(styles)(BxAppBar);
-const BxDialogThemed = withStyles(styles)(BxDialog);
-const BxDialogTransactionsThemed = withStyles(styles)(BxDialogTransactions);
-const BxDialogWorldMapThemed = withStyles(styles)(BxDialogWorldMap);
-const BxStatsTableThemed = withStyles(styles)(BxStatsTable);
-const BxTransactionChartThemed = withStyles(styles)(BxTransactionChart);
-const BxDataTableThemed = withStyles(styles)(BxDataTable);
+const BxAppBarThemed = withStyles(stylesV1)(BxAppBar);
+const BxDialogThemed = withStyles(stylesV1)(BxDialog);
+const BxDialogTransactionsThemed = withStyles(stylesV1)(BxDialogTransactions);
+const BxDialogWorldMapThemed = withStyles(stylesV1)(BxDialogWorldMap);
+const BxStatsTableThemed = withStyles(stylesV1)(BxStatsTable);
+const BxTransactionChartThemed = withStyles(stylesV1)(BxTransactionChart);
+const BxDataTableThemed = withStyles(stylesV1)(BxDataTable);
 
-const Bx2AppBarThemed = withStyles(styles)(Bx2AppBar);
-const Bx2BlankComponentThemed = withStyles(styles)(Bx2BlankComponent);
-
-const theme = createMuiTheme({
-  palette: {
-    type: 'dark',
-    primary: {
-      main: '#000000',
-    },
-    secondary: {
-      main: '#2BFEBC',
-    },
-  },
-  typography: {useNextVariants: true},
-});
+const Bx2AppBarThemed = withStyles(stylesV2)(Bx2AppBar);
+const Bx2BlankComponentThemed = withStyles(stylesV2)(Bx2BlankComponent);
 
 class App extends Component {
   constructor(props) {
@@ -660,8 +569,9 @@ class App extends Component {
     const leaderId = this.state.globalStats['!ent-last-leader'];
 
     return (
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider theme={themeV1}>
         <Router history={history}>
+          <CssBaseline />
           <div className="App">
             <BxAppBarThemed
               handleSearch={self.handleSearch(self)}
@@ -762,8 +672,9 @@ class App extends Component {
     let self = this;
 
     return (
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider theme={themeV2}>
         <Router history={history}>
+          <CssBaseline />
           <div className="App">
             <Bx2AppBarThemed
               handleSearch={self.handleSearch(self)}
@@ -771,7 +682,7 @@ class App extends Component {
               handleSwitch={this.toggleEnabled(self)}
               handleMap={this.showMap(self)}
             />
-            <Drawer open={true}>
+            <Drawer variant="permanent">
               <List>
                 <ListItem key="Item A" component={Link} to="/v2/itemA">
                   <ListItemIcon>

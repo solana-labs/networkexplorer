@@ -10,6 +10,9 @@ const themeV2 = createMuiTheme({
     secondary: {
       main: '#2BFEBC',
     },
+    background: {
+      default: '#000000',
+    },
   },
   typography: {useNextVariants: true},
 });
@@ -95,7 +98,4 @@ const stylesV2 = theme => ({
   },
 });
 
-export {
-  stylesV2,
-  themeV2
-};
+export {stylesV2, themeV2};

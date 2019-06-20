@@ -61,7 +61,7 @@ class BxTransactionChart extends React.Component {
       return (
         <Grid container justify="center">
           <Grid item>
-            <Paper style={{width: '1460px', padding:'16px'}}>
+            <Paper style={{width: '1460px', padding: '16px'}}>
               <Typography>No Data Present - Loading...</Typography>
             </Paper>
           </Grid>
