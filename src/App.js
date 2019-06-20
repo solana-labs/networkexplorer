@@ -684,33 +684,84 @@ class App extends Component {
             />
             <Drawer variant="permanent">
               <List>
-                <ListItem key="Item A" component={Link} to="/v2/itemA">
+                <ListItem key="Browse" component={Link} to="/v2/browse">
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Item A" />
+                  <ListItemText primary="Browse" />
                 </ListItem>
-                <ListItem key="Item B" component={Link} to="/v2/itemB">
+                <ListItem key="Transactions" component={Link} to="/v2/transactions">
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Item B" />
+                  <ListItemText primary="Transactions" />
+                </ListItem>
+                <ListItem key="Validators" component={Link} to="/v2/validators">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Validators" />
+                </ListItem>
+                <ListItem key="TourDeSol" component={Link} to="/v2/tourdesol">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Tour De Sol" />
+                </ListItem>
+                <ListItem key="Applications" component={Link} to="/v2/applications">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Applications" />
+                </ListItem>
+                <ListItem key="Blocks" component={Link} to="/v2/blocks">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Blocks" />
+                </ListItem>
+                <ListItem key="Favorites" component={Link} to="/v2/favorites">
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Favorites" />
                 </ListItem>
               </List>
             </Drawer>
             <div>
               <Route
-                path="/v2/itemA"
+                path="/v2/browse"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed message="Hello Item A" />
+                  <Bx2BlankComponentThemed message="Hello Browse" />
                 )}
               />
               <Route
-                path="/v2/itemB"
+                path="/v2/transactions"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed message="Hello Item B" />
+                  <Bx2BlankComponentThemed message="Hello Transactions" />
+                )}
+              />
+              <Route
+                path="/v2/validators"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed message="Hello Validators" />
+                )}
+              />
+              <Route
+                path="/v2/tourdesol"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed message="Hello Tour De Sol" />
+                )}
+              />
+              <Route
+                path="/v2/favorites"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed message="Hello Favorites" />
                 )}
               />
             </div>
