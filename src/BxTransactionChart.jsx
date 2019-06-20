@@ -59,9 +59,13 @@ class BxTransactionChart extends React.Component {
 
     if (_.size(txnStats) === 0) {
       return (
-        <Paper style={{width: '1460px'}}>
-          <Typography>No Data Present - Loading...</Typography>
-        </Paper>
+        <Grid container justify="center">
+          <Grid item>
+            <Paper style={{width: '1460px', padding:'16px'}}>
+              <Typography>No Data Present - Loading...</Typography>
+            </Paper>
+          </Grid>
+        </Grid>
       );
     }
 
