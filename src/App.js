@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {Router, Link} from 'react-router-dom';
+import {Router} from 'react-router-dom';
 import {MuiThemeProvider, withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import RobustWebSocket from 'robust-websocket';
@@ -9,9 +9,7 @@ import {matchPath, Route} from 'react-router';
 import './App.css';
 import {createBrowserHistory} from 'history';
 import {Connection} from '@solana/web3.js';
-import {
-  CssBaseline,
-} from '@material-ui/core';
+import {CssBaseline} from '@material-ui/core';
 
 import {sleep} from './sleep';
 import EndpointConfig from './EndpointConfig';

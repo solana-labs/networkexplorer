@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import {Drawer, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core';
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 
 class Bx2NavDrawer extends React.Component {
