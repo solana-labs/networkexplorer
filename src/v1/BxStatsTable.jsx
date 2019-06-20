@@ -124,9 +124,11 @@ class BxStatsTable extends React.Component {
                 <Typography component="p" align="left">
                   Current Signature Fee: {feeCalculator.lamportsPerSignature}
                   <br />
-                  Target Signature Fee: {feeCalculator.targetLamportsPerSignature}
+                  Target Signature Fee:{' '}
+                  {feeCalculator.targetLamportsPerSignature}
                   <br />
-                  Target Signatures Per Slot: {feeCalculator.targetSignaturesPerSlot}
+                  Target Signatures Per Slot:{' '}
+                  {feeCalculator.targetSignaturesPerSlot}
                 </Typography>
               </CardContent>
             </Card>
