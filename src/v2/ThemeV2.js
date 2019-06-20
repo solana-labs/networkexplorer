@@ -17,9 +17,12 @@ const themeV2 = createMuiTheme({
   typography: {useNextVariants: true},
 });
 
+const drawerWidth = 240;
+
 const stylesV2 = theme => ({
   root: {
     width: '95%',
+    display: 'flex',
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
@@ -27,6 +30,18 @@ const stylesV2 = theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
   },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+  toolbar: theme.mixins.toolbar,
   grow: {
     flexGrow: 1,
   },

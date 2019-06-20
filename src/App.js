@@ -11,13 +11,7 @@ import {createBrowserHistory} from 'history';
 import {Connection} from '@solana/web3.js';
 import {
   CssBaseline,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
 } from '@material-ui/core';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import {sleep} from './sleep';
 import EndpointConfig from './EndpointConfig';
@@ -32,6 +26,7 @@ import BxAppBar from './v1/BxAppBar';
 import {stylesV1, themeV1} from './v1/ThemeV1';
 // v2 components
 import Bx2AppBar from './v2/Bx2AppBar';
+import Bx2NavDrawer from './v2/Bx2NavDrawer';
 import Bx2BlankComponent from './v2/Bx2BlankComponent';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
@@ -71,6 +66,7 @@ const BxTransactionChartThemed = withStyles(stylesV1)(BxTransactionChart);
 const BxDataTableThemed = withStyles(stylesV1)(BxDataTable);
 
 const Bx2AppBarThemed = withStyles(stylesV2)(Bx2AppBar);
+const Bx2NavDrawerThemed = withStyles(stylesV2)(Bx2NavDrawer);
 const Bx2BlankComponentThemed = withStyles(stylesV2)(Bx2BlankComponent);
 
 class App extends Component {
@@ -682,52 +678,7 @@ class App extends Component {
               handleSwitch={this.toggleEnabled(self)}
               handleMap={this.showMap(self)}
             />
-            <Drawer variant="permanent">
-              <List>
-                <ListItem key="Browse" component={Link} to="/v2/browse">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Browse" />
-                </ListItem>
-                <ListItem key="Transactions" component={Link} to="/v2/transactions">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Transactions" />
-                </ListItem>
-                <ListItem key="Validators" component={Link} to="/v2/validators">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Validators" />
-                </ListItem>
-                <ListItem key="TourDeSol" component={Link} to="/v2/tourdesol">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Tour De Sol" />
-                </ListItem>
-                <ListItem key="Applications" component={Link} to="/v2/applications">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Applications" />
-                </ListItem>
-                <ListItem key="Blocks" component={Link} to="/v2/blocks">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Blocks" />
-                </ListItem>
-                <ListItem key="Favorites" component={Link} to="/v2/favorites">
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Favorites" />
-                </ListItem>
-              </List>
-            </Drawer>
+            <Bx2NavDrawerThemed />
             <div>
               <Route
                 path="/v2/browse"
@@ -755,6 +706,20 @@ class App extends Component {
                 exact
                 render={() => (
                   <Bx2BlankComponentThemed message="Hello Tour De Sol" />
+                )}
+              />
+              <Route
+                path="/v2/applications"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed message="Hello Applications" />
+                )}
+              />
+              <Route
+                path="/v2/blocks"
+                exact
+                render={() => (
+                  <Bx2BlankComponentThemed message="Hello Blocks" />
                 )}
               />
               <Route

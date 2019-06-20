@@ -98,7 +98,7 @@ class Bx2AppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.appBar}>
           <Grid container justify="center">
             <Grid item style={{width: '1520px'}}>
               <Toolbar>
