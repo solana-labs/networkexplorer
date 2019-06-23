@@ -12,7 +12,7 @@ import {Link} from 'react-router-dom';
 
 class Bx2NavDrawer extends React.Component {
   render() {
-    const {classes} = this.props;
+    //const {classes} = this.props;
 
     return (
       <Drawer variant="permanent">
