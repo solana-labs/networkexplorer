@@ -17,6 +17,7 @@ notifications:
 script:
   - yarn
   - yarn lint
+  - yarn build
 
 deploy:
   - provider: script
