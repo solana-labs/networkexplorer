@@ -26,6 +26,7 @@ import {stylesV1, themeV1} from './v1/ThemeV1';
 import Bx2AppBar from './v2/Bx2AppBar';
 import Bx2NavDrawer from './v2/Bx2NavDrawer';
 import Bx2BlankComponent from './v2/Bx2BlankComponent';
+import Bx2Footer from './v2/Bx2Footer';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
@@ -663,26 +664,22 @@ class App extends Component {
   }
 
   renderV2() {
-    let self = this;
-
     return (
       <MuiThemeProvider theme={themeV2}>
         <Router history={history}>
           <CssBaseline />
           <div className="App">
-            <Bx2AppBarThemed
-              handleSearch={self.handleSearch(self)}
-              enabled={this.state.enabled}
-              handleSwitch={this.toggleEnabled(self)}
-              handleMap={this.showMap(self)}
-            />
-            <Bx2NavDrawerThemed />
-            <div>
+            <Bx2AppBarThemed />
+            <div className="flex-l">
+              <Bx2NavDrawerThemed />
               <Route
                 path="/v2/browse"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed message="Hello Browse" />
+                  <div className="flex-auto">
+                    <Bx2BlankComponentThemed message="Hello Browse" />
+                    <Bx2Footer />
+                  </div>
                 )}
               />
               <Route
