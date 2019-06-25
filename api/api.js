@@ -23,7 +23,12 @@ import config from './config';
 //
 // FIXME: make configurable
 //
-let FULLNODE_URL = 'http://localhost:8899';
+//const FULLNODE_URL = 'http://beta.testnet.solana.com:8899';
+const FULLNODE_URL = 'http://localhost:8899';
+
+const GLOBAL_STATS_BROADCAST_INTERVAL_MS =  3000;
+const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 16000;
+const CLUSTER_INFO_CACHE_TIME_SECS       = 35000;
 
 const app = express();
 
@@ -65,6 +70,7 @@ let handleRedis = type => (channel, message) => {
 
 const client = getClient();
 
+const setexAsync = promisify(client.setex).bind(client);
 const mgetAsync = promisify(client.mget).bind(client);
 const existsAsync = promisify(client.exists).bind(client);
 const lrangeAsync = promisify(client.lrange).bind(client);
@@ -100,6 +106,24 @@ let handleTxnRedis = type => (channel, message) => {
 
 const txnsClient = getClient();
 txnsClient.on('message', handleTxnRedis('txns-by-prgid'));
+
+//const globalInfoPublish = handleRedis('global-info');
+//
+//async function updateGlobalInfoTimerTask() {
+//  let clusterInfo = await getGlobalInfo();
+//  globalInfoPublish('cluster-info', JSON.stringify(globalInfo));
+//}
+//
+//setInterval(updateGlobalInfoTimerTask, GLOBAL_STATS_BROADCAST_INTERVAL_MS);
+
+const clusterInfoPublish = handleRedis('cluster-info');
+
+async function updateClusterInfoTimerTask() {
+  let clusterInfo = await getClusterInfo();
+  clusterInfoPublish('cluster-info', JSON.stringify(clusterInfo));
+}
+
+setInterval(updateClusterInfoTimerTask, CLUSTER_INFO_BROADCAST_INTERVAL_MS);
 
 let id = 0;
 
@@ -420,6 +444,38 @@ function sendAccountResult(req, res) {
 
 app.get('/accts_bal/:ids', (req, res) => {
   sendAccountResult(req, res);
+});
+
+async function getClusterInfo() {
+  const connection = new solanaWeb3.Connection(FULLNODE_URL);
+  let ts = new Date().toISOString();
+  let cluster = await connection.getClusterNodes();
+  let voting = await connection.getEpochVoteAccounts()
+  let rest = {cluster,voting,ts};
+
+  await setexAsync('!clusterInfo', CLUSTER_INFO_CACHE_TIME_SECS, JSON.stringify(rest));
+  return rest;
+}
+
+async function sendClusterResult(req, res) {
+  try {
+    let result = await mgetAsync(['!clusterInfo']);
+    if (result[0]) {
+      res.send(result[0] + '\n');
+      return;
+    } else {
+      let newResult = await getClusterInfo();
+      res.send(JSON.stringify(newResult) + '\n');
+      return;
+    }
+  } catch (err) {
+    res.status(500).send(`{"error":"server_error","err":"${err}"}\n`);
+    return;
+  }
+}
+
+app.get('/cluster_info', (req, res) => {
+  sendClusterResult(req, res);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
