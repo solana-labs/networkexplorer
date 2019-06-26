@@ -26,7 +26,7 @@ import config from './config';
 //const FULLNODE_URL = 'http://beta.testnet.solana.com:8899';
 const FULLNODE_URL = 'http://localhost:8899';
 
-const GLOBAL_STATS_BROADCAST_INTERVAL_MS =  3000;
+const GLOBAL_STATS_BROADCAST_INTERVAL_MS =  2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 16000;
 const CLUSTER_INFO_CACHE_TIME_SECS       = 35000;
 
@@ -107,14 +107,14 @@ let handleTxnRedis = type => (channel, message) => {
 const txnsClient = getClient();
 txnsClient.on('message', handleTxnRedis('txns-by-prgid'));
 
-//const globalInfoPublish = handleRedis('global-info');
-//
-//async function updateGlobalInfoTimerTask() {
-//  let clusterInfo = await getGlobalInfo();
-//  globalInfoPublish('cluster-info', JSON.stringify(globalInfo));
-//}
-//
-//setInterval(updateGlobalInfoTimerTask, GLOBAL_STATS_BROADCAST_INTERVAL_MS);
+const globalInfoPublish = handleRedis('global-info');
+
+async function updateGlobalInfoTimerTask() {
+  let globalInfo = await getGlobalInfo();
+  globalInfoPublish('global-info', JSON.stringify(globalInfo));
+}
+
+setInterval(updateGlobalInfoTimerTask, GLOBAL_STATS_BROADCAST_INTERVAL_MS);
 
 const clusterInfoPublish = handleRedis('cluster-info');
 
@@ -214,7 +214,7 @@ app.get('/txn-stats', (req, res) => {
   sendMgetKeysZipValuesResult(min_keys, pure_keys, res);
 });
 
-app.get('/global-stats', (req, res) => {
+async function getGlobalInfo() {
   let txn_sec = new Date(new Date().getTime() - 3000)
     .toISOString()
     .substring(0, 19);
@@ -230,7 +230,18 @@ app.get('/global-stats', (req, res) => {
     `!ent-last-id`,
   ];
 
-  sendMgetKeysZipValuesResult(stat_keys, stat_keys, res);
+  let stat_values = await mgetAsync(stat_keys);
+
+  return _.zipObject(stat_keys, stat_values);
+}
+
+async function sendGlobalInfoResponse(res) {
+  let globalInfo = await getGlobalInfo();
+  res.send(JSON.stringify(globalInfo) + '\n');
+}
+
+app.get('/global-stats', (req, res) => {
+  sendGlobalInfoResponse(res);
 });
 
 async function sendLrangeResult(key, first, last, res) {
@@ -474,7 +485,7 @@ async function sendClusterResult(req, res) {
   }
 }
 
-app.get('/cluster_info', (req, res) => {
+app.get('/cluster-info', (req, res) => {
   sendClusterResult(req, res);
 });
 
