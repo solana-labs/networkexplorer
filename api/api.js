@@ -26,14 +26,42 @@ import config from './config';
 //const FULLNODE_URL = 'http://beta.testnet.solana.com:8899';
 const FULLNODE_URL = 'http://localhost:8899';
 
-const GLOBAL_STATS_BROADCAST_INTERVAL_MS =  2000;
+const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 16000;
-const CLUSTER_INFO_CACHE_TIME_SECS       = 35000;
+const CLUSTER_INFO_CACHE_TIME_SECS = 35000;
 
 const app = express();
 
 const port = 3001;
 const MINUTE_MS = 60 * 1000;
+
+//
+// simple hash code for random
+// from: https://jsperf.com/hashcodelordvlad
+//
+function hashCode(s) {
+  let hash = 0;
+  var ch;
+  if (s.length == 0) return hash;
+
+  for (let i = 0, l = s.length; i < l; i++) {
+    ch = s.charCodeAt(i);
+    hash = (hash << 5) - hash + ch;
+    hash |= 0;
+  }
+  return hash;
+}
+
+//
+// simple/approximate RNG from seed
+// from: https://stackoverflow.com/questions/521295
+//
+function randomOffset(seedString) {
+  let seed = hashCode(seedString);
+  let x = Math.sin(seed++) * 10000;
+
+  return (x - Math.floor(x)) / 10 - 0.05;
+}
 
 function getClient() {
   let props = config.redis.path
@@ -317,15 +345,18 @@ if (fs.existsSync(geoipWhitelistFile)) {
   }
 }
 
+function geoipLookup(ip) {
+  if (geoipWhitelist[ip]) {
+    return geoipWhitelist[ip];
+  }
+
+  return geoip.lookup(ip);
+}
+
 app.get('/geoip/:ip', (req, res) => {
   const {ip} = req.params;
 
-  if (geoipWhitelist[ip]) {
-    res.send(JSON.stringify(geoipWhitelist[ip]) + '\n');
-    return;
-  }
-
-  const geo = geoip.lookup(ip);
+  const geo = geoipLookup(ip);
   if (geo === null) {
     res.status(404).send('{"error":"not_found"}\n');
   } else {
@@ -457,14 +488,37 @@ app.get('/accts_bal/:ids', (req, res) => {
   sendAccountResult(req, res);
 });
 
+const DEFAULT_LAT = 11.6065;
+const DEFAULT_LNG = 165.3768;
+
 async function getClusterInfo() {
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
   let ts = new Date().toISOString();
+  let [, feeCalculator] = await connection.getRecentBlockhash();
   let cluster = await connection.getClusterNodes();
-  let voting = await connection.getEpochVoteAccounts()
-  let rest = {cluster,voting,ts};
+  let voting = await connection.getEpochVoteAccounts();
 
-  await setexAsync('!clusterInfo', CLUSTER_INFO_CACHE_TIME_SECS, JSON.stringify(rest));
+  cluster = _.map(cluster, c => {
+    let ip = c.gossip.split(':')[0];
+    let ll = geoipLookup(ip).ll;
+    let newc = _.clone(c, true);
+
+    // compute different but deterministic offsets
+    let offsetLat = randomOffset(ip);
+    let offsetLng = randomOffset(c.gossip);
+
+    newc.lat = ((ll && ll[0]) || DEFAULT_LAT) + offsetLat;
+    newc.lng = ((ll && ll[1]) || DEFAULT_LNG) + offsetLng;
+
+    return newc;
+  });
+
+  let rest = {feeCalculator, cluster, voting, ts};
+  await setexAsync(
+    '!clusterInfo',
+    CLUSTER_INFO_CACHE_TIME_SECS,
+    JSON.stringify(rest),
+  );
   return rest;
 }
 
