@@ -1,0 +1,27 @@
+import React from 'react';
+import InfoIcon from '@material-ui/icons/Info';
+import Link from '@material-ui/core/Link';
+import {testnetDefaultChannel} from '@solana/web3.js/package.json';
+
+const BOOK_VERSION = testnetDefaultChannel === 'edge' ? 'book-edge' : 'book';
+
+class Bx2HelpLink extends React.Component {
+  render() {
+    const {text, term} = this.props;
+    return (
+      <Link
+        href={`https://solana-labs.github.io/${BOOK_VERSION}/terminology.html#${term}`}
+        title={'Click for more info about: ' + text}
+        target="_new"
+      >
+        <InfoIcon
+          fontSize="small"
+          color="disabled"
+          style={{padding: '5px', verticalAlign: 'middle'}}
+        />
+      </Link>
+    );
+  }
+}
+
+export default Bx2HelpLink;
