@@ -17,43 +17,58 @@ class Bx2NavDrawer extends React.Component {
     return (
       <Drawer variant="permanent">
         <List>
-          <ListItem key="Browse" component={Link} to="/v2/browse">
+          <ListItem button key="Browse" component={Link} to="/v2/browse">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Browse" />
           </ListItem>
-          <ListItem key="Transactions" component={Link} to="/v2/transactions">
+          <ListItem
+            button
+            key="Transactions"
+            component={Link}
+            to="/v2/transactions"
+          >
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Transactions" />
           </ListItem>
-          <ListItem key="Validators" component={Link} to="/v2/validators">
+          <ListItem
+            button
+            key="Validators"
+            component={Link}
+            to="/v2/validators"
+          >
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Validators" />
           </ListItem>
-          <ListItem key="TourDeSol" component={Link} to="/v2/tourdesol">
+          <ListItem button key="TourDeSol" component={Link} to="/v2/tourdesol">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Tour De Sol" />
           </ListItem>
-          <ListItem key="Applications" component={Link} to="/v2/applications">
+          <ListItem
+            button
+            key="Applications"
+            component={Link}
+            to="/v2/applications"
+          >
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Applications" />
           </ListItem>
-          <ListItem key="Blocks" component={Link} to="/v2/blocks">
+          <ListItem button key="Blocks" component={Link} to="/v2/blocks">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Blocks" />
           </ListItem>
-          <ListItem key="Favorites" component={Link} to="/v2/favorites">
+          <ListItem button key="Favorites" component={Link} to="/v2/favorites">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>

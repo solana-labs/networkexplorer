@@ -26,6 +26,7 @@ import {stylesV1, themeV1} from './v1/ThemeV1';
 import Bx2AppBar from './v2/Bx2AppBar';
 import Bx2NavDrawer from './v2/Bx2NavDrawer';
 import Bx2BlankComponent from './v2/Bx2BlankComponent';
+import Bx2PanelValidators from './v2/Bx2PanelValidators';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
@@ -42,6 +43,7 @@ const BxDataTableThemed = withStyles(stylesV1)(BxDataTable);
 
 const Bx2AppBarThemed = withStyles(stylesV2)(Bx2AppBar);
 const Bx2NavDrawerThemed = withStyles(stylesV2)(Bx2NavDrawer);
+const Bx2PanelValidatorsThemed = withStyles(stylesV2)(Bx2PanelValidators);
 const Bx2BlankComponentThemed = withStyles(stylesV2)(Bx2BlankComponent);
 
 class App extends Component {
@@ -217,6 +219,17 @@ class App extends Component {
   }
 
   handleLocationChange = () => location => {
+    if (location.pathname.startsWith('/v2/')) {
+      this.updateStateAttributes({
+        selectedValue: null,
+        dialogOpen: false,
+        currentMatch: null,
+        stateLoading: false,
+      });
+
+      return;
+    }
+
     if (location.pathname === '/' && this.selectedValue !== null) {
       this.updateStateAttributes({
         selectedValue: null,
@@ -619,7 +632,7 @@ class App extends Component {
             <p />
             <BxTransactionChartThemed txnStats={this.state.txnStats} />
             <p />
-            <Grid container spacing={16} justify="center">
+            <Grid container spacing={1} justify="center">
               <Grid item style={{width: '1460px'}}>
                 <BxDataTableThemed
                   dataType="blk"
@@ -627,7 +640,8 @@ class App extends Component {
                 />
               </Grid>
             </Grid>
-            <Grid container spacing={16} justify="center">
+            <p />
+            <Grid container spacing={1} justify="center">
               <Grid item style={{width: '1460px'}}>
                 <BxDataTableThemed
                   dataType="txn"
@@ -676,7 +690,7 @@ class App extends Component {
                 path="/v2/validators"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed message="Hello Validators" />
+                  <Bx2PanelValidatorsThemed nodes={this.state.nodes} />
                 )}
               />
               <Route
