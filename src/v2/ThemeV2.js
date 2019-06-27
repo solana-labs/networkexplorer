@@ -24,8 +24,8 @@ const stylesV2 = theme => ({
     width: '95%',
     display: 'flex',
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -57,8 +57,8 @@ const stylesV2 = theme => ({
   },
   closeButton: {
     position: 'absolute',
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
+    right: theme.spacing(1),
+    top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
   search: {
@@ -68,15 +68,15 @@ const stylesV2 = theme => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing(2),
     marginLeft: 0,
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit * 3,
+      marginLeft: theme.spacing(3),
       width: '740px',
     },
   },
   searchIcon: {
-    width: theme.spacing.unit * 5,
+    width: theme.spacing(5),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -89,10 +89,10 @@ const stylesV2 = theme => ({
     width: '100%',
   },
   inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 5,
+    paddingTop: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(5),
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
