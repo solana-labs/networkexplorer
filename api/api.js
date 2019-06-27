@@ -138,7 +138,7 @@ txnsClient.on('message', handleTxnRedis('txns-by-prgid'));
 const globalInfoPublish = handleRedis('global-info');
 
 async function updateGlobalInfoTimerTask() {
-  let globalInfo = await getGlobalInfo();
+  const globalInfo = await getGlobalInfo();
   globalInfoPublish('global-info', JSON.stringify(globalInfo));
 }
 
@@ -147,7 +147,7 @@ setInterval(updateGlobalInfoTimerTask, GLOBAL_STATS_BROADCAST_INTERVAL_MS);
 const clusterInfoPublish = handleRedis('cluster-info');
 
 async function updateClusterInfoTimerTask() {
-  let clusterInfo = await getClusterInfo();
+  const clusterInfo = await getClusterInfo();
   clusterInfoPublish('cluster-info', JSON.stringify(clusterInfo));
 }
 
@@ -258,13 +258,13 @@ async function getGlobalInfo() {
     `!ent-last-id`,
   ];
 
-  let stat_values = await mgetAsync(stat_keys);
+  const stat_values = await mgetAsync(stat_keys);
 
   return _.zipObject(stat_keys, stat_values);
 }
 
 async function sendGlobalInfoResponse(res) {
-  let globalInfo = await getGlobalInfo();
+  const globalInfo = await getGlobalInfo();
   res.send(JSON.stringify(globalInfo) + '\n');
 }
 
