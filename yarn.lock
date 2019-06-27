@@ -1621,10 +1621,10 @@
     into-stream "^4.0.0"
     lodash "^4.17.4"
 
-"@solana/web3.js@^0.16.7":
-  version "0.16.7"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.16.7.tgz#523a8c5e2f551e098820c913160733f7218ee231"
-  integrity sha512-Qs0j3Wk5+IlNgXhZ7ZpRXhhn6KDsc6utieOo4aGVxW5Vm8SozlKZl5gjDOkEHSLdo91UpUnqF09Kjj7jcSZR6w==
+"@solana/web3.js@^0.16.8":
+  version "0.16.8"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.16.8.tgz#bd54e5022cc4aacacb4035f50b6a17626bb55604"
+  integrity sha512-rW7sKusAnn9tVsdoFVmPorsF82jfiiZNYgmoPFsAQ12H4krogCXt7VT7eMvkVZw4FclU7vkeWwZVZ9LhGo2pEw==
   dependencies:
     "@babel/runtime" "^7.3.1"
     bn.js "^4.11.8"
