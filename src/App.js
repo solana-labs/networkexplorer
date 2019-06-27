@@ -8,7 +8,7 @@ import _ from 'lodash';
 import {matchPath, Route} from 'react-router';
 import './App.css';
 import {createBrowserHistory} from 'history';
-import {Connection} from '@solana/web3.js';
+// import {Connection} from '@solana/web3.js';
 import {CssBaseline} from '@material-ui/core';
 
 import {sleep} from './sleep';
@@ -30,29 +30,6 @@ import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
 
-async function geoip(ip: string) {
-  let lat = 11.6065;
-  let lng = 165.3768;
-
-  try {
-    const result = await window.fetch(
-      `http:${BLOCK_EXPLORER_API_BASE}/geoip/${ip}`,
-    );
-    if (result.status === 200) {
-      const json = await result.json();
-      lat = json[0];
-      lng = json[1];
-      console.log(ip, 'at', lat, lng);
-    }
-  } catch (err) {
-    console.log('geoip of', ip, 'failed with:', err);
-  }
-
-  // Add some Math.random() to prevent nodes in the same data center from fully
-  // overlaying each other
-  return [lat + Math.random() / 10 - 0.05, lng + Math.random() / 10 - 0.05];
-}
-
 const BLOCK_EXPLORER_API_BASE = EndpointConfig.BLOCK_EXPLORER_API_BASE;
 
 const BxAppBarThemed = withStyles(stylesV1)(BxAppBar);
@@ -72,7 +49,9 @@ class App extends Component {
     super(props);
 
     this.ws = null;
-    this.connection = new Connection(EndpointConfig.BLOCK_EXPLORER_RPC_URL);
+
+    // unused (for now)
+    // this.connection = new Connection(EndpointConfig.BLOCK_EXPLORER_RPC_URL);
 
     this.state = {
       enabled: true,
@@ -96,9 +75,28 @@ class App extends Component {
 
     const self = this;
 
-    self.updateGlobalStats();
-    self.updateTxnStats();
+    // update global info (once, on load)
+    this.getRemoteState(
+      'globalStats',
+      `http:${BLOCK_EXPLORER_API_BASE}/global-stats`,
+    );
+
+    // update cluster info (once, on load)
+    this.getRemoteState(
+      'clusterInfo',
+      `http:${BLOCK_EXPLORER_API_BASE}/cluster-info`,
+      null,
+      null,
+      self.parseClusterInfo,
+    );
+
+    // update blocks (once, on load)
     self.updateBlocks();
+
+    self.updateTxnStats();
+    setInterval(() => {
+      self.updateTxnStats();
+    }, 30000);
 
     self.updateTransactions();
     setInterval(() => {
@@ -106,7 +104,7 @@ class App extends Component {
     }, 10000);
   }
 
-  getRemoteState(attr, url, mapFun, limit) {
+  getRemoteState(attr, url, mapFun, limit, transform) {
     axios.get(url).then(response => {
       let newState = {};
 
@@ -118,6 +116,10 @@ class App extends Component {
         newState[attr] = _.map(response.data, mapFun);
       } else {
         newState[attr] = response.data;
+      }
+
+      if (transform) {
+        newState = transform(response.data);
       }
 
       this.updateStateAttributes(newState);
@@ -143,60 +145,22 @@ class App extends Component {
     });
   }
 
-  async updateGlobalStats() {
-    this.getRemoteState(
-      'globalStats',
-      `http:${BLOCK_EXPLORER_API_BASE}/global-stats`,
-    );
+  parseClusterInfo(data) {
+    let voting = data.voting;
+    let gossip = data.cluster;
 
-    try {
-      const [
-        ,
-        /*blockhash*/ feeCalculator,
-      ] = await this.connection.getRecentBlockhash();
-      this.setState({feeCalculator});
+    let nodes = _.map(gossip, g => {
+      let newG = {...g};
+      let vote = voting.find(x => x.nodePubkey === newG.pubkey);
+      newG.voteAccount = vote;
 
-      const oldNodes = this.state.nodes;
-      const newNodes = await this.connection.getClusterNodes();
-      const nodes = [];
+      return newG;
+    });
 
-      // TODO: Don't bother updating vote accounts so much.  They only change
-      // once an epoch
-      const voteAccounts = await this.connection.getEpochVoteAccounts();
-
-      let modified = oldNodes.length !== newNodes.length;
-
-      const maybeSetState = () => {
-        if (modified) {
-          this.setState({nodes});
-          modified = false;
-        }
-      };
-      for (const newNode of newNodes) {
-        const oldNode = oldNodes.find(node => node.pubkey === newNode.pubkey);
-        const voteAccount = voteAccounts.find(
-          voteAccount => voteAccount.nodePubkey === newNode.pubkey,
-        );
-        if (oldNode) {
-          oldNode.voteAccount = voteAccount;
-          nodes.push(oldNode);
-        } else {
-          const ip = newNode.gossip.split(':')[0];
-          const [lat, lng] = await geoip(ip);
-          newNode.lat = lat;
-          newNode.lng = lng;
-          newNode.voteAccount = voteAccount;
-          nodes.push(newNode);
-          modified = true;
-        }
-        maybeSetState();
-      }
-      maybeSetState();
-    } catch (err) {
-      console.log('getClusterNodes failed:', err.message);
-    }
-
-    setTimeout(() => this.updateGlobalStats(), 1200);
+    return {
+      feeCalculator: data.feeCalculator,
+      nodes: nodes,
+    };
   }
 
   updateTxnStats() {
@@ -204,7 +168,6 @@ class App extends Component {
       'txnStats',
       `http:${BLOCK_EXPLORER_API_BASE}/txn-stats`,
     );
-    setTimeout(() => this.updateTxnStats(), 22000);
   }
 
   updateBlocks() {
@@ -329,6 +292,8 @@ class App extends Component {
   }
 
   onMessage = data => {
+    // console.log('m', data);
+
     if (!this.state.enabled) {
       return;
     }
@@ -337,6 +302,17 @@ class App extends Component {
 
     if (type === 'blk') {
       this.addBlock(this.parseBlockMessage(data.m));
+    }
+
+    if (type === 'global-info') {
+      this.updateStateAttributes({
+        globalStats: JSON.parse(data.m),
+      });
+    }
+
+    if (type === 'cluster-info') {
+      let newAttributes = this.parseClusterInfo(JSON.parse(data.m));
+      this.updateStateAttributes(newAttributes);
     }
 
     if (type === 'txns-by-prgid') {
@@ -390,6 +366,10 @@ class App extends Component {
     }
 
     blocks.unshift(block);
+
+    if (this.state.globalStats['!blk-last-slot'] < block.s) {
+      this.updateSpecificGlobalStateAttribute('!blk-last-slot', block.s);
+    }
 
     this.updateStateAttributes({blocks: blocks});
   }
