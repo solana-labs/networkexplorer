@@ -29,7 +29,7 @@ class BxStatsTable extends React.Component {
     });
 
     return (
-      <Grid container justify="center" spacing={24} className="sideBySide">
+      <Grid container justify="center" spacing={1} className="sideBySide">
         <Grid item>
           <Card>
             <CardContent onClick={() => this.copyLeaderPublickey()}>
