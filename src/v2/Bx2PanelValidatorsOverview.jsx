@@ -115,7 +115,7 @@ function ArrowTooltip(props) {
       title={
         <React.Fragment>
           {props.title}
-          <span className={arrow} ref={setArrowRef}/>
+          <span className={arrow} ref={setArrowRef} />
         </React.Fragment>
       }
     />
@@ -134,9 +134,7 @@ class Bx2PanelValidatorsOverview extends Component {
     const {nodes} = this.props;
 
     // eslint-disable-next-line no-restricted-properties
-    const totalSupplySOL = (this.props.supply / Math.pow(2, 34)).toFixed(
-      2,
-    );
+    const totalSupplySOL = (this.props.supply / Math.pow(2, 34)).toFixed(2);
 
     return (
       <div>
@@ -144,40 +142,45 @@ class Bx2PanelValidatorsOverview extends Component {
           <ComposableMap>
             <ZoomableGroup>
               <Geographies geography={'/resources/world-50m-simplified.json'}>
-                {(geographies, projection) => geographies.map((geography, i) => (
-                  <Geography
-                    key={`geo${i}`}
-                    geography={geography}
-                    projection={projection}
-                  />
-                ))}
-              </Geographies>
-              <Markers>
-                {
-                  nodes.map((node, i) => (
-                    <Marker key={`mk${i}`} marker={this.makeMarker(node)}>
-                      <ArrowTooltip
-                        title={`Name: ${node.pubkey}\nStake: ${(node.voteAccount && node.voteAccount.stake) || 0} Lamports`}>
-                        <circle
-                          cx={0}
-                          cy={0}
-                          r={10}
-                          style={{
-                            stroke: 'rgb(21, 127, 94)',
-                            fill: 'rgb(43, 254, 188)',
-                            strokeWidth: 3,
-                            opacity: 0.9,
-                          }}
-                        />
-                      </ArrowTooltip>
-                    </Marker>
+                {(geographies, projection) =>
+                  geographies.map((geography, i) => (
+                    <Geography
+                      key={`geo${i}`}
+                      geography={geography}
+                      projection={projection}
+                    />
                   ))
                 }
+              </Geographies>
+              <Markers>
+                {nodes.map((node, i) => (
+                  <Marker key={`mk${i}`} marker={this.makeMarker(node)}>
+                    <ArrowTooltip
+                      title={`Name: ${
+                        node.pubkey
+                      }\nStake: ${(node.voteAccount &&
+                        node.voteAccount.stake) ||
+                        0} Lamports`}
+                    >
+                      <circle
+                        cx={0}
+                        cy={0}
+                        r={10}
+                        style={{
+                          stroke: 'rgb(21, 127, 94)',
+                          fill: 'rgb(43, 254, 188)',
+                          strokeWidth: 3,
+                          opacity: 0.9,
+                        }}
+                      />
+                    </ArrowTooltip>
+                  </Marker>
+                ))}
               </Markers>
             </ZoomableGroup>
           </ComposableMap>
         </div>
-        <p/>
+        <p />
         <div>
           <Grid container justify="center" spacing={1} className="sideBySide">
             <Grid item>
@@ -185,7 +188,7 @@ class Bx2PanelValidatorsOverview extends Component {
                 <CardContent>
                   <Typography variant="h5" component="h2" align="center">
                     Total Supply
-                    <BxHelpLink text="Leader" term="leader"/>
+                    <BxHelpLink text="Leader" term="leader" />
                     <ArrowTooltip title="Add">
                       <Button>Arrow</Button>
                     </ArrowTooltip>
@@ -201,7 +204,7 @@ class Bx2PanelValidatorsOverview extends Component {
                 <CardContent>
                   <Typography variant="h5" component="h2" align="center">
                     Total Bonded Tokens
-                    <BxHelpLink text="Leader" term="leader"/>
+                    <BxHelpLink text="Leader" term="leader" />
                   </Typography>
                   <Typography component="p" align="center">
                     (TODO) SOL
@@ -214,7 +217,7 @@ class Bx2PanelValidatorsOverview extends Component {
                 <CardContent>
                   <Typography variant="h5" component="h2" align="center">
                     # Active Validators
-                    <BxHelpLink text="Leader" term="leader"/>
+                    <BxHelpLink text="Leader" term="leader" />
                   </Typography>
                   <Typography component="p" align="center">
                     {this.props.nodes.length}
@@ -231,9 +234,11 @@ class Bx2PanelValidatorsOverview extends Component {
             style={{textAlign: 'left', padding: '16px'}}
           >
             Validators
-            <BxHelpLink text="Transaction" term="transaction"/>
-            <br/>
-            <Link component={RouterLink} to={'/v2/validators'}>See All</Link>
+            <BxHelpLink text="Transaction" term="transaction" />
+            <br />
+            <Link component={RouterLink} to={'/v2/validators'}>
+              See All
+            </Link>
           </Typography>
           <Table>
             <TableHead>
@@ -241,24 +246,24 @@ class Bx2PanelValidatorsOverview extends Component {
                 <TableCell>
                   <div>
                     Node Pubkey
-                    <BxHelpLink text="Transaction" term="transaction"/>
+                    <BxHelpLink text="Transaction" term="transaction" />
                   </div>
                   <div>
                     Vote Pubkey
-                    <BxHelpLink text="Account" term="account"/>
+                    <BxHelpLink text="Account" term="account" />
                   </div>
                 </TableCell>
                 <TableCell>
                   Stake
-                  <BxHelpLink text="Program" term="program-id"/>
+                  <BxHelpLink text="Program" term="program-id" />
                 </TableCell>
                 <TableCell align="center">
                   Commission
-                  <BxHelpLink text="Block Height" term="block-height"/>
+                  <BxHelpLink text="Block Height" term="block-height" />
                 </TableCell>
                 <TableCell align="right">
                   Uptime
-                  <BxHelpLink text="Block Height" term="block-height"/>
+                  <BxHelpLink text="Block Height" term="block-height" />
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -270,8 +275,8 @@ class Bx2PanelValidatorsOverview extends Component {
                     scope="row"
                     title={JSON.stringify(row, null, 2)}
                   >
-                    <BxEntityLink prg_id={row.pubkey}/>
-                    <br/>
+                    <BxEntityLink prg_id={row.pubkey} />
+                    <br />
                     <BxEntityLink
                       prg_id={row.voteAccount && row.voteAccount.votePubkey}
                     />

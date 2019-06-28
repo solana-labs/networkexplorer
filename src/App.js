@@ -44,7 +44,9 @@ const BxDataTableThemed = withStyles(stylesV1)(BxDataTable);
 
 const Bx2AppBarThemed = withStyles(stylesV2)(Bx2AppBar);
 const Bx2NavDrawerThemed = withStyles(stylesV2)(Bx2NavDrawer);
-const Bx2PanelValidatorsOverviewThemed = withStyles(stylesV2)(Bx2PanelValidatorsOverview);
+const Bx2PanelValidatorsOverviewThemed = withStyles(stylesV2)(
+  Bx2PanelValidatorsOverview,
+);
 const Bx2PanelValidatorsThemed = withStyles(stylesV2)(Bx2PanelValidators);
 const Bx2BlankComponentThemed = withStyles(stylesV2)(Bx2BlankComponent);
 
@@ -695,7 +697,8 @@ class App extends Component {
                 render={() => (
                   <Bx2PanelValidatorsOverviewThemed
                     nodes={this.state.nodes}
-                    supply={this.state.supply || 0}/>
+                    supply={this.state.supply || 0}
+                  />
                 )}
               />
               <Route
