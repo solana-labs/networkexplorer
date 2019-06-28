@@ -26,6 +26,7 @@ import {stylesV1, themeV1} from './v1/ThemeV1';
 import Bx2AppBar from './v2/Bx2AppBar';
 import Bx2NavDrawer from './v2/Bx2NavDrawer';
 import Bx2BlankComponent from './v2/Bx2BlankComponent';
+import Bx2PanelValidatorsOverview from './v2/Bx2PanelValidatorsOverview';
 import Bx2PanelValidators from './v2/Bx2PanelValidators';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
@@ -43,6 +44,7 @@ const BxDataTableThemed = withStyles(stylesV1)(BxDataTable);
 
 const Bx2AppBarThemed = withStyles(stylesV2)(Bx2AppBar);
 const Bx2NavDrawerThemed = withStyles(stylesV2)(Bx2NavDrawer);
+const Bx2PanelValidatorsOverviewThemed = withStyles(stylesV2)(Bx2PanelValidatorsOverview);
 const Bx2PanelValidatorsThemed = withStyles(stylesV2)(Bx2PanelValidators);
 const Bx2BlankComponentThemed = withStyles(stylesV2)(Bx2BlankComponent);
 
@@ -160,6 +162,7 @@ class App extends Component {
     });
 
     return {
+      supply: data.supply,
       feeCalculator: data.feeCalculator,
       nodes: nodes,
     };
@@ -684,6 +687,15 @@ class App extends Component {
                 exact
                 render={() => (
                   <Bx2BlankComponentThemed message="Hello Transactions" />
+                )}
+              />
+              <Route
+                path="/v2/validators-overview"
+                exact
+                render={() => (
+                  <Bx2PanelValidatorsOverviewThemed
+                    nodes={this.state.nodes}
+                    supply={this.state.supply || 0}/>
                 )}
               />
               <Route

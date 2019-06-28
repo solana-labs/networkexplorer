@@ -1,6 +1,6 @@
 let EndpointConfig = {
-  BLOCK_EXPLORER_API_BASE: `//${window.location.hostname}:3001`,
-  BLOCK_EXPLORER_RPC_URL: `http://${window.location.hostname}:8899`,
+  BLOCK_EXPLORER_API_BASE: `//18.207.34.153:3001`,
+  BLOCK_EXPLORER_RPC_URL: `http://18.207.34.153:8899`,
 };
 
 export default EndpointConfig;

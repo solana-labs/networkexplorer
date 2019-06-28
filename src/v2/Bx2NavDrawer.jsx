@@ -38,7 +38,7 @@ class Bx2NavDrawer extends React.Component {
             button
             key="Validators"
             component={Link}
-            to="/v2/validators"
+            to="/v2/validators-overview"
           >
             <ListItemIcon>
               <DashboardIcon />
