@@ -495,6 +495,7 @@ async function getClusterInfo() {
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
   let ts = new Date().toISOString();
   let [, feeCalculator] = await connection.getRecentBlockhash();
+  let supply = await connection.getTotalSupply();
   let cluster = await connection.getClusterNodes();
   let voting = await connection.getEpochVoteAccounts();
 
@@ -513,7 +514,7 @@ async function getClusterInfo() {
     return newc;
   });
 
-  let rest = {feeCalculator, cluster, voting, ts};
+  let rest = {feeCalculator, supply, cluster, voting, ts};
   await setexAsync(
     '!clusterInfo',
     CLUSTER_INFO_CACHE_TIME_SECS,
