@@ -1,3 +1,6 @@
+require('@babel/register');
+const path = require('path');
+
 module.exports = {
   // eslint-disable-line import/no-commonjs
   env: {
@@ -51,6 +54,9 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
+      alias: {
+        map: [['v2', path.resolve(__dirname, 'src/v2')]],
+      },
       node: {
         extensions: ['.js', '.jsx'],
       },
