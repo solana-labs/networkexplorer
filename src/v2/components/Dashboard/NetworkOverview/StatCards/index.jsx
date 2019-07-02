@@ -8,7 +8,7 @@ import OverviewStore from 'v2/stores/networkOverview';
 import useStyles from './styles';
 
 const StatCards = () => {
-  const {globalStats} = OverviewStore;
+  const {globalStats, statsChanges, nodesChanges, cluster} = OverviewStore;
   const classes = useStyles();
   return (
     <Grid container spacing={2} alignItems="stretch">
@@ -23,11 +23,13 @@ const StatCards = () => {
             variant="h2"
             className={classes.val}
           >
-            {globalStats['!blkLastSlot']}
-          </Typography>{' '}
-          <Typography align="center" variant="h2" className={classes.changes}>
-            -2.45%
+            {cluster.nodes.length}
           </Typography>
+          {nodesChanges && (
+            <Typography align="center" variant="h2" className={classes.changes}>
+              {nodesChanges}%
+            </Typography>
+          )}
         </Paper>
       </Grid>
       <Grid item xs={3} zeroMinWidth>
@@ -43,9 +45,11 @@ const StatCards = () => {
           >
             {globalStats['!blkLastSlot']}
           </Typography>
-          <Typography align="center" variant="h2" className={classes.changes}>
-            -2.45%
-          </Typography>
+          {statsChanges && (
+            <Typography align="center" variant="h2" className={classes.changes}>
+              {statsChanges['!blkLastSlot']}%
+            </Typography>
+          )}
         </Paper>
       </Grid>
       <Grid item xs={3} zeroMinWidth>
@@ -61,9 +65,11 @@ const StatCards = () => {
           >
             {globalStats['!txnCount']}
           </Typography>
-          <Typography align="center" variant="h2" className={classes.changes}>
-            -2.45%
-          </Typography>
+          {statsChanges && (
+            <Typography align="center" variant="h2" className={classes.changes}>
+              {statsChanges['!txnCount']}%
+            </Typography>
+          )}
         </Paper>
       </Grid>
       <Grid item xs={3} zeroMinWidth>

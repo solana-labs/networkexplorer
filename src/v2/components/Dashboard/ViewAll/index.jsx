@@ -6,7 +6,7 @@ import decor from 'v2/assets/img/decorate.png';
 
 import useStyles from './styles';
 
-const ViewAll = props => {
+const ViewAll = () => {
   const classes = useStyles();
   return (
     <Container>
@@ -17,17 +17,17 @@ const ViewAll = props => {
         </Typography>
         <Grid container spacing={8}>
           <Grid item xs={4}>
-            <Button variant="contained" fullWidth color="primary">
+            <Button variant="contained" size="large" fullWidth color="primary">
               View all transactions
             </Button>
           </Grid>
           <Grid item xs={4}>
-            <Button variant="contained" fullWidth color="primary">
+            <Button variant="contained" size="large" fullWidth color="primary">
               View all applications
             </Button>
           </Grid>
           <Grid item xs={4}>
-            <Button variant="contained" fullWidth color="primary">
+            <Button variant="contained" size="large" fullWidth color="primary">
               View all blocks
             </Button>
           </Grid>

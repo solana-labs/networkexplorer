@@ -12,12 +12,12 @@ const Dashboard = lazy(() => import('v2/components/Dashboard'));
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+    overflow: 'hidden',
   },
   content: {
     flexGrow: 1,
     marginLeft: 50,
-    padding: theme.spacing(3),
-    paddingTop: 50,
+    padding: '50px 24px 0 24px',
   },
   toolbar: {
     display: 'flex',

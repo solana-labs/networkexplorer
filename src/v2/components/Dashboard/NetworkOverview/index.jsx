@@ -1,18 +1,37 @@
 // @flow
 
 import {Typography, Container} from '@material-ui/core';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import OverviewStore from 'v2/stores/networkOverview';
-import StatCards from './StatCards';
-import useStyles from './styles';
 import decor from 'v2/assets/img/decorate.png';
 
+import StatCards from './StatCards';
+import useStyles from './styles';
+
 const NetworkOverview = () => {
-  const {getStats} = OverviewStore;
+  const {getStats, getTxnStats} = OverviewStore;
   const classes = useStyles();
+  const timeout = useRef<TimeoutID | null>(null);
+
+  const pollStats = () => {
+    timeout.current = setTimeout(() => {
+      try {
+        getTxnStats();
+      } finally {
+        pollStats();
+      }
+    }, 5000);
+  };
+
   useEffect(() => {
     getStats();
-  }, [getStats]);
+    getTxnStats();
+    pollStats();
+    return () => {
+      clearTimeout(timeout.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Container>
       <div className={classes.root}>

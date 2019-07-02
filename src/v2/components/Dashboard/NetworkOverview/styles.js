@@ -5,6 +5,9 @@ export default makeStyles({
     padding: '40px 0',
     position: 'relative',
   },
+  row: {
+    marginBottom: 8,
+  },
   title: {
     marginBottom: 47,
   },

@@ -27,6 +27,11 @@ export default createMuiTheme({
       lineHeight: '31px',
       letterSpacing: 2.5,
     },
+    h5: {
+      fontWeight: 'bold',
+      fontSize: 19,
+      letterSpacing: 0.4,
+    },
     button: {
       textTransform: 'uppercase',
       fontSize: 15,
