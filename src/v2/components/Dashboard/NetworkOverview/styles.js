@@ -5,12 +5,7 @@ export default makeStyles({
     padding: '40px 0',
     position: 'relative',
   },
-  title: {
-    marginBottom: 47,
-  },
-  decor: {
-    position: 'absolute',
-    left: -120,
-    top: 32,
+  row: {
+    marginBottom: 8,
   },
 });

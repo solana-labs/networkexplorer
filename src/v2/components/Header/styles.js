@@ -1,7 +1,6 @@
 import {makeStyles} from '@material-ui/core';
 import {fade} from '@material-ui/core/styles';
-
-import getColor from '../../utils/getColor';
+import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
   root: {

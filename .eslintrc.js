@@ -8,8 +8,9 @@ module.exports = {
     es6: true,
     node: true,
   },
-  plugins: ['react'],
+  plugins: ['react', 'flowtype'],
   extends: [
+    'plugin:flowtype/recommended',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:import/errors',

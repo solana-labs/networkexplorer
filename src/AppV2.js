@@ -5,19 +5,23 @@ import {hot} from 'react-hot-loader/root';
 import {Route, Switch} from 'react-router-dom';
 import Header from 'v2/components/Header';
 import NavBar from 'v2/components/NavBar';
+import Footer from 'v2/components/Footer';
 import theme from 'v2/theme';
+import socket from 'v2/stores/socket';
+
+socket.init();
 
 const Dashboard = lazy(() => import('v2/components/Dashboard'));
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+    overflow: 'hidden',
   },
   content: {
     flexGrow: 1,
     marginLeft: 50,
-    padding: theme.spacing(3),
-    paddingTop: 50,
+    padding: '50px 24px 0 24px',
   },
   toolbar: {
     display: 'flex',
@@ -40,9 +44,10 @@ const App = () => {
           <div className={classes.toolbar} />
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
-              <Route exact path="/v2" component={Dashboard} />
+              <Route exact path="/rc" component={Dashboard} />
             </Switch>
           </Suspense>
+          <Footer />
         </div>
       </div>
     </MuiThemeProvider>
