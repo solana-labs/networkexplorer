@@ -113,7 +113,7 @@ class Node extends React.Component {
                 <b>Stake:</b> {node.voteAccount.stake}
                 <br />
                 <b>Commission:</b>{' '}
-                {(100 * (node.voteAccount.commission / 0xffffffff)).toFixed(3)}%
+                {(100 * (node.voteAccount.commission / 0xff)).toFixed(3)}%
                 <br />
                 <b>Vote Account:</b> {node.voteAccount.votePubkey}
               </div>
