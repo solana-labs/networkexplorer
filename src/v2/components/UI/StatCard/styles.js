@@ -2,27 +2,22 @@ import {makeStyles} from '@material-ui/core';
 import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
-  card: {
+  root: {
     background: getColor('grey')(theme),
     color: '#fff',
     borderRadius: 0,
     height: '100%',
     padding: '17px 30px',
   },
-  val: {
+  value: {
     fontSize: 60,
     fontWeight: 'bold',
     color: getColor('main')(theme),
     margin: '20px 0',
   },
-  leader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: getColor('main')(theme),
-    marginTop: 40,
-    letterSpacing: 3.4,
-  },
   changes: {
+    display: 'flex',
+    justifyContent: 'center',
     fontSize: 18,
     fontWeight: 'bold',
   },

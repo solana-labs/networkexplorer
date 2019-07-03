@@ -2,10 +2,15 @@
 import React from 'react';
 
 import logo from './assets/logo.svg';
+import logoVertical from './assets/logo_vertical.svg';
 
-const Logo = () => (
+type LogoProps = {
+  vertical?: boolean,
+};
+
+const Logo = ({vertical = false}: LogoProps) => (
   <div>
-    <img src={logo} alt="Solana" />
+    <img src={vertical ? logoVertical : logo} alt="Solana" />
   </div>
 );
 

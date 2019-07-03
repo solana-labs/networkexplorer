@@ -2,14 +2,15 @@
 import React from 'react';
 import {Button as BaseButton} from '@material-ui/core';
 import cn from 'classnames';
+
 import useStyles from './styles';
 
 type ButtonProps = {
   color: string,
-  fullWidth: boolean,
+  fullWidth?: boolean,
 };
 
-const Button = ({color, fullWidth, ...props}: ButtonProps) => {
+const Button = ({color, fullWidth = false, ...props}: ButtonProps) => {
   const classes = useStyles();
   return (
     <div

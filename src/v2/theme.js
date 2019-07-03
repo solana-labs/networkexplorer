@@ -8,6 +8,7 @@ export default createMuiTheme({
       grey: '#242424',
       grey2: '#202020',
       grey3: '#979797',
+      grey4: '#c4c4c4',
       main: '#00FFAD',
     },
     secondary: {
@@ -27,6 +28,11 @@ export default createMuiTheme({
       lineHeight: '31px',
       letterSpacing: 2.5,
     },
+    h5: {
+      fontWeight: 'bold',
+      fontSize: 19,
+      letterSpacing: 0.4,
+    },
     button: {
       textTransform: 'uppercase',
       fontSize: 15,
@@ -35,3 +41,16 @@ export default createMuiTheme({
     },
   },
 });
+
+export const mapStyle = {
+  fill: '#202020',
+  stroke: '#fff',
+  strokeWidth: 0.5,
+  outline: 'none',
+};
+
+export const markerStyle = {
+  default: {fill: '#00FFAD'},
+  hover: {fill: '#00FFAD'},
+  pressed: {fill: '#00FFAD'},
+};

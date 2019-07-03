@@ -15,7 +15,6 @@ export default makeStyles(theme => ({
     borderColor: getColor('main')(theme),
     '& button': {
       borderRadius: 0,
-      padding: '12px 25px',
       '&:hover': {
         backgroundColor: fade(getColor('main')(theme), 0.8),
       },

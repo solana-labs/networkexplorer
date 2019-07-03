@@ -22,7 +22,7 @@ const Header = () => {
         <div className={classes.realTime}>
           <p>Real-time updated:</p>
           <div>
-            Live <LiveIcon />
+            Every 5 sec <LiveIcon />
           </div>
         </div>
       </Toolbar>

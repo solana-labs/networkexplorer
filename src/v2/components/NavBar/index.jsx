@@ -1,10 +1,10 @@
 // @flow
 
 import {Drawer, List, ListItem, ListItemIcon} from '@material-ui/core';
-import {withRouter} from 'react-router-dom';
-import type {ContextRouter} from 'react-router-dom';
+import {RouterHistory, withRouter} from 'react-router-dom';
 import React from 'react';
 import {map, propEq, eq} from 'lodash/fp';
+
 import {ReactComponent as dashboard} from './assets/dashboard.svg';
 import {ReactComponent as transactions} from './assets/transactions.svg';
 import {ReactComponent as validators} from './assets/validators.svg';
@@ -12,7 +12,6 @@ import {ReactComponent as tourDeSol} from './assets/tour-de-sol.svg';
 import {ReactComponent as applications} from './assets/applications.svg';
 import {ReactComponent as blocks} from './assets/blocks.svg';
 import {ReactComponent as favorites} from './assets/favorites.svg';
-
 import useStyles from './styles';
 
 const icons = {
@@ -25,7 +24,13 @@ const icons = {
   favorites,
 };
 
-const NavBar = ({location, history}: ContextRouter) => {
+const NavBar = ({
+  location,
+  history,
+}: {
+  location: Location,
+  history: RouterHistory,
+}) => {
   const classes = useStyles();
   const routes = [
     'dashboard',
@@ -42,7 +47,7 @@ const NavBar = ({location, history}: ContextRouter) => {
     const selected =
       propEq('pathname', `/${link}`)(location) ||
       (propEq('pathname', '/')(location) && isDashboard);
-    const changeRoute = () => history.push(`/${isDashboard ? '' : link}`);
+    const changeRoute = () => history.push(`/v2/${isDashboard ? '' : link}`);
     return (
       <ListItem
         onClick={changeRoute}
