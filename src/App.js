@@ -28,6 +28,7 @@ import Bx2NavDrawer from './v2/Bx2NavDrawer';
 import Bx2BlankComponent from './v2/Bx2BlankComponent';
 import Bx2PanelValidatorsOverview from './v2/Bx2PanelValidatorsOverview';
 import Bx2PanelValidators from './v2/Bx2PanelValidators';
+import Bx2PanelValidatorDetail from './v2/Bx2PanelValidatorDetail';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
@@ -48,6 +49,9 @@ const Bx2PanelValidatorsOverviewThemed = withStyles(stylesV2)(
   Bx2PanelValidatorsOverview,
 );
 const Bx2PanelValidatorsThemed = withStyles(stylesV2)(Bx2PanelValidators);
+const Bx2PanelValidatorDetailThemed = withStyles(stylesV2)(
+  Bx2PanelValidatorDetail,
+);
 const Bx2BlankComponentThemed = withStyles(stylesV2)(Bx2BlankComponent);
 
 class App extends Component {
@@ -706,6 +710,16 @@ class App extends Component {
                 exact
                 render={() => (
                   <Bx2PanelValidatorsThemed nodes={this.state.nodes} />
+                )}
+              />
+              <Route
+                path="/v2/validator/:id"
+                exact
+                render={({match}) => (
+                  <Bx2PanelValidatorDetailThemed
+                    nodes={this.state.nodes}
+                    id={match.params.id}
+                  />
                 )}
               />
               <Route

@@ -47,6 +47,21 @@ class Bx2EntityLink extends React.Component {
     );
   }
 
+  renderValidatorId() {
+    return (
+      <Link
+        component={RouterLink}
+        to={'/v2/validator/' + this.props.validator_id}
+        color="secondary"
+      >
+        <code title={this.props.validator_id}>
+          {this.props.validator_id.substring(0, 22) +
+            (this.props.validator_id.length > 22 ? '\u2026' : '')}
+        </code>
+      </Link>
+    );
+  }
+
   renderAccountId() {
     return (
       <code title={this.props.acct_id}>
@@ -72,7 +87,7 @@ class Bx2EntityLink extends React.Component {
   }
 
   render() {
-    const {node, ent, blk, txn, acct_id, prg_id} = this.props;
+    const {node, ent, blk, txn, validator_id, acct_id, prg_id} = this.props;
 
     if (node) {
       return this.renderNode();
@@ -88,6 +103,10 @@ class Bx2EntityLink extends React.Component {
 
     if (txn) {
       return this.renderTransaction();
+    }
+
+    if (validator_id) {
+      return this.renderValidatorId();
     }
 
     if (acct_id) {
