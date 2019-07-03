@@ -4,12 +4,12 @@ import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
 import App from './App';
-import AppV2 from './AppV2';
+// import AppV2 from './AppV2';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <BrowserRouter>
-    {window.location.pathname.includes('v2') ? <AppV2 /> : <App />}
+    {window.location.pathname.includes('v2') ? <App /> : <App />}
   </BrowserRouter>,
   document.getElementById('root'),
 );

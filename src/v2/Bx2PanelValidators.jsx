@@ -60,7 +60,7 @@ class Bx2PanelValidators extends React.Component {
                   scope="row"
                   title={JSON.stringify(row, null, 2)}
                 >
-                  <BxEntityLink prg_id={row.pubkey} />
+                  <BxEntityLink validator_id={row.pubkey} />
                   <br />
                   <BxEntityLink
                     prg_id={row.voteAccount && row.voteAccount.votePubkey}
