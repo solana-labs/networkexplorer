@@ -15,7 +15,8 @@ import MapIcon from '@material-ui/icons/Map';
 // import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
-import {getMetricsDashboardUrl} from '../EndpointConfig';
+import Select from '@material-ui/core/Select';
+import * as EndpointConfig from '../EndpointConfig';
 
 class BxAppBar extends React.Component {
   state = {
@@ -24,7 +25,7 @@ class BxAppBar extends React.Component {
   };
 
   handleDashboard = event => {
-    window.open(getMetricsDashboardUrl());
+    window.open(EndpointConfig.getMetricsDashboardUrl());
   };
 
   handleMap = event => {
@@ -60,6 +61,12 @@ class BxAppBar extends React.Component {
 
   handleMobileMenuClose = () => {
     this.setState({mobileMoreAnchorEl: null});
+  };
+
+  handleSetEndpointName = event => {
+    if (this.props.handleSetEndpointName) {
+      this.props.handleSetEndpointName(event);
+    }
   };
 
   render() {
@@ -180,6 +187,19 @@ class BxAppBar extends React.Component {
                   {/*>*/}
                   {/*<AccountCircle/>*/}
                   {/*</IconButton>*/}
+                  <Select
+                    value={EndpointConfig.getEndpointName()}
+                    onChange={this.handleSetEndpointName}
+                    native
+                  >
+                    {EndpointConfig.getEndpoints().map((name, index) => {
+                      return (
+                        <option key={index} value={name}>
+                          {name}
+                        </option>
+                      );
+                    })}
+                  </Select>
                 </div>
                 <div className={classes.sectionMobile}>
                   <IconButton
