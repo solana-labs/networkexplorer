@@ -1,6 +1,26 @@
 #!/usr/bin/env bash
 set -e
 
+cmd=${1:-all}
+case $cmd in
+ui)
+  runUi=1
+  runApi=0
+  ;;
+api)
+  runUi=0
+  runApi=1
+  ;;
+all)
+  runUi=1
+  runApi=1
+  ;;
+*)
+  echo "Error: unknown command: $cmd"
+  exit 1
+  ;;
+esac
+
 cwd=$PWD
 
 rootDir=$(
@@ -41,32 +61,38 @@ cleanup() {
 }
 trap cleanup SIGINT SIGTERM ERR
 
-(
-  set -x
-  redis-cli ping
-)
+if ((runApi)); then
+  (
+    set -x
+    redis-cli ping
+  )
+fi
 
 rm -f "$cwd"/solana-blockexplorer-{api,ui}.log
 
 api=
 ui=
 while true; do
-  if [[ -z $api ]] || ! kill -0 "$api"; then
-    logfile="$cwd"/solana-blockexplorer-api.log
-    echo "Starting api process (logfile: $logfile)"
-    date | tee -a "$logfile"
-    npm run start-prod:api >> "$logfile" 2>&1 &
-    api=$!
-    echo "  pid: $api"
+  if ((runApi)); then
+    if [[ -z $api ]] || ! kill -0 "$api"; then
+      logfile="$cwd"/solana-blockexplorer-api.log
+      echo "Starting api process (logfile: $logfile)"
+      date | tee -a "$logfile"
+      npm run start-prod:api >> "$logfile" 2>&1 &
+      api=$!
+      echo "  pid: $api"
+    fi
   fi
 
-  if [[ -z $ui ]] || ! kill -0 "$ui"; then
-    logfile="$cwd"/solana-blockexplorer-ui.log
-    echo "Starting ui process (logfile: $logfile)"
-    date | tee -a "$logfile"
-    npm run start-prod:ui >> "$logfile" 2>&1 &
-    ui=$!
-    echo "  pid: $ui"
+  if ((runUi)); then
+    if [[ -z $ui ]] || ! kill -0 "$ui"; then
+      logfile="$cwd"/solana-blockexplorer-ui.log
+      echo "Starting ui process (logfile: $logfile)"
+      date | tee -a "$logfile"
+      npm run start-prod:ui >> "$logfile" 2>&1 &
+      ui=$!
+      echo "  pid: $ui"
+    fi
   fi
 
   sleep 1
