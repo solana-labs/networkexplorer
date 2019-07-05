@@ -13,6 +13,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import MapIcon from '@material-ui/icons/Map';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Switch from '@material-ui/core/Switch';
+import {getMetricsDashboardUrl} from '../EndpointConfig';
 
 class Bx2AppBar extends React.Component {
   state = {
@@ -21,15 +22,7 @@ class Bx2AppBar extends React.Component {
   };
 
   handleDashboard = event => {
-    const matches = window.location.hostname.match('(.*).testnet.solana.com');
-    let url =
-      'https://metrics.solana.com:3000/d/testnet-beta/testnet-monitor-beta?refresh=5s&from=now-5m&to=now';
-    if (matches) {
-      const testnet = matches[1];
-      url += `&var-testnet=testnet-${testnet}`;
-    }
-
-    window.open(url);
+    window.open(getMetricsDashboardUrl());
   };
 
   handleMap = event => {
