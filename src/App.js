@@ -12,7 +12,7 @@ import {createBrowserHistory} from 'history';
 import {CssBaseline} from '@material-ui/core';
 
 import {sleep} from './sleep';
-import EndpointConfig from './EndpointConfig';
+import * as EndpointConfig from './EndpointConfig';
 // v1 components
 import BxDataTable from './v1/BxDataTable';
 import BxTransactionChart from './v1/BxTransactionChart';
@@ -32,8 +32,6 @@ import Bx2PanelValidatorDetail from './v2/Bx2PanelValidatorDetail';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
-
-const BLOCK_EXPLORER_API_BASE = EndpointConfig.BLOCK_EXPLORER_API_BASE;
 
 const BxAppBarThemed = withStyles(stylesV1)(BxAppBar);
 const BxDialogThemed = withStyles(stylesV1)(BxDialog);
@@ -58,14 +56,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.ws = null;
-
-    // unused (for now)
-    // this.connection = new Connection(EndpointConfig.BLOCK_EXPLORER_RPC_URL);
-
-    this.state = {
-      enabled: true,
-      dialogOpen: false,
+    this.defaultState = {
       selectedValue: null,
       currentMatch: null,
       stateLoading: false,
@@ -82,35 +73,20 @@ class App extends Component {
       transactions: [],
       blocks: [],
     };
-
-    const self = this;
-
-    // update global info (once, on load)
-    this.getRemoteState(
-      'globalStats',
-      `http:${BLOCK_EXPLORER_API_BASE}/global-stats`,
+    this.state = Object.assign(
+      {
+        enabled: true,
+        dialogOpen: false,
+        ws: null,
+      },
+      this.defaultState,
     );
 
-    // update cluster info (once, on load)
-    this.getRemoteState(
-      'clusterInfo',
-      `http:${BLOCK_EXPLORER_API_BASE}/cluster-info`,
-      null,
-      null,
-      self.parseClusterInfo,
-    );
-
-    // update blocks (once, on load)
-    self.updateBlocks();
-
-    self.updateTxnStats();
     setInterval(() => {
-      self.updateTxnStats();
+      this.updateTxnStats();
     }, 30000);
-
-    self.updateTransactions();
     setInterval(() => {
-      self.updateTransactions();
+      this.updateTransactions();
     }, 10000);
   }
 
@@ -175,10 +151,7 @@ class App extends Component {
   }
 
   updateTxnStats() {
-    this.getRemoteState(
-      'txnStats',
-      `http:${BLOCK_EXPLORER_API_BASE}/txn-stats`,
-    );
+    this.getRemoteState('txnStats', `${EndpointConfig.getApiUrl()}txn-stats`);
   }
 
   updateBlocks() {
@@ -202,7 +175,7 @@ class App extends Component {
 
     this.getRemoteState(
       'blocks',
-      `http:${BLOCK_EXPLORER_API_BASE}/blk-timeline`,
+      `${EndpointConfig.getApiUrl()}blk-timeline`,
       blkFun,
       10,
     );
@@ -221,7 +194,7 @@ class App extends Component {
 
     this.getRemoteState(
       'transactions',
-      `http:${BLOCK_EXPLORER_API_BASE}/txn-timeline`,
+      `${EndpointConfig.getApiUrl()}txn-timeline`,
       txnFun,
       10,
     );
@@ -276,40 +249,57 @@ class App extends Component {
     }
   };
 
-  componentDidMount() {
-    const self = this;
-
-    if (!self.ws) {
-      let ws = new RobustWebSocket(`ws:${BLOCK_EXPLORER_API_BASE}/`);
-
-      ws.addEventListener('open', function() {
-        ws.send(JSON.stringify({hello: 'world'}));
-      });
-
-      ws.addEventListener('message', function(event) {
-        if (!self.state.enabled) {
-          return;
-        }
-
-        self.onMessage(JSON.parse(event.data));
-      });
-
-      self.ws = ws;
+  onEndpointChange() {
+    if (this.ws) {
+      this.ws.close();
+      this.ws = null;
     }
 
-    if (!self.locationListener) {
-      let locationListener = this.handleLocationChange();
+    this.getRemoteState(
+      'globalStats',
+      `${EndpointConfig.getApiUrl()}global-stats`,
+    );
+    this.getRemoteState(
+      'clusterInfo',
+      `${EndpointConfig.getApiUrl()}cluster-info`,
+      null,
+      null,
+      this.parseClusterInfo,
+    );
+    this.updateBlocks();
+    this.updateTxnStats();
+    this.updateTransactions();
 
+    const ws = new RobustWebSocket(EndpointConfig.getApiWebsocketUrl());
+    ws.addEventListener('open', () => {
+      ws.send(JSON.stringify({hello: 'world'}));
+    });
+
+    ws.addEventListener('message', event => {
+      if (this.state.enabled) {
+        this.onMessage(JSON.parse(event.data));
+      }
+    });
+
+    this.ws = ws;
+  }
+
+  componentDidMount() {
+    this.onEndpointChange();
+
+    if (!this.locationListener) {
+      const locationListener = this.handleLocationChange();
       history.listen(locationListener);
       locationListener(window.location);
 
-      self.locationListener = locationListener;
+      this.locationListener = locationListener;
     }
   }
 
   componentWillUnmount() {
     if (this.ws) {
       this.ws.close();
+      this.ws = null;
     }
   }
 
@@ -462,6 +452,12 @@ class App extends Component {
     });
   };
 
+  setEndpointName = event => {
+    EndpointConfig.setEndpointName(event.target.value);
+    this.onEndpointChange();
+    this.updateStateAttributes(this.defaultState);
+  };
+
   handleSearch = () => event => {
     let value = event.target.value;
     event.target.value = '';
@@ -470,7 +466,7 @@ class App extends Component {
       return;
     }
 
-    let url = `${BLOCK_EXPLORER_API_BASE}/search/${value}`;
+    let url = `${EndpointConfig.getApiUrl()}search/${value}`;
 
     axios.get(url).then(response => {
       let result = response.data;
@@ -485,19 +481,19 @@ class App extends Component {
       let url = null;
 
       if (type === 'txns-by-prgid') {
-        url = `${BLOCK_EXPLORER_API_BASE}/txns-by-prgid/${id}`;
+        url = `${EndpointConfig.getApiUrl()}txns-by-prgid/${id}`;
       }
 
       if (type === 'txn') {
-        url = `${BLOCK_EXPLORER_API_BASE}/txn/${id}`;
+        url = `${EndpointConfig.getApiUrl()}txn/${id}`;
       }
 
       if (type === 'ent') {
-        url = `${BLOCK_EXPLORER_API_BASE}/ent/${id}`;
+        url = `${EndpointConfig.getApiUrl()}ent/${id}`;
       }
 
       if (type === 'blk') {
-        url = `${BLOCK_EXPLORER_API_BASE}/blk/${id}`;
+        url = `${EndpointConfig.getApiUrl()}blk/${id}`;
       }
 
       return url;
@@ -573,6 +569,7 @@ class App extends Component {
               handleSearch={self.handleSearch(self)}
               enabled={this.state.enabled}
               handleSwitch={this.toggleEnabled(self)}
+              handleSetEndpointName={this.setEndpointName}
               handleMap={this.showMap(self)}
             />
             <div>

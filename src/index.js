@@ -6,13 +6,18 @@ import './index.css';
 import App from './App';
 import AppV2 from './AppV2';
 import * as serviceWorker from './serviceWorker';
+import * as EndpointConfig from './EndpointConfig';
 
-ReactDOM.render(
-  <BrowserRouter>
-    {window.location.pathname.includes('rc') ? <AppV2 /> : <App />}
-  </BrowserRouter>,
-  document.getElementById('root'),
-);
+async function main() {
+  await EndpointConfig.load();
+  ReactDOM.render(
+    <BrowserRouter>
+      {window.location.pathname.includes('rc') ? <AppV2 /> : <App />}
+    </BrowserRouter>,
+    document.getElementById('root'),
+  );
+}
+main();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

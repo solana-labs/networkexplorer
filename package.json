@@ -26,6 +26,7 @@
     "google-map-react": "^1.1.4",
     "humps": "^2.0.1",
     "ip": "^1.1.5",
+    "localforage": "^1.7.3",
     "lodash": "^4.17.11",
     "mobx": "^5.11.0",
     "mobx-react-lite": "^1.4.1",
