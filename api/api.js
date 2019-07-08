@@ -501,7 +501,8 @@ async function getClusterInfo() {
 
   cluster = _.map(cluster, c => {
     let ip = c.gossip.split(':')[0];
-    let ll = geoipLookup(ip).ll;
+    const geoip = geoipLookup(ip);
+    let ll = geoip ? geoip.ll : null;
     let newc = _.clone(c, true);
 
     // compute different but deterministic offsets
