@@ -5,7 +5,6 @@ import {parseClusterInfo} from 'v2/utils/parseMessage';
 import calcChanges from '../utils/calcChanges';
 
 class NodesStore {
-  nodes = [];
   cluster = {
     nodes: [],
   };
@@ -42,7 +41,6 @@ class NodesStore {
 }
 
 decorate(NodesStore, {
-  nodes: observable,
   cluster: observable,
   updateClusterInfo: action.bound,
   mapMarkers: computed,

@@ -16,6 +16,8 @@ try {
 }
 
 const Dashboard = lazy(() => import('v2/components/Dashboard'));
+const Validators = lazy(() => import('v2/components/Validators'));
+const ValidatorsAll = lazy(() => import('v2/components/Validators/All'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +28,11 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     marginLeft: 50,
     padding: '50px 24px 0 24px',
+    maxWidth: '100%',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 0,
+      padding: 0,
+    },
   },
   toolbar: {
     display: 'flex',
@@ -49,6 +56,12 @@ const App = () => {
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route exact path="/rc" component={Dashboard} />
+              <Route exact path="/rc/validators" component={Validators} />
+              <Route
+                exact
+                path="/rc/validators/all"
+                component={ValidatorsAll}
+              />
             </Switch>
           </Suspense>
           <Footer />

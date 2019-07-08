@@ -22,6 +22,7 @@ export default makeStyles(theme => ({
     textTransform: 'uppercase',
     fontSize: 12,
     letterSpacing: 2.5,
+    marginRight: 25,
     '& div': {
       background: 'transparent',
       border: `1px solid ${getColor('main')(theme)}`,

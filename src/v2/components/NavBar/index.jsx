@@ -1,6 +1,8 @@
 // @flow
 
 import {Drawer, List, ListItem, ListItemIcon} from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import {useTheme} from '@material-ui/core/styles';
 import {RouterHistory, withRouter} from 'react-router-dom';
 import React from 'react';
 import {map, propEq, eq} from 'lodash/fp';
@@ -32,6 +34,8 @@ const NavBar = ({
   history: RouterHistory,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const showDriver = useMediaQuery(theme.breakpoints.up('md'));
   const routes = [
     'dashboard',
     'transactions',
@@ -47,7 +51,7 @@ const NavBar = ({
     const selected =
       propEq('pathname', `/${link}`)(location) ||
       (propEq('pathname', '/')(location) && isDashboard);
-    const changeRoute = () => history.push(`/v2/${isDashboard ? '' : link}`);
+    const changeRoute = () => history.push(`/rc/${isDashboard ? '' : link}`);
     return (
       <ListItem
         onClick={changeRoute}
@@ -66,7 +70,7 @@ const NavBar = ({
   return (
     <div className={classes.root}>
       <Drawer
-        variant="permanent"
+        variant={!showDriver ? 'temporary' : 'permanent'}
         classes={{
           root: classes.drawerRoot,
           paper: classes.drawerPaper,

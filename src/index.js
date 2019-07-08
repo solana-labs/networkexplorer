@@ -1,18 +1,24 @@
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
 import App from './App';
-import AppV2 from './AppV2';
 import * as serviceWorker from './serviceWorker';
 import * as EndpointConfig from './EndpointConfig';
+const AppV2 = lazy(() => import('./AppV2'));
 
 async function main() {
   await EndpointConfig.load();
   ReactDOM.render(
     <BrowserRouter>
-      {window.location.pathname.includes('rc') ? <AppV2 /> : <App />}
+      {window.location.pathname.includes('rc') ? (
+        <Suspense fallback={<div>Loading...</div>}>
+          <AppV2 />
+        </Suspense>
+      ) : (
+        <App />
+      )}
     </BrowserRouter>,
     document.getElementById('root'),
   );

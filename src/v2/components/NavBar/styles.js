@@ -4,6 +4,9 @@ export default makeStyles(theme => ({
   root: {
     width: 102,
     flexShrink: 0,
+    [theme.breakpoints.down('sm')]: {
+      width: 0,
+    },
   },
   toolbar: {
     display: 'flex',
@@ -25,5 +28,8 @@ export default makeStyles(theme => ({
   drawerRoot: {
     width: 102,
     flexShrink: 0,
+    [theme.breakpoints.down('sm')]: {
+      width: 0,
+    },
   },
 }));

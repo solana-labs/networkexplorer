@@ -7,6 +7,10 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     marginTop: 80,
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
   },
   link: {
     background: getColor('main')(theme),
@@ -19,6 +23,10 @@ export default makeStyles(theme => ({
     '& svg': {
       width: 17,
       height: 'auto',
+    },
+    [theme.breakpoints.down('md')]: {
+      marginBottom: 0,
+      marginRight: 22,
     },
   },
 }));

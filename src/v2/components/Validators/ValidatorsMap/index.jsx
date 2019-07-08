@@ -10,7 +10,7 @@ import {
   ZoomableGroup,
 } from 'react-simple-maps';
 import {map} from 'lodash/fp';
-import NodesStore from 'v2/stores/nodes';
+import nodesStore from 'v2/stores/nodes';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import {mapStyle, markerStyle} from 'v2/theme';
 
@@ -22,13 +22,13 @@ const mapStyles = {
   pressed: mapStyle,
 };
 
-const NodesMap = () => {
+const ValidatorsMap = () => {
   const classes = useStyles();
-  const {mapMarkers} = NodesStore;
+  const {mapMarkers} = nodesStore;
 
   const mapConfig = {
     projection: {
-      scale: 85,
+      scale: 150,
       rotation: [-11, 0, 0],
     },
     style: {
@@ -62,11 +62,11 @@ const NodesMap = () => {
   );
   return (
     <div className={classes.card}>
-      <Typography>Nodes Map</Typography>
+      <Typography>Active Validators Map</Typography>
       <ComposableMap
         projectionConfig={mapConfig.projection}
-        width={390}
-        height={240}
+        width={690}
+        height={410}
         style={mapConfig.style}
       >
         <ZoomableGroup center={mapConfig.center} disablePanning>
@@ -74,15 +74,18 @@ const NodesMap = () => {
             geography={`${process.env.PUBLIC_URL}/resources/world-50m-simplified.json`}
           >
             {(geographies, projection) =>
-              geographies.map((geography, i) => (
-                <Geography
-                  key={i}
-                  tabable={false}
-                  geography={geography}
-                  projection={projection}
-                  style={mapStyles}
-                />
-              ))
+              geographies.map(
+                (geography, i) =>
+                  geography.id !== 'ATA' && (
+                    <Geography
+                      key={i}
+                      tabable={false}
+                      geography={geography}
+                      projection={projection}
+                      style={mapStyles}
+                    />
+                  ),
+              )
             }
           </Geographies>
           <Markers>{map(renderMarker)(mapMarkers)}</Markers>
@@ -92,4 +95,4 @@ const NodesMap = () => {
   );
 };
 
-export default observer(NodesMap);
+export default observer(ValidatorsMap);
