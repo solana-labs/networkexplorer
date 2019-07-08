@@ -77,10 +77,10 @@ class App extends Component {
       {
         enabled: true,
         dialogOpen: false,
-        ws: null,
       },
       this.defaultState,
     );
+    this.ws = null;
 
     setInterval(() => {
       this.updateTxnStats();
@@ -90,8 +90,9 @@ class App extends Component {
     }, 10000);
   }
 
-  getRemoteState(attr, url, mapFun, limit, transform) {
-    axios.get(url).then(response => {
+  async getRemoteState(attr, url, mapFun, limit, transform) {
+    try {
+      const response = await axios.get(url);
       let newState = {};
 
       if (limit) {
@@ -109,7 +110,9 @@ class App extends Component {
       }
 
       this.updateStateAttributes(newState);
-    });
+    } catch (err) {
+      console.error('getRemoteState failed:', err);
+    }
   }
 
   updateSpecificGlobalStateAttribute(attr, value) {
@@ -250,7 +253,7 @@ class App extends Component {
   };
 
   onEndpointChange() {
-    if (this.ws) {
+    if (this.ws !== null) {
       this.ws.close();
       this.ws = null;
     }
@@ -285,7 +288,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.onEndpointChange();
+    try {
+      this.onEndpointChange();
+    } catch (err) {
+      console.error('onEndpointChange failed:', err);
+    }
 
     if (!this.locationListener) {
       const locationListener = this.handleLocationChange();

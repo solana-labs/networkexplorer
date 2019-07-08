@@ -9,7 +9,11 @@ import Footer from 'v2/components/Footer';
 import theme from 'v2/theme';
 import socket from 'v2/stores/socket';
 
-socket.init();
+try {
+  socket.init();
+} catch (err) {
+  console.error('Socket init failed:', err);
+}
 
 const Dashboard = lazy(() => import('v2/components/Dashboard'));
 
