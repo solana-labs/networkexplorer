@@ -3,14 +3,15 @@ import {parse as urlParse, format as urlFormat} from 'url';
 
 const urlMap = {
   local: `http://${window.location.hostname}:8899`,
+  //'local-tls': `https://${window.location.hostname}:8443`,
   'testnet-edge': 'http://edge.testnet.solana.com:8899',
   'testnet-beta': 'http://beta.testnet.solana.com:8899',
   testnet: 'http://testnet.solana.com:8899',
   /*
   TODO: Switch to TLS endpoints...
-  'testnet-edge': 'https://api.edge.testnet.solana.com',
-  'testnet-beta': 'https://api.beta.testnet.solana.com',
-  testnet: 'https://api.testnet.solana.com',
+  'testnet-edge': 'https://edge.testnet.solana.com:8443',
+  'testnet-beta': 'https://beta.testnet.solana.com:8443',
+  testnet: 'https://testnet.solana.com:8443',
   */
 };
 
@@ -71,7 +72,6 @@ export function getApiWebsocketUrl() {
   urlParts.host = '';
   if (urlParts.protocol === 'https:') {
     urlParts.protocol = 'wss:';
-    urlParts.port = '3444';
   } else {
     urlParts.protocol = 'ws:';
   }
