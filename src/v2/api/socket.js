@@ -1,6 +1,7 @@
 import RobustWebSocket from 'robust-websocket';
-import {BLOCK_EXPLORER_WS_API_BASE} from 'v2/const';
+
+import * as EndpointConfig from '../../EndpointConfig';
 
 export const initSocket = () => {
-  return new RobustWebSocket(BLOCK_EXPLORER_WS_API_BASE);
+  return new RobustWebSocket(EndpointConfig.getApiWebsocketUrl());
 };

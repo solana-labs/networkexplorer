@@ -14,6 +14,7 @@ const StatCard = (props: StatCardProps) => {
   const classes = useStyles();
   const {title, value, changes} = props;
   const renderValue = () => {
+    if (!value) return;
     if (typeof value === 'function') {
       return value();
     }

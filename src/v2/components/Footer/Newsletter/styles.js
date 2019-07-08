@@ -20,6 +20,9 @@ export default makeStyles(theme => ({
     padding: 5,
     display: 'flex',
     marginBottom: 132,
+    [theme.breakpoints.down('md')]: {
+      marginBottom: 0,
+    },
   },
   input: {
     border: 'none',
