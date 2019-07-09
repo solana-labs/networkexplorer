@@ -93,7 +93,7 @@ while true; do
       logfile="$cwd"/solana-blockexplorer-proxy.log
       echo "Starting proxy process (logfile: $logfile)"
       date | tee -a "$logfile"
-      npm run start-prod:proxy >> "$logfile" 2>&1 &
+      npm run start-prod:proxy -- --keys "$cwd" >> "$logfile" 2>&1 &
       proxy=$!
       echo "  pid: $proxy"
     fi
