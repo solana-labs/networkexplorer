@@ -1,6 +1,6 @@
 // @flow
 import {Container, Grid} from '@material-ui/core';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {map} from 'lodash/fp';
 import Card from 'v2/components/UI/StatCard';
@@ -14,24 +14,28 @@ import useStyles from './styles';
 
 const Validators = () => {
   const classes = useStyles();
-  const {cluster, clusterChanges} = NodesStore;
+  const {cluster, fetchClusterInfo, totalBondedTokens} = NodesStore;
+  useEffect(() => {
+    fetchClusterInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const cards = [
     {
       title: 'Total Circulating SOL',
       value: cluster.supply / Math.pow(2, 34).toFixed(2),
-      changes: clusterChanges.supply,
+      changes: '',
       period: 'since yesterday',
     },
     {
       title: 'Total Bonded Tokens',
-      value: '100,000',
-      changes: '-2.45',
+      value: totalBondedTokens,
+      changes: '',
       period: 'since yesterday',
     },
     {
       title: '# Active Validators',
       value: cluster.nodes.length,
-      changes: clusterChanges.nodes,
+      changes: '',
       period: 'since yesterday',
     },
   ];
@@ -55,7 +59,7 @@ const Validators = () => {
         value={value}
         changes={() => (
           <div className={classes.changes}>
-            <div>{changes}%</div>
+            {changes && <div>{changes}%</div>}
             <div className={classes.period}>{period}</div>
           </div>
         )}
@@ -75,11 +79,11 @@ const Validators = () => {
           </div>
         </SectionHeader>
         <Grid spacing={2} container alignItems="flex-start">
-          <Grid item xs={12} md={9} zeroMinWidth>
+          <Grid item xs={12} lg={9} zeroMinWidth>
             <ValidatorsMap />
           </Grid>
-          <Grid item xs={12} md={3} zeroMinWidth>
-            {map(renderStats)(cards)}
+          <Grid item xs={12} lg={3} zeroMinWidth>
+            <div className={classes.stats}>{map(renderStats)(cards)}</div>
           </Grid>
         </Grid>
         <Grid container>

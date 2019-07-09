@@ -38,9 +38,11 @@ export default makeStyles(theme => ({
   bg: {
     position: 'absolute',
     left: -160,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       position: 'static',
       width: '100%',
+      height: 70,
+      objectFit: 'cover',
     },
   },
 }));

@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     marginTop: 80,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'row',
       justifyContent: 'center',
     },
@@ -24,7 +24,7 @@ export default makeStyles(theme => ({
       width: 17,
       height: 'auto',
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       marginBottom: 0,
       marginRight: 22,
     },

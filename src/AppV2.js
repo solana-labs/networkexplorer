@@ -4,7 +4,6 @@ import React, {lazy, Suspense} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {Route, Switch} from 'react-router-dom';
 import Header from 'v2/components/Header';
-import NavBar from 'v2/components/NavBar';
 import Footer from 'v2/components/Footer';
 import theme from 'v2/theme';
 import socket from 'v2/stores/socket';
@@ -25,13 +24,16 @@ const useStyles = makeStyles(theme => ({
     overflow: 'hidden',
   },
   content: {
-    flexGrow: 1,
     marginLeft: 50,
+    minWidth: '1px',
     padding: '50px 24px 0 24px',
-    maxWidth: '100%',
+    maxWidth: 'calc(100% - 50px)',
+    width: '100%',
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
       padding: 0,
+      paddingTop: 80,
+      maxWidth: '100%',
     },
   },
   toolbar: {
@@ -50,7 +52,6 @@ const App = () => {
       <div className={classes.root}>
         <CssBaseline />
         <Header />
-        <NavBar />
         <div className={classes.content}>
           <div className={classes.toolbar} />
           <Suspense fallback={<div>Loading...</div>}>

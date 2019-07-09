@@ -12,7 +12,8 @@ import {
 import {map} from 'lodash/fp';
 import nodesStore from 'v2/stores/nodes';
 import MapTooltip from 'v2/components/UI/MapTooltip';
-import {mapStyle, markerStyle} from 'v2/theme';
+import theme, {mapStyle, markerStyle} from 'v2/theme';
+import getColor from 'v2/utils/getColor';
 
 import useStyles from './styles';
 
@@ -20,6 +21,10 @@ const mapStyles = {
   default: mapStyle,
   hover: mapStyle,
   pressed: mapStyle,
+};
+
+const markerCircleStyle = {
+  stroke: getColor('main')(theme),
 };
 
 const ValidatorsMap = () => {
@@ -49,14 +54,7 @@ const ValidatorsMap = () => {
           </>
         )}
       >
-        <circle
-          cx={0}
-          cy={0}
-          r={5}
-          style={{
-            stroke: '#00FFAD',
-          }}
-        />
+        <circle cx={0} cy={0} r={5} style={markerCircleStyle} />
       </MapTooltip>
     </Marker>
   );
@@ -74,18 +72,15 @@ const ValidatorsMap = () => {
             geography={`${process.env.PUBLIC_URL}/resources/world-50m-simplified.json`}
           >
             {(geographies, projection) =>
-              geographies.map(
-                (geography, i) =>
-                  geography.id !== 'ATA' && (
-                    <Geography
-                      key={i}
-                      tabable={false}
-                      geography={geography}
-                      projection={projection}
-                      style={mapStyles}
-                    />
-                  ),
-              )
+              geographies.map((geography, i) => (
+                <Geography
+                  key={i}
+                  tabable={false}
+                  geography={geography}
+                  projection={projection}
+                  style={mapStyles}
+                />
+              ))
             }
           </Geographies>
           <Markers>{map(renderMarker)(mapMarkers)}</Markers>

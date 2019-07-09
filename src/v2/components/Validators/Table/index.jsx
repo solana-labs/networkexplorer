@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {
   Typography,
@@ -8,6 +10,7 @@ import {
   TableRow,
   Grid,
 } from '@material-ui/core';
+import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
@@ -17,7 +20,7 @@ import NodesStore from 'v2/stores/nodes';
 
 import useStyles from './styles';
 
-const ValidatorsTable = () => {
+const ValidatorsTable = ({vertical}: {vertical: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
@@ -41,10 +44,10 @@ const ValidatorsTable = () => {
   };
   const renderCard = card => {
     return (
-      <div className={classes.card}>
+      <div className={cn(classes.card, vertical && classes.cardVertical)}>
         <div className={classes.name}>
           <span />
-          {card.pubkey}
+          <div>{card.pubkey}</div>
         </div>
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
@@ -67,7 +70,7 @@ const ValidatorsTable = () => {
     <div className={classes.root}>
       <div className={classes.header}>
         <Typography>Validators</Typography>
-        <Typography variant="h5">129,948</Typography>
+        <Typography variant="h5">{nodes.length}</Typography>
         <Link to="validators/all" className={classes.link}>
           See all &gt;
         </Link>
@@ -91,7 +94,9 @@ const ValidatorsTable = () => {
           </TableBody>
         </Table>
       ) : (
-        <div className={classes.list}>{map(renderCard)(nodes)}</div>
+        <div className={cn(classes.list, vertical && classes.vertical)}>
+          {map(renderCard)(nodes)}
+        </div>
       )}
     </div>
   );

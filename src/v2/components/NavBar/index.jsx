@@ -1,8 +1,16 @@
 // @flow
 
-import {Drawer, List, ListItem, ListItemIcon} from '@material-ui/core';
+import {
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import {RouterHistory, withRouter} from 'react-router-dom';
 import React from 'react';
 import {map, propEq, eq} from 'lodash/fp';
@@ -29,13 +37,17 @@ const icons = {
 const NavBar = ({
   location,
   history,
+  isOpen,
+  toggleDrawer,
 }: {
   location: Location,
   history: RouterHistory,
+  isOpen: boolean,
+  toggleDrawer: (val: boolean) => void,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const showDriver = useMediaQuery(theme.breakpoints.up('md'));
+  const showDrawer = useMediaQuery(theme.breakpoints.up('md'));
   const routes = [
     'dashboard',
     'transactions',
@@ -49,9 +61,14 @@ const NavBar = ({
     const Icon = icons[link];
     const isDashboard = eq('dashboard', link);
     const selected =
-      propEq('pathname', `/${link}`)(location) ||
-      (propEq('pathname', '/')(location) && isDashboard);
-    const changeRoute = () => history.push(`/rc/${isDashboard ? '' : link}`);
+      propEq('pathname', `/rc/${link}`)(location) ||
+      (propEq('pathname', '/rc/')(location) && isDashboard);
+    const changeRoute = () => {
+      if (selected) {
+        return;
+      }
+      history.push(`/rc/${isDashboard ? '' : link}`);
+    };
     return (
       <ListItem
         onClick={changeRoute}
@@ -64,21 +81,33 @@ const NavBar = ({
         <ListItemIcon className={classes.icon}>
           <Icon />
         </ListItemIcon>
+        <ListItemText classes={{primary: classes.itemText}} primary={link} />
       </ListItem>
     );
   };
+
   return (
     <div className={classes.root}>
-      <Drawer
-        variant={!showDriver ? 'temporary' : 'permanent'}
+      <SwipeableDrawer
+        anchor={showDrawer ? 'left' : 'right'}
+        open={isOpen}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+        variant={!showDrawer ? 'temporary' : 'permanent'}
         classes={{
           root: classes.drawerRoot,
           paper: classes.drawerPaper,
         }}
       >
         <div className={classes.toolbar} />
+        <IconButton
+          onClick={toggleDrawer(false)}
+          className={classes.menuButton}
+        >
+          <CloseIcon fontSize="large" />
+        </IconButton>
         <List component="div">{map(renderLink)(routes)}</List>
-      </Drawer>
+      </SwipeableDrawer>
     </div>
   );
 };

@@ -1,8 +1,18 @@
-import {eq, compose, keys, map, mapValues, pick} from 'lodash/fp';
-import {action, computed, decorate, observable, observe} from 'mobx';
+import {
+  sumBy,
+  eq,
+  get,
+  compose,
+  keys,
+  map,
+  mapValues,
+  pick,
+  merge,
+} from 'lodash/fp';
+import {action, computed, decorate, observable, observe, flow} from 'mobx';
 import {parseClusterInfo} from 'v2/utils/parseMessage';
-
-import calcChanges from '../utils/calcChanges';
+import * as API from 'v2/api/stats';
+import calcChanges from 'v2/utils/calcChanges';
 
 class NodesStore {
   cluster = {
@@ -28,8 +38,13 @@ class NodesStore {
   }
 
   updateClusterInfo = data => {
-    this.cluster = parseClusterInfo(data);
+    this.cluster = merge(this.cluster, parseClusterInfo(data));
   };
+
+  fetchClusterInfo = flow(function*() {
+    const res = yield API.getClusterInfo();
+    this.cluster = merge(this.cluster, res.data);
+  });
 
   get mapMarkers() {
     return map(({pubkey: name, gossip, lat, lng}) => ({
@@ -38,12 +53,20 @@ class NodesStore {
       coordinates: [lng, lat],
     }))(this.cluster.nodes);
   }
+
+  get totalBondedTokens() {
+    return compose(
+      sumBy('stake'),
+      get('voting'),
+    )(this.cluster);
+  }
 }
 
 decorate(NodesStore, {
   cluster: observable,
   updateClusterInfo: action.bound,
   mapMarkers: computed,
+  fetchClusterInfo: action.bound,
 });
 
 export default new NodesStore();

@@ -6,9 +6,10 @@ export default makeStyles(theme => ({
     marginTop: 19,
     background: getColor('grey2')(theme),
     padding: '25px 44px',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       padding: 0,
       paddingBottom: 27,
+      marginBottom: 50,
     },
   },
   head: {
@@ -26,6 +27,10 @@ export default makeStyles(theme => ({
       fontSize: 15,
       paddingTop: 18,
       paddingBottom: 18,
+      maxWidth: 0,
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
     },
   },
   header: {
@@ -36,7 +41,7 @@ export default makeStyles(theme => ({
       marginRight: 35,
     },
     marginBottom: 23,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       padding: '10px 27px 0',
       marginBottom: 10,
     },
@@ -52,9 +57,6 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     color: getColor('main')(theme),
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
     '& span': {
       width: 33,
       height: 33,
@@ -63,7 +65,12 @@ export default makeStyles(theme => ({
       borderRadius: '50%',
       marginRight: 22,
     },
-    [theme.breakpoints.down('md')]: {
+    '& div': {
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+    },
+    [theme.breakpoints.down('sm')]: {
       marginBottom: 22,
     },
   },
@@ -72,11 +79,23 @@ export default makeStyles(theme => ({
     width: '100%',
     overflowX: 'auto',
   },
+  vertical: {
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
+  },
   card: {
     padding: 17,
     background: '#505050',
     marginRight: 12,
     maxWidth: 326,
+  },
+  cardVertical: {
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 2,
+      marginRight: 0,
+      maxWidth: '100%',
+    },
   },
   cardTitle: {
     fontSize: 12,
