@@ -15,7 +15,7 @@ notifications:
   email: false
 
 script:
-  - npx commitlint-travis
+  - if [[ $TRAVIS_PULL_REQUEST != false ]]; then npx commitlint-travis; fi
   - yarn
   - yarn lint
   - yarn build
