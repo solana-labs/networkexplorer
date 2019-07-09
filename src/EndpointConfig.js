@@ -7,11 +7,13 @@ const urlMap = {
   'testnet-edge': 'http://edge.testnet.solana.com:8899',
   'testnet-beta': 'http://beta.testnet.solana.com:8899',
   testnet: 'http://testnet.solana.com:8899',
+  'testnet-tds': 'http://tds.solana.com:8899',
   /*
   TODO: Switch to TLS endpoints...
   'testnet-edge': 'https://edge.testnet.solana.com:8443',
   'testnet-beta': 'https://beta.testnet.solana.com:8443',
   testnet: 'https://testnet.solana.com:8443',
+  'testnet-tds': 'https://tds.solana.com:8443',
   */
 };
 
