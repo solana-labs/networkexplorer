@@ -1,6 +1,6 @@
 import {makeStyles} from '@material-ui/core';
 
-export default makeStyles({
+export default makeStyles(theme => ({
   root: {
     position: 'relative',
     marginBottom: 47,
@@ -13,5 +13,8 @@ export default makeStyles({
     position: 'absolute',
     left: -120,
     top: -7,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
-});
+}));

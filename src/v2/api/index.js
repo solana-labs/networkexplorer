@@ -2,10 +2,11 @@
 
 import axios from 'axios';
 import humps from 'humps';
-import {BLOCK_EXPLORER_API_BASE} from 'v2/const';
+
+import {getApiUrl} from '../../EndpointConfig';
 
 const api = axios.create({
-  baseURL: BLOCK_EXPLORER_API_BASE,
+  baseURL: getApiUrl(),
 });
 
 api.defaults.transformResponse = [
@@ -23,5 +24,9 @@ api.defaults.transformRequest = [
   },
   ...axios.defaults.transformRequest,
 ];
+
+export function updateBaseUrl() {
+  api.defaults.baseURL = getApiUrl();
+}
 
 export default api;

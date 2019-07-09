@@ -12,7 +12,7 @@ async function main() {
   await EndpointConfig.load();
   ReactDOM.render(
     <BrowserRouter>
-      {window.location.pathname.includes('rc') ? (
+      {window.location.pathname.startsWith('/rc') ? (
         <Suspense fallback={<div>Loading...</div>}>
           <AppV2 />
         </Suspense>

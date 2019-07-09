@@ -7,3 +7,7 @@ export function getStats() {
 export function getTxnStats() {
   return api('/txn-stats');
 }
+
+export function getClusterInfo() {
+  return api('/cluster-info');
+}
