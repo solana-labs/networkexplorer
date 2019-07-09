@@ -86,7 +86,7 @@ export function getMetricsDashboardUrl() {
     matches = window.location.hostname.match('([^.]*).testnet.solana.com');
   } else {
     const endpointUrl = urlMap[endpointName];
-    matches = endpointUrl.match('([^.]*).testnet.solana.com');
+    matches = endpointUrl.match('\/([^.]*).testnet.solana.com');
   }
 
   let url =
