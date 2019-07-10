@@ -1,20 +1,18 @@
 import localforage from 'localforage';
 import {parse as urlParse, format as urlFormat} from 'url';
 
+const windowProtocol = urlParse(window.location.href).protocol;
+
 const urlMap = {
-  local: `http://${window.location.hostname}:8899`,
-  //'local-tls': `https://${window.location.hostname}:8443`,
-  'testnet-edge': 'http://edge.testnet.solana.com:8899',
-  'testnet-beta': 'http://beta.testnet.solana.com:8899',
-  testnet: 'http://testnet.solana.com:8899',
-  'tds': 'http://tds.solana.com:8899',
-  /*
-  TODO: Switch to TLS endpoints...
+  local:
+    windowProtocol === 'https:'
+      ? `http://${window.location.hostname}:8443`
+      : `http://${window.location.hostname}:8899`,
+
   'testnet-edge': 'https://edge.testnet.solana.com:8443',
   'testnet-beta': 'https://beta.testnet.solana.com:8443',
   testnet: 'https://testnet.solana.com:8443',
-  'tds': 'https://tds.solana.com:8443',
-  */
+  tds: 'https://tds.solana.com:8443',
 };
 
 let endpointName = process.env.NODE_ENV === 'development' ? 'local' : 'testnet';
@@ -88,7 +86,7 @@ export function getMetricsDashboardUrl() {
     matches = window.location.hostname.match('([^.]*).testnet.solana.com');
   } else {
     const endpointUrl = urlMap[endpointName];
-    matches = endpointUrl.match('\/([^.]*).testnet.solana.com');
+    matches = endpointUrl.match('/([^.]*).testnet.solana.com');
   }
 
   let url =
