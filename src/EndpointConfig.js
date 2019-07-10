@@ -20,8 +20,8 @@ const endpointHostnameMap = {
   'beta.testnet.solana.com': 'testnet-beta',
   'testnet.solana.com': 'testnet',
   'tds.solana.com': 'tds',
-  'explorer.solana.com': 'tds', // Default endpoint for explorer.solana.com
-  'edge.explorer': 'testnet-edge', // Default endpoint for edge.explorer.solana.com
+  'explorer.solana.com': 'testnet', // Default endpoint for explorer.solana.com
+  'edge.explorer.solana.com': 'testnet-edge', // Default endpoint for edge.explorer.solana.com
 };
 
 const endpointFriendlyNameMap = {
