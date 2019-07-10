@@ -192,10 +192,10 @@ class BxAppBar extends React.Component {
                     onChange={this.handleSetEndpointName}
                     native
                   >
-                    {EndpointConfig.getEndpoints().map((name, index) => {
+                    {EndpointConfig.getEndpoints().map((endpoint, index) => {
                       return (
-                        <option key={index} value={name}>
-                          {name}
+                        <option key={index} value={endpoint.name}>
+                          {endpoint.friendlyName}
                         </option>
                       );
                     })}

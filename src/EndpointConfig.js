@@ -3,7 +3,7 @@ import {parse as urlParse, format as urlFormat} from 'url';
 
 const windowProtocol = urlParse(window.location.href).protocol;
 
-const urlMap = {
+const endpointUrlMap = {
   local:
     windowProtocol === 'https:'
       ? `http://${window.location.hostname}:8443`
@@ -15,12 +15,41 @@ const urlMap = {
   tds: 'https://tds.solana.com:8443',
 };
 
-let endpointName = process.env.NODE_ENV === 'development' ? 'local' : 'testnet';
+const endpointHostnameMap = {
+  'edge.testnet.solana.com': 'testnet-edge',
+  'beta.testnet.solana.com': 'testnet-beta',
+  'testnet.solana.com': 'testnet',
+  'tds.solana.com': 'tds',
+  'explorer.solana.com': 'tds', // Default endpoint for explorer.solana.com
+  'edge.explorer': 'testnet-edge', // Default endpoint for edge.explorer.solana.com
+};
+
+const endpointFriendlyNameMap = {
+  'testnet-edge': 'Edge Development Testnet',
+  'testnet-beta': 'Beta Development Testnet',
+  testnet: 'Public Testnet',
+  tds: 'Tour de SOL',
+  local: 'Local Cluster',
+};
+
+function getDefaultEndpointName() {
+  const endpointName = endpointHostnameMap[window.location.hostname];
+  if (endpointName) {
+    // Remove 'local' option if not running a local/dev app
+    delete endpointUrlMap.local;
+    return endpointName;
+  }
+
+  // Default to the edge testnet when in dev mode.
+  return 'testnet-edge';
+}
+
+let endpointName = getDefaultEndpointName();
 
 export async function load() {
   try {
     const newEndpointName = await localforage.getItem('endpointName');
-    if (typeof urlMap[newEndpointName] === 'string') {
+    if (typeof endpointUrlMap[newEndpointName] === 'string') {
       endpointName = newEndpointName;
     }
   } catch (err) {
@@ -36,11 +65,13 @@ export function getEndpointName() {
 }
 
 export function getEndpoints() {
-  return Object.keys(urlMap);
+  return Object.keys(endpointUrlMap).map(name => {
+    return {name, friendlyName: endpointFriendlyNameMap[name]};
+  });
 }
 
 export function setEndpointName(newEndpointName) {
-  if (typeof urlMap[newEndpointName] !== 'string') {
+  if (typeof endpointUrlMap[newEndpointName] !== 'string') {
     throw new Error(`Unknown endpoint: ${newEndpointName}`);
   }
   endpointName = newEndpointName;
@@ -51,7 +82,7 @@ export function setEndpointName(newEndpointName) {
 }
 
 export function getRpcUrl() {
-  return urlMap[endpointName];
+  return endpointUrlMap[endpointName];
 }
 
 export function getApiUrl() {
@@ -63,7 +94,6 @@ export function getApiUrl() {
     urlParts.port = '3001';
   }
   const url = urlFormat(urlParts);
-  console.info('getApiUrl:', url);
   return url;
 }
 
@@ -76,7 +106,6 @@ export function getApiWebsocketUrl() {
     urlParts.protocol = 'ws:';
   }
   const url = urlFormat(urlParts);
-  console.info('getApiWebsocketUrl:', url);
   return url;
 }
 
@@ -86,27 +115,19 @@ export function getMetricsDashboardUrl() {
   if (endpointName === 'local') {
     matches = window.location.hostname.match('(.*).solana.com');
   } else {
-    const endpointUrl = urlMap[endpointName];
+    const endpointUrl = endpointUrlMap[endpointName];
     matches = endpointUrl.match('/([^/]*).solana.com');
   }
 
   let url =
     'https://metrics.solana.com:3000/d/testnet-beta/testnet-monitor-beta?refresh=5s&from=now-5m&to=now';
   if (matches) {
-    const metricsDbMap = {
-      'edge.testnet': 'testnet-edge',
-      'beta.testnet': 'testnet-beta',
-      'testnet': 'testnet',
-      'tds': 'testnet-tds',
-    };
     console.log('getMetricsDashboardUrl matches:', matches);
-
-    const testnet = metricsDbMap[matches[1]];
+    const testnet = endpointHostnameMap[matches[1]];
     console.log('getMetricsDashboardUrl testnet:', testnet);
     if (testnet) {
       url += `&var-testnet=${testnet}`;
     }
   }
-  console.log('getMetricsDashboardUrl:', url);
   return url;
 }
