@@ -110,24 +110,15 @@ export function getApiWebsocketUrl() {
 }
 
 export function getMetricsDashboardUrl() {
-  let matches;
-
+  let testnet = endpointName;
   if (endpointName === 'local') {
-    matches = window.location.hostname.match('(.*).solana.com');
-  } else {
-    const endpointUrl = endpointUrlMap[endpointName];
-    matches = endpointUrl.match('/([^/]*).solana.com');
+    testnet = endpointHostnameMap[window.location.hostname];
   }
 
   let url =
     'https://metrics.solana.com:3000/d/testnet-beta/testnet-monitor-beta?refresh=5s&from=now-5m&to=now';
-  if (matches) {
-    console.log('getMetricsDashboardUrl matches:', matches);
-    const testnet = endpointHostnameMap[matches[1]];
-    console.log('getMetricsDashboardUrl testnet:', testnet);
-    if (testnet) {
-      url += `&var-testnet=${testnet}`;
-    }
+  if (testnet) {
+    url += `&var-testnet=${testnet}`;
   }
   return url;
 }
