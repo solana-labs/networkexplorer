@@ -29,8 +29,8 @@ const Header = () => {
   };
   const endPointsList = EndpointConfig.getEndpoints();
   const renderEndpointOption = endpoint => (
-    <option key={endpoint} value={endpoint}>
-      {endpoint}
+    <option key={endpoint.name} value={endpoint.name}>
+      {endpoint.friendlyName}
     </option>
   );
 
