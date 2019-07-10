@@ -14,7 +14,7 @@ import {parseClusterInfo} from 'v2/utils/parseMessage';
 import * as API from 'v2/api/stats';
 import calcChanges from 'v2/utils/calcChanges';
 
-class NodesStore {
+class Store {
   cluster = {
     nodes: [],
   };
@@ -62,11 +62,14 @@ class NodesStore {
   }
 }
 
-decorate(NodesStore, {
+decorate(Store, {
   cluster: observable,
   updateClusterInfo: action.bound,
   mapMarkers: computed,
   fetchClusterInfo: action.bound,
 });
 
-export default new NodesStore();
+const NodesStore = new Store();
+NodesStore.fetchClusterInfo();
+
+export default NodesStore;

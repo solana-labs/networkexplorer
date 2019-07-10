@@ -6,7 +6,7 @@ import ValidatorsTable from '../Table';
 const ValidatorsAll = () => {
   return (
     <Container>
-      <ValidatorsTable vertical />
+      <ValidatorsTable separate />
     </Container>
   );
 };

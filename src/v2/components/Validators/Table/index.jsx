@@ -20,47 +20,45 @@ import NodesStore from 'v2/stores/nodes';
 
 import useStyles from './styles';
 
-const ValidatorsTable = ({vertical}: {vertical: boolean}) => {
+const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
   const {
-    cluster: {nodes},
+    cluster: {voting = []},
   } = NodesStore;
   const renderRow = row => {
     return (
-      <TableRow hover key={row.pubkey}>
+      <TableRow hover key={row.nodePubkey}>
         <TableCell align="center">
-          <div className={classes.name}>
+          <Link to={`validators/${row.nodePubkey}`} className={classes.name}>
             <span />
-            {row.pubkey}
-          </div>
+            <div>{row.nodePubkey}</div>
+          </Link>
         </TableCell>
-        <TableCell>total sol</TableCell>
-        <TableCell>Commission</TableCell>
-        <TableCell>Uptime</TableCell>
+        <TableCell>{row.stake} Lamports</TableCell>
+        <TableCell>{row.commission}</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
     return (
-      <div className={cn(classes.card, vertical && classes.cardVertical)}>
-        <div className={classes.name}>
+      <div
+        className={cn(classes.card, separate && classes.cardVertical)}
+        key={card.nodePubkey}
+      >
+        <Link to={`validators/${card.nodePubkey}`} className={classes.name}>
           <span />
-          <div>{card.pubkey}</div>
-        </div>
+          <div>{card.nodePubkey}</div>
+        </Link>
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Total sol</div>
-            <div>Total sol</div>
+            <div className={classes.cardTitle}>Stake</div>
+            <div>{card.stake} Lamports</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>
-            <div>Commission</div>
-          </Grid>
-          <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Uptime</div>
-            <div>Uptime</div>
+            <div>{card.commission}</div>
           </Grid>
         </Grid>
       </div>
@@ -70,19 +68,20 @@ const ValidatorsTable = ({vertical}: {vertical: boolean}) => {
     <div className={classes.root}>
       <div className={classes.header}>
         <Typography>Validators</Typography>
-        <Typography variant="h5">{nodes.length}</Typography>
-        <Link to="validators/all" className={classes.link}>
-          See all &gt;
-        </Link>
+        <Typography variant="h5">{voting.length}</Typography>
+        {!separate && (
+          <Link to="validators/all" className={classes.link}>
+            See all &gt;
+          </Link>
+        )}
       </div>
       {showTable ? (
         <Table>
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell align="center">Name/Moniker</TableCell>
-              <TableCell>Total Sol</TableCell>
+              <TableCell>Stake</TableCell>
               <TableCell>Commission</TableCell>
-              <TableCell>Uptime</TableCell>
             </TableRow>
           </TableHead>
           <TableBody
@@ -90,12 +89,12 @@ const ValidatorsTable = ({vertical}: {vertical: boolean}) => {
               root: classes.body,
             }}
           >
-            {map(renderRow)(nodes)}
+            {map(renderRow)(voting)}
           </TableBody>
         </Table>
       ) : (
-        <div className={cn(classes.list, vertical && classes.vertical)}>
-          {map(renderCard)(nodes)}
+        <div className={cn(classes.list, separate && classes.vertical)}>
+          {map(renderCard)(voting)}
         </div>
       )}
     </div>

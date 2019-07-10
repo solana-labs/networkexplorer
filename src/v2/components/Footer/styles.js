@@ -6,8 +6,8 @@ export default makeStyles(theme => ({
     paddingTop: 100,
     position: 'relative',
     marginLeft: 28,
-    [theme.breakpoints.down('md')]: {
-      paddingTop: 0,
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: 20,
       marginLeft: 0,
     },
   },
