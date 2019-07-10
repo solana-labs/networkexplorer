@@ -57,6 +57,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     color: getColor('main')(theme),
+    textDecoration: 'none',
     '& span': {
       width: 33,
       height: 33,

@@ -17,6 +17,7 @@ try {
 const Dashboard = lazy(() => import('v2/components/Dashboard'));
 const Validators = lazy(() => import('v2/components/Validators'));
 const ValidatorsAll = lazy(() => import('v2/components/Validators/All'));
+const ValidatorDetail = lazy(() => import('v2/components/Validators/Detail'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,6 +63,11 @@ const App = () => {
                 exact
                 path="/rc/validators/all"
                 component={ValidatorsAll}
+              />
+              <Route
+                exact
+                path="/rc/validators/:id"
+                component={ValidatorDetail}
               />
             </Switch>
           </Suspense>
