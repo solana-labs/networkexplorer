@@ -82,18 +82,30 @@ export function getApiWebsocketUrl() {
 
 export function getMetricsDashboardUrl() {
   let matches;
+
   if (endpointName === 'local') {
-    matches = window.location.hostname.match('([^.]*).testnet.solana.com');
+    matches = window.location.hostname.match('(.*).solana.com');
   } else {
     const endpointUrl = urlMap[endpointName];
-    matches = endpointUrl.match('/([^.]*).testnet.solana.com');
+    matches = endpointUrl.match('/([^/]*).solana.com');
   }
 
   let url =
     'https://metrics.solana.com:3000/d/testnet-beta/testnet-monitor-beta?refresh=5s&from=now-5m&to=now';
   if (matches) {
-    const testnet = matches[1];
-    url += `&var-testnet=testnet-${testnet}`;
+    const metricsDbMap = {
+      'edge.testnet': 'testnet-edge',
+      'beta.testnet': 'testnet-beta',
+      'testnet': 'testnet',
+      'tds': 'testnet-tds',
+    };
+    console.log('getMetricsDashboardUrl matches:', matches);
+
+    const testnet = metricsDbMap[matches[1]];
+    console.log('getMetricsDashboardUrl testnet:', testnet);
+    if (testnet) {
+      url += `&var-testnet=${testnet}`;
+    }
   }
   console.log('getMetricsDashboardUrl:', url);
   return url;
