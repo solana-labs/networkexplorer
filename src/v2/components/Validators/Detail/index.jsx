@@ -15,9 +15,10 @@ import {
 } from 'react-simple-maps';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
-import {mapStyle, markerStyle} from 'v2/theme';
+import theme, {mapStyle, markerStyle} from 'v2/theme';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import Bx2HelpLink from 'v2/Bx2HelpLink';
+import getColor from 'v2/utils/getColor';
 
 import useStyles from './styles';
 
@@ -25,6 +26,10 @@ const mapStyles = {
   default: mapStyle,
   hover: mapStyle,
   pressed: mapStyle,
+};
+
+const markerCircleStyle = {
+  stroke: getColor('main')(theme),
 };
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
@@ -35,13 +40,13 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {params} = match;
-  const currentCluster = find({pubkey: params.id})(cluster);
-  if (!currentCluster) {
+  const currentNode = find({pubkey: params.id})(cluster);
+  if (!currentNode) {
     return <div>Loading...</div>;
   }
   const node = compose(
-    mergeWith(currentCluster, {
-      coordinates: [currentCluster.lng, currentCluster.lat],
+    mergeWith(currentNode, {
+      coordinates: [currentNode.lng, currentNode.lat],
     }),
     find({nodePubkey: params.id}),
   )(voting);
@@ -57,14 +62,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
           </>
         )}
       >
-        <circle
-          cx={0}
-          cy={0}
-          r={5}
-          style={{
-            stroke: '#00FFAD',
-          }}
-        />
+        <circle cx={0} cy={0} r={5} style={markerCircleStyle} />
       </MapTooltip>
     </Marker>
   );
@@ -73,27 +71,27 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Website',
       hint: '',
-      value: 'solana.com',
+      value: 'TODO',
     },
     {
-      label: 'voting power',
+      label: 'Voting power',
       hint: '',
-      value: '286,431',
+      value: `${node.stake}`,
     },
     {
       label: 'Address',
       hint: '',
-      value: 'cosmos1sjllsnramtg3ewxqwwrwjxfgc4n4ef9u0tvx7u',
+      value: `${node.pubkey}`,
     },
     {
       label: 'Missed blocks',
       hint: '',
-      value: '43',
+      value: 'TODO',
     },
     {
       label: 'keybase',
       hint: '',
-      value: 'A21D897660B856AC',
+      value: 'TODO',
     },
     {
       label: 'commission',
@@ -103,13 +101,12 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'details',
       hint: '',
-      value:
-        'Operated by Chris Remus (Twitter @cjremus) / Validating since the Validator Working Group formed in October 2017',
+      value: 'TODO',
     },
     {
       label: 'Amount of delegated sol',
       hint: '',
-      value: '5.47%',
+      value: 'TODO',
     },
   ];
 
