@@ -61,7 +61,7 @@ const NavBar = ({
     const Icon = icons[link];
     const isDashboard = eq('dashboard', link);
     const selected =
-      propEq('pathname', `/rc/${link}`)(location) ||
+      location.pathname.includes(link) ||
       (propEq('pathname', '/rc/')(location) && isDashboard);
     const changeRoute = () => {
       if (selected) {
