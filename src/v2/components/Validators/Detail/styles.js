@@ -62,9 +62,14 @@ export default makeStyles(theme => ({
     flexShrink: 0,
     marginRight: 40,
     color: getColor('grey4')(theme),
+    display: 'flex',
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       marginRight: 0,
+    },
+    '& a': {
+      marginLeft: 5,
     },
   },
   value: {

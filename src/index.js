@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import * as EndpointConfig from './EndpointConfig';
+import ScrollToTop from './v2/components/ScrollToTop';
 const AppV2 = lazy(() => import('./AppV2'));
 
 async function main() {
@@ -14,7 +15,9 @@ async function main() {
     <BrowserRouter>
       {window.location.pathname.startsWith('/rc') ? (
         <Suspense fallback={<div>Loading...</div>}>
-          <AppV2 />
+          <ScrollToTop>
+            <AppV2 />
+          </ScrollToTop>
         </Suspense>
       ) : (
         <App />

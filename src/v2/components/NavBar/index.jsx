@@ -68,6 +68,7 @@ const NavBar = ({
         return;
       }
       history.push(`/rc/${isDashboard ? '' : link}`);
+      toggleDrawer(false)();
     };
     return (
       <ListItem
@@ -76,7 +77,7 @@ const NavBar = ({
         button
         component="a"
         key={link}
-        className={classes.item}
+        classes={{root: classes.item, selected: classes.itemSelected}}
       >
         <ListItemIcon className={classes.icon}>
           <Icon />
@@ -104,7 +105,7 @@ const NavBar = ({
           onClick={toggleDrawer(false)}
           className={classes.menuButton}
         >
-          <CloseIcon fontSize="large" />
+          <CloseIcon className={classes.menuIcon} fontSize="large" />
         </IconButton>
         <List component="div">{map(renderLink)(routes)}</List>
       </SwipeableDrawer>

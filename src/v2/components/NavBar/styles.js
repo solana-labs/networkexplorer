@@ -22,11 +22,20 @@ export default makeStyles(theme => ({
   },
   item: {
     height: 102,
+    [theme.breakpoints.down('sm')]: {
+      height: 97,
+    },
   },
   icon: {
     justifyContent: 'center',
     '& svg': {
       stroke: '#fff',
+    },
+  },
+  itemSelected: {
+    color: getColor('main')(theme),
+    '& svg': {
+      stroke: getColor('main')(theme),
     },
   },
   drawerRoot: {
@@ -40,14 +49,22 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       background: getColor('dark')(theme),
+      paddingTop: 18,
     },
   },
   menuButton: {
     marginLeft: 'auto',
     display: 'none',
+    padding: 10,
+    background: getColor('white')(theme),
+    borderRadius: 0,
+    marginRight: 16,
     [theme.breakpoints.down('sm')]: {
       display: 'block',
     },
+  },
+  menuIcon: {
+    color: getColor('dark')(theme),
   },
   itemText: {
     textTransform: 'uppercase',

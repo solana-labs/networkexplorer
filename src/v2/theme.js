@@ -10,6 +10,8 @@ export default createMuiTheme({
       grey3: '#979797',
       grey4: '#c4c4c4',
       main: '#00FFAD',
+      white: '#fff',
+      greenDark: '#00a771',
     },
     secondary: {
       main: '#000',

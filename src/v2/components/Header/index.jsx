@@ -71,7 +71,7 @@ const Header = () => {
             onClick={toggleDrawer(!isDrawerOpen)}
             className={classes.menuButton}
           >
-            <MenuIcon fontSize="large" />
+            <MenuIcon className={classes.menuIcon} fontSize="large" />
           </IconButton>
         </Toolbar>
       </AppBar>
