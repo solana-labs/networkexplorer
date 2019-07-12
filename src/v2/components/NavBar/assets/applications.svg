@@ -1,8 +1,8 @@
 <svg width="37" height="39" viewBox="0 0 37 39" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M13.9377 1H32.0523V38H5.70758V8.92706" stroke="white"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M13.8508 1.04509V8.93371H5.80649L13.8508 1.04509Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12.0955 15.7204H23.6343L26.5169 13.1556H36.2912" stroke="white"/>
-  <path d="M0.55304 18.1751H8.41987L10.6598 20.7399H25.3901" stroke="white"/>
-  <path d="M0.55304 28.4267H8.41987L10.6598 30.9915H25.3901" stroke="white"/>
+  <path d="M13.9377 1H32.0523V38H5.70758V8.92706" />
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M13.8508 1.04509V8.93371H5.80649L13.8508 1.04509Z" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.0955 15.7204H23.6343L26.5169 13.1556H36.2912" />
+  <path d="M0.55304 18.1751H8.41987L10.6598 20.7399H25.3901" />
+  <path d="M0.55304 28.4267H8.41987L10.6598 30.9915H25.3901" />
   <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3846 25.8117C11.3846 25.1216 11.944 24.5623 12.6347 24.5623C13.3248 24.5623 13.8841 25.1216 13.8841 25.8117C13.8841 26.5017 13.3248 27.0611 12.6347 27.0611C11.944 27.0611 11.3846 26.5017 11.3846 25.8117Z" fill="white"/>
 </svg>

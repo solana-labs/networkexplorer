@@ -25,6 +25,7 @@ export default makeStyles(theme => ({
       order: 1,
       marginLeft: 0,
       maxWidth: '100%',
+      marginTop: 23,
     },
   },
   realTime: {
@@ -63,8 +64,14 @@ export default makeStyles(theme => ({
   menuButton: {
     display: 'none',
     marginLeft: 'auto',
+    borderRadius: 0,
+    padding: 10,
+    background: getColor('white')(theme),
     [theme.breakpoints.down('sm')]: {
       display: 'block',
     },
+  },
+  menuIcon: {
+    color: getColor('dark')(theme),
   },
 }));

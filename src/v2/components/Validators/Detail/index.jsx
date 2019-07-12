@@ -17,7 +17,7 @@ import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
 import theme, {mapStyle, markerStyle} from 'v2/theme';
 import MapTooltip from 'v2/components/UI/MapTooltip';
-import Bx2HelpLink from 'v2/Bx2HelpLink';
+import HelpLink from 'v2/components/HelpLink';
 import getColor from 'v2/utils/getColor';
 
 import useStyles from './styles';
@@ -126,7 +126,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     <li key={label}>
       <div className={classes.label}>
         {label}
-        <Bx2HelpLink />
+        <HelpLink />
       </div>
       <div className={classes.value}>{value}</div>
     </li>
