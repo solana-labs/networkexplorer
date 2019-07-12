@@ -29,6 +29,7 @@ import Bx2BlankComponent from './v2/Bx2BlankComponent';
 import Bx2PanelValidatorsOverview from './v2/Bx2PanelValidatorsOverview';
 import Bx2PanelValidators from './v2/Bx2PanelValidators';
 import Bx2PanelValidatorDetail from './v2/Bx2PanelValidatorDetail';
+import Bx2PanelTourDeSolLeaderboard from './v2/Bx2PanelTourDeSolLeaderboard';
 import {stylesV2, themeV2} from './v2/ThemeV2';
 
 const history = createBrowserHistory();
@@ -43,6 +44,9 @@ const BxDataTableThemed = withStyles(stylesV1)(BxDataTable);
 
 const Bx2AppBarThemed = withStyles(stylesV2)(Bx2AppBar);
 const Bx2NavDrawerThemed = withStyles(stylesV2)(Bx2NavDrawer);
+const Bx2PanelTourDeSolLeaderboardThemed = withStyles(stylesV2)(
+  Bx2PanelTourDeSolLeaderboard,
+);
 const Bx2PanelValidatorsOverviewThemed = withStyles(stylesV2)(
   Bx2PanelValidatorsOverview,
 );
@@ -730,7 +734,11 @@ class App extends Component {
                 path="/v2/tourdesol"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed message="Hello Tour De Sol" />
+                  <Bx2PanelTourDeSolLeaderboardThemed
+                    currentBlock={this.state.globalStats['!blk-last-slot']}
+                    nodes={this.state.nodes}
+                    supply={this.state.supply || 0}
+                  />
                 )}
               />
               <Route
