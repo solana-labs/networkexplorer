@@ -9,6 +9,8 @@ import useStyles from './styles';
 import bg from './assets/bg.svg';
 import bgSm from './assets/bg_sm.svg';
 
+const version = process.env.REACT_APP_VERSION;
+
 const Footer = () => {
   const classes = useStyles();
   return (
@@ -23,6 +25,8 @@ const Footer = () => {
           <Newsletter />
           <Typography className={classes.copyright}>
             © Copyright Solana Labs, Inc. All rights reserved.
+            <br />
+            {version}
           </Typography>
         </Grid>
         <Grid item className={classes.right} xs={12} md={5}>
