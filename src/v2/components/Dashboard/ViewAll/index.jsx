@@ -11,7 +11,7 @@ const ViewAll = () => {
   return (
     <Container>
       <div className={classes.root}>
-        <SectionHeader>View All</SectionHeader>
+        <SectionHeader title="View All" />
         <Grid container spacing={8}>
           <Grid item xs={4}>
             <Button variant="contained" size="large" fullWidth color="primary">

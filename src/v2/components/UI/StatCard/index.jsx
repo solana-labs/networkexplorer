@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import {Paper, Typography} from '@material-ui/core';
+import HelpLink from 'v2/components/HelpLink';
 
 import useStyles from './styles';
 
@@ -35,6 +36,7 @@ const StatCard = (props: StatCardProps) => {
     <Paper className={classes.root}>
       <Typography align="center" variant="body1">
         {title}
+        <HelpLink text="" term="" />
       </Typography>
       {renderValue()}
       <Typography align="center" variant="h2" className={classes.changes}>
