@@ -135,8 +135,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
   return (
     <Container>
       <div className={classes.root}>
-        <SectionHeader>
-          Validator Detail
+        <SectionHeader title=" Validator Detail">
           {!isMobile && (
             <div className={classes.validatorName}>
               <span />

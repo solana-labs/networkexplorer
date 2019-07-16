@@ -18,6 +18,7 @@ const Dashboard = lazy(() => import('v2/components/Dashboard'));
 const Validators = lazy(() => import('v2/components/Validators'));
 const ValidatorsAll = lazy(() => import('v2/components/Validators/All'));
 const ValidatorDetail = lazy(() => import('v2/components/Validators/Detail'));
+const TourDeSol = lazy(() => import('v2/components/TourDeSol'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,6 +70,7 @@ const App = () => {
                 path="/rc/validators/:id"
                 component={ValidatorDetail}
               />
+              <Route exact path="/rc/tour-de-sol" component={TourDeSol} />
             </Switch>
           </Suspense>
           <Footer />

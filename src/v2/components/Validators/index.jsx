@@ -70,8 +70,7 @@ const Validators = () => {
   return (
     <Container>
       <div className={classes.root}>
-        <SectionHeader>
-          Validators Overview
+        <SectionHeader title="Validators Overview">
           <div className={classes.becomeBtn}>
             <Button variant="contained" color="primary">
               Become a validator
