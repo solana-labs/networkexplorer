@@ -70,7 +70,7 @@ const Cards = () => {
     title: string,
     value: string | (() => React$Node),
     changes?: string,
-  }) => <Card title={title} value={value} changes={changes} />;
+  }) => <Card key={title} title={title} value={value} changes={changes} />;
 
   return <div className={classes.cards}>{map(renderStats)(cards)}</div>;
 };
