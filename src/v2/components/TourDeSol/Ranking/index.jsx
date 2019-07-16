@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import {map} from 'lodash/fp';
+import {get, map, maxBy, compose} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
 import NodesStore from 'v2/stores/nodes';
 import {ReactComponent as BicycleIcon} from 'v2/assets/icons/bicycle.svg';
@@ -10,19 +10,30 @@ import useStyles from './styles';
 const Ranking = () => {
   const classes = useStyles();
   const {
-    cluster: {nodes},
+    cluster: {voting},
   } = NodesStore;
 
-  const renderNode = node => (
-    <li className={classes.item}>
-      <div className={classes.name}>{node.pubkey}</div>
-      <div className={classes.bar}>
-        <div className={classes.icon}>
-          <BicycleIcon />
+  const maxVal = compose(
+    get('stake'),
+    maxBy('stake'),
+  )(voting);
+
+  const renderNode = node => {
+    const position = (node.stake * 100) / maxVal;
+    return (
+      <li key={node.nodePubkey} className={classes.item}>
+        <div className={classes.name}>{node.nodePubkey}</div>
+        <div className={classes.bar}>
+          <div
+            className={classes.icon}
+            style={{left: `calc(${position}% - 26px)`}}
+          >
+            <BicycleIcon />
+          </div>
         </div>
-      </div>
-    </li>
-  );
+      </li>
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -30,11 +41,9 @@ const Ranking = () => {
         Top Validator Ranking
         <HelpLink text="" term="" />
       </div>
-      <ul className={classes.list}>{map(renderNode)(nodes)}</ul>
+      <ul className={classes.list}>{map(renderNode)(voting)}</ul>
     </div>
   );
 };
-
-Ranking.propTypes = {};
 
 export default observer(Ranking);

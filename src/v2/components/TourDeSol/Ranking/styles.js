@@ -46,5 +46,6 @@ export default makeStyles(theme => ({
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
+    transition: 'left .15s ease-in-out',
   },
 }));
