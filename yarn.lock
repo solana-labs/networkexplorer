@@ -1856,10 +1856,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
   integrity sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==
 
-"@solana/web3.js@^0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.16.10.tgz#ac050f236fb5a822d160ac3868a02d252abf7dd8"
-  integrity sha512-zSsWqWZPK7o84v32aym9wxFlBvOPqnHGitKtjQhzNbAiKAfEWlUu1OPGscJ98DtXgc023TdI9OlLvWRyU+iTPA==
+"@solana/web3.js@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.17.0.tgz#af1ea2c364f8c6be4e226019fb3d82ccb91879f0"
+  integrity sha512-YuVH+bodeTkR0t88MtdCsVaTiFU+Xl1cJLKGp/Be0D8UdZg+8wAenocoTIzBvKMro5+o6AiTUH+sfowMKrXe5Q==
   dependencies:
     "@babel/runtime" "^7.3.1"
     bn.js "^4.11.8"
@@ -10765,15 +10765,10 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.1.1:
+node-fetch@^2.1.1, node-fetch@^2.2.0, node-fetch@^2.3.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
-
-node-fetch@^2.2.0, node-fetch@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
-  integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
 
 node-forge@0.7.5:
   version "0.7.5"
