@@ -102,6 +102,7 @@ let handleRedis = type => (channel, message) => {
 const client = getClient();
 
 const setexAsync = promisify(client.setex).bind(client);
+const getAsync = promisify(client.get).bind(client);
 const mgetAsync = promisify(client.mget).bind(client);
 const existsAsync = promisify(client.exists).bind(client);
 const lrangeAsync = promisify(client.lrange).bind(client);
@@ -502,6 +503,8 @@ async function getClusterInfo() {
   let cluster = await connection.getClusterNodes();
   let identities = await fetchValidatorIdentities(cluster.map(c => c.pubkey));
   let voting = await connection.getEpochVoteAccounts();
+  let uptime = await getAsync('!uptime');
+
   let totalStaked = _.reduce(
     voting,
     (a, v) => {
@@ -535,8 +538,10 @@ async function getClusterInfo() {
     cluster,
     identities,
     voting,
+    uptime,
     ts,
   };
+
   await setexAsync(
     '!clusterInfo',
     CLUSTER_INFO_CACHE_TIME_SECS,
