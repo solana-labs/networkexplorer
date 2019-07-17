@@ -39,10 +39,10 @@ const NetworkOverview = () => {
       <div className={classes.root}>
         <SectionHeader title="Network Overview" />
         <Grid container spacing={2} className={classes.row}>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <TPS />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <NodesMap />
           </Grid>
         </Grid>
