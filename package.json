@@ -99,6 +99,7 @@
     "prepack": "set -ex; npm run lint; npm run build",
     "pretty": "prettier --write '{,{api,proxy,src}/**/}*.js{,x}'",
     "re": "semantic-release --repository-url git@github.com:solana-labs/blockexplorer.git",
+    "start:uptime-crawler": "set -ex; redis-cli ping; babel-node --presets env api/uptime-crawler.js",
     "start:api": "set -ex; redis-cli ping; babel-node --presets env api/api.js",
     "start:proxy": "babel-node --presets env proxy",
     "start:ui": "react-app-rewired start",
