@@ -57,7 +57,7 @@ const StatCards = () => {
     value: string | (() => React$Node),
     changes?: string,
   }) => (
-    <Grid key={title} item xs={3} zeroMinWidth>
+    <Grid key={title} item xs={12} sm={6} lg={3} zeroMinWidth>
       <Card title={title} value={value} changes={changes} />
     </Grid>
   );
