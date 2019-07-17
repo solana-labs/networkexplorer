@@ -498,6 +498,11 @@ async function getClusterInfo() {
   let supply = await connection.getTotalSupply();
   let cluster = await connection.getClusterNodes();
   let voting = await connection.getEpochVoteAccounts();
+  let totalBonded = _.reduce(voting, (a, v) => {
+    a += (v.stake || 0);
+
+    return a;
+  }, 0);
 
   cluster = _.map(cluster, c => {
     let ip = c.gossip.split(':')[0];
@@ -515,7 +520,7 @@ async function getClusterInfo() {
     return newc;
   });
 
-  let rest = {feeCalculator, supply, cluster, voting, ts};
+  let rest = {feeCalculator, supply, totalBonded, cluster, voting, ts};
   await setexAsync(
     '!clusterInfo',
     CLUSTER_INFO_CACHE_TIME_SECS,
