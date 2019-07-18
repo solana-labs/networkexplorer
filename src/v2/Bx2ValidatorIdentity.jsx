@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import Link from '@material-ui/core/Link';
@@ -19,7 +20,7 @@ class Bx2ValidatorIdentity extends Component {
       );
     } else {
       verifiedIcon = (
-        <ErrorOutlineIcon
+        <ErrorIcon
           color="error"
           style={{padding: '4px', verticalAlign: 'middle'}}
         />
@@ -67,8 +68,31 @@ class Bx2ValidatorIdentity extends Component {
     );
   }
 
+  renderMissingInfo() {
+    return (
+      <>
+        <Typography display="inline" variant="body1">
+          Missing Info
+        </Typography>
+        <Link
+          href={'https://solana-labs.github.io/book/testnet-participation.html#publishing-validator-info'}
+          title={'Click to learn how validator info is published'}
+          target="_new"
+        >
+          <InfoIcon
+            fontSize="small"
+            color="disabled"
+            style={{padding: '5px', verticalAlign: 'middle'}}
+          />
+        </Link>
+      </>
+    );
+  }
+
   render() {
-    if (!this.props.info) return 'Missing Info';
+    if (!this.props.info) {
+      return this.renderMissingInfo();
+    }
 
     return (
       <>
