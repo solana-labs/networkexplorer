@@ -18,6 +18,7 @@ import {Bar} from '@nivo/bar';
 
 import BxEntityLink from './Bx2EntityLink';
 import BxHelpLink from './Bx2HelpLink';
+import BxValidatorIdentity from './Bx2ValidatorIdentity';
 
 class Bx2PanelTourDeSolLeaderboard extends Component {
   renderValidators() {
@@ -257,10 +258,11 @@ class Bx2PanelTourDeSolLeaderboard extends Component {
                     <BxHelpLink text="Account" term="account" />
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell align="right">
                   Stake
                   <BxHelpLink text="Program" term="program-id" />
                 </TableCell>
+                <TableCell align="center">Identity</TableCell>
                 <TableCell align="right">
                   Uptime
                   <BxHelpLink text="Block Height" term="block-height" />
@@ -283,6 +285,9 @@ class Bx2PanelTourDeSolLeaderboard extends Component {
                   </TableCell>
                   <TableCell align="right" style={{verticalAlign: 'middle'}}>
                     {(row.voteAccount && row.voteAccount.stake) || 0} Lamports
+                  </TableCell>
+                  <TableCell align="center" style={{verticalAlign: 'middle'}}>
+                    <BxValidatorIdentity info={row.info} />
                   </TableCell>
                   <TableCell align="right">TODO</TableCell>
                 </TableRow>

@@ -141,11 +141,14 @@ class App extends Component {
   parseClusterInfo(data) {
     let voting = data.voting;
     let gossip = data.cluster;
+    let validators = data.validators;
 
     let nodes = _.map(gossip, g => {
       let newG = {...g};
       let vote = voting.find(x => x.nodePubkey === newG.pubkey);
       newG.voteAccount = vote;
+      let info = validators.find(v => v.pubkey === newG.pubkey);
+      newG.info = info;
 
       return newG;
     });

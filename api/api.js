@@ -3,6 +3,7 @@
    API handler methods to support the Block Explorer
    Web UI.
  */
+import fetch from 'node-fetch';
 import express from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
@@ -29,6 +30,7 @@ const FULLNODE_URL = 'http://localhost:8899';
 const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 16000;
 const CLUSTER_INFO_CACHE_TIME_SECS = 35000;
+const CONFIG_PROGRAM_ID = 'Config1111111111111111111111111111111111111';
 
 const app = express();
 
@@ -497,12 +499,17 @@ async function getClusterInfo() {
   let [, feeCalculator] = await connection.getRecentBlockhash();
   let supply = await connection.getTotalSupply();
   let cluster = await connection.getClusterNodes();
+  let validators = await fetchValidatorInfo(cluster.map(c => c.pubkey));
   let voting = await connection.getEpochVoteAccounts();
-  let totalStaked = _.reduce(voting, (a, v) => {
-    a += (v.stake || 0);
+  let totalStaked = _.reduce(
+    voting,
+    (a, v) => {
+      a += v.stake || 0;
 
-    return a;
-  }, 0);
+      return a;
+    },
+    0,
+  );
 
   cluster = _.map(cluster, c => {
     let ip = c.gossip.split(':')[0];
@@ -520,7 +527,15 @@ async function getClusterInfo() {
     return newc;
   });
 
-  let rest = {feeCalculator, supply, totalStaked, cluster, voting, ts};
+  let rest = {
+    feeCalculator,
+    supply,
+    totalStaked,
+    cluster,
+    validators,
+    voting,
+    ts,
+  };
   await setexAsync(
     '!clusterInfo',
     CLUSTER_INFO_CACHE_TIME_SECS,
@@ -549,5 +564,41 @@ async function sendClusterResult(req, res) {
 app.get('/cluster-info', (req, res) => {
   sendClusterResult(req, res);
 });
+
+async function fetchValidatorInfo(keys) {
+  const configKey = new solanaWeb3.PublicKey(CONFIG_PROGRAM_ID);
+  const connection = new solanaWeb3.Connection(FULLNODE_URL);
+  const accounts = await connection.getProgramAccounts(configKey);
+  const keySet = new Set(keys);
+
+  const results = await Promise.all(
+    accounts.map(async account => {
+      const validatorInfo = solanaWeb3.ValidatorInfo.fromConfigData(
+        account[1].data,
+      );
+      if (validatorInfo) {
+        const validatorKeyStr = validatorInfo.key.toString();
+        if (keySet.has(validatorKeyStr)) {
+          keySet.delete(validatorKeyStr);
+
+          // build info and verify
+          const info = validatorInfo.info;
+          const keybaseId = info.keybaseId;
+          if (keybaseId) {
+            const keybaseUrl = `https://keybase.pub/${keybaseId}/solana/validator-${validatorKeyStr}`;
+            const keybaseResponse = await fetch(keybaseUrl, {method: 'HEAD'});
+            const verified = keybaseResponse.status === 200;
+            info.verified = verified;
+            info.verifyUrl = keybaseUrl;
+          }
+          info.pubkey = validatorKeyStr;
+          return info;
+        }
+      }
+    }),
+  );
+
+  return results.filter(res => !!res);
+}
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
