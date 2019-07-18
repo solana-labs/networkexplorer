@@ -8,8 +8,6 @@ import {
   Marker,
 } from 'react-simple-maps';
 import {makeStyles} from '@material-ui/core/styles';
-import BxEntityLink from './Bx2EntityLink';
-import BxHelpLink from './Bx2HelpLink';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,6 +20,10 @@ import PropTypes from 'prop-types';
 import {Link as RouterLink} from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import Tooltip from '@material-ui/core/Tooltip';
+
+import BxEntityLink from './Bx2EntityLink';
+import BxHelpLink from './Bx2HelpLink';
+import BxValidatorIdentity from './Bx2ValidatorIdentity';
 
 function arrowGenerator(color) {
   return {
@@ -159,10 +161,11 @@ class Bx2PanelValidatorDetail extends Component {
                     <BxHelpLink text="Account" term="account" />
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell align="right">
                   Stake
                   <BxHelpLink text="Program" term="program-id" />
                 </TableCell>
+                <TableCell align="center">Identity</TableCell>
                 <TableCell align="center">
                   Commission
                   <BxHelpLink text="Block Height" term="block-height" />
@@ -189,6 +192,9 @@ class Bx2PanelValidatorDetail extends Component {
                   </TableCell>
                   <TableCell align="right" style={{verticalAlign: 'middle'}}>
                     {(row.voteAccount && row.voteAccount.stake) || 0} Lamports
+                  </TableCell>
+                  <TableCell align="center" style={{verticalAlign: 'middle'}}>
+                    <BxValidatorIdentity info={row.info} />
                   </TableCell>
                   <TableCell align="center">TODO</TableCell>
                   <TableCell align="right">TODO</TableCell>
