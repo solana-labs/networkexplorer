@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
@@ -7,6 +8,36 @@ import PropTypes from 'prop-types';
 import Link from '@material-ui/core/Link';
 
 class Bx2ValidatorIdentity extends Component {
+
+  renderAvatar() {
+    let {avatarUrl, name} = this.props.info;
+
+    const avatarStyle = {
+      marginRight: 10,
+      border: '2px solid white',
+      backgroundColor: 'black',
+      color: 'white',
+      borderRadius: 3,
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      width: 35,
+      height: 35,
+    };
+
+    if (!avatarUrl) {
+      const initials = name.split(' ').map(word => word[0]).join('');
+      return (
+        <Avatar alt="initials" style={avatarStyle}>
+          {initials}
+        </Avatar>
+      );
+    }
+
+    return (
+      <Avatar alt="avatar" src={avatarUrl} style={avatarStyle} />
+    )
+  }
+
   renderVerified() {
     const {verified, verifyUrl} = this.props.info;
 
@@ -96,6 +127,7 @@ class Bx2ValidatorIdentity extends Component {
 
     return (
       <>
+        {this.renderAvatar()}
         {this.renderName()}
         {this.renderVerified()}
       </>

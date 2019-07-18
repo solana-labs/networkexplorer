@@ -573,9 +573,13 @@ async function fetchValidatorInfo(keys) {
 
   const results = await Promise.all(
     accounts.map(async account => {
-      const validatorInfo = solanaWeb3.ValidatorInfo.fromConfigData(
-        account[1].data,
-      );
+      let validatorInfo;
+      try {
+        validatorInfo = solanaWeb3.ValidatorInfo.fromConfigData(account[1].data);
+      } catch (err) {
+        return;
+      }
+
       if (validatorInfo) {
         const validatorKeyStr = validatorInfo.key.toString();
         if (keySet.has(validatorKeyStr)) {
@@ -583,9 +587,9 @@ async function fetchValidatorInfo(keys) {
 
           // build info and verify
           const info = validatorInfo.info;
-          const keybaseId = info.keybaseId;
-          if (keybaseId) {
-            const keybaseUrl = `https://keybase.pub/${keybaseId}/solana/validator-${validatorKeyStr}`;
+          const keybaseUsername = info.keybaseUsername;
+          if (keybaseUsername) {
+            const keybaseUrl = `https://keybase.pub/${keybaseUsername}/solana/validator-${validatorKeyStr}`;
             const keybaseResponse = await fetch(keybaseUrl, {method: 'HEAD'});
             const verified = keybaseResponse.status === 200;
             info.verified = verified;
@@ -598,7 +602,32 @@ async function fetchValidatorInfo(keys) {
     }),
   );
 
-  return results.filter(res => !!res);
+  const infoList = results.filter(r => r);
+  const keybaseUsernames = infoList.map(info => info.keybaseUsername).filter(u => u).join(',');
+  const avatarMap = new Map();
+  if (keybaseUsernames.length > 0) {
+    const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${keybaseUsernames}&fields=pictures,basics`;
+    const keybaseResponse = await fetch(keybaseApiUrl);
+    const keybaseData = await keybaseResponse.json();
+    if (keybaseData && keybaseData.them) {
+      for (const {basics, pictures} of keybaseData.them) {
+        if (basics && basics.username && pictures && pictures.primary && pictures.primary.url) {
+          avatarMap.set(basics.username, pictures.primary.url);
+        }
+      }
+    }
+  }
+
+  for (const info of infoList) {
+    if (info.keybaseUsername) {
+      const avatarUrl = avatarMap.get(info.keybaseUsername);
+      if (avatarUrl) {
+        info.avatarUrl = avatarUrl;
+      }
+    }
+  }
+
+  return infoList;
 }
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
