@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import Link from '@material-ui/core/Link';
 
 class Bx2ValidatorIdentity extends Component {
-
   renderAvatar() {
     let {avatarUrl, name} = this.props.identity;
 
@@ -25,7 +24,10 @@ class Bx2ValidatorIdentity extends Component {
     };
 
     if (!avatarUrl) {
-      const initials = name.split(' ').map(word => word[0]).join('');
+      const initials = name
+        .split(' ')
+        .map(word => word[0])
+        .join('');
       return (
         <Avatar alt="initials" style={avatarStyle}>
           {initials}
@@ -33,9 +35,7 @@ class Bx2ValidatorIdentity extends Component {
       );
     }
 
-    return (
-      <Avatar alt="avatar" src={avatarUrl} style={avatarStyle} />
-    )
+    return <Avatar alt="avatar" src={avatarUrl} style={avatarStyle} />;
   }
 
   renderVerified() {
@@ -106,7 +106,9 @@ class Bx2ValidatorIdentity extends Component {
           Missing Info
         </Typography>
         <Link
-          href={'https://solana-labs.github.io/book/testnet-participation.html#publishing-validator-info'}
+          href={
+            'https://solana-labs.github.io/book/testnet-participation.html#publishing-validator-info'
+          }
           title={'Click to learn how validator info is published'}
           target="_new"
         >
