@@ -504,7 +504,8 @@ async function getClusterInfo() {
   let cluster = await connection.getClusterNodes();
   let identities = await fetchValidatorIdentities(cluster.map(c => c.pubkey));
   let voting = await connection.getEpochVoteAccounts();
-  let uptime = await getAsync('!uptime');
+  let uptimeJson = await getAsync('!uptime');
+  let uptime = uptimeJson && JSON.parse(uptimeJson);
 
   let totalStaked = _.reduce(
     voting,
