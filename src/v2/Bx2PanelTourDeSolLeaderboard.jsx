@@ -287,7 +287,7 @@ class Bx2PanelTourDeSolLeaderboard extends Component {
                     {(row.voteAccount && row.voteAccount.stake) || 0} Lamports
                   </TableCell>
                   <TableCell align="center" style={{verticalAlign: 'middle'}}>
-                    <BxValidatorIdentity info={row.info} />
+                    <BxValidatorIdentity identity={row.identity} />
                   </TableCell>
                   <TableCell align="right">TODO</TableCell>
                 </TableRow>
