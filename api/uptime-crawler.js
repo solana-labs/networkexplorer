@@ -4,14 +4,18 @@ import YAML from 'yaml';
 import redis from 'redis';
 import {promisify} from 'util';
 import {exec} from 'child_process';
+import {sync as commandExistsSync} from 'command-exists';
 
 import config from './config';
 
-const SOLANA_WALLET_PATH =
-  process.env.SOLANA_WALLET_PATH || '../solana/target/debug';
 const FULLNODE_URL = process.env.FULLNODE_URL || 'http://localhost:8899';
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; // 10min
+
+if (!commandExistsSync('solana-wallet')) {
+  throw 'solana-wallet command not found!';
+}
+
 
 function getClient() {
   let props = config.redis.path
@@ -29,7 +33,7 @@ function getVoteAccountUptime(x) {
 
   const p = new Promise((resolve, reject) => {
     exec(
-      `${SOLANA_WALLET_PATH}/solana-wallet -u ${FULLNODE_URL} show-vote-account ${x.votePubkey}`,
+      `solana-wallet -u ${FULLNODE_URL} show-vote-account ${x.votePubkey}`,
       (err, stdout, stderr) => {
         const t2 = new Date().getTime();
 
@@ -75,6 +79,7 @@ function getVoteAccountUptime(x) {
 }
 
 async function refreshUptime() {
+  console.log('uptime updater: updating...');
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
   let voting = await connection.getEpochVoteAccounts();
 
@@ -84,6 +89,7 @@ async function refreshUptime() {
 
   Promise.all(allTasks).then(async results => {
     await setAsync('!uptime', JSON.stringify(results));
+    console.log('uptime updater: updated successfully.');
   });
 }
 

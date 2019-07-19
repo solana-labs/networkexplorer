@@ -13,6 +13,7 @@ import redis from 'redis';
 import WebSocket from 'ws';
 import _ from 'lodash';
 import './inbound-stream';
+import './uptime-crawler';
 import geoip from 'geoip-lite';
 import YAML from 'yaml';
 import fs from 'fs';
