@@ -568,7 +568,7 @@ app.get('/cluster-info', (req, res) => {
 
 async function fetchValidatorAvatars(keybaseUsernames) {
   const avatarMap = new Map();
-  let batch = keybaseUsernames.splice(0, MAX_KEYBASE_USER_LOOKUP)
+  let batch = keybaseUsernames.splice(0, MAX_KEYBASE_USER_LOOKUP);
   while (batch.length > 0) {
     const usernames = batch.join(',');
     const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${usernames}&fields=pictures,basics`;
@@ -577,12 +577,18 @@ async function fetchValidatorAvatars(keybaseUsernames) {
       const keybaseData = await keybaseResponse.json();
       if (keybaseData && keybaseData.them) {
         for (const {basics, pictures} of keybaseData.them) {
-          if (basics && basics.username && pictures && pictures.primary && pictures.primary.url) {
+          if (
+            basics &&
+            basics.username &&
+            pictures &&
+            pictures.primary &&
+            pictures.primary.url
+          ) {
             avatarMap.set(basics.username, pictures.primary.url);
           }
         }
       }
-    } catch(err) {
+    } catch (err) {
       // Skip failed batch
     }
     // Prepare next batch
@@ -601,7 +607,9 @@ async function fetchValidatorIdentities(keys) {
     accounts.map(async account => {
       let validatorInfo;
       try {
-        validatorInfo = solanaWeb3.ValidatorInfo.fromConfigData(account[1].data);
+        validatorInfo = solanaWeb3.ValidatorInfo.fromConfigData(
+          account[1].data,
+        );
       } catch (err) {
         return;
       }
@@ -628,7 +636,9 @@ async function fetchValidatorIdentities(keys) {
   );
 
   identities = identities.filter(r => r);
-  const keybaseUsernames = identities.map(i => i.keybaseUsername).filter(u => u);
+  const keybaseUsernames = identities
+    .map(i => i.keybaseUsername)
+    .filter(u => u);
   const avatarMap = await fetchValidatorAvatars(keybaseUsernames);
   for (const identity of identities) {
     if (identity.keybaseUsername) {
