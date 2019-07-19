@@ -16,7 +16,6 @@ if (!commandExistsSync('solana-wallet')) {
   throw 'solana-wallet command not found!';
 }
 
-
 function getClient() {
   let props = config.redis.path
     ? {path: config.redis.path}
