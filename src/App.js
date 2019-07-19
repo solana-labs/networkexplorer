@@ -142,6 +142,7 @@ class App extends Component {
     let voting = data.voting;
     let gossip = data.cluster;
     let identities = data.identities;
+    let uptimes = data.uptime;
 
     let nodes = _.map(gossip, g => {
       let newG = {...g};
@@ -149,6 +150,8 @@ class App extends Component {
       newG.voteAccount = vote;
       let identity = identities.find(v => v.pubkey === newG.pubkey);
       newG.identity = identity;
+      let uptime = vote && uptimes.find(v => v.pubkey === vote.pubkey);
+      newG.uptime = uptime;
 
       return newG;
     });

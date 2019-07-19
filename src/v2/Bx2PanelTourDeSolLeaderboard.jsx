@@ -289,7 +289,14 @@ class Bx2PanelTourDeSolLeaderboard extends Component {
                   <TableCell align="center" style={{verticalAlign: 'middle'}}>
                     <BxValidatorIdentity identity={row.identity} />
                   </TableCell>
-                  <TableCell align="right">TODO</TableCell>
+                  <TableCell align="right">
+                    {(row.uptime &&
+                      row.uptime.uptime &&
+                      row.uptime.uptime[0] &&
+                      (row.uptime.uptime[0].percentage * 100.0).toFixed(4)) ||
+                      0.0}
+                    %
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
