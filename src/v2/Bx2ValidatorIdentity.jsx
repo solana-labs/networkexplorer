@@ -10,7 +10,7 @@ import Link from '@material-ui/core/Link';
 class Bx2ValidatorIdentity extends Component {
 
   renderAvatar() {
-    let {avatarUrl, name} = this.props.info;
+    let {avatarUrl, name} = this.props.identity;
 
     const avatarStyle = {
       marginRight: 10,
@@ -39,7 +39,7 @@ class Bx2ValidatorIdentity extends Component {
   }
 
   renderVerified() {
-    const {verified, verifyUrl} = this.props.info;
+    const {verified, verifyUrl} = this.props.identity;
 
     let verifiedIcon;
     if (verified && verifyUrl) {
@@ -70,7 +70,7 @@ class Bx2ValidatorIdentity extends Component {
   }
 
   renderName() {
-    const {name, verified, website} = this.props.info;
+    const {name, verified, website} = this.props.identity;
 
     let color = 'secondary';
     if (!verified) {
@@ -121,7 +121,7 @@ class Bx2ValidatorIdentity extends Component {
   }
 
   render() {
-    if (!this.props.info) {
+    if (!this.props.identity) {
       return this.renderMissingInfo();
     }
 
@@ -136,7 +136,7 @@ class Bx2ValidatorIdentity extends Component {
 }
 
 Bx2ValidatorIdentity.propTypes = {
-  info: PropTypes.object,
+  identity: PropTypes.object,
 };
 
 export default Bx2ValidatorIdentity;

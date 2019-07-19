@@ -288,7 +288,7 @@ class Bx2PanelValidatorsOverview extends Component {
                     {(row.voteAccount && row.voteAccount.stake) || 0} Lamports
                   </TableCell>
                   <TableCell align="center">
-                    <BxValidatorIdentity info={row.info} />
+                    <BxValidatorIdentity identity={row.identity} />
                   </TableCell>
                   <TableCell align="center">TODO</TableCell>
                   <TableCell align="right">TODO</TableCell>

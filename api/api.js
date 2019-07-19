@@ -31,6 +31,7 @@ const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 16000;
 const CLUSTER_INFO_CACHE_TIME_SECS = 35000;
 const CONFIG_PROGRAM_ID = 'Config1111111111111111111111111111111111111';
+const MAX_KEYBASE_USER_LOOKUP = 50;
 
 const app = express();
 
@@ -499,7 +500,7 @@ async function getClusterInfo() {
   let [, feeCalculator] = await connection.getRecentBlockhash();
   let supply = await connection.getTotalSupply();
   let cluster = await connection.getClusterNodes();
-  let validators = await fetchValidatorInfo(cluster.map(c => c.pubkey));
+  let identities = await fetchValidatorIdentities(cluster.map(c => c.pubkey));
   let voting = await connection.getEpochVoteAccounts();
   let totalStaked = _.reduce(
     voting,
@@ -532,7 +533,7 @@ async function getClusterInfo() {
     supply,
     totalStaked,
     cluster,
-    validators,
+    identities,
     voting,
     ts,
   };
@@ -565,13 +566,38 @@ app.get('/cluster-info', (req, res) => {
   sendClusterResult(req, res);
 });
 
-async function fetchValidatorInfo(keys) {
+async function fetchValidatorAvatars(keybaseUsernames) {
+  const avatarMap = new Map();
+  let batch = keybaseUsernames.splice(0, MAX_KEYBASE_USER_LOOKUP)
+  while (batch.length > 0) {
+    const usernames = batch.join(',');
+    const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${usernames}&fields=pictures,basics`;
+    try {
+      const keybaseResponse = await fetch(keybaseApiUrl);
+      const keybaseData = await keybaseResponse.json();
+      if (keybaseData && keybaseData.them) {
+        for (const {basics, pictures} of keybaseData.them) {
+          if (basics && basics.username && pictures && pictures.primary && pictures.primary.url) {
+            avatarMap.set(basics.username, pictures.primary.url);
+          }
+        }
+      }
+    } catch(err) {
+      // Skip failed batch
+    }
+    // Prepare next batch
+    batch = keybaseUsernames.splice(0, MAX_KEYBASE_USER_LOOKUP);
+  }
+  return avatarMap;
+}
+
+async function fetchValidatorIdentities(keys) {
   const configKey = new solanaWeb3.PublicKey(CONFIG_PROGRAM_ID);
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
   const accounts = await connection.getProgramAccounts(configKey);
   const keySet = new Set(keys);
 
-  const results = await Promise.all(
+  let identities = await Promise.all(
     accounts.map(async account => {
       let validatorInfo;
       try {
@@ -584,50 +610,36 @@ async function fetchValidatorInfo(keys) {
         const validatorKeyStr = validatorInfo.key.toString();
         if (keySet.has(validatorKeyStr)) {
           keySet.delete(validatorKeyStr);
-
-          // build info and verify
-          const info = validatorInfo.info;
-          const keybaseUsername = info.keybaseUsername;
+          // build identity and verify
+          const identity = validatorInfo.info;
+          const keybaseUsername = identity.keybaseUsername;
           if (keybaseUsername) {
             const keybaseUrl = `https://keybase.pub/${keybaseUsername}/solana/validator-${validatorKeyStr}`;
             const keybaseResponse = await fetch(keybaseUrl, {method: 'HEAD'});
             const verified = keybaseResponse.status === 200;
-            info.verified = verified;
-            info.verifyUrl = keybaseUrl;
+            identity.verified = verified;
+            identity.verifyUrl = keybaseUrl;
           }
-          info.pubkey = validatorKeyStr;
-          return info;
+          identity.pubkey = validatorKeyStr;
+          return identity;
         }
       }
     }),
   );
 
-  const infoList = results.filter(r => r);
-  const keybaseUsernames = infoList.map(info => info.keybaseUsername).filter(u => u).join(',');
-  const avatarMap = new Map();
-  if (keybaseUsernames.length > 0) {
-    const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${keybaseUsernames}&fields=pictures,basics`;
-    const keybaseResponse = await fetch(keybaseApiUrl);
-    const keybaseData = await keybaseResponse.json();
-    if (keybaseData && keybaseData.them) {
-      for (const {basics, pictures} of keybaseData.them) {
-        if (basics && basics.username && pictures && pictures.primary && pictures.primary.url) {
-          avatarMap.set(basics.username, pictures.primary.url);
-        }
-      }
-    }
-  }
-
-  for (const info of infoList) {
-    if (info.keybaseUsername) {
-      const avatarUrl = avatarMap.get(info.keybaseUsername);
+  identities = identities.filter(r => r);
+  const keybaseUsernames = identities.map(i => i.keybaseUsername).filter(u => u);
+  const avatarMap = await fetchValidatorAvatars(keybaseUsernames);
+  for (const identity of identities) {
+    if (identity.keybaseUsername) {
+      const avatarUrl = avatarMap.get(identity.keybaseUsername);
       if (avatarUrl) {
-        info.avatarUrl = avatarUrl;
+        identity.avatarUrl = avatarUrl;
       }
     }
   }
 
-  return infoList;
+  return identities;
 }
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
