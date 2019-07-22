@@ -8,6 +8,7 @@ import {
   mapValues,
   pick,
   merge,
+  find,
 } from 'lodash/fp';
 import {action, computed, decorate, observable, observe, flow} from 'mobx';
 import {parseClusterInfo} from 'v2/utils/parseMessage';
@@ -17,6 +18,7 @@ import calcChanges from 'v2/utils/calcChanges';
 class Store {
   cluster = {
     nodes: [],
+    voting: [],
   };
   clusterChanges = {};
 
@@ -52,6 +54,13 @@ class Store {
       gossip,
       coordinates: [lng, lat],
     }))(this.cluster.nodes);
+  }
+
+  get validators() {
+    return map(vote => ({
+      ...vote,
+      uptime: find({votePubkey: vote.votePubkey})(this.cluster.uptime),
+    }))(this.cluster.voting);
   }
 
   get totalBondedTokens() {

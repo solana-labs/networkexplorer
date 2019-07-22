@@ -17,19 +17,19 @@ import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
-import HelpLink from '../../HelpLink';
+import getUptime from 'v2/utils/getUptime';
 
+import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
 const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const {
-    cluster: {voting = []},
-  } = NodesStore;
+  const {validators} = NodesStore;
 
   const renderRow = row => {
+    const uptime = getUptime(row);
     return (
       <TableRow hover key={row.nodePubkey}>
         <TableCell>1</TableCell>
@@ -43,11 +43,12 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           </Link>
         </TableCell>
         <TableCell>{row.stake}</TableCell>
-        <TableCell>TODO</TableCell>
+        <TableCell>{uptime}%</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
+    const uptime = getUptime(card);
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
@@ -64,7 +65,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>TODO</div>
+            <div>{uptime}%</div>
           </Grid>
         </Grid>
       </div>
@@ -77,7 +78,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           Active Validators
           <HelpLink text="" term="" />
         </Typography>
-        <Typography variant="h5">{voting.length}</Typography>
+        <Typography variant="h5">{validators.length}</Typography>
         {!separate && (
           <Link to="/rc/validators/all" className={classes.link}>
             See all &gt;
@@ -99,12 +100,12 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
               root: classes.body,
             }}
           >
-            {map(renderRow)(voting)}
+            {map(renderRow)(validators)}
           </TableBody>
         </Table>
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          {map(renderCard)(voting)}
+          {map(renderCard)(validators)}
         </div>
       )}
     </div>
