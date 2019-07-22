@@ -91,7 +91,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
               <TableCell width={100}>Ranking</TableCell>
               <TableCell width={230}>Name</TableCell>
               <TableCell>Stake</TableCell>
-              <TableCell width={100}>Uptime</TableCell>
+              <TableCell width={110}>Uptime</TableCell>
             </TableRow>
           </TableHead>
           <TableBody

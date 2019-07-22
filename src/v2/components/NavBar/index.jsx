@@ -64,9 +64,6 @@ const NavBar = ({
       location.pathname.includes(link) ||
       (propEq('pathname', '/rc/')(location) && isDashboard);
     const changeRoute = () => {
-      if (selected) {
-        return;
-      }
       history.push(`/rc/${isDashboard ? '' : link}`);
       toggleDrawer(false)();
     };
@@ -82,7 +79,10 @@ const NavBar = ({
         <ListItemIcon className={classes.icon}>
           <Icon />
         </ListItemIcon>
-        <ListItemText classes={{primary: classes.itemText}} primary={link} />
+        <ListItemText
+          classes={{primary: classes.itemText, root: classes.itemTextRoot}}
+          primary={link}
+        />
       </ListItem>
     );
   };
@@ -107,7 +107,9 @@ const NavBar = ({
         >
           <CloseIcon className={classes.menuIcon} fontSize="large" />
         </IconButton>
-        <List component="div">{map(renderLink)(routes)}</List>
+        <List component="div" classes={{root: classes.listRoot}}>
+          {map(renderLink)(routes)}
+        </List>
       </SwipeableDrawer>
     </div>
   );

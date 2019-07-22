@@ -72,16 +72,20 @@ const Validators = () => {
       <div className={classes.root}>
         <SectionHeader title="Validators Overview">
           <div className={classes.becomeBtn}>
-            <Button variant="contained" color="primary">
+            <Button
+              href="https://solana.com/network/"
+              variant="contained"
+              color="primary"
+            >
               Become a validator
             </Button>
           </div>
         </SectionHeader>
-        <Grid spacing={2} container alignItems="flex-start">
-          <Grid item xs={12} lg={9} zeroMinWidth>
+        <Grid spacing={2} container>
+          <Grid item xs={12} md={9} zeroMinWidth>
             <ValidatorsMap />
           </Grid>
-          <Grid item xs={12} lg={3} zeroMinWidth>
+          <Grid item xs={12} md={3} zeroMinWidth>
             <div className={classes.stats}>{map(renderStats)(cards)}</div>
           </Grid>
         </Grid>

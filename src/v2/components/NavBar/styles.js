@@ -22,6 +22,9 @@ export default makeStyles(theme => ({
   },
   item: {
     height: 102,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
       height: 97,
     },
@@ -39,17 +42,28 @@ export default makeStyles(theme => ({
     },
   },
   drawerRoot: {
-    width: 102,
     flexShrink: 0,
     [theme.breakpoints.down('sm')]: {
       width: 0,
     },
   },
   drawerPaper: {
+    '&:hover a div:nth-child(2)': {
+      opacity: 1,
+      visibility: 'visible',
+    },
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       background: getColor('dark')(theme),
       paddingTop: 18,
+    },
+  },
+  listRoot: {
+    width: 88,
+    transition: '.15s ease-in-out',
+    overflow: 'hidden',
+    '&:hover': {
+      width: 225,
     },
   },
   menuButton: {
@@ -66,15 +80,20 @@ export default makeStyles(theme => ({
   menuIcon: {
     color: getColor('dark')(theme),
   },
+  itemTextRoot: {
+    opacity: 0,
+    visibility: 'hidden',
+    position: 'absolute',
+    bottom: 2,
+  },
   itemText: {
     textTransform: 'uppercase',
-    marginLeft: 38,
     fontSize: 15,
     fontWeight: 'bold',
     letterSpacing: 2.5,
-    display: 'none',
+    whiteSpace: 'nowrap',
     [theme.breakpoints.down('sm')]: {
-      display: 'block',
+      marginLeft: 38,
     },
   },
 }));

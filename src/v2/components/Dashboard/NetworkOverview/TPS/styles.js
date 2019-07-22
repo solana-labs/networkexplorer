@@ -17,6 +17,17 @@ export default makeStyles(theme => ({
     color: getColor('dark')(theme),
     textAlign: 'center',
   },
+  tooltipDot: {
+    position: 'absolute',
+    width: 14,
+    height: 14,
+    background: getColor('main')(theme),
+    borderRadius: '50%',
+    border: `3px solid ${getColor('grey2')(theme)}`,
+    bottom: -20,
+    left: '50%',
+    marginLeft: -7,
+  },
   tooltipDate: {
     fontSize: 12,
     color: getColor('grey3')(theme),

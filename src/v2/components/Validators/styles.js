@@ -47,11 +47,5 @@ export default makeStyles(theme => ({
   stats: {
     display: 'flex',
     flexDirection: 'column',
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'row',
-    },
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-    },
   },
 }));
