@@ -14,17 +14,22 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     marginLeft: 40,
+    marginRight: 'auto',
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
       marginTop: 5,
     },
-    '& span': {
+    '& > span': {
       width: 33,
       height: 33,
       flexShrink: 0,
       background: getColor('main')(theme),
       borderRadius: '50%',
       marginRight: 22,
+    },
+    '& div': {
+      cursor: 'pointer',
+      marginLeft: 14,
     },
   },
   spec: {
@@ -67,9 +72,6 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       marginRight: 0,
-    },
-    '& a': {
-      marginLeft: 5,
     },
   },
   value: {

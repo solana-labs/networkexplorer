@@ -5,6 +5,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React from 'react';
 import {map, find, compose, mergeWith} from 'lodash/fp';
 import {Match} from 'react-router-dom';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {
   ComposableMap,
   Geographies,
@@ -20,6 +21,7 @@ import MapTooltip from 'v2/components/UI/MapTooltip';
 import HelpLink from 'v2/components/HelpLink';
 import getColor from 'v2/utils/getColor';
 
+import {ReactComponent as CopyIcon} from '../../../assets/icons/copy.svg';
 import useStyles from './styles';
 
 const mapStyles = {
@@ -140,6 +142,11 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
             <div className={classes.validatorName}>
               <span />
               {node.nodePubkey}
+              <CopyToClipboard text={node.nodePubkey}>
+                <div>
+                  <CopyIcon />
+                </div>
+              </CopyToClipboard>
             </div>
           )}
         </SectionHeader>

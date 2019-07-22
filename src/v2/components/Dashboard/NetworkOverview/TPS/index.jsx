@@ -22,6 +22,7 @@ const Tooltip = ({point: {data}}: {point: Point}) => {
   if (!data) return null;
   return (
     <div className={classes.tooltip}>
+      <div className={classes.tooltipDot} />
       <div className={classes.tooltipTitle}>AVG TPS:{data.y}</div>
       <div className={classes.tooltipDate}>{data.date}</div>
     </div>
@@ -45,6 +46,7 @@ const TPS = () => {
     animate: true,
     useMesh: true,
     layers: ['lines', 'mesh'],
+    enableSlices: false,
     yScale: {
       type: 'linear',
       stacked: false,

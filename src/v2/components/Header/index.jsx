@@ -12,7 +12,6 @@ import {updateBaseUrl} from 'v2/api';
 
 import * as EndpointConfig from '../../../EndpointConfig';
 import NavBar from '../NavBar';
-import {ReactComponent as LiveIcon} from './assets/liveIcon.svg';
 import useStyles from './styles';
 
 const Header = () => {
@@ -55,9 +54,7 @@ const Header = () => {
           </div>
           <div className={classes.realTime}>
             <p>Real-time updated:</p>
-            <div>
-              Every 5 sec <LiveIcon />
-            </div>
+            <div>Every 5 sec</div>
           </div>
           <Select
             className={classes.networkSelect}

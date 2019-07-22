@@ -34,8 +34,13 @@ const StatCard = (props: StatCardProps) => {
   };
   return (
     <Paper className={classes.root}>
-      <Typography align="center" variant="body1">
-        {title}
+      <Typography
+        className={classes.header}
+        component="div"
+        align="center"
+        variant="body1"
+      >
+        <span>{title}</span>
         <HelpLink text="" term="" />
       </Typography>
       {renderValue()}

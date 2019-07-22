@@ -4,9 +4,14 @@ import getColor from 'v2/utils/getColor';
 export default makeStyles(theme => ({
   card: {
     background: getColor('grey2')(theme),
-    maxHeight: 558,
+    height: '100%',
     overflow: 'hidden',
     padding: '14px 35px',
+    display: 'flex',
+    flexDirection: 'column',
+    '& svg': {
+      margin: 'auto',
+    },
   },
   tooltip: {
     background: '#fff',

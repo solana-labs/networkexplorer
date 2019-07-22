@@ -7,10 +7,19 @@ export default makeStyles(theme => ({
     color: '#fff',
     borderRadius: 0,
     height: '100%',
-    padding: '17px 30px',
+    padding: '17px 15px',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'center',
+    '& span': {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
   },
   value: {
-    fontSize: 60,
+    fontSize: 50,
     fontWeight: 'bold',
     color: getColor('main')(theme),
     margin: '20px 0',

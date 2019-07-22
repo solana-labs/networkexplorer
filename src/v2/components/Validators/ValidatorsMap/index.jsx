@@ -38,7 +38,7 @@ const ValidatorsMap = () => {
     },
     style: {
       width: '100%',
-      height: 'auto',
+      height: '100%',
     },
     center: [0, 20],
   };
@@ -64,7 +64,7 @@ const ValidatorsMap = () => {
       <ComposableMap
         projectionConfig={mapConfig.projection}
         width={690}
-        height={410}
+        height={370}
         style={mapConfig.style}
       >
         <ZoomableGroup center={mapConfig.center} disablePanning>

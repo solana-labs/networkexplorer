@@ -19,5 +19,11 @@ export default makeStyles(theme => ({
         backgroundColor: fade(getColor('main')(theme), 0.8),
       },
     },
+    '& a': {
+      borderRadius: 0,
+      '&:hover': {
+        backgroundColor: fade(getColor('main')(theme), 0.8),
+      },
+    },
   },
 }));

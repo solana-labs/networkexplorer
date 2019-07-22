@@ -13,7 +13,7 @@ export default makeStyles(theme => ({
     padding: '0 5px',
     color: getColor('greenDark')(theme),
     transition: '.15s ease-in-out',
-    marginLeft: 15,
+    marginLeft: 5,
     '&:hover': {
       color: getColor('main')(theme),
       borderColor: getColor('main')(theme),
