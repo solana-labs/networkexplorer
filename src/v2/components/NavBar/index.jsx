@@ -14,6 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import {RouterHistory, withRouter} from 'react-router-dom';
 import React from 'react';
 import {map, propEq, eq} from 'lodash/fp';
+import Mixpanel from 'v2/mixpanel';
 
 import {ReactComponent as dashboard} from './assets/dashboard.svg';
 import {ReactComponent as transactions} from './assets/transactions.svg';
@@ -32,6 +33,16 @@ const icons = {
   applications,
   blocks,
   favorites,
+};
+
+const navTracks = {
+  dashboard: 'Clicked Overview',
+  transactions: 'Clicked Transactions Page',
+  validators: 'Clicked Transactions Page',
+  'tour-de-sol': 'Clicked Transactions Page',
+  applications: 'Clicked Applications page',
+  blocks: 'Clicked Applications page',
+  favorites: 'Clicked Applications page',
 };
 
 const NavBar = ({
@@ -64,6 +75,7 @@ const NavBar = ({
       location.pathname.includes(link) ||
       (propEq('pathname', '/rc/')(location) && isDashboard);
     const changeRoute = () => {
+      Mixpanel.track(navTracks[link]);
       history.push(`/rc/${isDashboard ? '' : link}`);
       toggleDrawer(false)();
     };

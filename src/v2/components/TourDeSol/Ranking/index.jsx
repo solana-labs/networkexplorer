@@ -9,14 +9,12 @@ import useStyles from './styles';
 
 const Ranking = () => {
   const classes = useStyles();
-  const {
-    cluster: {voting},
-  } = NodesStore;
+  const {validators} = NodesStore;
 
   const maxVal = compose(
     get('stake'),
     maxBy('stake'),
-  )(voting);
+  )(validators);
 
   const renderNode = node => {
     const position = (node.stake * 100) / maxVal;
@@ -41,7 +39,7 @@ const Ranking = () => {
         Top Validator Ranking
         <HelpLink text="" term="" />
       </div>
-      <ul className={classes.list}>{map(renderNode)(voting)}</ul>
+      <ul className={classes.list}>{map(renderNode)(validators)}</ul>
     </div>
   );
 };

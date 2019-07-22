@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import {map} from 'lodash/fp';
+import Mixpanel from 'v2/mixpanel';
 
 import {ReactComponent as discord} from './assets/discord.svg';
 import {ReactComponent as medium} from './assets/medium.svg';
@@ -44,8 +45,16 @@ const links: Link[] = [
 ];
 const Social = () => {
   const classes = useStyles();
+
+  const handleLink = () => social => Mixpanel.track(`Visit ${social}`);
+
   const renderLink = ({name, link, icon: Icon}: Link) => (
-    <a key={name} className={classes.link} href={link}>
+    <a
+      key={name}
+      className={classes.link}
+      href={link}
+      onClick={handleLink(name)}
+    >
       <Icon />
     </a>
   );

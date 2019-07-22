@@ -7,6 +7,7 @@ import Card from 'v2/components/UI/StatCard';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
 
+import Mixpanel from '../../mixpanel';
 import Button from '../UI/Button';
 import ValidatorsMap from './ValidatorsMap';
 import ValidatorsTable from './Table';
@@ -67,12 +68,15 @@ const Validators = () => {
     </div>
   );
 
+  const handleValidator = () => Mixpanel.track('Clicked Become a Validator');
+
   return (
     <Container>
       <div className={classes.root}>
         <SectionHeader title="Validators Overview">
           <div className={classes.becomeBtn}>
             <Button
+              onClick={handleValidator}
               href="https://solana.com/network/"
               variant="contained"
               color="primary"

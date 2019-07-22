@@ -2,7 +2,7 @@
 import {Container, useTheme} from '@material-ui/core';
 import {observer} from 'mobx-react-lite';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {map, find, compose, mergeWith} from 'lodash/fp';
 import {Match} from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -22,6 +22,7 @@ import HelpLink from 'v2/components/HelpLink';
 import getColor from 'v2/utils/getColor';
 
 import {ReactComponent as CopyIcon} from '../../../assets/icons/copy.svg';
+import Mixpanel from '../../../mixpanel';
 import useStyles from './styles';
 
 const mapStyles = {
@@ -38,10 +39,16 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
   const {
     cluster: {voting, cluster},
   } = NodesStore;
+
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {params} = match;
+
+  useEffect(() => {
+    Mixpanel.track(`Clicked Validator ${params.id}`);
+  }, [params.id]);
+
   const currentNode = find({pubkey: params.id})(cluster);
   if (!currentNode) {
     return <div>Loading...</div>;

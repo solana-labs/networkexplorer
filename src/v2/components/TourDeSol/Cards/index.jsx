@@ -9,8 +9,8 @@ import useStyles from './styles';
 
 const Cards = () => {
   const classes = useStyles();
-  const {cluster} = NodesStore;
-  const {nodes} = cluster;
+  const {cluster, validators} = NodesStore;
+
   const cards = [
     {
       title: 'Stage Duration Blocks',
@@ -44,7 +44,7 @@ const Cards = () => {
     },
     {
       title: '# of Active Validators',
-      value: nodes.length,
+      value: validators.length,
       changes: '',
       period: 'since yesterday',
     },
