@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
   },
   changes: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     padding: '0 20px',
@@ -23,14 +23,14 @@ export default makeStyles(theme => ({
     '&:not(:last-child)': {
       marginBottom: 15,
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       flex: 1,
       '&:not(:last-child)': {
         marginBottom: 0,
         marginRight: 10,
       },
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       flex: 1,
       '&:not(:last-child)': {
         marginRight: 0,
@@ -47,5 +47,11 @@ export default makeStyles(theme => ({
   stats: {
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+    },
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+    },
   },
 }));

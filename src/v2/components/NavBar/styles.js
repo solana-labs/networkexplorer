@@ -61,7 +61,8 @@ export default makeStyles(theme => ({
   listRoot: {
     width: 88,
     transition: '.15s ease-in-out',
-    overflow: 'hidden',
+    overflowX: 'hidden',
+    overflowY: 'auto',
     '&:hover': {
       width: 225,
     },
