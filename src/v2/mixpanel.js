@@ -1,7 +1,9 @@
 import mixpanel from 'mixpanel-browser';
-mixpanel.init('a733ed40b877d30ff2a1a58b4e326cf0');
 
 const isProduction = process.env.NODE_ENV === 'production';
+if (isProduction) {
+  mixpanel.init('a733ed40b877d30ff2a1a58b4e326cf0');
+}
 
 export default {
   identify: id => {

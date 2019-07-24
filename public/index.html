@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112467444-2"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-112467444-2');
+      var isProduction = "%NODE_ENV%" === 'production';
+      if (isProduction) {
+        var f = document.getElementsByTagName('script')[0];
+        var j = document.createElement('script');j.async=true;
+        j.src= 'https://www.googletagmanager.com/gtag/js?id=UA-112467444-2';
+        f.parentNode.insertBefore(j,f);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-112467444-2');
+      }
     </script>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
