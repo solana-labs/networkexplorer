@@ -148,9 +148,9 @@ class App extends Component {
       let newG = {...g};
       let vote = voting.find(x => x.nodePubkey === newG.pubkey);
       newG.voteAccount = vote;
-      let identity = identities.find(v => v.pubkey === newG.pubkey);
+      let identity = (identities || []).find(v => v.pubkey === newG.pubkey);
       newG.identity = identity;
-      let uptime = vote && uptimes.find(v => v.pubkey === vote.pubkey);
+      let uptime = vote && (uptimes || []).find(v => v.pubkey === vote.pubkey);
       newG.uptime = uptime;
 
       return newG;
