@@ -42,15 +42,23 @@ export function parseBlock(message) {
 }
 
 export function parseClusterInfo(data) {
-  const {voting, cluster: gossip, supply, feeCalculator} = JSON.parse(data);
+  const {
+    voting,
+    cluster: gossip,
+    supply,
+    feeCalculator,
+    identities,
+  } = JSON.parse(data);
+
   const nodes = map(g => ({
     ...g,
-    voteAccount: find({nodePubkey: g.pubKey}, voting),
+    voteAccount: find({nodePubkey: g.pubKey})(voting),
   }))(gossip);
 
   return {
     nodes,
     supply,
     feeCalculator,
+    identities,
   };
 }

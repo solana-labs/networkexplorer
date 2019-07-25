@@ -18,6 +18,7 @@ import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
+import Avatar from 'v2/components/UI/Avatar';
 
 import HelpLink from '../../HelpLink';
 import useStyles from './styles';
@@ -30,38 +31,37 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
 
   const renderRow = row => {
     const uptime = getUptime(row);
+    const {identity = {}, nodePubkey, stake} = row;
     return (
-      <TableRow hover key={row.nodePubkey}>
+      <TableRow hover key={nodePubkey}>
         <TableCell>1</TableCell>
         <TableCell>
-          <Link
-            to={`/rc/validators/${row.nodePubkey}`}
-            className={classes.name}
-          >
-            <span />
-            <div>{row.nodePubkey}</div>
+          <Link to={`/rc/validators/${nodePubkey}`} className={classes.name}>
+            <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+            <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{row.stake}</TableCell>
+        <TableCell>{stake}</TableCell>
         <TableCell>{uptime}%</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
     const uptime = getUptime(card);
+    const {identity = {}, nodePubkey, stake} = card;
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
         key={card.nodePubkey}
       >
         <Link to={`/rc/validators/${card.nodePubkey}`} className={classes.name}>
-          <span />
-          <div>{card.nodePubkey}</div>
+          <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+          <div>{identity.name || nodePubkey}</div>
         </Link>
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{card.stake}</div>
+            <div>{stake}</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
