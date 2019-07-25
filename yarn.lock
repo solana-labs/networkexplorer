@@ -1856,13 +1856,13 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
   integrity sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==
 
-"@solana/web3.js@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.18.0.tgz#d7b391f2563d75dc511e49ed496f82db09215309"
-  integrity sha512-F1GyNav9Ju62yfIcja9bu85iGnJhqe4QVe012PwXgn1yiDaN3db42DH6fxabF3FVzXNwBn8tyK5NmSU55myNxg==
+"@solana/web3.js@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.18.2.tgz#29f00b4ac626ba2f613a30741297512b9a858cd9"
+  integrity sha512-JZlNjH5vUoU2BghxgOqDpZfjXE6dSI42ioyQD6DevhQd0gfdxKBgqNKICvN3R6t58DryWUnC03qTZne+VsdL+A==
   dependencies:
     "@babel/runtime" "^7.3.1"
-    bn.js "^4.11.8"
+    bn.js "^5.0.0"
     bs58 "^4.0.1"
     buffer-layout "^1.2.0"
     esdoc-inject-style-plugin "^1.0.0"
@@ -3671,10 +3671,15 @@ bluebird@~3.4.1:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.4.7.tgz#f72d760be09b7f76d08ed8fae98b289a8d05fab3"
   integrity sha1-9y12C+Cbf3bQjtj66Ysomo0F+rM=
 
-bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.11.8, bn.js@^4.4.0:
+bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.8"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
   integrity sha512-ItfYfPLkWHUjckQCk8xC+LwxgK8NYcXywGigJgSwOP8Y2iyWT4f2vsZnoOXTTbo+o5yXmIUJ4gn5538SO5S3gA==
+
+bn.js@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.0.0.tgz#5c3d398021b3ddb548c1296a16f857e908f35c70"
+  integrity sha512-bVwDX8AF+72fIUNuARelKAlQUNtPOfG2fRxorbVvFk4zpHbqLrPdOGfVg5vrKwVzLLePqPBiATaOZNELQzmS0A==
 
 body-parser@1.19.0:
   version "1.19.0"
