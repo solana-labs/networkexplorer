@@ -15,21 +15,29 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     marginLeft: 40,
     marginRight: 'auto',
+    flexShrink: 1,
+    minWidth: 1,
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
       marginTop: 5,
     },
-    '& > span': {
-      width: 33,
-      height: 33,
-      flexShrink: 0,
-      background: getColor('main')(theme),
-      borderRadius: '50%',
-      marginRight: 22,
+    '& > span:nth-child(2)': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      marginLeft: 22,
     },
-    '& div': {
+    '& div:last-child': {
       cursor: 'pointer',
       marginLeft: 14,
+    },
+  },
+  headerBtn: {
+    marginLeft: 40,
+    whiteSpace: 'nowrap',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 0,
+      marginTop: 5,
     },
   },
   spec: {

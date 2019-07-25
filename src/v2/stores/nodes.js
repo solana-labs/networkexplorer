@@ -57,10 +57,18 @@ class Store {
   }
 
   get validators() {
-    return map(vote => ({
-      ...vote,
-      uptime: find({votePubkey: vote.votePubkey})(this.cluster.uptime),
-    }))(this.cluster.voting);
+    return map(vote => {
+      const {lng, lat, gossip} = find({pubkey: vote.nodePubkey})(
+        this.cluster.cluster,
+      );
+      return {
+        ...vote,
+        coordinates: [lng, lat],
+        gossip,
+        uptime: find({votePubkey: vote.votePubkey})(this.cluster.uptime),
+        identity: find({pubkey: vote.nodePubkey})(this.cluster.identities),
+      };
+    })(this.cluster.voting);
   }
 
   get totalBondedTokens() {

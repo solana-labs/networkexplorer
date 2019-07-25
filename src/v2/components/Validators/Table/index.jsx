@@ -18,6 +18,7 @@ import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
+import Avatar from 'v2/components/UI/Avatar';
 
 import useStyles from './styles';
 
@@ -28,42 +29,41 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const {validators} = NodesStore;
   const renderRow = row => {
     const uptime = getUptime(row);
+    const {identity = {}, nodePubkey, stake, commission} = row;
     return (
-      <TableRow hover key={row.nodePubkey}>
+      <TableRow hover key={nodePubkey}>
         <TableCell align="center">
-          <Link
-            to={`/rc/validators/${row.nodePubkey}`}
-            className={classes.name}
-          >
-            <span />
-            <div>{row.nodePubkey}</div>
+          <Link to={`/rc/validators/${nodePubkey}`} className={classes.name}>
+            <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+            <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{row.stake} Lamports</TableCell>
-        <TableCell>{row.commission}</TableCell>
+        <TableCell>{stake} Lamports</TableCell>
+        <TableCell>{commission}</TableCell>
         <TableCell>{uptime}%</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
     const uptime = getUptime(card);
+    const {identity = {}, nodePubkey, stake, commission} = card;
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
-        key={card.nodePubkey}
+        key={nodePubkey}
       >
-        <Link to={`/rc/validators/${card.nodePubkey}`} className={classes.name}>
-          <span />
-          <div>{card.nodePubkey}</div>
+        <Link to={`/rc/validators/${nodePubkey}`} className={classes.name}>
+          <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+          <div>{identity.name || nodePubkey}</div>
         </Link>
         <Grid container spacing={1}>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{card.stake} Lamports</div>
+            <div>{stake} Lamports</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>
-            <div>{card.commission}</div>
+            <div>{commission}</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>

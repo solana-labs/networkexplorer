@@ -3,7 +3,7 @@ import {Container, useTheme} from '@material-ui/core';
 import {observer} from 'mobx-react-lite';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
-import {map, find, compose, mergeWith} from 'lodash/fp';
+import {map, find} from 'lodash/fp';
 import {Match} from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {
@@ -20,6 +20,8 @@ import theme, {mapStyle, markerStyle} from 'v2/theme';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import HelpLink from 'v2/components/HelpLink';
 import getColor from 'v2/utils/getColor';
+import Button from 'v2/components/UI/Button';
+import Avatar from 'v2/components/UI/Avatar';
 
 import {ReactComponent as CopyIcon} from '../../../assets/icons/copy.svg';
 import Mixpanel from '../../../mixpanel';
@@ -36,9 +38,7 @@ const markerCircleStyle = {
 };
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
-  const {
-    cluster: {voting, cluster},
-  } = NodesStore;
+  const {validators} = NodesStore;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -49,16 +49,13 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     Mixpanel.track(`Clicked Validator ${params.id}`);
   }, [params.id]);
 
-  const currentNode = find({pubkey: params.id})(cluster);
-  if (!currentNode) {
+  const node = find({nodePubkey: params.id})(validators);
+
+  if (!node) {
     return <div>Loading...</div>;
   }
-  const node = compose(
-    mergeWith(currentNode, {
-      coordinates: [currentNode.lng, currentNode.lat],
-    }),
-    find({nodePubkey: params.id}),
-  )(voting);
+
+  const {nodePubkey, gossip, stake, commission, identity = {}} = node;
 
   const renderMarker = () => (
     <Marker style={markerStyle} marker={node}>
@@ -66,8 +63,8 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
         classes={{tooltip: classes.tooltip}}
         title={() => (
           <>
-            <div className={classes.tooltipTitle}>NODE: {node.nodePubkey}</div>
-            <div className={classes.tooltipDesc}>Gossip: {node.gossip}</div>
+            <div className={classes.tooltipTitle}>NODE: {nodePubkey}</div>
+            <div className={classes.tooltipDesc}>Gossip: {gossip}</div>
           </>
         )}
       >
@@ -80,17 +77,17 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Website',
       hint: '',
-      value: 'TODO',
+      value: identity.website || '',
     },
     {
       label: 'Voting power',
       hint: '',
-      value: `${node.stake}`,
+      value: stake,
     },
     {
       label: 'Address',
       hint: '',
-      value: `${node.pubkey}`,
+      value: nodePubkey,
     },
     {
       label: 'Missed blocks',
@@ -100,17 +97,17 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'keybase',
       hint: '',
-      value: 'TODO',
+      value: identity.keybaseUsername || '',
     },
     {
       label: 'commission',
       hint: '',
-      value: `${node.commission}%`,
+      value: `${commission}%`,
     },
     {
       label: 'details',
       hint: '',
-      value: 'TODO',
+      value: identity.details || '',
     },
     {
       label: 'Amount of delegated sol',
@@ -147,15 +144,26 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
         <SectionHeader title="Validator Detail">
           {!isMobile && (
             <div className={classes.validatorName}>
-              <span />
-              {node.nodePubkey}
-              <CopyToClipboard text={node.nodePubkey}>
+              <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+              <span>{identity.name || nodePubkey}</span>
+              <CopyToClipboard text={nodePubkey}>
                 <div>
                   <CopyIcon />
                 </div>
               </CopyToClipboard>
             </div>
           )}
+          <div className={classes.headerBtn}>
+            <Button
+              variant="contained"
+              size="large"
+              fullWidth
+              color="primary"
+              href="#"
+            >
+              Connect To Keybase
+            </Button>
+          </div>
         </SectionHeader>
         <div className={classes.body}>
           <ul className={classes.spec}>
@@ -165,7 +173,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
                 <div className={classes.value}>
                   <div className={classes.validatorName}>
                     <span />
-                    {node.nodePubkey}
+                    {nodePubkey}
                   </div>
                 </div>
               </li>

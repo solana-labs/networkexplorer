@@ -58,15 +58,10 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     color: getColor('main')(theme),
     textDecoration: 'none',
-    '& span': {
-      width: 33,
-      height: 33,
-      flexShrink: 0,
-      background: getColor('main')(theme),
-      borderRadius: '50%',
-      marginRight: 22,
-    },
     '& div': {
+      '&:first-child': {
+        marginRight: 15,
+      },
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       overflow: 'hidden',

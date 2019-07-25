@@ -24,15 +24,10 @@ export default makeStyles(theme => ({
     color: getColor('main')(theme),
     marginRight: 20,
     flexShrink: 0,
-    '&::before': {
-      content: '""',
-      display: 'inline-block',
-      verticalAlign: 'middle',
-      width: 33,
-      height: 33,
-      background: getColor('main')(theme),
-      borderRadius: '50%',
-      marginRight: 22,
+    display: 'flex',
+    alignItems: 'center',
+    '& div:first-child': {
+      marginRight: 15,
     },
   },
   bar: {

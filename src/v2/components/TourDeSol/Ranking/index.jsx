@@ -4,6 +4,7 @@ import {get, map, maxBy, compose} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
 import NodesStore from 'v2/stores/nodes';
 import {ReactComponent as BicycleIcon} from 'v2/assets/icons/bicycle.svg';
+import Avatar from 'v2/components/UI/Avatar';
 
 import useStyles from './styles';
 
@@ -18,9 +19,13 @@ const Ranking = () => {
 
   const renderNode = node => {
     const position = (node.stake * 100) / maxVal;
+    const {identity = {}, nodePubkey} = node;
     return (
-      <li key={node.nodePubkey} className={classes.item}>
-        <div className={classes.name}>{node.nodePubkey}</div>
+      <li key={nodePubkey} className={classes.item}>
+        <div className={classes.name}>
+          <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+          {identity.name || nodePubkey}
+        </div>
         <div className={classes.bar}>
           <div
             className={classes.icon}
