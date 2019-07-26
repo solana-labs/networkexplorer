@@ -87,5 +87,17 @@ export default makeStyles(theme => ({
     lineHeight: '29px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    '& a': {
+      color: getColor('main')(theme),
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    }
   },
+  address: {
+    display: 'flex',
+    alignItem: 'center',
+    color: getColor('main')(theme)
+  }
 }));

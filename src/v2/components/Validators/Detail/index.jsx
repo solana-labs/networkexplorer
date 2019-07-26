@@ -75,9 +75,20 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
 
   const specs = [
     {
-      label: 'Website',
+      label: 'Address',
       hint: '',
-      value: identity.website || '',
+      value() {
+        return (
+          <div className={classes.address}>
+            <span className={classes.value}>{nodePubkey} </span>
+            <CopyToClipboard text={nodePubkey}>
+              <div>
+                <CopyIcon />
+              </div>
+            </CopyToClipboard>
+          </div>
+        );
+      },
     },
     {
       label: 'Voting power',
@@ -85,9 +96,15 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       value: stake,
     },
     {
-      label: 'Address',
+      label: 'Website',
       hint: '',
-      value: nodePubkey,
+      value() {
+        return identity.website ? (
+          <a href={identity.website}>{identity.website}</a>
+        ) : (
+          ''
+        );
+      },
     },
     {
       label: 'Missed blocks',
@@ -97,7 +114,15 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'keybase',
       hint: '',
-      value: identity.keybaseUsername || '',
+      value() {
+        return identity.keybaseUsername ? (
+          <a href={`https://keybase.io/${identity.keybaseUsername}`}>
+            {identity.keybaseUsername}
+          </a>
+        ) : (
+          ''
+        );
+      },
     },
     {
       label: 'commission',
@@ -134,7 +159,9 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
         {label}
         <HelpLink />
       </div>
-      <div className={classes.value}>{value}</div>
+      <div className={classes.value}>
+        {typeof value === 'function' ? value() : value}
+      </div>
     </li>
   );
 
@@ -146,11 +173,6 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
             <div className={classes.validatorName}>
               <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
               <span>{identity.name || nodePubkey}</span>
-              <CopyToClipboard text={nodePubkey}>
-                <div>
-                  <CopyIcon />
-                </div>
-              </CopyToClipboard>
             </div>
           )}
           <div className={classes.headerBtn}>
@@ -159,7 +181,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
               size="large"
               fullWidth
               color="primary"
-              href="#"
+              href="https://github.com/solana-labs/tour-de-sol#validator-public-key-registration"
             >
               Connect To Keybase
             </Button>

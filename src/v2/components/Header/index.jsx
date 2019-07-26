@@ -18,7 +18,6 @@ const Header = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const {endpointName, updateEndpointName} = socketActions;
   const classes = useStyles();
-  const onSearch = () => {};
   const handleEndpointChange = (event: SyntheticEvent<HTMLSelectElement>) => {
     const endpointName = event.currentTarget.value;
     EndpointConfig.setEndpointName(endpointName);
@@ -50,7 +49,7 @@ const Header = () => {
         <Toolbar classes={{root: classes.inner}}>
           <Logo />
           <div className={classes.search}>
-            <Search onSubmit={onSearch} />
+            <Search />
           </div>
           <div className={classes.realTime}>
             <p>Real-time updated:</p>

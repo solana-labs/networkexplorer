@@ -16,11 +16,14 @@ export default makeStyles(theme => ({
     margin: '20px 0',
   },
   leader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: getColor('main')(theme),
-    marginTop: 40,
-    letterSpacing: 3.4,
+    textDecoration: 'none',
+    '& h2': {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: getColor('main')(theme),
+      marginTop: 40,
+      letterSpacing: 3.4,
+    }
   },
   changes: {
     fontSize: 18,

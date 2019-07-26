@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {map} from 'lodash/fp';
 import {Grid, Typography} from '@material-ui/core';
@@ -11,38 +12,35 @@ import NodesStore from 'v2/stores/nodes';
 import useStyles from './styles';
 
 const StatCards = () => {
-  const {globalStats, statsChanges} = OverviewStore;
-  const {cluster, clusterChanges} = NodesStore;
+  const {globalStats} = OverviewStore;
+  const {cluster} = NodesStore;
   const classes = useStyles();
 
   const cards = [
     {
       title: 'Node Count',
       value: cluster.nodes.length,
-      changes: clusterChanges.nodes,
     },
     {
       title: 'Block Height',
       value: globalStats['!blkLastSlot'],
-      changes: statsChanges['!blkLastSlot'],
     },
     {
       title: 'Transactions Count',
       value: globalStats['!txnCount'],
-      changes: statsChanges['!txnCount'],
     },
     {
       title: 'Current Leader',
       value() {
         return (
-          <Typography
-            noWrap
-            align="center"
-            variant="h2"
+          <Link
             className={classes.leader}
+            to={`/rc/validators/${globalStats['!entLastLeader']}`}
           >
-            {globalStats['!entLastLeader']}
-          </Typography>
+            <Typography noWrap align="center" variant="h2">
+              {globalStats['!entLastLeader']}
+            </Typography>
+          </Link>
         );
       },
     },
