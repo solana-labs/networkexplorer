@@ -23,7 +23,7 @@ export default makeStyles(theme => ({
       color: getColor('main')(theme),
       marginTop: 40,
       letterSpacing: 3.4,
-    }
+    },
   },
   changes: {
     fontSize: 18,

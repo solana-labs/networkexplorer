@@ -100,7 +100,9 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       hint: '',
       value() {
         return identity.website ? (
-          <a href={identity.website}>{identity.website}</a>
+          <a target="_blank" rel="noopener noreferrer" href={identity.website}>
+            {identity.website}
+          </a>
         ) : (
           ''
         );
@@ -116,7 +118,11 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       hint: '',
       value() {
         return identity.keybaseUsername ? (
-          <a href={`https://keybase.io/${identity.keybaseUsername}`}>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={`https://keybase.io/${identity.keybaseUsername}`}
+          >
             {identity.keybaseUsername}
           </a>
         ) : (
@@ -182,6 +188,8 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
               fullWidth
               color="primary"
               href="https://github.com/solana-labs/tour-de-sol#validator-public-key-registration"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Connect To Keybase
             </Button>

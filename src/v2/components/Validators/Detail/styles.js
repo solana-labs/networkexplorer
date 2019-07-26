@@ -91,13 +91,13 @@ export default makeStyles(theme => ({
       color: getColor('main')(theme),
       textDecoration: 'none',
       '&:hover': {
-        textDecoration: 'underline'
-      }
-    }
+        textDecoration: 'underline',
+      },
+    },
   },
   address: {
     display: 'flex',
     alignItem: 'center',
-    color: getColor('main')(theme)
-  }
+    color: getColor('main')(theme),
+  },
 }));

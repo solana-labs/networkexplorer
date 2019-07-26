@@ -58,9 +58,8 @@ class Store {
 
   get validators() {
     return map(vote => {
-      const cluster = find({pubkey: vote.nodePubkey})(
-        this.cluster.cluster,
-      ) || {};
+      const cluster =
+        find({pubkey: vote.nodePubkey})(this.cluster.cluster) || {};
       const {lng = 0, lat = 0, gossip} = cluster;
       return {
         ...vote,
