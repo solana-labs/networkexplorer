@@ -13,7 +13,12 @@ type SearchResultProps = {
   isFocus: boolean,
 };
 
-const SearchResult = ({isDirty, isFocus, items, onClear}: SearchResultProps) => {
+const SearchResult = ({
+  isDirty,
+  isFocus,
+  items,
+  onClear,
+}: SearchResultProps) => {
   const classes = useStyles();
   const renderItem = ({nodePubkey}: {nodePubkey: string}) => (
     <li className={classes.item} key={nodePubkey}>
@@ -22,7 +27,7 @@ const SearchResult = ({isDirty, isFocus, items, onClear}: SearchResultProps) => 
       </Link>
     </li>
   );
-  if ((!isDirty && !items.length ) || !isFocus) {
+  if ((!isDirty && !items.length) || !isFocus) {
     return null;
   }
 

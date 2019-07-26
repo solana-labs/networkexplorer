@@ -38,13 +38,13 @@ export default makeStyles(theme => {
           padding: '5px 0',
           display: 'block',
           '&:hover': {
-            color: getColor('dark')(theme)
-          }
-        }
+            color: getColor('dark')(theme),
+          },
+        },
       },
     },
     title: {
-      color: getColor('dark')(theme)
-    }
+      color: getColor('dark')(theme),
+    },
   };
 });

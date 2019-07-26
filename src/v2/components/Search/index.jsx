@@ -1,10 +1,11 @@
 // @flow
 import React, {useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {compose, get, filter, lowerCase, contains} from 'lodash/fp';
+import {compose, get, filter, toLower, contains} from 'lodash/fp';
 import {InputBase, IconButton} from '@material-ui/core';
 import {Search as SearchIcon} from '@material-ui/icons';
 import NodesStore from 'v2/stores/nodes';
+import {MIN_TERM_LEN} from '../../constants';
 
 import SearchResult from './result';
 import useStyles from './styles';
@@ -12,7 +13,7 @@ import useStyles from './styles';
 const Search = () => {
   const classes = useStyles();
   const {validators} = NodesStore;
-  const [value, setValue] = useState('');
+  const [query, setQuery] = useState('');
   const [isDirty, setDirty] = useState(false);
   const [isFocus, setFocus] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
@@ -26,21 +27,35 @@ const Search = () => {
 
   const handleClear = () => {
     setDirty(false);
-    setValue('');
+    setQuery('');
     setSearchResult([]);
   };
 
   const handleSearch = ({currentTarget}: SyntheticEvent<HTMLInputElement>) => {
-    if (!currentTarget.value) {
+    const {value} = currentTarget;
+    if (!value) {
       handleClear();
       return;
     }
-    setValue(currentTarget.value);
+    setQuery(value);
+    if (value.length < MIN_TERM_LEN) {
+      setDirty(false);
+      setSearchResult([]);
+      return;
+    }
     const filteredValidators = filter(v => {
-      const lowerVal = lowerCase(value);
+      const lowerVal = toLower(value);
       return (
-        compose(contains(lowerVal), lowerCase, get('nodePubkey'))(v) ||
-        compose(contains(lowerVal), lowerCase, get('identity.keybaseUsername'))(v)
+        compose(
+          contains(lowerVal),
+          toLower,
+          get('nodePubkey'),
+        )(v) ||
+        compose(
+          contains(lowerVal),
+          toLower,
+          get('identity.keybaseUsername'),
+        )(v)
       );
     })(validators);
     setDirty(true);
@@ -59,7 +74,7 @@ const Search = () => {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          value={value}
+          value={query}
           onChange={handleSearch}
         />
         <IconButton size="small" className={classes.btn}>
