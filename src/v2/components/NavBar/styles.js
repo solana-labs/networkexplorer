@@ -9,6 +9,17 @@ export default makeStyles(theme => ({
       width: 0,
     },
   },
+  coming: {
+    position: 'absolute',
+    fontSize: 12,
+    color: getColor('main')(theme),
+    opacity: 0,
+    transition: '.15s ease-in-out',
+    bottom: -8,
+    [theme.breakpoints.down('sm')]: {
+      opacity: 1,
+    },
+  },
   toolbar: {
     display: 'flex',
     alignItems: 'center',
@@ -25,9 +36,6 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    [theme.breakpoints.down('sm')]: {
-      height: 97,
-    },
   },
   icon: {
     justifyContent: 'center',
@@ -52,6 +60,10 @@ export default makeStyles(theme => ({
       opacity: 1,
       visibility: 'visible',
     },
+    '&:hover a div:nth-child(3)': {
+      opacity: 1,
+      visibility: 'visible',
+    },
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       background: getColor('dark')(theme),
@@ -63,8 +75,15 @@ export default makeStyles(theme => ({
     transition: '.15s ease-in-out',
     overflowX: 'hidden',
     overflowY: 'auto',
+    height: '100%',
     '&:hover': {
       width: 225,
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      '&:hover': {
+        width: '100%',
+      },
     },
   },
   menuButton: {
@@ -86,6 +105,10 @@ export default makeStyles(theme => ({
     visibility: 'hidden',
     position: 'absolute',
     bottom: 2,
+    [theme.breakpoints.down('sm')]: {
+      opacity: 1,
+      visibility: 'visible',
+    },
   },
   itemText: {
     textTransform: 'uppercase',
@@ -93,8 +116,5 @@ export default makeStyles(theme => ({
     fontWeight: 'bold',
     letterSpacing: 2.5,
     whiteSpace: 'nowrap',
-    [theme.breakpoints.down('sm')]: {
-      marginLeft: 38,
-    },
   },
 }));

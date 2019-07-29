@@ -37,7 +37,7 @@ const NetworkOverview = () => {
   return (
     <Container>
       <div className={classes.root}>
-        <SectionHeader title="Network Overview" />
+        <SectionHeader title={<div>Network Overview <div className={classes.betaLabel}>Beta</div></div>} />
         <Grid container spacing={2} className={classes.row}>
           <Grid item xs={12} md={6}>
             <TPS />

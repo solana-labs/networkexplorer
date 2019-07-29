@@ -60,15 +60,33 @@ const NavBar = ({
   const theme = useTheme();
   const showDrawer = useMediaQuery(theme.breakpoints.up('md'));
   const routes = [
-    'dashboard',
-    'transactions',
-    'validators',
-    'tour-de-sol',
-    'applications',
-    'blocks',
-    'favorites',
+    {
+      link: 'dashboard',
+    },
+    {
+      link: 'transactions',
+      disabled: true,
+    },
+    {
+      link: 'validators',
+    },
+    {
+      link: 'tour-de-sol',
+    },
+    {
+      link: 'applications',
+      disabled: true,
+    },
+    {
+      link: 'blocks',
+      disabled: true,
+    },
+    {
+      link: 'favorites',
+      disabled: true,
+    },
   ];
-  const renderLink = link => {
+  const renderLink = ({link, disabled}: {link: string, disabled?: boolean}) => {
     const Icon = icons[link];
     const isDashboard = eq('dashboard', link);
     const selected =
@@ -86,6 +104,7 @@ const NavBar = ({
         button
         component="a"
         key={link}
+        disabled={disabled}
         classes={{root: classes.item, selected: classes.itemSelected}}
       >
         <ListItemIcon className={classes.icon}>
@@ -95,6 +114,7 @@ const NavBar = ({
           classes={{primary: classes.itemText, root: classes.itemTextRoot}}
           primary={link}
         />
+        {disabled && <div className={classes.coming}>Coming Soon</div>}
       </ListItem>
     );
   };
