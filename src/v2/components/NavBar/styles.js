@@ -18,6 +18,11 @@ export default makeStyles(theme => ({
     bottom: -8,
     [theme.breakpoints.down('sm')]: {
       opacity: 1,
+      bottom: 25,
+      marginLeft: 15
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: 93
     },
   },
   toolbar: {
@@ -36,6 +41,12 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+    },
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'flex-start'
+    },
   },
   icon: {
     justifyContent: 'center',
@@ -108,6 +119,10 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       opacity: 1,
       visibility: 'visible',
+      position: 'relative',
+      width: 135,
+      flex: 'none',
+      marginLeft: 37
     },
   },
   itemText: {
