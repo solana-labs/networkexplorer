@@ -18,7 +18,8 @@ import calcChanges from 'v2/utils/calcChanges';
 class Store {
   cluster = {
     nodes: [],
-    voting: [],
+    votingNow: [],
+    votingAll: [],
   };
   clusterChanges = {};
 
@@ -68,13 +69,13 @@ class Store {
         uptime: find({votePubkey: vote.votePubkey})(this.cluster.uptime),
         identity: find({pubkey: vote.nodePubkey})(this.cluster.identities),
       };
-    })(this.cluster.voting);
+    })(this.cluster.votingNow);
   }
 
   get totalStakedTokens() {
     return compose(
       sumBy('stake'),
-      get('voting'),
+      get('votingNow'),
     )(this.cluster);
   }
 }
