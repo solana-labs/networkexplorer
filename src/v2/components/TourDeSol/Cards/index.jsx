@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 const Cards = () => {
   const classes = useStyles();
-  const {cluster, validators} = NodesStore;
+  const {cluster, validators, totalStakedTokens} = NodesStore;
 
   const cards = [
     {
@@ -32,7 +32,7 @@ const Cards = () => {
     },
     {
       title: 'Total Staked Tokens',
-      value: 'TODO',
+      value: totalStakedTokens,
       changes: '',
       period: 'since yesterday',
     },
