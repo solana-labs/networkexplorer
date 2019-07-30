@@ -38,7 +38,7 @@ const Cards = () => {
     },
     {
       title: 'Current Network Inflation Rate',
-      value: 'TODO',
+      value: '5.00%',
       changes: '',
       period: 'since yesterday',
     },
