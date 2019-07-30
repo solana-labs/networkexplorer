@@ -38,11 +38,11 @@ const icons = {
 const navTracks = {
   dashboard: 'Clicked Overview',
   transactions: 'Clicked Transactions Page',
-  validators: 'Clicked Transactions Page',
-  'tour-de-sol': 'Clicked Transactions Page',
+  validators: 'Clicked Validators Page',
+  'tour-de-sol': 'Clicked TDS Page',
   applications: 'Clicked Applications page',
-  blocks: 'Clicked Applications page',
-  favorites: 'Clicked Applications page',
+  blocks: 'Clicked Blocks page',
+  favorites: 'Clicked Favorites page',
 };
 
 const NavBar = ({
@@ -64,14 +64,14 @@ const NavBar = ({
       link: 'dashboard',
     },
     {
-      link: 'transactions',
-      disabled: true,
-    },
-    {
       link: 'validators',
     },
     {
       link: 'tour-de-sol',
+    },
+    {
+      link: 'transactions',
+      disabled: true,
     },
     {
       link: 'applications',
@@ -91,10 +91,10 @@ const NavBar = ({
     const isDashboard = eq('dashboard', link);
     const selected =
       location.pathname.includes(link) ||
-      (propEq('pathname', '/rc/')(location) && isDashboard);
+      (propEq('pathname', '/')(location) && isDashboard);
     const changeRoute = () => {
       Mixpanel.track(navTracks[link]);
-      history.push(`/rc/${isDashboard ? '' : link}`);
+      history.push(`/${isDashboard ? '' : link}`);
       toggleDrawer(false)();
     };
     return (

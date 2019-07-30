@@ -35,7 +35,7 @@ const StatCards = () => {
         return (
           <Link
             className={classes.leader}
-            to={`/rc/validators/${globalStats['!entLastLeader']}`}
+            to={`/validators/${globalStats['!entLastLeader']}`}
           >
             <Typography noWrap align="center" variant="h2">
               {globalStats['!entLastLeader']}

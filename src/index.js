@@ -13,14 +13,14 @@ async function main() {
   await EndpointConfig.load();
   ReactDOM.render(
     <BrowserRouter>
-      {window.location.pathname.startsWith('/rc') ? (
+      {window.location.pathname.startsWith('/v1') ? (
+        <App />
+      ) : (
         <Suspense fallback={<div>Loading...</div>}>
           <ScrollToTop>
             <AppV2 />
           </ScrollToTop>
         </Suspense>
-      ) : (
-        <App />
       )}
     </BrowserRouter>,
     document.getElementById('root'),
