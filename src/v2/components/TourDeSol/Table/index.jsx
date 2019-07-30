@@ -37,7 +37,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <TableCell>1</TableCell>
         <TableCell>
           <Link to={`/validators/${nodePubkey}`} className={classes.name}>
-            <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+            <Avatar pubkey={nodePubkey} name={identity.name} avatarUrl={identity.avatarUrl} />
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
@@ -55,7 +55,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         key={card.nodePubkey}
       >
         <Link to={`/validators/${card.nodePubkey}`} className={classes.name}>
-          <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+          <Avatar pubkey={card.nodePubkey} name={identity.name} avatarUrl={identity.avatarUrl} />
           <div>{identity.name || nodePubkey}</div>
         </Link>
         <Grid container>
