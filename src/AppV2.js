@@ -60,16 +60,8 @@ const App = () => {
             <Switch>
               <Route exact path="/" component={Dashboard} />
               <Route exact path="/validators" component={Validators} />
-              <Route
-                exact
-                path="/validators/all"
-                component={ValidatorsAll}
-              />
-              <Route
-                exact
-                path="/validators/:id"
-                component={ValidatorDetail}
-              />
+              <Route exact path="/validators/all" component={ValidatorsAll} />
+              <Route exact path="/validators/:id" component={ValidatorDetail} />
               <Route exact path="/tour-de-sol" component={TourDeSol} />
             </Switch>
           </Suspense>

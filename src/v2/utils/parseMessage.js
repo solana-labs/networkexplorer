@@ -43,7 +43,8 @@ export function parseBlock(message) {
 
 export function parseClusterInfo(data) {
   const {
-    voting,
+    votingNow,
+    votingAll,
     cluster: gossip,
     supply,
     feeCalculator,
@@ -52,7 +53,7 @@ export function parseClusterInfo(data) {
 
   const nodes = map(g => ({
     ...g,
-    voteAccount: find({nodePubkey: g.pubKey})(voting),
+    voteAccount: find({nodePubkey: g.pubKey})(votingNow),
   }))(gossip);
 
   return {
@@ -60,5 +61,6 @@ export function parseClusterInfo(data) {
     supply,
     feeCalculator,
     identities,
+    votingAll,
   };
 }

@@ -15,6 +15,6 @@ export default makeStyles(theme => ({
   betaLabel: {
     fontSize: 15,
     color: getColor('main')(theme),
-    lineHeight: 1
-  }
+    lineHeight: 1,
+  },
 }));

@@ -139,7 +139,7 @@ class App extends Component {
   }
 
   parseClusterInfo(data) {
-    let voting = data.voting;
+    let voting = data.votingNow;
     let gossip = data.cluster;
     let identities = data.identities;
     let uptimes = data.uptime;

@@ -503,12 +503,15 @@ async function getClusterInfo() {
   let supply = await connection.getTotalSupply();
   let cluster = await connection.getClusterNodes();
   let identities = await fetchValidatorIdentities(cluster.map(c => c.pubkey));
-  let voting = await connection.getEpochVoteAccounts();
+  let votingNow = await connection.getEpochVoteAccounts();
+  let votingAll = await connection.getProgramAccounts(
+    solanaWeb3.VOTE_ACCOUNT_KEY,
+  );
   let uptimeJson = await getAsync('!uptime');
   let uptime = uptimeJson && JSON.parse(uptimeJson);
 
   let totalStaked = _.reduce(
-    voting,
+    votingNow,
     (a, v) => {
       a += v.stake || 0;
 
@@ -516,6 +519,16 @@ async function getClusterInfo() {
     },
     0,
   );
+
+  votingAll = _.map(votingAll, e => {
+    const [, v] = e;
+
+    let voteAccount = solanaWeb3.VoteAccount.fromAccountData(v.data);
+    voteAccount.nodePubkey = voteAccount.nodePubkey.toString();
+    voteAccount.authorizedVoterPubkey = voteAccount.authorizedVoterPubkey.toString();
+
+    return voteAccount;
+  });
 
   cluster = _.map(cluster, c => {
     let ip = c.gossip.split(':')[0];
@@ -539,7 +552,8 @@ async function getClusterInfo() {
     totalStaked,
     cluster,
     identities,
-    voting,
+    votingAll,
+    votingNow,
     uptime,
     ts,
   };
