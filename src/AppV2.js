@@ -58,19 +58,19 @@ const App = () => {
           <div className={classes.toolbar} />
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
-              <Route exact path="/rc" component={Dashboard} />
-              <Route exact path="/rc/validators" component={Validators} />
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/validators" component={Validators} />
               <Route
                 exact
-                path="/rc/validators/all"
+                path="/validators/all"
                 component={ValidatorsAll}
               />
               <Route
                 exact
-                path="/rc/validators/:id"
+                path="/validators/:id"
                 component={ValidatorDetail}
               />
-              <Route exact path="/rc/tour-de-sol" component={TourDeSol} />
+              <Route exact path="/tour-de-sol" component={TourDeSol} />
             </Switch>
           </Suspense>
           <Footer />

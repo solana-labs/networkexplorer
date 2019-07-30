@@ -36,7 +36,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       <TableRow hover key={nodePubkey}>
         <TableCell>1</TableCell>
         <TableCell>
-          <Link to={`/rc/validators/${nodePubkey}`} className={classes.name}>
+          <Link to={`/validators/${nodePubkey}`} className={classes.name}>
             <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
             <div>{identity.name || nodePubkey}</div>
           </Link>
@@ -54,7 +54,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         className={cn(classes.card, separate && classes.cardVertical)}
         key={card.nodePubkey}
       >
-        <Link to={`/rc/validators/${card.nodePubkey}`} className={classes.name}>
+        <Link to={`/validators/${card.nodePubkey}`} className={classes.name}>
           <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
           <div>{identity.name || nodePubkey}</div>
         </Link>
@@ -80,7 +80,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         </Typography>
         <Typography variant="h5">{validators.length}</Typography>
         {!separate && (
-          <Link to="/rc/validators/all" className={classes.link}>
+          <Link to="/validators/all" className={classes.link}>
             See all &gt;
           </Link>
         )}

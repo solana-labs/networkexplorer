@@ -22,7 +22,7 @@ const SearchResult = ({
   const classes = useStyles();
   const renderItem = ({nodePubkey}: {nodePubkey: string}) => (
     <li className={classes.item} key={nodePubkey}>
-      <Link onClick={onClear} to={`/rc/validators/${nodePubkey}`}>
+      <Link onClick={onClear} to={`/validators/${nodePubkey}`}>
         {nodePubkey}
       </Link>
     </li>
