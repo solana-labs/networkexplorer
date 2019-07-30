@@ -177,7 +177,11 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
         <SectionHeader title="Validator Detail">
           {!isMobile && (
             <div className={classes.validatorName}>
-              <Avatar name={identity.name} avatarUrl={identity.avatarUrl} />
+              <Avatar
+                pubkey={nodePubkey}
+                name={identity.name}
+                avatarUrl={identity.avatarUrl}
+              />
               <span>{identity.name || nodePubkey}</span>
             </div>
           )}
