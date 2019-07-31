@@ -38,7 +38,7 @@ const Cards = () => {
     },
     {
       title: 'Current Network Inflation Rate',
-      value: '5.00%',
+      value: ((cluster.networkInflationRate * 100.0).toFixed(3) + '%') || 'N/A',
       changes: '',
       period: 'since yesterday',
     },
