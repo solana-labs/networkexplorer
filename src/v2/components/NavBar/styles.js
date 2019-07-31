@@ -19,10 +19,10 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       opacity: 1,
       bottom: 25,
-      marginLeft: 15
+      marginLeft: 15,
     },
     [theme.breakpoints.down('xs')]: {
-      marginLeft: 93
+      marginLeft: 93,
     },
   },
   toolbar: {
@@ -45,7 +45,7 @@ export default makeStyles(theme => ({
       flexDirection: 'row',
     },
     [theme.breakpoints.down('xs')]: {
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
     },
   },
   icon: {
@@ -122,7 +122,7 @@ export default makeStyles(theme => ({
       position: 'relative',
       width: 135,
       flex: 'none',
-      marginLeft: 37
+      marginLeft: 37,
     },
   },
   itemText: {
@@ -131,5 +131,21 @@ export default makeStyles(theme => ({
     fontWeight: 'bold',
     letterSpacing: 2.5,
     whiteSpace: 'nowrap',
+  },
+  endpointSelectorTitle: {
+    textTransform: 'uppercase',
+    fontSize: 12,
+    letterSpacing: 2.5,
+    marginBottom: 10,
+  },
+  endpointSelector: {
+    display: 'none',
+    marginBottom: 25,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+    },
   },
 }));

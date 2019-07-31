@@ -36,24 +36,22 @@ const NetworkOverview = () => {
   }, []);
   return (
     <Container>
-      <div className={classes.root}>
-        <SectionHeader
-          title={
-            <div>
-              Network Overview <div className={classes.betaLabel}>Beta</div>
-            </div>
-          }
-        />
-        <Grid container spacing={2} className={classes.row}>
-          <Grid item xs={12} md={6}>
-            <TPS />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <NodesMap />
-          </Grid>
+      <SectionHeader
+        title={
+          <div>
+            Network Overview <div className={classes.betaLabel}>Beta</div>
+          </div>
+        }
+      />
+      <Grid container spacing={2} className={classes.row}>
+        <Grid item xs={12} md={6} className={classes.card}>
+          <TPS />
         </Grid>
-        <StatCards />
-      </div>
+        <Grid item xs={12} md={6} className={classes.card}>
+          <NodesMap />
+        </Grid>
+      </Grid>
+      <StatCards />
     </Container>
   );
 };

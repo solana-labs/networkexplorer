@@ -173,74 +173,72 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
 
   return (
     <Container>
-      <div className={classes.root}>
-        <SectionHeader title="Validator Detail">
-          {!isMobile && (
-            <div className={classes.validatorName}>
-              <Avatar
-                pubkey={nodePubkey}
-                name={identity.name}
-                avatarUrl={identity.avatarUrl}
-              />
-              <span>{identity.name || nodePubkey}</span>
-            </div>
-          )}
-          <div className={classes.headerBtn}>
-            <Button
-              variant="contained"
-              size="large"
-              fullWidth
-              color="primary"
-              href="https://github.com/solana-labs/tour-de-sol#validator-public-key-registration"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Connect To Keybase
-            </Button>
+      <SectionHeader title="Validator Detail">
+        {!isMobile && (
+          <div className={classes.validatorName}>
+            <Avatar
+              pubkey={nodePubkey}
+              name={identity.name}
+              avatarUrl={identity.avatarUrl}
+            />
+            <span>{identity.name || nodePubkey}</span>
           </div>
-        </SectionHeader>
-        <div className={classes.body}>
-          <ul className={classes.spec}>
-            {isMobile && (
-              <li>
-                <div className={classes.label}>Name</div>
-                <div className={classes.value}>
-                  <div className={classes.validatorName}>
-                    <span />
-                    {nodePubkey}
-                  </div>
+        )}
+        <div className={classes.headerBtn}>
+          <Button
+            variant="contained"
+            size="large"
+            fullWidth
+            color="primary"
+            href="https://github.com/solana-labs/tour-de-sol#validator-public-key-registration"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Connect To Keybase
+          </Button>
+        </div>
+      </SectionHeader>
+      <div className={classes.body}>
+        <ul className={classes.spec}>
+          {isMobile && (
+            <li>
+              <div className={classes.label}>Name</div>
+              <div className={classes.value}>
+                <div className={classes.validatorName}>
+                  <span />
+                  {nodePubkey}
                 </div>
-              </li>
-            )}
-            {map(renderSpec)(specs)}
-          </ul>
-          <div>
-            <ComposableMap
-              projectionConfig={mapConfig.projection}
-              width={390}
-              height={240}
-              style={mapConfig.style}
-            >
-              <ZoomableGroup center={mapConfig.center} disablePanning>
-                <Geographies
-                  geography={`${process.env.PUBLIC_URL}/resources/world-50m-simplified.json`}
-                >
-                  {(geographies, projection) =>
-                    geographies.map((geography, i) => (
-                      <Geography
-                        key={i}
-                        tabable={false}
-                        geography={geography}
-                        projection={projection}
-                        style={mapStyles}
-                      />
-                    ))
-                  }
-                </Geographies>
-                <Markers>{renderMarker()}</Markers>
-              </ZoomableGroup>
-            </ComposableMap>
-          </div>
+              </div>
+            </li>
+          )}
+          {map(renderSpec)(specs)}
+        </ul>
+        <div>
+          <ComposableMap
+            projectionConfig={mapConfig.projection}
+            width={390}
+            height={240}
+            style={mapConfig.style}
+          >
+            <ZoomableGroup center={mapConfig.center} disablePanning>
+              <Geographies
+                geography={`${process.env.PUBLIC_URL}/resources/world-50m-simplified.json`}
+              >
+                {(geographies, projection) =>
+                  geographies.map((geography, i) => (
+                    <Geography
+                      key={i}
+                      tabable={false}
+                      geography={geography}
+                      projection={projection}
+                      style={mapStyles}
+                    />
+                  ))
+                }
+              </Geographies>
+              <Markers>{renderMarker()}</Markers>
+            </ZoomableGroup>
+          </ComposableMap>
         </div>
       </div>
     </Container>

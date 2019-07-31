@@ -2,9 +2,6 @@ import {makeStyles} from '@material-ui/core';
 import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
-  root: {
-    paddingTop: 57,
-  },
   validatorName: {
     fontSize: 15,
     color: getColor('main')(theme),

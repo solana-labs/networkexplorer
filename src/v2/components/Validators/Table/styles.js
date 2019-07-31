@@ -12,6 +12,10 @@ export default makeStyles(theme => ({
       marginBottom: 50,
     },
   },
+  separateRoot: {
+    padding: 0,
+    background: 'transparent',
+  },
   head: {
     border: '1px solid #979797',
     '& th': {

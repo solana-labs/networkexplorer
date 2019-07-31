@@ -1,4 +1,4 @@
-import { random } from 'lodash/fp';
+import {random} from 'lodash/fp';
 
 export default function getAvatarIndex(key) {
   if (!key) return random(0, 9);

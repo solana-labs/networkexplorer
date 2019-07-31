@@ -31,7 +31,7 @@ const Avatar = ({
   name: string,
   width: number,
   height: number,
-  pubkey: string;
+  pubkey: string,
 }) => {
   const initials = name.charAt(0);
   const [x, y] = bgPosition[getAvatarIndex(pubkey)];
@@ -41,7 +41,7 @@ const Avatar = ({
     width,
     height,
     backgroundImage: `url(${bg})`,
-    backgroundPosition: `${x}px ${y}px`
+    backgroundPosition: `${x}px ${y}px`,
   };
 
   return (

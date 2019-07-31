@@ -2,11 +2,13 @@ import {makeStyles} from '@material-ui/core';
 
 export default makeStyles(theme => ({
   root: {
+    marginTop: 40,
     position: 'relative',
     marginBottom: 47,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 55,
     [theme.breakpoints.down('sm')]: {
       flexWrap: 'wrap',
     },
@@ -15,6 +17,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
+    marginRight: 25,
   },
   decor: {
     position: 'absolute',

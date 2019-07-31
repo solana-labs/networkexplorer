@@ -2,13 +2,11 @@ import {makeStyles} from '@material-ui/core';
 import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
-  root: {
-    padding: '40px 0',
-  },
   stages: {
     display: 'flex',
     width: '100%',
     padding: 0,
+    margin: 0,
     marginLeft: 50,
     maxWidth: 675,
     [theme.breakpoints.down('sm')]: {
@@ -44,5 +42,9 @@ export default makeStyles(theme => ({
     background: getColor('main')(theme),
     color: getColor('dark')(theme),
     borderColor: getColor('main')(theme),
+  },
+  leftCol: {
+    display: 'flex',
+    flexDirection: 'column',
   },
 }));

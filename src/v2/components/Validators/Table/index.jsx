@@ -42,9 +42,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{(stake && (stake + ' Lamports')) || 'N/A'}</TableCell>
+        <TableCell>{(stake && stake + ' Lamports') || 'N/A'}</TableCell>
         <TableCell>{commission || 'N/A'}</TableCell>
-        <TableCell>{(uptime && (uptime + '%')) || 'Node Unavailable'}</TableCell>
+        <TableCell>{(uptime && uptime + '%') || 'Node Unavailable'}</TableCell>
       </TableRow>
     );
   };
@@ -67,7 +67,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <Grid container spacing={1}>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{(stake && (stake + ' Lamports')) || 'N/A'}</div>
+            <div>{(stake && stake + ' Lamports') || 'N/A'}</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>
@@ -75,23 +75,24 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>{(uptime && (uptime + '%')) || 'Node Unavailable'}</div>
+            <div>{(uptime && uptime + '%') || 'Node Unavailable'}</div>
           </Grid>
         </Grid>
       </div>
     );
   };
   return (
-    <div className={classes.root}>
-      <div className={classes.header}>
-        <Typography>Validators</Typography>
-        <Typography variant="h5">{validators.length}</Typography>
-        {!separate && (
+    <div className={cn(classes.root, separate && classes.separateRoot)}>
+      {!separate && (
+        <div className={classes.header}>
+          <Typography>Validators</Typography>
+          <Typography variant="h5">{validators.length}</Typography>
+
           <Link to="/validators/all" className={classes.link}>
             See all &gt;
           </Link>
-        )}
-      </div>
+        </div>
+      )}
       {showTable ? (
         <Table>
           <TableHead className={classes.head}>

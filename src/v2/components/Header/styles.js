@@ -28,37 +28,47 @@ export default makeStyles(theme => ({
       marginTop: 23,
     },
   },
+  endpointSelector: {
+    display: 'flex',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  selectTitle: {
+    textTransform: 'uppercase',
+    fontSize: 12,
+    letterSpacing: 2.5,
+    marginRight: 10,
+  },
   realTime: {
     display: 'flex',
     alignItems: 'center',
-    whiteSpace: 'nowrap',
     marginLeft: 25,
     textTransform: 'uppercase',
     fontSize: 12,
     letterSpacing: 2.5,
     marginRight: 25,
+    whiteSpace: 'nowrap',
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
+    '& p': {
+      maxWidth: 82,
+    },
     '& div': {
       background: 'transparent',
-      border: `1px solid ${getColor('main')(theme)}`,
-      color: getColor('main')(theme),
+      border: `1px solid ${getColor('white')(theme)}`,
+      color: getColor('white')(theme),
       textTransform: 'uppercase',
       display: 'flex',
       alignItems: 'center',
       padding: '0 15px',
       height: 40,
-      marginLeft: 15,
+      marginLeft: 10,
       '& svg': {
         marginLeft: 20,
       },
-    },
-  },
-  networkSelect: {
-    minWidth: 125,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
     },
   },
   menuButton: {
