@@ -167,7 +167,7 @@ class Bx2PanelTourDeSolLeaderboard extends Component {
               <Card>
                 <CardContent>
                   <Typography variant="h5" component="h2" align="center">
-                    Total Bonded Tokens
+                    Total Staked Tokens
                     <BxHelpLink text="Leader" term="leader" />
                   </Typography>
                   <Typography component="p" align="center">

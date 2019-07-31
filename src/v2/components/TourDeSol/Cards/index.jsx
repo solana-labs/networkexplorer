@@ -31,7 +31,7 @@ const Cards = () => {
       period: 'since yesterday',
     },
     {
-      title: 'Total Bonded Tokens',
+      title: 'Total Staked Tokens',
       value: 'TODO',
       changes: '',
       period: 'since yesterday',
