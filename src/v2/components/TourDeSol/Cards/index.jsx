@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 const Cards = () => {
   const classes = useStyles();
-  const {cluster, validators, totalStakedTokens} = NodesStore;
+  const {cluster, validators, inactiveValidators, totalStakedTokens} = NodesStore;
 
   const cards = [
     {
@@ -38,7 +38,7 @@ const Cards = () => {
     },
     {
       title: 'Current Network Inflation Rate',
-      value: ((cluster.networkInflationRate * 100.0).toFixed(3) + '%') || 'N/A',
+      value: (cluster.networkInflationRate * 100.0).toFixed(3) + '%',
       changes: '',
       period: 'since yesterday',
     },
@@ -50,7 +50,7 @@ const Cards = () => {
     },
     {
       title: '# of Inactive Validators',
-      value: 'TODO',
+      value: inactiveValidators.length,
       changes: '',
       period: 'since yesterday',
     },
