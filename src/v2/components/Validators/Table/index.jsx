@@ -26,9 +26,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const {validators} = NodesStore;
+  const {validators, inactiveValidators} = NodesStore;
   const renderRow = row => {
-    const uptime = getUptime(row);
+    const uptime = row.uptime && getUptime(row);
     const {identity = {}, nodePubkey, stake, commission} = row;
     return (
       <TableRow hover key={nodePubkey}>
@@ -42,14 +42,14 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{stake} Lamports</TableCell>
-        <TableCell>{commission}</TableCell>
-        <TableCell>{uptime}%</TableCell>
+        <TableCell>{(stake && (stake + ' Lamports')) || 'N/A'}</TableCell>
+        <TableCell>{commission || 'N/A'}</TableCell>
+        <TableCell>{(uptime && (uptime + '%')) || 'Node Unavailable'}</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
-    const uptime = getUptime(card);
+    const uptime = card.uptime && getUptime(card);
     const {identity = {}, nodePubkey, stake, commission} = card;
     return (
       <div
@@ -67,15 +67,15 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <Grid container spacing={1}>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{stake} Lamports</div>
+            <div>{(stake && (stake + ' Lamports')) || 'N/A'}</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>
-            <div>{commission}</div>
+            <div>{commission || 'N/A'}</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>{uptime}%</div>
+            <div>{(uptime && (uptime + '%')) || 'Node Unavailable'}</div>
           </Grid>
         </Grid>
       </div>
@@ -108,11 +108,13 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             }}
           >
             {map(renderRow)(validators)}
+            {map(renderRow)(inactiveValidators)}
           </TableBody>
         </Table>
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
           {map(renderCard)(validators)}
+          {map(renderCard)(inactiveValidators)}
         </div>
       )}
     </div>
