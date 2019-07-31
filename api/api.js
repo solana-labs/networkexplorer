@@ -500,6 +500,8 @@ async function getClusterInfo() {
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
   let ts = new Date().toISOString();
   let [, feeCalculator] = await connection.getRecentBlockhash();
+  let currentSlot = await getAsync('!blk-last-slot');
+  let networkInflationRate = getNetworkInflationRate(currentSlot);
   let supply = await connection.getTotalSupply();
   let cluster = await connection.getClusterNodes();
   let identities = await fetchValidatorIdentities(cluster.map(c => c.pubkey));
@@ -549,6 +551,7 @@ async function getClusterInfo() {
   let rest = {
     feeCalculator,
     supply,
+    networkInflationRate,
     totalStaked,
     cluster,
     identities,
@@ -671,6 +674,34 @@ async function fetchValidatorIdentities(keys) {
   }
 
   return identities;
+}
+
+/**
+ * TODO - this data should come from an RPC that loads parameters
+ * from the genesis block.
+ *
+ * @param slot
+ */
+function getNetworkInflationRate(slot) {
+  const SLOTS_PER_SECOND = 1.0;
+  const SECONDS_PER_YEAR = (365.25 * 24.0 * 60.0 * 60.0);
+  const SLOTS_PER_YEAR = SLOTS_PER_SECOND * SECONDS_PER_YEAR;
+  const DEFAULT_INITIAL = 0.15;
+  const DEFAULT_TERMINAL = 0.015;
+  const DEFAULT_TAPER = 0.15;
+  // const DEFAULT_FOUNDATION = 0.05;
+  // const DEFAULT_GRANT = 0.05;
+  // const DEFAULT_FOUNDATION_GRANT_TERM = 7.0;
+  // const DEFAULT_STORAGE = 0.10;
+
+  let year = (slot * 1.0) / SLOTS_PER_YEAR;
+  let tapered = DEFAULT_INITIAL * Math.pow(1.0 - DEFAULT_TAPER, year);
+
+  if (tapered > DEFAULT_TERMINAL) {
+    return tapered;
+  } else {
+    return DEFAULT_TERMINAL;
+  }
 }
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
