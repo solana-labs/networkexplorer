@@ -13,6 +13,8 @@ export default createMuiTheme({
       main: '#00FFAD',
       white: '#fff',
       greenDark: '#00a771',
+      primaryLoader: '#202020',
+      secondaryLoader: '#404040',
     },
     secondary: {
       main: '#000',

@@ -6,7 +6,9 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {ResponsiveLine} from '@nivo/line';
 import OverviewStore from 'v2/stores/networkOverview';
+import Socket from 'v2/stores/socket';
 
+import Loader from '../../Loader';
 import useStyles from './styles';
 
 type Point = {
@@ -32,6 +34,12 @@ const Tooltip = ({point: {data}}: {point: Point}) => {
 const TPS = () => {
   const classes = useStyles();
   const {txnChartData, globalStats, statsChanges} = OverviewStore;
+  const {isLoading} = Socket;
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   const data = [
     {
       id: 'txn',

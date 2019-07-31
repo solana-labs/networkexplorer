@@ -8,12 +8,15 @@ import {Grid, Typography} from '@material-ui/core';
 import Card from 'v2/components/UI/StatCard';
 import OverviewStore from 'v2/stores/networkOverview';
 import NodesStore from 'v2/stores/nodes';
+import Socket from 'v2/stores/socket';
 
+import Loader from '../../Loader';
 import useStyles from './styles';
 
 const StatCards = () => {
   const {globalStats} = OverviewStore;
   const {cluster} = NodesStore;
+  const {isLoading} = Socket;
   const classes = useStyles();
 
   const cards = [
@@ -55,8 +58,20 @@ const StatCards = () => {
     value: string | (() => React$Node),
     changes?: string,
   }) => (
-    <Grid key={title} item xs={12} sm={6} lg={3} zeroMinWidth>
-      <Card title={title} value={value} changes={changes} />
+    <Grid
+      key={title}
+      item
+      xs={12}
+      sm={6}
+      lg={3}
+      zeroMinWidth
+      className={classes.card}
+    >
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Card title={title} value={value} changes={changes} />
+      )}
     </Grid>
   );
 

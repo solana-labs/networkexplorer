@@ -11,9 +11,11 @@ import {
 } from 'react-simple-maps';
 import {map} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
+import Socket from 'v2/stores/socket';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import {mapStyle, markerStyle} from 'v2/theme';
 
+import Loader from '../../Loader';
 import useStyles from './styles';
 
 const mapStyles = {
@@ -25,6 +27,11 @@ const mapStyles = {
 const NodesMap = () => {
   const classes = useStyles();
   const {mapMarkers} = NodesStore;
+  const {isLoading} = Socket;
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const mapConfig = {
     projection: {
@@ -33,7 +40,6 @@ const NodesMap = () => {
     },
     style: {
       width: '100%',
-      height: 'auto',
     },
     center: [0, 20],
   };

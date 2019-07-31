@@ -15,6 +15,7 @@ import {RouterHistory, withRouter} from 'react-router-dom';
 import React from 'react';
 import {map, propEq, eq} from 'lodash/fp';
 import Mixpanel from 'v2/mixpanel';
+import EndpointSelector from '../EndpointSelector';
 
 import {ReactComponent as dashboard} from './assets/dashboard.svg';
 import {ReactComponent as transactions} from './assets/transactions.svg';
@@ -141,6 +142,10 @@ const NavBar = ({
         </IconButton>
         <List component="div" classes={{root: classes.listRoot}}>
           {map(renderLink)(routes)}
+          <div className={classes.endpointSelector}>
+            <div className={classes.endpointSelectorTitle}>Network:</div>
+            <EndpointSelector />
+          </div>
         </List>
       </SwipeableDrawer>
     </div>

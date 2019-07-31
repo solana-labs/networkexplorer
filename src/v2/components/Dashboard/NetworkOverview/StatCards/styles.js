@@ -3,11 +3,12 @@ import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
   card: {
-    background: getColor('grey')(theme),
-    color: '#fff',
-    borderRadius: 0,
-    height: '100%',
-    padding: '17px 30px',
+    height: 164,
+    '& svg': {
+      width: '100%',
+      height: 150,
+      marginTop: -2,
+    },
   },
   val: {
     fontSize: 60,

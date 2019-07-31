@@ -6,6 +6,7 @@ export default makeStyles(theme => ({
     marginTop: 19,
     background: getColor('grey2')(theme),
     padding: '25px 44px',
+    flex: 1,
     [theme.breakpoints.down('sm')]: {
       padding: 0,
       paddingBottom: 27,
