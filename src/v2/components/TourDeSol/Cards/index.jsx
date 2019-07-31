@@ -9,7 +9,12 @@ import useStyles from './styles';
 
 const Cards = () => {
   const classes = useStyles();
-  const {cluster, validators, inactiveValidators, totalStakedTokens} = NodesStore;
+  const {
+    cluster,
+    validators,
+    inactiveValidators,
+    totalStakedTokens,
+  } = NodesStore;
 
   const cards = [
     {

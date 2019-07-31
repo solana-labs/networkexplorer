@@ -4,6 +4,7 @@ import {
   get,
   compose,
   keys,
+  filter,
   map,
   mapValues,
   pick,
@@ -72,6 +73,14 @@ class Store {
     })(this.cluster.votingNow);
   }
 
+  get inactiveValidators() {
+    let inactive = filter(
+      vote => !find({pubkey: vote.nodePubkey})(this.cluster.cluster),
+    )(this.cluster.votingAll);
+
+    return inactive;
+  }
+
   get totalStakedTokens() {
     return compose(
       sumBy('stake'),
@@ -85,6 +94,7 @@ decorate(Store, {
   updateClusterInfo: action.bound,
   mapMarkers: computed,
   validators: computed,
+  inactiveValidators: computed,
   fetchClusterInfo: action.bound,
 });
 

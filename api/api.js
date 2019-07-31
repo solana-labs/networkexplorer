@@ -684,7 +684,7 @@ async function fetchValidatorIdentities(keys) {
  */
 function getNetworkInflationRate(slot) {
   const SLOTS_PER_SECOND = 1.0;
-  const SECONDS_PER_YEAR = (365.25 * 24.0 * 60.0 * 60.0);
+  const SECONDS_PER_YEAR = 365.25 * 24.0 * 60.0 * 60.0;
   const SLOTS_PER_YEAR = SLOTS_PER_SECOND * SECONDS_PER_YEAR;
   const DEFAULT_INITIAL = 0.15;
   const DEFAULT_TERMINAL = 0.015;
