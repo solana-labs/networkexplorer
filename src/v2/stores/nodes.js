@@ -71,7 +71,7 @@ class Store {
     })(this.cluster.voting);
   }
 
-  get totalBondedTokens() {
+  get totalStakedTokens() {
     return compose(
       sumBy('stake'),
       get('voting'),

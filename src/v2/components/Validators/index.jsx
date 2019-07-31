@@ -15,7 +15,7 @@ import useStyles from './styles';
 
 const Validators = () => {
   const classes = useStyles();
-  const {cluster, validators, fetchClusterInfo, totalBondedTokens} = NodesStore;
+  const {cluster, validators, fetchClusterInfo, totalStakedTokens} = NodesStore;
   useEffect(() => {
     fetchClusterInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,8 +28,8 @@ const Validators = () => {
       period: 'since yesterday',
     },
     {
-      title: 'Total Bonded Tokens',
-      value: totalBondedTokens,
+      title: 'Total Staked Tokens',
+      value: totalStakedTokens,
       changes: '',
       period: 'since yesterday',
     },
