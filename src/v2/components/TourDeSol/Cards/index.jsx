@@ -7,7 +7,11 @@ import Card from 'v2/components/UI/StatCard';
 
 import useStyles from './styles';
 
-const Cards = () => {
+const Cards = ({
+  stageDurationBlocks = null,
+  blocksLeftInStage = null,
+  daysLeftInStage = null,
+}) => {
   const classes = useStyles();
   const {
     cluster,
@@ -19,13 +23,19 @@ const Cards = () => {
   const cards = [
     {
       title: 'Stage Duration Blocks',
-      value: 'TODO',
+      value: stageDurationBlocks || '...',
+      changes: '',
+      period: 'since yesterday',
+    },
+    {
+      title: 'Blocks Left In Stage',
+      value: blocksLeftInStage || '...',
       changes: '',
       period: 'since yesterday',
     },
     {
       title: 'Days Left In Stage',
-      value: 'TODO',
+      value: daysLeftInStage || '...',
       changes: '',
       period: 'since yesterday',
     },
