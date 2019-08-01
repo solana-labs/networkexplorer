@@ -19,6 +19,8 @@ const Validators = lazy(() => import('v2/components/Validators'));
 const ValidatorsAll = lazy(() => import('v2/components/Validators/All'));
 const ValidatorDetail = lazy(() => import('v2/components/Validators/Detail'));
 const TourDeSol = lazy(() => import('v2/components/TourDeSol'));
+const Blocks = lazy(() => import('v2/components/Blocks'));
+const BlockDetail = lazy(() => import('v2/components/Blocks/Detail'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +46,12 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
+    [theme.breakpoints.down('md')]: {
+      minHeight: 85,
+    },
+    [theme.breakpoints.up('md')]: {
+      minHeight: 50,
+    },
   },
 }));
 
@@ -63,6 +71,8 @@ const App = () => {
               <Route exact path="/validators/all" component={ValidatorsAll} />
               <Route exact path="/validators/:id" component={ValidatorDetail} />
               <Route exact path="/tour-de-sol" component={TourDeSol} />
+              <Route exact path="/blocks" component={Blocks} />
+              <Route exact path="/blocks/:id" component={BlockDetail} />
             </Switch>
           </Suspense>
           <Footer />

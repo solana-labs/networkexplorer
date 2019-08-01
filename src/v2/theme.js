@@ -15,6 +15,10 @@ export default createMuiTheme({
       greenDark: '#00a771',
       primaryLoader: '#202020',
       secondaryLoader: '#404040',
+      aqua: '#33f1ff',
+      pink: '#f71ef4',
+      blue: '#2069f6',
+      yellow: '#ffc617',
     },
     secondary: {
       main: '#000',
