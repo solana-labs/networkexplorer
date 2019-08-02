@@ -9,8 +9,9 @@ import {
   Markers,
   ZoomableGroup,
 } from 'react-simple-maps';
-import {map} from 'lodash/fp';
+import {eq, map} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
+import OverviewStore from 'v2/stores/networkOverview';
 import Socket from 'v2/stores/socket';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import {mapStyle, markerStyle} from 'v2/theme';
@@ -27,6 +28,7 @@ const mapStyles = {
 const NodesMap = () => {
   const classes = useStyles();
   const {mapMarkers} = NodesStore;
+  const {globalStats} = OverviewStore;
   const {isLoading} = Socket;
 
   if (isLoading) {
@@ -45,7 +47,11 @@ const NodesMap = () => {
   };
 
   const renderMarker = marker => (
-    <Marker key={marker.name} style={markerStyle} marker={marker}>
+    <Marker
+      key={marker.name}
+      style={markerStyle(eq(globalStats['!entLastLeader'], marker.name))}
+      marker={marker}
+    >
       <MapTooltip
         classes={{tooltip: classes.tooltip}}
         title={() => (
@@ -59,9 +65,6 @@ const NodesMap = () => {
           cx={0}
           cy={0}
           r={5}
-          style={{
-            stroke: '#00FFAD',
-          }}
         />
       </MapTooltip>
     </Marker>

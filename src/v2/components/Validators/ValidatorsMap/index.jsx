@@ -9,11 +9,11 @@ import {
   Markers,
   ZoomableGroup,
 } from 'react-simple-maps';
-import {map} from 'lodash/fp';
+import {eq, map} from 'lodash/fp';
 import nodesStore from 'v2/stores/nodes';
+import OverviewStore from 'v2/stores/networkOverview';
 import MapTooltip from 'v2/components/UI/MapTooltip';
-import theme, {mapStyle, markerStyle} from 'v2/theme';
-import getColor from 'v2/utils/getColor';
+import {mapStyle, markerStyle} from 'v2/theme';
 
 import useStyles from './styles';
 
@@ -23,13 +23,10 @@ const mapStyles = {
   pressed: mapStyle,
 };
 
-const markerCircleStyle = {
-  stroke: getColor('main')(theme),
-};
-
 const ValidatorsMap = () => {
   const classes = useStyles();
   const {mapMarkers} = nodesStore;
+  const {globalStats} = OverviewStore;
 
   const mapConfig = {
     projection: {
@@ -44,7 +41,11 @@ const ValidatorsMap = () => {
   };
 
   const renderMarker = marker => (
-    <Marker key={marker.name} style={markerStyle} marker={marker}>
+    <Marker
+      key={marker.name}
+      style={markerStyle(eq(globalStats['!entLastLeader'], marker.name))}
+      marker={marker}
+    >
       <MapTooltip
         classes={{tooltip: classes.tooltip}}
         title={() => (
@@ -54,7 +55,7 @@ const ValidatorsMap = () => {
           </>
         )}
       >
-        <circle cx={0} cy={0} r={5} style={markerCircleStyle} />
+        <circle cx={0} cy={0} r={5} />
       </MapTooltip>
     </Marker>
   );

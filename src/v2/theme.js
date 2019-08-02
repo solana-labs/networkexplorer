@@ -1,5 +1,8 @@
 import {createMuiTheme} from '@material-ui/core';
 
+const main = '#00FFAD';
+const violet = '#5A00A7';
+
 export default createMuiTheme({
   palette: {
     type: 'dark',
@@ -10,11 +13,12 @@ export default createMuiTheme({
       grey2: '#202020',
       grey3: '#979797',
       grey4: '#c4c4c4',
-      main: '#00FFAD',
+      main,
       white: '#fff',
       greenDark: '#00a771',
       primaryLoader: '#202020',
       secondaryLoader: '#404040',
+      violet,
       aqua: '#33f1ff',
       pink: '#f71ef4',
       blue: '#2069f6',
@@ -58,8 +62,8 @@ export const mapStyle = {
   outline: 'none',
 };
 
-export const markerStyle = {
-  default: {fill: '#00FFAD'},
-  hover: {fill: '#00FFAD'},
-  pressed: {fill: '#00FFAD'},
-};
+export const markerStyle = isLeader => ({
+  default: {fill: isLeader ? violet : main},
+  hover: {fill: isLeader ? violet : main},
+  pressed: {fill: isLeader ? violet : main},
+});

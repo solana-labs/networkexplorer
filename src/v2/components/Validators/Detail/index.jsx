@@ -3,7 +3,7 @@ import {Container, useTheme} from '@material-ui/core';
 import {observer} from 'mobx-react-lite';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
-import {map, find} from 'lodash/fp';
+import {map, find, eq} from 'lodash/fp';
 import {Match} from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {
@@ -16,15 +16,15 @@ import {
 } from 'react-simple-maps';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
-import theme, {mapStyle, markerStyle} from 'v2/theme';
+import OverviewStore from 'v2/stores/networkOverview';
+import {mapStyle, markerStyle} from 'v2/theme';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import HelpLink from 'v2/components/HelpLink';
-import getColor from 'v2/utils/getColor';
 import Button from 'v2/components/UI/Button';
 import Avatar from 'v2/components/UI/Avatar';
+import {ReactComponent as CopyIcon} from 'v2/assets/icons/copy.svg';
+import Mixpanel from 'v2/mixpanel';
 
-import {ReactComponent as CopyIcon} from '../../../assets/icons/copy.svg';
-import Mixpanel from '../../../mixpanel';
 import useStyles from './styles';
 
 const mapStyles = {
@@ -33,12 +33,9 @@ const mapStyles = {
   pressed: mapStyle,
 };
 
-const markerCircleStyle = {
-  stroke: getColor('main')(theme),
-};
-
 const ValidatorsDetail = ({match}: {match: Match}) => {
   const {validators} = NodesStore;
+  const {globalStats} = OverviewStore;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -58,7 +55,10 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
   const {nodePubkey, gossip, stake, commission, identity = {}} = node;
 
   const renderMarker = () => (
-    <Marker style={markerStyle} marker={node}>
+    <Marker
+      style={markerStyle(eq(globalStats['!entLastLeader'], nodePubkey))}
+      marker={node}
+    >
       <MapTooltip
         classes={{tooltip: classes.tooltip}}
         title={() => (
@@ -68,7 +68,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
           </>
         )}
       >
-        <circle cx={0} cy={0} r={5} style={markerCircleStyle} />
+        <circle cx={0} cy={0} r={5} />
       </MapTooltip>
     </Marker>
   );
