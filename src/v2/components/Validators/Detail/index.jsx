@@ -190,7 +190,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
             size="large"
             fullWidth
             color="primary"
-            href="https://github.com/solana-labs/tour-de-sol#validator-public-key-registration"
+            href="https://github.com/solana-labs/tour-de-sol#publishing-information-about-your-validator"
             target="_blank"
             rel="noopener noreferrer"
           >
