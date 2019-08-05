@@ -73,7 +73,7 @@ const BlocksTable = ({separate}: {separate: boolean}) => {
         <TableCell>126</TableCell>
         <TableCell>5</TableCell>
         <TableCell>
-          <Avatar avatarUrl="" name="" />
+          <Avatar avatarUrl="" />
           {block.pubkey}
         </TableCell>
       </TableRow>
@@ -110,7 +110,7 @@ const BlocksTable = ({separate}: {separate: boolean}) => {
               <TableCell>5</TableCell>
               <TableCell>
                 <div className={classes.miner}>
-                  <Avatar avatarUrl="" name="" />
+                  <Avatar avatarUrl="" />
                   <div>0xAA15A3E6b97...</div>
                 </div>
               </TableCell>
@@ -140,7 +140,7 @@ const BlocksTable = ({separate}: {separate: boolean}) => {
               <li>
                 <div className={classes.cardTitle}>Miner</div>
                 <div className={classes.miner}>
-                  <Avatar avatarUrl="" name="" />
+                  <Avatar avatarUrl="" />
                   <div>0xAA15A3E6b97...</div>
                 </div>
               </li>

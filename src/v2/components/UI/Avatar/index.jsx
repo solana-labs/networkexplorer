@@ -22,7 +22,6 @@ const bgPosition = [
 
 const Avatar = ({
   avatarUrl = '',
-  name = '',
   width = 33,
   height = 33,
   pubkey,
@@ -33,7 +32,6 @@ const Avatar = ({
   height: number,
   pubkey: string,
 }) => {
-  const initials = name.charAt(0);
   const [x, y] = bgPosition[getAvatarIndex(pubkey)];
   const avatarStyle = {
     backgroundColor: getColor('main')(theme),
@@ -44,11 +42,7 @@ const Avatar = ({
     backgroundPosition: `${x}px ${y}px`,
   };
 
-  return (
-    <BaseAvatar src={avatarUrl} style={avatarStyle}>
-      {!avatarUrl && initials}
-    </BaseAvatar>
-  );
+  return <BaseAvatar src={avatarUrl} style={avatarStyle} />;
 };
 
 export default Avatar;
