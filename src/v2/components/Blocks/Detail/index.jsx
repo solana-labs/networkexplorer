@@ -55,7 +55,7 @@ const BlockDetail = ({match}: {match: Match}) => {
       value() {
         return (
           <Link to="" className={classes.mined}>
-            <Avatar avatarUrl="" name="" />
+            <Avatar avatarUrl="" />
             123123123
           </Link>
         );

@@ -61,11 +61,7 @@ const NodesMap = () => {
           </>
         )}
       >
-        <circle
-          cx={0}
-          cy={0}
-          r={5}
-        />
+        <circle cx={0} cy={0} r={5} />
       </MapTooltip>
     </Marker>
   );
