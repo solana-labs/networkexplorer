@@ -133,7 +133,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'commission',
       hint: '',
-      value: `${commission}%`,
+      value: `${(100 * (commission / 0xff)).toFixed(3)}%`,
     },
     {
       label: 'details',
