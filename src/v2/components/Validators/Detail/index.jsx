@@ -176,19 +176,21 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
             <span>{identity.name || nodePubkey}</span>
           </div>
         )}
-        <div className={classes.headerBtn}>
-          <Button
-            variant="contained"
-            size="large"
-            fullWidth
-            color="primary"
-            href="https://github.com/solana-labs/tour-de-sol#publishing-information-about-your-validator"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Connect To Keybase
-          </Button>
-        </div>
+        {!identity.keybaseUsername && (
+          <div className={classes.headerBtn}>
+            <Button
+              variant="contained"
+              size="large"
+              fullWidth
+              color="primary"
+              href="https://github.com/solana-labs/tour-de-sol#publishing-information-about-your-validator"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Connect To Keybase
+            </Button>
+          </div>
+        )}
       </SectionHeader>
       <div className={classes.body}>
         <ul className={classes.spec}>
