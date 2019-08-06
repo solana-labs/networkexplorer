@@ -5,7 +5,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
 import {map, find, eq} from 'lodash/fp';
 import {Match} from 'react-router-dom';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 import {
   ComposableMap,
   Geographies,
@@ -22,8 +22,8 @@ import MapTooltip from 'v2/components/UI/MapTooltip';
 import HelpLink from 'v2/components/HelpLink';
 import Button from 'v2/components/UI/Button';
 import Avatar from 'v2/components/UI/Avatar';
-import {ReactComponent as CopyIcon} from 'v2/assets/icons/copy.svg';
 import Mixpanel from 'v2/mixpanel';
+import CopyBtn from 'v2/components/UI/CopyBtn';
 
 import useStyles from './styles';
 
@@ -81,11 +81,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
         return (
           <div className={classes.address}>
             <span className={classes.value}>{nodePubkey} </span>
-            <CopyToClipboard text={nodePubkey}>
-              <div>
-                <CopyIcon />
-              </div>
-            </CopyToClipboard>
+            <CopyBtn text={nodePubkey} />
           </div>
         );
       },
