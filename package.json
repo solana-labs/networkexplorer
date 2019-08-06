@@ -42,7 +42,7 @@
     "react-simple-maps": "^0.12.1",
     "redis": "^2.8.0",
     "serve": "^11.1.0",
-    "use-debounce": "^2.2.0",
+    "use-debounce": "^2.2.1",
     "yaml": "^1.6.0",
     "yargs": "^13.3.0"
   },
