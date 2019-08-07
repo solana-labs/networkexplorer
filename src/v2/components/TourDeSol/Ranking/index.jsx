@@ -23,11 +23,7 @@ const Ranking = () => {
     return (
       <li key={nodePubkey} className={classes.item}>
         <div className={classes.name}>
-          <Avatar
-            pubkey={nodePubkey}
-            name={identity.name}
-            avatarUrl={identity.avatarUrl}
-          />
+          <Avatar pubkey={nodePubkey} avatarUrl={identity.avatarUrl} />
           {identity.name || nodePubkey}
         </div>
         <div className={classes.bar}>

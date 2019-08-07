@@ -18,6 +18,10 @@ export default makeStyles(theme => ({
       letterSpacing: 2,
       fontWeight: 'bold',
       borderBottom: 'none',
+      paddingRight: 16,
+      '&:first-child': {
+        paddingLeft: 40,
+      },
     },
   },
   body: {
@@ -29,6 +33,10 @@ export default makeStyles(theme => ({
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       overflow: 'hidden',
+      paddingRight: 16,
+      '&:first-child': {
+        paddingLeft: 40,
+      },
     },
   },
   name: {

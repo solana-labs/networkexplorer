@@ -21,6 +21,10 @@ const ValidatorDetail = lazy(() => import('v2/components/Validators/Detail'));
 const TourDeSol = lazy(() => import('v2/components/TourDeSol'));
 const Blocks = lazy(() => import('v2/components/Blocks'));
 const BlockDetail = lazy(() => import('v2/components/Blocks/Detail'));
+const Transactions = lazy(() => import('v2/components/Transactions'));
+const TransactionDetail = lazy(() =>
+  import('v2/components/Transactions/Detail'),
+);
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -73,6 +77,12 @@ const App = () => {
               <Route exact path="/tour-de-sol" component={TourDeSol} />
               <Route exact path="/blocks" component={Blocks} />
               <Route exact path="/blocks/:id" component={BlockDetail} />
+              <Route exact path="/transactions" component={Transactions} />
+              <Route
+                exact
+                path="/transactions/:id"
+                component={TransactionDetail}
+              />
             </Switch>
           </Suspense>
           <Footer />
