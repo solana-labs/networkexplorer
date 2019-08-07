@@ -102,6 +102,6 @@ export default makeStyles(theme => ({
     textTransform: 'uppercase',
     color: '#C4C4C4',
     letterSpacing: 2,
-    fontWight: 'bold',
+    fontWeight: 'bold',
   },
 }));

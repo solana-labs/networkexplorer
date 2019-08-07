@@ -119,7 +119,7 @@ const TransactionsTable = ({
             {map(renderRow)(transactions)}
             <TableRow hover>
               <TableCell align="center">
-                <Link to={`/transaction/234`} className={classes.name}>
+                <Link to={`/transactions/234`} className={classes.name}>
                   <div>5CpdpKwKUBJgD4Bd...</div>
                 </Link>
               </TableCell>

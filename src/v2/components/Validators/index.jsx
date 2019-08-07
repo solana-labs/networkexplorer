@@ -6,9 +6,9 @@ import {map} from 'lodash/fp';
 import Card from 'v2/components/UI/StatCard';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
+import Mixpanel from 'v2/mixpanel';
+import Button from 'v2/components/UI/Button';
 
-import Mixpanel from '../../mixpanel';
-import Button from '../UI/Button';
 import ValidatorsMap from './ValidatorsMap';
 import ValidatorsTable from './Table';
 import useStyles from './styles';

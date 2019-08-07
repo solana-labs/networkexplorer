@@ -4,14 +4,13 @@ import {observer} from 'mobx-react-lite';
 import React, {useEffect} from 'react';
 import {map} from 'lodash/fp';
 import {Match, Link} from 'react-router-dom';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import HelpLink from 'v2/components/HelpLink';
 import Avatar from 'v2/components/UI/Avatar';
-import {ReactComponent as CopyIcon} from 'v2/assets/icons/copy.svg';
 import Mixpanel from 'v2/mixpanel';
+import CopyBtn from 'v2/components/UI/CopyBtn';
+import TransactionsTable from 'v2/components/Transactions/Table';
 
-import TransactionsTable from '../../Transactions/Table';
 import useStyles from './styles';
 
 const BlockDetail = ({match}: {match: Match}) => {
@@ -80,12 +79,7 @@ const BlockDetail = ({match}: {match: Match}) => {
       <div className={classes.root}>
         <SectionHeader title="Block Detail">
           <span className={classes.blockTitle}>
-            7887219
-            <CopyToClipboard text="7887219">
-              <div>
-                <CopyIcon />
-              </div>
-            </CopyToClipboard>
+            <CopyBtn text="123" />
           </span>
         </SectionHeader>
         <div className={classes.body}>
