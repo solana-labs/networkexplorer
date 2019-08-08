@@ -23,7 +23,7 @@ const Validators = () => {
   const cards = [
     {
       title: 'Total Circulating SOL',
-      value: cluster.supply / Math.pow(2, 34).toFixed(2),
+      value: (cluster.supply / Math.pow(2, 34)).toFixed(2),
       changes: '',
       period: 'since yesterday',
     },

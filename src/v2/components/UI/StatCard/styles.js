@@ -19,7 +19,7 @@ export default makeStyles(theme => ({
     },
   },
   value: {
-    fontSize: 50,
+    fontSize: 40,
     fontWeight: 'bold',
     color: getColor('main')(theme),
     margin: '20px 0',

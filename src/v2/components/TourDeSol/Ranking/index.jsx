@@ -1,5 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
+import {Link} from 'react-router-dom';
 import {get, map, maxBy, compose} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
 import NodesStore from 'v2/stores/nodes';
@@ -22,10 +23,10 @@ const Ranking = () => {
     const {identity = {}, nodePubkey} = node;
     return (
       <li key={nodePubkey} className={classes.item}>
-        <div className={classes.name}>
+        <Link to={`/validators/${nodePubkey}`} className={classes.name}>
           <Avatar pubkey={nodePubkey} avatarUrl={identity.avatarUrl} />
-          {identity.name || nodePubkey}
-        </div>
+          <span>{identity.name || nodePubkey}</span>
+        </Link>
         <div className={classes.bar}>
           <div
             className={classes.icon}

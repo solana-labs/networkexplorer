@@ -7,6 +7,7 @@ import {observer} from 'mobx-react-lite';
 import Logo from 'v2/components/UI/Logo';
 import Search from 'v2/components/Search';
 import EndpointSelector from 'v2/components/EndpointSelector';
+import {ReactComponent as GithubIcon} from 'v2/assets/icons/github.svg';
 
 import NavBar from '../NavBar';
 import useStyles from './styles';
@@ -32,6 +33,21 @@ const Header = () => {
           <Logo />
           <div className={classes.search}>
             <Search />
+          </div>
+          <div className={classes.github}>
+            <p>
+              report issues/
+              <br />
+              feedback on github:
+            </p>
+            <a
+              className={classes.icon}
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/solana-labs/blockexplorer/issues"
+            >
+              <GithubIcon />
+            </a>
           </div>
           <div className={classes.realTime}>
             <p>
