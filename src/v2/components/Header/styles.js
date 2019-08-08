@@ -84,4 +84,25 @@ export default makeStyles(theme => ({
   menuIcon: {
     color: getColor('dark')(theme),
   },
+  github: {
+    display: 'flex',
+    fontSize: 12,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+    width: 220,
+    flexShrink: 0,
+    alignItems: 'center',
+    marginLeft: 16,
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    flexShrink: 0,
+    background: getColor('main')(theme),
+    padding: 8,
+    marginLeft: 5,
+  },
 }));

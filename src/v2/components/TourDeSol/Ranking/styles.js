@@ -18,14 +18,17 @@ export default makeStyles(theme => ({
   },
   name: {
     maxWidth: 130,
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
     color: getColor('main')(theme),
-    marginRight: 20,
+    marginRight: 26,
     flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
+    textDecoration: 'none',
+    '& span': {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
     '& div:first-child': {
       marginRight: 15,
     },
