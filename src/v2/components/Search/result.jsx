@@ -3,6 +3,7 @@ import React, {memo} from 'react';
 import {map} from 'lodash/fp';
 import {Link} from 'react-router-dom';
 import type {Validator} from 'v2/@types/validator';
+import MixPanel from 'v2/mixpanel';
 
 import useStyles from './styles';
 
@@ -20,13 +21,20 @@ const SearchResult = ({
   onClear,
 }: SearchResultProps) => {
   const classes = useStyles();
-  const renderItem = ({nodePubkey}: {nodePubkey: string}) => (
-    <li className={classes.item} key={nodePubkey}>
-      <Link onClick={onClear} to={`/validators/${nodePubkey}`}>
-        {nodePubkey}
-      </Link>
-    </li>
-  );
+
+  const renderItem = ({nodePubkey}: {nodePubkey: string}) => {
+    const handleClick = () => {
+      onClear();
+      MixPanel.track('Click Search Dropdown', { nodePubkey });
+    };
+    return (
+      <li className={classes.item} key={nodePubkey}>
+        <Link onClick={handleClick} to={`/validators/${nodePubkey}`}>
+          {nodePubkey}
+        </Link>
+      </li>
+    );
+  };
   if ((!isDirty && !items.length) || !isFocus) {
     return null;
   }
