@@ -42,6 +42,7 @@ const NodesMap = () => {
     },
     style: {
       width: '100%',
+      height: 'auto',
     },
     center: [0, 20],
   };

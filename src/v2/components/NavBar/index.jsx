@@ -20,7 +20,7 @@ import EndpointSelector from '../EndpointSelector';
 import {ReactComponent as dashboard} from './assets/dashboard.svg';
 import {ReactComponent as transactions} from './assets/transactions.svg';
 import {ReactComponent as validators} from './assets/validators.svg';
-import {ReactComponent as tourDeSol} from './assets/tour-de-sol.svg';
+import {ReactComponent as tourdesol} from './assets/tourdesol.svg';
 import {ReactComponent as applications} from './assets/applications.svg';
 import {ReactComponent as blocks} from './assets/blocks.svg';
 import {ReactComponent as favorites} from './assets/favorites.svg';
@@ -30,7 +30,7 @@ const icons = {
   dashboard,
   transactions,
   validators,
-  'tour-de-sol': tourDeSol,
+  tourdesol,
   applications,
   blocks,
   favorites,
@@ -40,7 +40,7 @@ const navTracks = {
   dashboard: 'Clicked Overview',
   transactions: 'Clicked Transactions Page',
   validators: 'Clicked Validators Page',
-  'tour-de-sol': 'Clicked TDS Page',
+  tourdesol: 'Clicked TDS Page',
   applications: 'Clicked Applications page',
   blocks: 'Clicked Blocks page',
   favorites: 'Clicked Favorites page',
@@ -69,6 +69,8 @@ const NavBar = ({
     },
     {
       link: 'tour-de-sol',
+      icon: 'tourdesol',
+      title: 'tour de sol',
     },
     {
       link: 'transactions',
@@ -87,8 +89,8 @@ const NavBar = ({
       disabled: true,
     },
   ];
-  const renderLink = ({link, disabled}: {link: string, disabled?: boolean}) => {
-    const Icon = icons[link];
+  const renderLink = ({link, title, icon, disabled}: {link: string, title: string, icon: string, disabled?: boolean}) => {
+    const Icon = icons[icon || link];
     const isDashboard = eq('dashboard', link);
     const selected =
       location.pathname.includes(link) ||
@@ -113,7 +115,7 @@ const NavBar = ({
         </ListItemIcon>
         <ListItemText
           classes={{primary: classes.itemText, root: classes.itemTextRoot}}
-          primary={link}
+          primary={title || link}
         />
         {disabled && <div className={classes.coming}>Coming Soon</div>}
       </ListItem>

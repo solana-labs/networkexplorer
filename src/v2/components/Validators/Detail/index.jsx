@@ -25,6 +25,7 @@ import Avatar from 'v2/components/UI/Avatar';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 
+import {LAMPORT_SOL_RATIO} from '../../../constants';
 import useStyles from './styles';
 
 const mapStyles = {
@@ -89,7 +90,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Voting power',
       hint: '',
-      value: stake,
+      value: (stake * LAMPORT_SOL_RATIO).toFixed(8),
     },
     {
       label: 'Website',
