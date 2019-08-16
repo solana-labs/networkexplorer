@@ -30,7 +30,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const {validators, inactiveValidators} = NodesStore;
   const renderRow = row => {
     const uptime = row.uptime && getUptime(row);
-    const {identity = {}, nodePubkey, stake, commission} = row;
+    const {identity = {}, nodePubkey, activatedStake, commission} = row;
     return (
       <TableRow hover key={nodePubkey}>
         <TableCell align="center">
@@ -40,7 +40,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           </Link>
         </TableCell>
         <TableCell>
-          {(stake && (stake * LAMPORT_SOL_RATIO).toFixed(8)) || 'N/A'}
+          {(activatedStake &&
+            (activatedStake * LAMPORT_SOL_RATIO).toFixed(8)) ||
+            'N/A'}
         </TableCell>
         <TableCell>{commission || 'N/A'}</TableCell>
         <TableCell>{(uptime && uptime + '%') || 'Unavailable'}</TableCell>
@@ -49,7 +51,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   };
   const renderCard = card => {
     const uptime = card.uptime && getUptime(card);
-    const {identity = {}, nodePubkey, stake, commission} = card;
+    const {identity = {}, nodePubkey, activatedStake, commission} = card;
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
@@ -63,7 +65,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
             <div>
-              {(stake && (stake * LAMPORT_SOL_RATIO).toFixed(4)) || 'N/A'}
+              {(activatedStake &&
+                (activatedStake * LAMPORT_SOL_RATIO).toFixed(4)) ||
+                'N/A'}
             </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
@@ -83,7 +87,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       {!separate && (
         <div className={classes.header}>
           <Typography>Validators</Typography>
-          <Typography variant="h5">{validators.length}</Typography>
+          <Typography variant="h5">
+            {validators.length + inactiveValidators.length}
+          </Typography>
 
           <Link to="/validators/all" className={classes.link}>
             See all &gt;

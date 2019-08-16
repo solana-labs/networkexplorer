@@ -35,7 +35,7 @@ const mapStyles = {
 };
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
-  const {validators} = NodesStore;
+  const {validators, inactiveValidators} = NodesStore;
   const {globalStats} = OverviewStore;
 
   const classes = useStyles();
@@ -47,13 +47,15 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     Mixpanel.track(`Clicked Validator ${params.id}`);
   }, [params.id]);
 
-  const node = find({nodePubkey: params.id})(validators);
+  let node =
+    find({nodePubkey: params.id})(validators) ||
+    find({nodePubkey: params.id})(inactiveValidators);
 
   if (!node) {
     return <div>Loading...</div>;
   }
 
-  const {nodePubkey, gossip, stake, commission, identity = {}} = node;
+  const {nodePubkey, gossip, activatedStake, commission, identity = {}} = node;
 
   const renderMarker = () => (
     <Marker
@@ -90,7 +92,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Voting power',
       hint: '',
-      value: (stake * LAMPORT_SOL_RATIO).toFixed(8),
+      value: (activatedStake * LAMPORT_SOL_RATIO).toFixed(8),
     },
     {
       label: 'Website',
@@ -231,7 +233,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
                   ))
                 }
               </Geographies>
-              <Markers>{renderMarker()}</Markers>
+              <Markers>{node.coordinates && renderMarker()}</Markers>
             </ZoomableGroup>
           </ComposableMap>
         </div>

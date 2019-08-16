@@ -12,17 +12,18 @@ import Socket from 'v2/stores/socket';
 
 import Loader from '../../Loader';
 import useStyles from './styles';
+import {size} from 'lodash';
 
 const StatCards = () => {
   const {globalStats} = OverviewStore;
-  const {cluster} = NodesStore;
+  const {network} = NodesStore;
   const {isLoading} = Socket;
   const classes = useStyles();
 
   const cards = [
     {
       title: 'Node Count',
-      value: cluster.nodes.length,
+      value: size(network),
     },
     {
       title: 'Block Height',

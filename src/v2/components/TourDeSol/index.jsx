@@ -64,7 +64,7 @@ const TourDeSol = () => {
 
     if (isActive) {
       return (
-        <li className={cn(classes.stage, classes.stageActive)}>
+        <li className={cn(classes.stage, classes.stageActive)} key={i}>
           <div>
             {stage.title} (LIVE!)
             <img src={iconRight} width={47} height={13} alt="" />
@@ -73,7 +73,7 @@ const TourDeSol = () => {
       );
     } else if (isFinished) {
       return (
-        <li className={classes.stage}>
+        <li className={classes.stage} key={i}>
           <div>
             {stage.title}
             <br />
@@ -83,7 +83,7 @@ const TourDeSol = () => {
       );
     } else {
       return (
-        <li className={classes.stage}>
+        <li className={classes.stage} key={i}>
           <div>
             {stage.title}
             <br />
