@@ -1,4 +1,4 @@
-import {find, compose, split, map} from 'lodash/fp';
+import {compose, split, map} from 'lodash/fp';
 
 export function parseTransaction(message) {
   const [h, l, s, dt, entry_id, id, inst] = split('#')(message);
@@ -42,25 +42,12 @@ export function parseBlock(message) {
 }
 
 export function parseClusterInfo(data) {
-  const {
-    votingNow,
-    votingAll,
-    cluster: gossip,
-    supply,
-    feeCalculator,
-    identities,
-  } = JSON.parse(data);
-
-  const nodes = map(g => ({
-    ...g,
-    voteAccount: find({nodePubkey: g.pubKey})(votingNow),
-  }))(gossip);
+  const {network, supply, totalStaked, feeCalculator} = JSON.parse(data);
 
   return {
-    nodes,
+    network,
     supply,
+    totalStaked,
     feeCalculator,
-    identities,
-    votingAll,
   };
 }

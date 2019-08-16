@@ -14,10 +14,12 @@ const Cards = ({
 }) => {
   const classes = useStyles();
   const {
-    cluster,
+    network,
     validators,
     inactiveValidators,
-    totalStakedTokens,
+    supply,
+    totalStaked,
+    networkInflationRate,
   } = NodesStore;
 
   const cards = [
@@ -41,19 +43,19 @@ const Cards = ({
     },
     {
       title: 'Total SOL In Circulation',
-      value: (cluster.supply / Math.pow(2, 34)).toFixed(2),
+      value: (supply / Math.pow(2, 34)).toFixed(2),
       changes: '',
       period: 'since yesterday',
     },
     {
-      title: 'Total Staked Tokens',
-      value: totalStakedTokens,
+      title: 'Total Staked SOL',
+      value: totalStaked,
       changes: '',
       period: 'since yesterday',
     },
     {
       title: 'Current Network Inflation Rate',
-      value: (cluster.networkInflationRate * 100.0).toFixed(3) + '%',
+      value: (networkInflationRate * 100.0).toFixed(3) + '%',
       changes: '',
       period: 'since yesterday',
     },

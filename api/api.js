@@ -29,8 +29,8 @@ import config from './config';
 const FULLNODE_URL = 'http://localhost:8899';
 
 const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
-const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 16000;
-const CLUSTER_INFO_CACHE_TIME_SECS = 35000;
+const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 5000;
+const CLUSTER_INFO_CACHE_TIME_SECS = 4500;
 const CONFIG_PROGRAM_ID = 'Config1111111111111111111111111111111111111';
 const MAX_KEYBASE_USER_LOOKUP = 50;
 
@@ -65,6 +65,10 @@ function randomOffset(seedString) {
   let x = Math.sin(seed++) * 10000;
 
   return (x - Math.floor(x)) / 10 - 0.05;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function getClient() {
@@ -498,65 +502,175 @@ const DEFAULT_LNG = 165.3768;
 
 async function getClusterInfo() {
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
+  const nodeConnectionCache = {};
   let ts = new Date().toISOString();
   let [, feeCalculator] = await connection.getRecentBlockhash();
   let currentSlot = await getAsync('!blk-last-slot');
   let networkInflationRate = getNetworkInflationRate(currentSlot);
   let supply = await connection.getTotalSupply();
-  let cluster = await connection.getClusterNodes();
-  let identities = await fetchValidatorIdentities(cluster.map(c => c.pubkey));
-  let votingNow = await connection.getEpochVoteAccounts();
-  let votingAll = await connection.getProgramAccounts(
+  let clusterNodes = await connection.getClusterNodes();
+  const leader = await connection.getSlotLeader();
+  let identities = await fetchValidatorIdentities(
+    clusterNodes.map(c => c.pubkey),
+  );
+  let voteAccounts = await connection.getVoteAccounts();
+  let allVoteAccounts = await connection.getProgramAccounts(
     solanaWeb3.VOTE_ACCOUNT_KEY,
   );
   let uptimeJson = await getAsync('!uptime');
   let uptime = uptimeJson && JSON.parse(uptimeJson);
 
   let totalStaked = _.reduce(
-    votingNow,
+    (voteAccounts.current || []).concat(voteAccounts.delinquent || []),
     (a, v) => {
-      a += v.stake || 0;
+      a += v.activatedStake || 0;
 
       return a;
     },
     0,
   );
 
-  votingAll = _.map(votingAll, e => {
-    const [, v] = e;
+  const network = {};
 
-    let voteAccount = solanaWeb3.VoteAccount.fromAccountData(v.data);
-    voteAccount.nodePubkey = voteAccount.nodePubkey.toString();
-    voteAccount.authorizedVoterPubkey = voteAccount.authorizedVoterPubkey.toString();
+  for (const clusterNode of clusterNodes) {
+    const {pubkey, rpc, tpu, gossip} = clusterNode;
 
-    return voteAccount;
-  });
+    if (!tpu) {
+      continue;
+    }
 
-  cluster = _.map(cluster, c => {
-    let ip = c.gossip.split(':')[0];
+    let ip = tpu.split(':')[0];
     const geoip = geoipLookup(ip);
     let ll = geoip ? geoip.ll : null;
-    let newc = _.clone(c, true);
 
     // compute different but deterministic offsets
     let offsetLat = randomOffset(ip);
-    let offsetLng = randomOffset(c.gossip);
+    let offsetLng = randomOffset(tpu);
 
-    newc.lat = ((ll && ll[0]) || DEFAULT_LAT) + offsetLat;
-    newc.lng = ((ll && ll[1]) || DEFAULT_LNG) + offsetLng;
+    let lat = ((ll && ll[0]) || DEFAULT_LAT) + offsetLat;
+    let lng = ((ll && ll[1]) || DEFAULT_LNG) + offsetLng;
 
-    return newc;
-  });
+    network[pubkey] = Object.assign(network[pubkey] || {}, {
+      online: true,
+      gossip,
+      rpc,
+      tpu,
+      lat,
+      lng,
+      coordinates: [lng, lat],
+    });
+  }
+
+  for (let [votePubkey, voteAccountInfo] of allVoteAccounts) {
+    voteAccountInfo.owner =
+      voteAccountInfo.owner && voteAccountInfo.owner.toString();
+
+    let voteAccount = solanaWeb3.VoteAccount.fromAccountData(
+      voteAccountInfo.data,
+    );
+    voteAccount.authorizedVoterPubkey =
+      voteAccount.authorizedVoterPubkey &&
+      voteAccount.authorizedVoterPubkey.toString();
+    voteAccount.nodePubkey =
+      voteAccount.nodePubkey && voteAccount.nodePubkey.toString();
+
+    const nodePubkey = voteAccount.nodePubkey.toString();
+    const node = network[nodePubkey];
+    if (!node) {
+      continue;
+    }
+    if (node.votePubkey && node.votePubkey != votePubkey) {
+      if (node.warning && node.warning.hasMultipleVoteAccounts) {
+        node.warning.hasMultipleVoteAccounts.push(
+          voteAccount.authorizedVoterPubkey,
+        );
+      } else {
+        node.warning |= {};
+        node.warning.hasMultipleVoteAccounts = [
+          node.votePubkey,
+          voteAccount.authorizedVoterPubkey,
+        ];
+      }
+      continue;
+    }
+    node.nodePubkey = nodePubkey;
+    node.voteAccount = voteAccount;
+    node.votePubkey = votePubkey;
+    node.identity = identities.find(x => {
+      return x.pubkey === nodePubkey;
+    });
+    node.uptime =
+      uptime &&
+      uptime.find(x => {
+        return x.nodePubkey === nodePubkey;
+      });
+
+    node.voteStatus =
+      voteAccounts.current.find(x => {
+        return x.nodePubkey === nodePubkey;
+      }) ||
+      voteAccounts.delinquent.find(x => {
+        return x.nodePubkey === nodePubkey;
+      });
+    node.activatedStake = node.voteStatus && node.voteStatus.activatedStake;
+    node.commission = node.voteStatus && node.voteStatus.commission;
+  }
+
+  for (const node of Object.keys(network).sort()) {
+    const {online, rpc, tpu} = network[node];
+    if (!online && !tpu) {
+      continue;
+    }
+
+    const balanceLamports = await connection.getBalance(
+      new solanaWeb3.PublicKey(node),
+    );
+    let currentSlot = null;
+    if (rpc) {
+      try {
+        let nodeConnection = nodeConnectionCache[rpc];
+        if (nodeConnection === undefined) {
+          nodeConnectionCache[rpc] = nodeConnection = new solanaWeb3.Connection(
+            `http://${rpc}`,
+          );
+        }
+        currentSlot = await Promise.race([
+          nodeConnection.getSlot(),
+          sleep(1000),
+        ]);
+        if (currentSlot === undefined) {
+          currentSlot = 'timeout';
+        }
+      } catch (err) {
+        currentSlot = 'error';
+      }
+    }
+
+    let what;
+    if (!tpu && online) {
+      what = 'Spy';
+    } else {
+      what = 'Validator';
+    }
+
+    let newNode = network[node] || {};
+    newNode.leader = leader === node;
+    newNode.what = what;
+    newNode.balanceLamports = balanceLamports;
+    newNode.currentSlot = currentSlot;
+    network[node] = newNode;
+  }
 
   let rest = {
     feeCalculator,
     supply,
     networkInflationRate,
     totalStaked,
-    cluster,
+    network,
+    clusterNodes,
     identities,
-    votingAll,
-    votingNow,
+    voteAccounts,
+    allVoteAccounts,
     uptime,
     ts,
   };
@@ -566,6 +680,7 @@ async function getClusterInfo() {
     CLUSTER_INFO_CACHE_TIME_SECS,
     JSON.stringify(rest),
   );
+
   return rest;
 }
 

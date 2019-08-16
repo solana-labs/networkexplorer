@@ -32,7 +32,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
 
   const renderRow = row => {
     const uptime = getUptime(row);
-    const {identity = {}, nodePubkey, stake} = row;
+    const {identity = {}, nodePubkey, activatedStake} = row;
     return (
       <TableRow hover key={nodePubkey}>
         <TableCell>1</TableCell>
@@ -42,14 +42,14 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{(stake * LAMPORT_SOL_RATIO).toFixed(8)}</TableCell>
+        <TableCell>{(activatedStake * LAMPORT_SOL_RATIO).toFixed(8)}</TableCell>
         <TableCell>{uptime}%</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
     const uptime = getUptime(card);
-    const {identity = {}, nodePubkey, stake} = card;
+    const {identity = {}, nodePubkey, activatedStake} = card;
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
@@ -62,7 +62,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{(stake * LAMPORT_SOL_RATIO).toFixed(4)} </div>
+            <div>{(activatedStake * LAMPORT_SOL_RATIO).toFixed(4)} </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>

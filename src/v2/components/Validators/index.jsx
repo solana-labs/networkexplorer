@@ -15,7 +15,7 @@ import useStyles from './styles';
 
 const Validators = () => {
   const classes = useStyles();
-  const {cluster, validators, fetchClusterInfo, totalStakedTokens} = NodesStore;
+  const {supply, validators, fetchClusterInfo, totalStaked} = NodesStore;
   useEffect(() => {
     fetchClusterInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,13 +23,13 @@ const Validators = () => {
   const cards = [
     {
       title: 'Total Circulating SOL',
-      value: (cluster.supply / Math.pow(2, 34)).toFixed(2),
+      value: (supply / Math.pow(2, 34)).toFixed(2),
       changes: '',
       period: 'since yesterday',
     },
     {
-      title: 'Total Staked Tokens',
-      value: totalStakedTokens,
+      title: 'Total Staked SOL',
+      value: totalStaked,
       changes: '',
       period: 'since yesterday',
     },
