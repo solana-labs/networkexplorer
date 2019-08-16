@@ -20,6 +20,7 @@ import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
 import Avatar from 'v2/components/UI/Avatar';
 
+import {LAMPORT_SOL_RATIO} from '../../../constants';
 import useStyles from './styles';
 
 const ValidatorsTable = ({separate}: {separate: boolean}) => {
@@ -38,7 +39,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{(stake && stake + ' Lamports') || 'N/A'}</TableCell>
+        <TableCell>{(stake && (stake * LAMPORT_SOL_RATIO).toFixed(8)) || 'N/A'}</TableCell>
         <TableCell>{commission || 'N/A'}</TableCell>
         <TableCell>{(uptime && uptime + '%') || 'Node Unavailable'}</TableCell>
       </TableRow>
@@ -59,7 +60,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <Grid container spacing={1}>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{(stake && stake + ' Lamports') || 'N/A'}</div>
+            <div>{(stake && (stake * LAMPORT_SOL_RATIO).toFixed(4)) || 'N/A'}</div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>
@@ -90,7 +91,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell align="center">Name/Moniker</TableCell>
-              <TableCell>Stake</TableCell>
+              <TableCell>Stake SOL</TableCell>
               <TableCell>Commission</TableCell>
               <TableCell>Uptime</TableCell>
             </TableRow>

@@ -20,6 +20,7 @@ import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
 import Avatar from 'v2/components/UI/Avatar';
 
+import {LAMPORT_SOL_RATIO} from '../../../constants';
 import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
@@ -41,7 +42,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{stake}</TableCell>
+        <TableCell>{(stake * LAMPORT_SOL_RATIO).toFixed(8)}</TableCell>
         <TableCell>{uptime}%</TableCell>
       </TableRow>
     );
@@ -60,8 +61,8 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         </Link>
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Stake</div>
-            <div>{stake}</div>
+            <div className={classes.cardTitle}>Stakw</div>
+            <div>{(stake * LAMPORT_SOL_RATIO).toFixed(4)} </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
@@ -91,7 +92,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <TableRow>
               <TableCell width={100}>Ranking</TableCell>
               <TableCell width={230}>Name</TableCell>
-              <TableCell>Stake</TableCell>
+              <TableCell>Stake SOL</TableCell>
               <TableCell width={110}>Uptime</TableCell>
             </TableRow>
           </TableHead>
