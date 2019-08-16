@@ -25,7 +25,7 @@ const SearchResult = ({
   const renderItem = ({nodePubkey}: {nodePubkey: string}) => {
     const handleClick = () => {
       onClear();
-      MixPanel.track('Click Search Dropdown', { nodePubkey });
+      MixPanel.track('Click Search Dropdown', {nodePubkey});
     };
     return (
       <li className={classes.item} key={nodePubkey}>

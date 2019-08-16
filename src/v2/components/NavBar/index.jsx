@@ -89,7 +89,17 @@ const NavBar = ({
       disabled: true,
     },
   ];
-  const renderLink = ({link, title, icon, disabled}: {link: string, title: string, icon: string, disabled?: boolean}) => {
+  const renderLink = ({
+    link,
+    title,
+    icon,
+    disabled,
+  }: {
+    link: string,
+    title: string,
+    icon: string,
+    disabled?: boolean,
+  }) => {
     const Icon = icons[icon || link];
     const isDashboard = eq('dashboard', link);
     const selected =

@@ -39,7 +39,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             <div>{identity.name || nodePubkey}</div>
           </Link>
         </TableCell>
-        <TableCell>{(stake && (stake * LAMPORT_SOL_RATIO).toFixed(8)) || 'N/A'}</TableCell>
+        <TableCell>
+          {(stake && (stake * LAMPORT_SOL_RATIO).toFixed(8)) || 'N/A'}
+        </TableCell>
         <TableCell>{commission || 'N/A'}</TableCell>
         <TableCell>{(uptime && uptime + '%') || 'Unavailable'}</TableCell>
       </TableRow>
@@ -60,7 +62,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <Grid container spacing={1}>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{(stake && (stake * LAMPORT_SOL_RATIO).toFixed(4)) || 'N/A'}</div>
+            <div>
+              {(stake && (stake * LAMPORT_SOL_RATIO).toFixed(4)) || 'N/A'}
+            </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>

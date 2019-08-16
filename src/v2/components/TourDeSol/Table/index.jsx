@@ -61,7 +61,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         </Link>
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Stakw</div>
+            <div className={classes.cardTitle}>Stake</div>
             <div>{(stake * LAMPORT_SOL_RATIO).toFixed(4)} </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
