@@ -41,7 +41,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         </TableCell>
         <TableCell>{(stake && (stake * LAMPORT_SOL_RATIO).toFixed(8)) || 'N/A'}</TableCell>
         <TableCell>{commission || 'N/A'}</TableCell>
-        <TableCell>{(uptime && uptime + '%') || 'Node Unavailable'}</TableCell>
+        <TableCell>{(uptime && uptime + '%') || 'Unavailable'}</TableCell>
       </TableRow>
     );
   };
@@ -68,7 +68,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>{(uptime && uptime + '%') || 'Node Unavailable'}</div>
+            <div>{(uptime && uptime + '%') || 'Unavailable'}</div>
           </Grid>
         </Grid>
       </div>
