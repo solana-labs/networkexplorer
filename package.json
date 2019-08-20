@@ -44,7 +44,7 @@
     "serve": "^11.1.0",
     "use-debounce": "^3.0.0",
     "yaml": "^1.6.0",
-    "yargs": "^13.3.0"
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@babel/register": "^7.5.5",
