@@ -61,7 +61,7 @@
     "chart.js": "^2.8.0",
     "customize-cra": "^0.5.0",
     "eslint": "^5.16.0",
-    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-prettier": "^6.1.0",
     "eslint-config-react-app": "^4.0.1",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-flowtype": "^3.13.0",
