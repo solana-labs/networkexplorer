@@ -14,7 +14,6 @@ const Cards = ({
 }) => {
   const classes = useStyles();
   const {
-    network,
     validators,
     inactiveValidators,
     supply,

@@ -8,22 +8,22 @@ class Store {
   };
   clusterChanges = {};
 
-  constructor() {
-    // observe(this, 'network', ({oldValue, newValue}) => {
-    //   if (!keys(oldValue).length) {
-    //     return;
-    //   }
-    //   this.clusterChanges = compose(
-    //     mapValues.convert({cap: false})((value, key) => {
-    //       if (eq('nodes', key)) {
-    //         return calcChanges(oldValue[key].length, value.length);
-    //       }
-    //       return calcChanges(oldValue[key], value);
-    //     }),
-    //     pick(['nodes', 'supply']),
-    //   )(newValue);
-    // });
-  }
+  // constructor() {
+  //   observe(this, 'network', ({oldValue, newValue}) => {
+  //     if (!keys(oldValue).length) {
+  //       return;
+  //     }
+  //     this.clusterChanges = compose(
+  //       mapValues.convert({cap: false})((value, key) => {
+  //         if (eq('nodes', key)) {
+  //           return calcChanges(oldValue[key].length, value.length);
+  //         }
+  //         return calcChanges(oldValue[key], value);
+  //       }),
+  //       pick(['nodes', 'supply']),
+  //     )(newValue);
+  //   });
+  // }
 
   updateClusterInfo = data => {
     data = JSON.parse(data);
