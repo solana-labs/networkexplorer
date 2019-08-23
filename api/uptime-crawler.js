@@ -12,8 +12,8 @@ const FULLNODE_URL = process.env.FULLNODE_URL || 'http://localhost:8899';
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; // 10min
 
-if (!commandExistsSync('solana-wallet')) {
-  throw 'solana-wallet command not found!';
+if (!commandExistsSync('solana')) {
+  throw 'solana command not found!';
 }
 
 function getClient() {
@@ -35,7 +35,7 @@ function getVoteAccountUptime(x) {
       reject(`invalid pubkey: ${x}`);
       return;
     }
-    let command = `solana-wallet -u ${FULLNODE_URL} show-vote-account ${x.votePubkey}`;
+    let command = `solana -u ${FULLNODE_URL} show-vote-account ${x.votePubkey}`;
     exec(command, (err, stdout, stderr) => {
       const t2 = new Date().getTime();
 
