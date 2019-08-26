@@ -69,7 +69,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14",
-    "flow-bin": "^0.106.0",
+    "flow-bin": "^0.106.1",
     "flow-typed": "^2.6.1",
     "history": "^4.9.0",
     "husky": "^3.0.4",
