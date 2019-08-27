@@ -236,7 +236,7 @@ class App extends Component {
 
     if (location.pathname !== '/') {
       let pathMatch = matchPath(window.location.pathname, {
-        path: '/:type/:id',
+        path: '/v1/:type/:id',
         exact: false,
         strict: false,
       });
@@ -579,102 +579,100 @@ class App extends Component {
 
     return (
       <MuiThemeProvider theme={themeV1}>
-        <Router history={history}>
-          <CssBaseline />
-          <div className="App">
-            <BxAppBarThemed
-              handleSearch={self.handleSearch(self)}
-              enabled={this.state.enabled}
-              handleSwitch={this.toggleEnabled(self)}
-              handleSetEndpointName={this.setEndpointName}
-              handleMap={this.showMap(self)}
-            />
-            <div>
-              <Route
-                path="/map"
-                render={() => (
-                  <BxDialogWorldMapThemed
-                    open={true}
-                    onClose={self.handleDialogClose}
-                    nodes={this.state.nodes}
-                    leaderId={leaderId}
-                  />
-                )}
-              />
-              <Route
-                path="/txn/:id"
-                exact
-                render={() => (
-                  <BxDialogThemed
-                    selectedValue={self.state.selectedValue}
-                    open={self.state.dialogOpen}
-                    onClose={self.handleDialogClose}
-                  />
-                )}
-              />
-              <Route
-                path="/blk/:id"
-                exact
-                render={() => (
-                  <BxDialogThemed
-                    selectedValue={self.state.selectedValue}
-                    open={self.state.dialogOpen}
-                    onClose={self.handleDialogClose}
-                  />
-                )}
-              />
-              <Route
-                path="/ent/:id"
-                exact
-                render={() => (
-                  <BxDialogThemed
-                    selectedValue={self.state.selectedValue}
-                    open={self.state.dialogOpen}
-                    onClose={self.handleDialogClose}
-                  />
-                )}
-              />
-              <Route
-                path="/txns-by-prgid/:id"
-                exact
-                render={() => (
-                  <BxDialogTransactionsThemed
-                    selectedValue={self.state.selectedValue}
-                    open={self.state.dialogOpen}
-                    onClose={self.handleDialogClose}
-                  />
-                )}
-              />
-            </div>
-            <p />
-            <BxStatsTableThemed
-              globalStats={this.state.globalStats}
-              nodeCount={this.state.nodes.length}
-              feeCalculator={this.state.feeCalculator}
-            />
-            <p />
-            <BxTransactionChartThemed txnStats={this.state.txnStats} />
-            <p />
-            <Grid container spacing={1} justify="center">
-              <Grid item style={{width: '1460px'}}>
-                <BxDataTableThemed
-                  dataType="blk"
-                  dataItems={this.state.blocks}
+        <CssBaseline />
+        <div className="App">
+          <BxAppBarThemed
+            handleSearch={self.handleSearch(self)}
+            enabled={this.state.enabled}
+            handleSwitch={this.toggleEnabled(self)}
+            handleSetEndpointName={this.setEndpointName}
+            handleMap={this.showMap(self)}
+          />
+          <div>
+            <Route
+              path="/map"
+              render={() => (
+                <BxDialogWorldMapThemed
+                  open={true}
+                  onClose={self.handleDialogClose}
+                  nodes={this.state.nodes}
+                  leaderId={leaderId}
                 />
-              </Grid>
-            </Grid>
-            <p />
-            <Grid container spacing={1} justify="center">
-              <Grid item style={{width: '1460px'}}>
-                <BxDataTableThemed
-                  dataType="txn"
-                  dataItems={this.state.transactions}
+              )}
+            />
+            <Route
+              path="/txn/:id"
+              exact
+              render={() => (
+                <BxDialogThemed
+                  selectedValue={self.state.selectedValue}
+                  open={self.state.dialogOpen}
+                  onClose={self.handleDialogClose}
                 />
-              </Grid>
-            </Grid>
-            <p />
+              )}
+            />
+            <Route
+              path="/blk/:id"
+              exact
+              render={() => (
+                <BxDialogThemed
+                  selectedValue={self.state.selectedValue}
+                  open={self.state.dialogOpen}
+                  onClose={self.handleDialogClose}
+                />
+              )}
+            />
+            <Route
+              path="/ent/:id"
+              exact
+              render={() => (
+                <BxDialogThemed
+                  selectedValue={self.state.selectedValue}
+                  open={self.state.dialogOpen}
+                  onClose={self.handleDialogClose}
+                />
+              )}
+            />
+            <Route
+              path="/txns-by-prgid/:id"
+              exact
+              render={() => (
+                <BxDialogTransactionsThemed
+                  selectedValue={self.state.selectedValue}
+                  open={self.state.dialogOpen}
+                  onClose={self.handleDialogClose}
+                />
+              )}
+            />
           </div>
-        </Router>
+          <p />
+          <BxStatsTableThemed
+            globalStats={this.state.globalStats}
+            nodeCount={this.state.nodes.length}
+            feeCalculator={this.state.feeCalculator}
+          />
+          <p />
+          <BxTransactionChartThemed txnStats={this.state.txnStats} />
+          <p />
+          <Grid container spacing={1} justify="center">
+            <Grid item style={{width: '1460px'}}>
+              <BxDataTableThemed
+                dataType="blk"
+                dataItems={this.state.blocks}
+              />
+            </Grid>
+          </Grid>
+          <p />
+          <Grid container spacing={1} justify="center">
+            <Grid item style={{width: '1460px'}}>
+              <BxDataTableThemed
+                dataType="txn"
+                dataItems={this.state.transactions}
+              />
+            </Grid>
+          </Grid>
+          <p />
+        </div>
       </MuiThemeProvider>
     );
   }

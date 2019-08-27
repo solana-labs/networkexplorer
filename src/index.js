@@ -11,9 +11,10 @@ const AppV2 = lazy(() => import('./AppV2'));
 
 async function main() {
   await EndpointConfig.load();
+  const renderV1 = window.location.pathname.startsWith('/v1');
   ReactDOM.render(
-    <BrowserRouter>
-      {window.location.pathname.startsWith('/v1') ? (
+    <BrowserRouter basename={renderV1 ? '/v1' : null}>
+      {renderV1 ? (
         <App />
       ) : (
         <Suspense fallback={<div>Loading...</div>}>
