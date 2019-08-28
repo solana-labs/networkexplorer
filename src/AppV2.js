@@ -25,6 +25,10 @@ const Transactions = lazy(() => import('v2/components/Transactions'));
 const TransactionDetail = lazy(() =>
   import('v2/components/Transactions/Detail'),
 );
+const Applications = lazy(() => import('v2/components/Applications'));
+const ApplicationDetail = lazy(() =>
+  import('v2/components/Applications/Detail'),
+);
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,6 +86,12 @@ const App = () => {
                 exact
                 path="/transactions/:id"
                 component={TransactionDetail}
+              />
+              <Route exact path="/applications" component={Applications} />
+              <Route
+                exact
+                path="/applications/:id"
+                component={ApplicationDetail}
               />
             </Switch>
           </Suspense>
