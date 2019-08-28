@@ -580,17 +580,12 @@ async function getClusterInfo() {
       continue;
     }
     if (node.votePubkey && node.votePubkey != votePubkey) {
-      if (node.warning && node.warning.hasMultipleVoteAccounts) {
-        node.warning.hasMultipleVoteAccounts.push(
-          voteAccount.authorizedVoterPubkey,
-        );
-      } else {
-        node.warning |= {};
-        node.warning.hasMultipleVoteAccounts = [
-          node.votePubkey,
-          voteAccount.authorizedVoterPubkey,
-        ];
-      }
+      node.warning |= {};
+      node.warning.hasMultipleVoteAccounts |= {};
+      node.warning.hasMultipleVoteAccounts[node.votePubkey] |= {};
+      node.warning.hasMultipleVoteAccounts[node.votePubkey][
+        voteAccount.authorizedVoterPubkey
+      ] = true;
       continue;
     }
     node.nodePubkey = nodePubkey;
