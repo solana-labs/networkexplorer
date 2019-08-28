@@ -23,7 +23,13 @@ const Partnership = () => {
         <br />
         Let’s build something together.
       </Typography>
-      <Button color="primary" variant="contained" onClick={handlePartner}>
+      <Button
+        color="primary"
+        variant="contained"
+        href="https://solana.com/partnerships/"
+        target="_blank"
+        onClick={handlePartner}
+      >
         Partner with us
       </Button>
       <div className={classes.links}>

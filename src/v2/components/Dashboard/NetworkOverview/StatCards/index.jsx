@@ -3,16 +3,15 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {map} from 'lodash/fp';
+import {map, size} from 'lodash/fp';
 import {Grid, Typography} from '@material-ui/core';
 import Card from 'v2/components/UI/StatCard';
+import Loader from 'v2/components/UI/Loader';
 import OverviewStore from 'v2/stores/networkOverview';
 import NodesStore from 'v2/stores/nodes';
 import Socket from 'v2/stores/socket';
 
-import Loader from '../../Loader';
 import useStyles from './styles';
-import {size} from 'lodash';
 
 const StatCards = () => {
   const {globalStats} = OverviewStore;
@@ -69,7 +68,7 @@ const StatCards = () => {
       className={classes.card}
     >
       {isLoading ? (
-        <Loader />
+        <Loader width="533" height="290" />
       ) : (
         <Card title={title} value={value} changes={changes} />
       )}

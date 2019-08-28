@@ -5,7 +5,10 @@ import {observer} from 'mobx-react-lite';
 import NodesStore from 'v2/stores/nodes';
 import Card from 'v2/components/UI/StatCard';
 
+import Socket from '../../../stores/socket';
+import Loader from '../../UI/Loader';
 import useStyles from './styles';
+import {LAMPORT_SOL_RATIO} from '../../../constants';
 
 const Cards = ({
   stageDurationBlocks = null,
@@ -20,6 +23,7 @@ const Cards = ({
     totalStaked,
     networkInflationRate,
   } = NodesStore;
+  const {isLoading} = Socket;
 
   const cards = [
     {
@@ -41,14 +45,14 @@ const Cards = ({
       period: 'since yesterday',
     },
     {
-      title: 'Total SOL In Circulation',
+      title: 'Circulating SOL',
       value: (supply / Math.pow(2, 34)).toFixed(2),
       changes: '',
       period: 'since yesterday',
     },
     {
-      title: 'Total Staked SOL',
-      value: totalStaked,
+      title: 'Staked SOL',
+      value: (totalStaked * LAMPORT_SOL_RATIO).toFixed(8),
       changes: '',
       period: 'since yesterday',
     },
@@ -59,13 +63,13 @@ const Cards = ({
       period: 'since yesterday',
     },
     {
-      title: '# of Active Validators',
+      title: 'Active Validators',
       value: validators.length,
       changes: '',
       period: 'since yesterday',
     },
     {
-      title: '# of Inactive Validators',
+      title: 'Inactive Validators',
       value: inactiveValidators.length,
       changes: '',
       period: 'since yesterday',
@@ -86,7 +90,12 @@ const Cards = ({
     title: string,
     value: string | (() => React$Node),
     changes?: string,
-  }) => <Card key={title} title={title} value={value} changes={changes} />;
+  }) =>
+    isLoading ? (
+      <Loader key={title} width="100%" height="138" y={-3} />
+    ) : (
+      <Card key={title} title={title} value={value} changes={changes} />
+    );
 
   return <div className={classes.cards}>{map(renderStats)(cards)}</div>;
 };

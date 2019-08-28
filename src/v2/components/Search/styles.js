@@ -11,6 +11,11 @@ export default makeStyles(theme => {
       padding: 5,
       display: 'flex',
     },
+    inputInput: {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
     input: {
       border: 'none',
       background: getColor('grey2')(theme),

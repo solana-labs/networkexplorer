@@ -18,27 +18,27 @@ type Link = {
 
 const links: Link[] = [
   {
-    link: '#',
+    link: 'https://discordapp.com/invite/pquxPsq',
     icon: discord,
     name: 'discord',
   },
   {
-    link: '#',
+    link: 'https://t.me/solanaio',
     icon: telegram,
     name: 'telegram',
   },
   {
-    link: '#',
+    link: 'https://www.reddit.com/r/solana',
     icon: reddit,
     name: 'reddit',
   },
   {
-    link: '#',
+    link: 'https://twitter.com/solana',
     icon: twitter,
     name: 'twitter',
   },
   {
-    link: '#',
+    link: 'https://medium.com/solana-labs',
     icon: medium,
     name: 'medium',
   },
@@ -53,6 +53,8 @@ const Social = () => {
       key={name}
       className={classes.link}
       href={link}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={handleLink(name)}
     >
       <Icon />

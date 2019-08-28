@@ -1,46 +1,28 @@
 // @flow
 import {Container, Grid} from '@material-ui/core';
-import React from 'react';
-import cn from 'classnames';
+import React, {useEffect} from 'react';
+import {map, eq} from 'lodash/fp';
 import {observer} from 'mobx-react-lite';
+import {RouterHistory, withRouter} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import iconRight from 'v2/assets/icons/arrow-right-dark.png';
+import OverviewStore from 'v2/stores/networkOverview';
+import {TDS_ACTIVE_STAGE, TDS_STAGES, SLOTS_PER_DAY} from 'v2/constants';
+import socketActions from 'v2/stores/socket';
+
 import Ranking from './Ranking';
+import Stage from './Stage';
 import Table from './Table';
 import Cards from './Cards';
-import OverviewStore from 'v2/stores/networkOverview';
-
 import useStyles from './styles';
-import _ from 'lodash';
-import moment from 'moment';
 
-const SLOTS_PER_DAY = (1.0 * 24 * 60 * 60) / 0.8;
-const TDS_ACTIVE_STAGE = parseInt(process.env.TDS_ACTIVE_STAGE || '0');
-const TDS_DEFAULT_STAGE_LENGTH_BLOCKS = SLOTS_PER_DAY * 5.0;
-
-const TDS_STAGES = [
-  {title: 'Stage 0', hidden: true},
-  {
-    title: 'Stage 1',
-    start_date: '2019-09-02T17:00:00.0Z',
-    end_date: '2019-09-06T17:00:00.0Z',
-    duration: TDS_DEFAULT_STAGE_LENGTH_BLOCKS,
-  },
-  {
-    title: 'Stage 2',
-    start_date: '2019-09-09T17:00:00.0Z',
-    end_date: '2019-09-13T17:00:00.0Z',
-    duration: TDS_DEFAULT_STAGE_LENGTH_BLOCKS,
-  },
-  {
-    title: 'Stage 3',
-    start_date: '2019-09-16T17:00:00.0Z',
-    end_date: '2019-09-20T17:00:00.0Z',
-    duration: TDS_DEFAULT_STAGE_LENGTH_BLOCKS,
-  },
-];
-
-const TourDeSol = () => {
+const TourDeSol = ({history}: {history: RouterHistory}) => {
+  const {endpointName} = socketActions;
+  useEffect(() => {
+    if (!eq('tds', endpointName)) {
+      history.replace(`/`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endpointName]);
   const classes = useStyles();
   const currentStage =
     TDS_ACTIVE_STAGE < TDS_STAGES.length && TDS_STAGES[TDS_ACTIVE_STAGE];
@@ -52,52 +34,19 @@ const TourDeSol = () => {
   const daysLeftInStage =
     slotsLeftInStage && (slotsLeftInStage / SLOTS_PER_DAY).toFixed(3);
 
-  function renderStage(stage, i) {
-    if (stage.hidden) {
-      return;
-    }
-
-    const isActive = i === TDS_ACTIVE_STAGE;
-    const isFinished = i < TDS_ACTIVE_STAGE;
-    const stageDateStart = moment(stage.start_date).format('l');
-    const stageDateEnd = moment(stage.end_date).format('l');
-
-    if (isActive) {
-      return (
-        <li className={cn(classes.stage, classes.stageActive)} key={i}>
-          <div>
-            {stage.title} (LIVE!)
-            <img src={iconRight} width={47} height={13} alt="" />
-          </div>
-        </li>
-      );
-    } else if (isFinished) {
-      return (
-        <li className={classes.stage} key={i}>
-          <div>
-            {stage.title}
-            <br />
-            <span>(finished {stageDateEnd})</span>
-          </div>
-        </li>
-      );
-    } else {
-      return (
-        <li className={classes.stage} key={i}>
-          <div>
-            {stage.title}
-            <br />
-            <span>(coming {stageDateStart})</span>
-          </div>
-        </li>
-      );
-    }
-  }
+  const renderStage = stage => (
+    <Stage
+      stage={stage}
+      key={stage.id}
+      className={classes.stage}
+      activeClass={classes.stageActive}
+    />
+  );
 
   return (
     <Container>
       <SectionHeader title="Tour de sol leaderboard">
-        <ul className={classes.stages}>{_.map(TDS_STAGES, renderStage)}</ul>
+        <ul className={classes.stages}>{map(renderStage)(TDS_STAGES)}</ul>
       </SectionHeader>
       <Grid container spacing={2}>
         <Grid item xs={12} md={8} lg={9} className={classes.leftCol}>
@@ -116,4 +65,4 @@ const TourDeSol = () => {
   );
 };
 
-export default observer(TourDeSol);
+export default withRouter(observer(TourDeSol));

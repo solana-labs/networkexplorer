@@ -5,10 +5,10 @@ import {maxBy, minBy, get} from 'lodash/fp';
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {ResponsiveLine} from '@nivo/line';
+import Loader from 'v2/components/UI/Loader';
 import OverviewStore from 'v2/stores/networkOverview';
 import Socket from 'v2/stores/socket';
 
-import Loader from '../../Loader';
 import useStyles from './styles';
 
 type Point = {
@@ -37,7 +37,7 @@ const TPS = () => {
   const {isLoading} = Socket;
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader width="533" height="290" />;
   }
 
   const data = [

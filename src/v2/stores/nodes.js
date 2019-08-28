@@ -1,4 +1,4 @@
-import {filter, map} from 'lodash/fp';
+import {compose, filter, map} from 'lodash/fp';
 import {action, computed, decorate, observable, flow} from 'mobx';
 import * as API from 'v2/api/stats';
 
@@ -43,31 +43,26 @@ class Store {
   });
 
   get mapMarkers() {
-    let validators = filter(node => node.what === 'Validator')(this.network);
-
-    validators = map(({nodePubkey: name, tpu: gossip, coordinates}) => ({
-      name,
-      gossip,
-      coordinates,
-    }))(validators);
-
-    return validators;
+    return compose(
+      map(({nodePubkey: name, tpu: gossip, coordinates}) => ({
+        name,
+        gossip,
+        coordinates,
+      })),
+      filter({what: 'Validator'}),
+    )(this.network);
   }
 
   get validators() {
-    let active = filter(
-      node => node.what === 'Validator' && node.activatedStake,
-    )(this.network);
-
-    return active;
+    return filter(node => node.what === 'Validator' && node.activatedStake)(
+      this.network,
+    );
   }
 
   get inactiveValidators() {
-    let inactive = filter(
-      node => node.what === 'Validator' && !node.activatedStake,
-    )(this.network);
-
-    return inactive;
+    return filter(node => node.what === 'Validator' && !node.activatedStake)(
+      this.network,
+    );
   }
 }
 
