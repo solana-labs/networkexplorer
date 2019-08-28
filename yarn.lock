@@ -1635,10 +1635,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
   integrity sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==
 
-"@solana/web3.js@^0.18.8":
-  version "0.18.8"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.18.8.tgz#2d00d002848ceadbebb2b9b939482883273aee3b"
-  integrity sha512-ApyyV6yMwt2Rz+DqbCr8lgdK+A9IakpZiWlL2K8VQioAFZSEckzN8cWd2vEhmAPpbyev5PV2V6gfvee4Ao1EAw==
+"@solana/web3.js@^0.19.1":
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.19.1.tgz#3d1e5ac2aca64ecce9e12379438bd4931cef6c85"
+  integrity sha512-MJUKVo7gMps6126p6Xfzpk6Vxc21P7AuQ+J5z/tmVMuZQYJ/Kw+OcNjBnVeCjBRw4ObQlqXuI3/zORPqX2xVvQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
     bn.js "^5.0.0"
