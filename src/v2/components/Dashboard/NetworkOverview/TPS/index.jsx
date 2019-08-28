@@ -33,7 +33,7 @@ const Tooltip = ({point: {data}}: {point: Point}) => {
 
 const TPS = () => {
   const classes = useStyles();
-  const {txnChartData, globalStats, statsChanges} = OverviewStore;
+  const {txnChartData, globalStats /* statsChanges */} = OverviewStore;
   const {isLoading} = Socket;
 
   if (isLoading) {
@@ -78,11 +78,11 @@ const TPS = () => {
         <Typography className={classes.val} variant="h2">
           {globalStats.tpsCount || 0}
         </Typography>
-        {statsChanges && (
-          <Typography align="right" variant="h2" className={classes.changes}>
-            {statsChanges.tpsCount}%
-          </Typography>
-        )}
+        {/*{statsChanges && (*/}
+        {/*  <Typography align="right" variant="h2" className={classes.changes}>*/}
+        {/*    {statsChanges.tpsCount}%*/}
+        {/*  </Typography>*/}
+        {/*)}*/}
       </div>
       <div className={classes.graph}>
         {Boolean(txnChartData.length) && (
