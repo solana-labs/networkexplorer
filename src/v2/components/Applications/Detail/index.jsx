@@ -3,49 +3,54 @@ import {Container, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
+import {ReactComponent as StarIcon} from 'v2/assets/icons/star.svg';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import ApplicationCode from 'v2/components/Applications/Detail/Code';
 import HelpLink from 'v2/components/HelpLink';
+import TypeLabel from 'v2/components/UI/TypeLabel';
 import QRPopup from 'v2/components/QRPopup';
-import CopyBtn from '../../UI/CopyBtn';
-import TabNav from '../../UI/TabNav';
+import CopyBtn from 'v2/components/UI/CopyBtn';
 
-import ApplicationsTab from './ApplicationsTab';
-import ApplicationStatus from './Status';
+import TabNav from '../../UI/TabNav';
+import ApplicationDetails from './Details';
+import ApplicationCode from './Code';
 import useStyles from './styles';
 
 const TransactionDetail = () => {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
   const theme = useTheme();
-  const verticalTabs = useMediaQuery(theme.breakpoints.down('sm'));
+  const verticalTable = useMediaQuery(theme.breakpoints.down('xs'));
+
   const handleTabChange = (event, tab) => setTab(tab);
 
   const specs = [
     {
-      label: 'Time',
+      label: 'Balance',
       hint: '',
-      value: '06/05/2019 11:27AM',
+      value: '0.006 SOL | $1.12',
     },
     {
-      label: 'Fee',
+      label: 'Type',
       hint: '',
-      value: '0.006 SOL | $0.60',
+      value() {
+        return (
+          <div className={classes.types}>
+            <TypeLabel type="system" label="system" />
+            <TypeLabel type="consensus" label="consensus" />
+          </div>
+        );
+      },
     },
     {
-      label: 'Block',
+      label: 'Nickname',
       hint: '',
-      value: '7887219',
+      value: 'Testname',
     },
     {
-      label: 'Confirmations',
+      label: 'Description',
       hint: '',
-      value: '1,245',
-    },
-    {
-      label: 'Value',
-      hint: '',
-      value: '0.006 SOL | $0.60',
+      value:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
   ];
 
@@ -61,27 +66,30 @@ const TransactionDetail = () => {
     </li>
   );
 
-  const tabNav = ['Applications: 3', 'status: success', 'code/course'];
+  const tabNav = ['Details', 'code/course'];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
 
   return (
     <Container>
       <div className={classes.root}>
-        <SectionHeader title="Transaction Detail">
+        <SectionHeader title="Application Detail">
           <div className={classes.blockTitle}>
             <span>
               0x03e125a40b39a637028bce780af3544e51cfa2f61abbe7c8ec8059f7178bce74
             </span>
-            <CopyBtn text="123" />
+            <CopyBtn text={'123'} />
             <QRPopup />
+            <button>
+              <StarIcon />
+            </button>
           </div>
         </SectionHeader>
         <div className={classes.body}>
           <ul className={classes.spec}>{map(renderSpec)(specs)}</ul>
         </div>
         <Tabs
-          orientation={verticalTabs ? 'vertical' : 'horizontal'}
+          orientation={verticalTable ? 'vertical' : 'horizontal'}
           className={classes.tabs}
           classes={{indicator: classes.indicator}}
           value={tab}
@@ -90,9 +98,8 @@ const TransactionDetail = () => {
         >
           {map(renderTabNav)(tabNav)}
         </Tabs>
-        {eq(0, tab) && <ApplicationsTab />}
-        {eq(1, tab) && <ApplicationStatus />}
-        {eq(2, tab) && <ApplicationCode />}
+        {eq(0, tab) && <ApplicationDetails />}
+        {eq(1, tab) && <ApplicationCode />}
       </div>
     </Container>
   );
