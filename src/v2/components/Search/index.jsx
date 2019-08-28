@@ -5,7 +5,7 @@ import {compose, get, filter, toLower, contains} from 'lodash/fp';
 import {InputBase, IconButton} from '@material-ui/core';
 import {Search as SearchIcon} from '@material-ui/icons';
 import NodesStore from 'v2/stores/nodes';
-import {MIN_TERM_LEN} from '../../constants';
+import {MIN_TERM_LEN} from 'v2/constants';
 
 import SearchResult from './result';
 import useStyles from './styles';
@@ -43,6 +43,7 @@ const Search = () => {
       setSearchResult([]);
       return;
     }
+
     const filteredValidators = filter(v => {
       const lowerVal = toLower(value);
       return (
@@ -50,6 +51,11 @@ const Search = () => {
           contains(lowerVal),
           toLower,
           get('nodePubkey'),
+        )(v) ||
+        compose(
+          contains(lowerVal),
+          toLower,
+          get('identity.name'),
         )(v) ||
         compose(
           contains(lowerVal),
@@ -69,7 +75,7 @@ const Search = () => {
           onFocus={onFocus}
           onBlur={onBlur}
           className={classes.input}
-          placeholder="Search by validators address / keybase"
+          placeholder="Search by validator address / keybase"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,

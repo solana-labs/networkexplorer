@@ -17,6 +17,7 @@ export default makeStyles(theme => ({
   },
   card: {
     minWidth: '1px',
+    minHeight: 150,
     '&:not(:last-child)': {
       marginBottom: 15,
     },
@@ -34,6 +35,10 @@ export default makeStyles(theme => ({
         marginBottom: 15,
       },
     },
+    '& svg': {
+      height: '100%',
+      width: '100%',
+    },
   },
   becomeBtn: {
     marginLeft: 'auto',
@@ -44,11 +49,19 @@ export default makeStyles(theme => ({
   stats: {
     display: 'flex',
     flexDirection: 'column',
+    height: '100%',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'row',
     },
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
+    },
+  },
+  loader: {
+    height: '100%',
+    '& svg': {
+      width: '100%',
+      height: '100%',
     },
   },
 }));

@@ -91,8 +91,8 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell width={100}>Ranking</TableCell>
-              <TableCell width={230}>Name</TableCell>
-              <TableCell>Stake SOL</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell width={150}>Staked SOL</TableCell>
               <TableCell width={110}>Uptime</TableCell>
             </TableRow>
           </TableHead>

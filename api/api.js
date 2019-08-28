@@ -580,9 +580,11 @@ async function getClusterInfo() {
       continue;
     }
     if (node.votePubkey && node.votePubkey != votePubkey) {
-      node.warning = (node.warning || {});
-      node.warning.hasMultipleVoteAccounts = (node.warning.hasMultipleVoteAccounts || {});
-      node.warning.hasMultipleVoteAccounts[node.votePubkey] = (node.warning.hasMultipleVoteAccounts[node.votePubkey] || {});
+      node.warning = node.warning || {};
+      node.warning.hasMultipleVoteAccounts =
+        node.warning.hasMultipleVoteAccounts || {};
+      node.warning.hasMultipleVoteAccounts[node.votePubkey] =
+        node.warning.hasMultipleVoteAccounts[node.votePubkey] || {};
       node.warning.hasMultipleVoteAccounts[node.votePubkey][
         voteAccount.authorizedVoterPubkey
       ] = true;

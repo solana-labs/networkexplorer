@@ -11,12 +11,15 @@ import {
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
+import {observer} from 'mobx-react-lite';
 import {RouterHistory, withRouter} from 'react-router-dom';
 import React from 'react';
 import {map, propEq, eq} from 'lodash/fp';
 import Mixpanel from 'v2/mixpanel';
-import EndpointSelector from '../EndpointSelector';
+import socketActions from 'v2/stores/socket';
+import insertIf from 'v2/utils/insertIf';
 
+import EndpointSelector from '../EndpointSelector';
 import {ReactComponent as dashboard} from './assets/dashboard.svg';
 import {ReactComponent as transactions} from './assets/transactions.svg';
 import {ReactComponent as validators} from './assets/validators.svg';
@@ -57,6 +60,8 @@ const NavBar = ({
   isOpen: boolean,
   toggleDrawer: (val: boolean) => void,
 }) => {
+  const {endpointName} = socketActions;
+  const isTDS = eq('tds', endpointName);
   const classes = useStyles();
   const theme = useTheme();
   const showDrawer = useMediaQuery(theme.breakpoints.up('md'));
@@ -67,11 +72,11 @@ const NavBar = ({
     {
       link: 'validators',
     },
-    {
+    ...insertIf(isTDS, {
       link: 'tour-de-sol',
       icon: 'tourdesol',
       title: 'tour de sol',
-    },
+    }),
     {
       link: 'transactions',
       disabled: true,
@@ -164,4 +169,4 @@ const NavBar = ({
   );
 };
 
-export default withRouter(NavBar);
+export default withRouter(observer(NavBar));

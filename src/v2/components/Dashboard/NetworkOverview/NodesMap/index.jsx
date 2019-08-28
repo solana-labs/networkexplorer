@@ -14,9 +14,9 @@ import NodesStore from 'v2/stores/nodes';
 import OverviewStore from 'v2/stores/networkOverview';
 import Socket from 'v2/stores/socket';
 import MapTooltip from 'v2/components/UI/MapTooltip';
+import Loader from 'v2/components/UI/Loader';
 import {mapStyle, markerStyle} from 'v2/theme';
 
-import Loader from '../../Loader';
 import useStyles from './styles';
 
 const mapStyles = {
@@ -32,17 +32,16 @@ const NodesMap = () => {
   const {isLoading} = Socket;
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader width="533" height="290" />;
   }
 
   const mapConfig = {
     projection: {
-      scale: 85,
-      rotation: [-11, 0, 0],
+      scale: 90,
+      rotation: [-11, -10, 0],
     },
     style: {
       width: '100%',
-      height: 'auto',
     },
     center: [0, 20],
   };
@@ -68,11 +67,11 @@ const NodesMap = () => {
   );
   return (
     <div className={classes.card}>
-      <Typography>Nodes Map</Typography>
+      <Typography>Active Validators Map</Typography>
       <ComposableMap
         projectionConfig={mapConfig.projection}
-        width={390}
-        height={240}
+        width={530}
+        height={262}
         style={mapConfig.style}
       >
         <ZoomableGroup center={mapConfig.center} disablePanning>

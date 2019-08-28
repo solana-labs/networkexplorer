@@ -12,6 +12,7 @@ export default makeStyles(theme => ({
   header: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     '& span': {
       whiteSpace: 'nowrap',
       overflow: 'hidden',

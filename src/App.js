@@ -656,10 +656,7 @@ class App extends Component {
           <p />
           <Grid container spacing={1} justify="center">
             <Grid item style={{width: '1460px'}}>
-              <BxDataTableThemed
-                dataType="blk"
-                dataItems={this.state.blocks}
-              />
+              <BxDataTableThemed dataType="blk" dataItems={this.state.blocks} />
             </Grid>
           </Grid>
           <p />

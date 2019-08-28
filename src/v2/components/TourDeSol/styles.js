@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
     width: '100%',
     padding: 0,
     margin: 0,
-    marginLeft: 50,
+    marginLeft: 'auto',
     maxWidth: 675,
     [theme.breakpoints.down('sm')]: {
       maxWidth: '100%',

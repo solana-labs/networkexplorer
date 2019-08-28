@@ -8,33 +8,37 @@ import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
 import Mixpanel from 'v2/mixpanel';
 import Button from 'v2/components/UI/Button';
+import Socket from 'v2/stores/socket';
+import Loader from 'v2/components/UI/Loader';
 
 import ValidatorsMap from './ValidatorsMap';
 import ValidatorsTable from './Table';
 import useStyles from './styles';
+import {LAMPORT_SOL_RATIO} from '../../constants';
 
 const Validators = () => {
   const classes = useStyles();
   const {supply, validators, fetchClusterInfo, totalStaked} = NodesStore;
+  const {isLoading} = Socket;
   useEffect(() => {
     fetchClusterInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const cards = [
     {
-      title: 'Total Circulating SOL',
+      title: 'Circulating SOL',
       value: (supply / Math.pow(2, 34)).toFixed(2),
       changes: '',
       period: 'since yesterday',
     },
     {
-      title: 'Total Staked SOL',
-      value: totalStaked,
+      title: 'Staked SOL',
+      value: (totalStaked * LAMPORT_SOL_RATIO).toFixed(8),
       changes: '',
       period: 'since yesterday',
     },
     {
-      title: '# Active Validators',
+      title: 'Active Validators',
       value: validators.length,
       changes: '',
       period: 'since yesterday',
@@ -53,18 +57,22 @@ const Validators = () => {
     period: string,
   }) => (
     <div key={title} className={classes.card}>
-      <Card
-        key={title}
-        zeroMinWidth
-        title={title}
-        value={value}
-        changes={() => (
-          <div className={classes.changes}>
-            {changes && <div>{changes}%</div>}
-            <div className={classes.period}>{period}</div>
-          </div>
-        )}
-      />
+      {isLoading ? (
+        <Loader width="100%" height="150" y={-3} />
+      ) : (
+        <Card
+          key={title}
+          zeroMinWidth
+          title={title}
+          value={value}
+          changes={() => (
+            <div className={classes.changes}>
+              {changes && <div>{changes}%</div>}
+              <div className={classes.period}>{period}</div>
+            </div>
+          )}
+        />
+      )}
     </div>
   );
 
@@ -86,7 +94,13 @@ const Validators = () => {
       </SectionHeader>
       <Grid spacing={2} container>
         <Grid item xs={12} md={9} zeroMinWidth>
-          <ValidatorsMap />
+          {isLoading ? (
+            <div className={classes.loader}>
+              <Loader width="100%" height="480" y={-10} />
+            </div>
+          ) : (
+            <ValidatorsMap />
+          )}
         </Grid>
         <Grid item xs={12} md={3} zeroMinWidth>
           <div className={classes.stats}>{map(renderStats)(cards)}</div>
