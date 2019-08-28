@@ -505,8 +505,9 @@ async function getClusterInfo() {
   const nodeConnectionCache = {};
   let ts = new Date().toISOString();
   let [, feeCalculator] = await connection.getRecentBlockhash();
+  let inflation = await connection.getInflation();
   let currentSlot = await getAsync('!blk-last-slot');
-  let networkInflationRate = getNetworkInflationRate(currentSlot);
+  let networkInflationRate = getNetworkInflationRate(inflation, currentSlot);
   let supply = await connection.getTotalSupply();
   let clusterNodes = await connection.getClusterNodes();
   const leader = await connection.getSlotLeader();
@@ -661,6 +662,7 @@ async function getClusterInfo() {
   let rest = {
     feeCalculator,
     supply,
+    inflation,
     networkInflationRate,
     totalStaked,
     network,
@@ -789,30 +791,22 @@ async function fetchValidatorIdentities(keys) {
 }
 
 /**
- * TODO - this data should come from an RPC that loads parameters
- * from the genesis block.
+ * This data comes from the fullnode getInflation() RPC
  *
  * @param slot
  */
-function getNetworkInflationRate(slot) {
+function getNetworkInflationRate(inflation, slot) {
   const SLOTS_PER_SECOND = 1.0;
   const SECONDS_PER_YEAR = 365.25 * 24.0 * 60.0 * 60.0;
   const SLOTS_PER_YEAR = SLOTS_PER_SECOND * SECONDS_PER_YEAR;
-  const DEFAULT_INITIAL = 0.15;
-  const DEFAULT_TERMINAL = 0.015;
-  const DEFAULT_TAPER = 0.15;
-  // const DEFAULT_FOUNDATION = 0.05;
-  // const DEFAULT_GRANT = 0.05;
-  // const DEFAULT_FOUNDATION_GRANT_TERM = 7.0;
-  // const DEFAULT_STORAGE = 0.10;
 
   let year = (slot * 1.0) / SLOTS_PER_YEAR;
-  let tapered = DEFAULT_INITIAL * Math.pow(1.0 - DEFAULT_TAPER, year);
+  let tapered = inflation.initial * Math.pow(1.0 - inflation.taper, year);
 
-  if (tapered > DEFAULT_TERMINAL) {
+  if (tapered > inflation.terminal) {
     return tapered;
   } else {
-    return DEFAULT_TERMINAL;
+    return inflation.terminal;
   }
 }
 
