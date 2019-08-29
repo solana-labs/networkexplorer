@@ -7,8 +7,7 @@ import {
   observe,
   computed,
 } from 'mobx';
-import parseISO from 'date-fns/parseISO';
-import format from 'date-fns/format';
+import moment from 'moment';
 import {
   map,
   keys,
@@ -74,7 +73,7 @@ class OverviewStore {
       map(([date, value = 0]) => ({
         y: Math.round((parseFloat(value) / 60) * 100) / 100,
         x: date,
-        date: format(parseISO(date), 'MMM d hh:mma'),
+        date: moment(date, 'YYYYMMDDTHH:mm', true).format('MMM D hh:mmA'),
       })),
       toPairs,
       pickBy(identity),
