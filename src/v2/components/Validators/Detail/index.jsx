@@ -35,7 +35,7 @@ const mapStyles = {
 };
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
-  const {validators, inactiveValidators} = NodesStore;
+  const {validators, inactiveValidators, totalStaked} = NodesStore;
   const {globalStats} = OverviewStore;
 
   const classes = useStyles();
@@ -90,9 +90,9 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       },
     },
     {
-      label: 'Voting power',
+      label: 'Staked SOL',
       hint: '',
-      value: (activatedStake * LAMPORT_SOL_RATIO).toFixed(8),
+      value: `${(activatedStake * LAMPORT_SOL_RATIO).toFixed(8)} (${(100 * (activatedStake / totalStaked)).toFixed(3)}%)`
     },
     {
       label: 'Website',
@@ -108,7 +108,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       },
     },
     {
-      label: 'Missed blocks',
+      label: 'Uptime',
       hint: '',
       value: 'TODO',
     },
@@ -130,9 +130,9 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       },
     },
     {
-      label: 'commission',
+      label: 'Missed blocks',
       hint: '',
-      value: `${(100 * (commission / 0xff)).toFixed(3)}%`,
+      value: 'TODO',
     },
     {
       label: 'details',
@@ -140,9 +140,9 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       value: identity.details || '',
     },
     {
-      label: 'Amount of delegated sol',
+      label: 'commission',
       hint: '',
-      value: 'TODO',
+      value: `${(100 * (commission / 0xff)).toFixed(3)}%`,
     },
   ];
 
