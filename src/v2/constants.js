@@ -24,8 +24,8 @@ export const TDS_STAGES = [
   {
     id: 3,
     title: 'Stage 3',
-    startDate: '2019-11-4T17:00:00.0Z',
-    endDate: '2019-11-8T17:00:00.0Z',
+    startDate: '2019-11-04T17:00:00.0Z',
+    endDate: '2019-11-08T17:00:00.0Z',
     duration: TDS_DEFAULT_STAGE_LENGTH_BLOCKS,
   },
 ];
