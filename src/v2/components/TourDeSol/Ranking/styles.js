@@ -17,7 +17,7 @@ export default makeStyles(theme => ({
     },
   },
   name: {
-    maxWidth: 130,
+    width: 130,
     color: getColor('main')(theme),
     marginRight: 26,
     flexShrink: 0,
