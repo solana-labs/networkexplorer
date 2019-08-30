@@ -1,20 +1,13 @@
 import * as solanaWeb3 from '@solana/web3.js';
 import _ from 'lodash';
-import YAML from 'yaml';
 import redis from 'redis';
 import {promisify} from 'util';
-import {exec} from 'child_process';
-import {sync as commandExistsSync} from 'command-exists';
 
 import config from './config';
 
 const FULLNODE_URL = process.env.FULLNODE_URL || 'http://localhost:8899';
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; // 10min
-
-if (!commandExistsSync('solana')) {
-  throw 'solana command not found!';
-}
 
 function getClient() {
   let props = config.redis.path
@@ -27,72 +20,73 @@ function getClient() {
 const client = getClient();
 const setAsync = promisify(client.set).bind(client);
 
-function getVoteAccountUptime(x) {
+// FIXME: this should be a genesis block API call (eventually), see:
+// https://github.com/solana-labs/solana/blob/master/cli/src/wallet.rs#L680
+// https://github.com/solana-labs/solana/blob/master/sdk/src/timing.rs#L14
+const SLOTS_PER_EPOCH = 8192;
+
+async function getVoteAccountUptime(connection, x) {
   const t1 = new Date().getTime();
+  let voteAccount = await connection.getAccountInfo(
+    new solanaWeb3.PublicKey(x.votePubkey),
+  );
+  const t2 = new Date().getTime();
 
-  const p = new Promise((resolve, reject) => {
-    if (!x.votePubkey || x.votePubkey.length !== 44) {
-      reject(`invalid pubkey: ${x}`);
-      return;
-    }
-    let command = `solana -u ${FULLNODE_URL} show-vote-account ${x.votePubkey}`;
-    exec(command, (err, stdout, stderr) => {
-      const t2 = new Date().getTime();
+  let voteState = solanaWeb3.VoteAccount.fromAccountData(voteAccount.data);
+  if (voteState) {
+    const uptime = _.reduce(
+      voteState.epochCredits,
+      (a, v) => {
+        let credits = v.credits - v.prevCredits;
 
-      if (err) {
-        // node couldn't execute the command
-        console.log('err', err, stderr);
-        reject(err);
-        return;
-      }
+        a.unshift({
+          epoch: v.epoch,
+          credits_earned: credits,
+          slots_in_epoch: SLOTS_PER_EPOCH,
+          percentage: ((credits * 1.0) / (SLOTS_PER_EPOCH * 1.0)).toFixed(6),
+        });
 
-      const result = YAML.parse(stdout);
+        return a;
+      },
+      [],
+    );
 
-      const uptime = _.reduce(
-        result['epoch voting history'],
-        (a, v) => {
-          a.unshift({
-            epoch: v.epoch,
-            credits_earned: v['credits earned'],
-            slots_in_epoch: v['slots in epoch'],
-            percentage: (
-              (v['credits earned'] * 1.0) /
-              (v['slots in epoch'] * 1.0)
-            ).toFixed(6),
-          });
-          return a;
-        },
-        [],
-      );
+    const uptimeValue = {
+      nodePubkey: voteState.nodePubkey.toString(),
+      authorizedVoterPubkey: voteState.authorizedVoterPubkey.toString(),
+      uptime: uptime,
+      lat: t2 - t1,
+      ts: t1,
+    };
 
-      const uptimeValue = {
-        nodePubkey: result['node id'],
-        authorizedVoterPubkey: result['authorized voter pubkey'],
-        uptime: uptime,
-        lat: t2 - t1,
-        ts: t1,
-      };
-
-      resolve(uptimeValue);
-    });
-  });
-
-  return p;
+    return uptimeValue;
+  } else {
+    console.log('eep, no vote state: ', x.votePubkey);
+    return null;
+  }
 }
 
 async function refreshUptime() {
   console.log('uptime updater: updating...');
-  const connection = new solanaWeb3.Connection(FULLNODE_URL);
-  let voting = await connection.getVoteAccounts();
+  try {
+    const connection = new solanaWeb3.Connection(FULLNODE_URL);
+    let voting = await connection.getVoteAccounts();
 
-  const allTasks = _.map(voting.current.concat(...voting.delinquent), v => {
-    return getVoteAccountUptime(v);
-  });
+    const resultsAsync = _.map(
+      voting.current.concat(...voting.delinquent),
+      v => {
+        return getVoteAccountUptime(connection, v);
+      },
+    );
 
-  Promise.all(allTasks).then(async results => {
+    let results = await Promise.all(resultsAsync);
+    results = _.filter(results, x => x);
     await setAsync('!uptime', JSON.stringify(results));
+
     console.log('uptime updater: updated successfully.');
-  });
+  } catch (err) {
+    console.log('ERROR updating uptime: ' + err);
+  }
 }
 
 console.log('uptime updater process running...');
