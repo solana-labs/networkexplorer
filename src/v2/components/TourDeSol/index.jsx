@@ -1,7 +1,7 @@
 // @flow
 import {Container, Grid} from '@material-ui/core';
-import React, {useEffect} from 'react';
-import {map, eq} from 'lodash/fp';
+import React /* useEffect */ from 'react';
+import {map /* eq */} from 'lodash/fp';
 import {observer} from 'mobx-react-lite';
 import {RouterHistory, withRouter} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
@@ -16,8 +16,8 @@ import Cards from './Cards';
 import useStyles from './styles';
 
 const TourDeSol = ({history}: {history: RouterHistory}) => {
-  const {endpointName} = socketActions;
-  // FIXME: this is commented to allow testing
+  // FIXME: this is commented to allow testing without redirection
+  // const {endpointName} = socketActions;
   // useEffect(() => {
   //   if (!eq('tds', endpointName)) {
   //     history.replace(`/`);
