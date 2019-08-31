@@ -61,7 +61,7 @@ const Ranking = ({stageDurationBlocks = null, currentSlot = null}) => {
         <div className={classes.bar}>
           <div
             className={classes.icon}
-            style={{left: `calc(${position}% - 52px)`}}
+            style={{left: `calc(${position}% - 26px)`}}
           >
             <BicycleIcon />
           </div>
