@@ -17,12 +17,13 @@ import useStyles from './styles';
 
 const TourDeSol = ({history}: {history: RouterHistory}) => {
   const {endpointName} = socketActions;
-  useEffect(() => {
-    if (!eq('tds', endpointName)) {
-      history.replace(`/`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endpointName]);
+  // FIXME: this is commented to allow testing
+  // useEffect(() => {
+  //   if (!eq('tds', endpointName)) {
+  //     history.replace(`/`);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [endpointName]);
   const classes = useStyles();
   const currentStage =
     TDS_ACTIVE_STAGE < TDS_STAGES.length && TDS_STAGES[TDS_ACTIVE_STAGE];
@@ -50,7 +51,10 @@ const TourDeSol = ({history}: {history: RouterHistory}) => {
       </SectionHeader>
       <Grid container spacing={2}>
         <Grid item xs={12} md={8} lg={9} className={classes.leftCol}>
-          <Ranking />
+          <Ranking
+            stageDurationBlocks={currentStage && currentStage.duration}
+            currentSlot={slot}
+          />
           <Table />
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
