@@ -2,6 +2,7 @@
 
 import {Grid, Container} from '@material-ui/core';
 import React, {useEffect, useRef} from 'react';
+import cn from 'classnames';
 import OverviewStore from 'v2/stores/networkOverview';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 
@@ -44,10 +45,10 @@ const NetworkOverview = () => {
         }
       />
       <Grid container spacing={2} className={classes.row}>
-        <Grid item xs={12} md={6} className={classes.card}>
+        <Grid item xs={12} md={6} className={cn(classes.card, classes.tpsCard)}>
           <TPS />
         </Grid>
-        <Grid item xs={12} md={6} className={classes.card}>
+        <Grid item xs={12} md={6} className={cn(classes.card, classes.mapCard)}>
           <NodesMap />
         </Grid>
       </Grid>

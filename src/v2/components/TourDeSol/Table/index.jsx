@@ -77,7 +77,10 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       <div className={classes.header}>
         <Typography>
           Active Validators
-          <HelpLink text="" term="" />
+          <HelpLink
+            text="The number of validators currently confirming the legitimacy of entries added to the ledger."
+            term=""
+          />
         </Typography>
         <Typography variant="h5">{validators.length}</Typography>
         {!separate && (

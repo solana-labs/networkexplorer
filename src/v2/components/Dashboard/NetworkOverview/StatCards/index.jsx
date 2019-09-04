@@ -23,14 +23,23 @@ const StatCards = () => {
     {
       title: 'Node Count',
       value: size(network),
+      helpTerm: 'fullnode',
+      helpText:
+        'Number of fullnodes currently active and participating in the network.',
     },
     {
       title: 'Block Height',
       value: globalStats['!blkLastSlot'],
+      helpTerm: 'block-height',
+      helpText:
+        'The number of blocks beneath the current block. The first block after the genesis block has height zero. This is the number of blocks the network has currently produced.',
     },
     {
       title: 'Transactions Count',
       value: globalStats['!txnCount'],
+      helpTerm: '',
+      helpText:
+        'The total number of transactions processed by the network and added to the ledger.',
     },
     {
       title: 'Current Leader',
@@ -46,17 +55,22 @@ const StatCards = () => {
           </Link>
         );
       },
+      helpTerm: 'leader',
+      helpText:
+        'The fullnode that currently has the role of appending entries to the ledger',
     },
   ];
 
   const renderStats = ({
     title,
-    value,
     changes = null,
+    ...props
   }: {
     title: string,
     value: string | (() => React$Node),
     changes?: string,
+    helpText: string,
+    helpTerm: string,
   }) => (
     <Grid
       key={title}
@@ -70,7 +84,7 @@ const StatCards = () => {
       {isLoading ? (
         <Loader width="533" height="290" />
       ) : (
-        <Card title={title} value={value} changes={changes} />
+        <Card title={title} changes={changes} {...props} />
       )}
     </Grid>
   );
