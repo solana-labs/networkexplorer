@@ -92,7 +92,10 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Staked SOL',
       hint: '',
-      value: `${(activatedStake * LAMPORT_SOL_RATIO).toFixed(8)} (${(100 * (activatedStake / totalStaked)).toFixed(3)}%)`
+      value: `${(activatedStake * LAMPORT_SOL_RATIO).toFixed(8)} (${(
+        100 *
+        (activatedStake / totalStaked)
+      ).toFixed(3)}%)`,
     },
     {
       label: 'Website',

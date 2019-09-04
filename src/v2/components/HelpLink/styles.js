@@ -22,4 +22,12 @@ export default makeStyles(theme => ({
       textDecoration: 'none',
     },
   },
+  tooltip: {
+    backgroundColor: getColor('white')(theme),
+    color: getColor('dark')(theme),
+    fontSize: 12,
+    lineHeight: '16px',
+    borderRadius: 0,
+    padding: 11,
+  },
 }));

@@ -12,11 +12,22 @@ export default makeStyles(theme => ({
   },
   card: {
     height: 306,
+  },
+  mapCard: {
+    height: 306,
     '& svg': {
       width: '100%',
       height: 295,
       minHeight: 290,
       marginTop: -5,
+    },
+  },
+  tpsCard: {
+    '& > svg': {
+      width: '100%',
+      marginTop: -5,
+      height: 295,
+      minHeight: 290,
     },
   },
 }));

@@ -9,11 +9,13 @@ type StatCardProps = {
   title?: string,
   value?: string | (() => React$Node),
   changes?: string | (() => React$Node),
+  helpTerm?: string,
+  helpText?: string,
 };
 
 const StatCard = (props: StatCardProps) => {
   const classes = useStyles();
-  const {title, value, changes} = props;
+  const {title, value, changes = null, helpTerm, helpText} = props;
   const renderValue = () => {
     if (!value && !(value === 0)) return;
     if (typeof value === 'function') {
@@ -41,7 +43,7 @@ const StatCard = (props: StatCardProps) => {
         variant="body1"
       >
         <span>{title}</span>
-        <HelpLink text="" term="" />
+        <HelpLink text={helpText} term={helpTerm} />
       </Typography>
       {renderValue()}
       <Typography align="center" variant="h2" className={classes.changes}>
