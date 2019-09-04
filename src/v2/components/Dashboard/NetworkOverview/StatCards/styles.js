@@ -20,6 +20,7 @@ export default makeStyles(theme => ({
     textDecoration: 'none',
     '& h2': {
       fontSize: 20,
+      lineHeight: 1.3,
       fontWeight: 'bold',
       color: getColor('main')(theme),
       marginTop: 40,
