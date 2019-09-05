@@ -29,6 +29,7 @@ const Applications = lazy(() => import('v2/components/Applications'));
 const ApplicationDetail = lazy(() =>
   import('v2/components/Applications/Detail'),
 );
+const Favorites = lazy(() => import('v2/components/Favorites'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -93,6 +94,7 @@ const App = () => {
                 path="/applications/:id"
                 component={ApplicationDetail}
               />
+              <Route exact path="/favorites" component={Favorites} />
             </Switch>
           </Suspense>
           <Footer />
