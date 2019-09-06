@@ -20,6 +20,7 @@ import fs from 'fs';
 import assert from 'assert';
 import * as solanaWeb3 from '@solana/web3.js';
 
+import {FriendlyGet} from './friendlyGet';
 import config from './config';
 
 //
@@ -504,25 +505,51 @@ async function getClusterInfo() {
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
   const nodeConnectionCache = {};
   let ts = new Date().toISOString();
-  let [, feeCalculator] = await connection.getRecentBlockhash();
-  let inflation = await connection.getInflation();
-  let currentSlot = await getAsync('!blk-last-slot');
+
+  let {
+    feeCalculator,
+    inflation,
+    currentSlot,
+    supply,
+    clusterNodes,
+    leader,
+    voteAccounts,
+    allVoteAccounts,
+    uptimeJson,
+  } = await new FriendlyGet()
+    .with('feeCalculator', connection.getRecentBlockhash())
+    .with('inflation', connection.getInflation())
+    .with('currentSlot', getAsync('!blk-last-slot'))
+    .with('supply', connection.getTotalSupply())
+    .with('clusterNodes', connection.getClusterNodes())
+    .with('leader', connection.getSlotLeader())
+    .with('voteAccounts', connection.getVoteAccounts())
+    .with(
+      'allVoteAccounts',
+      connection.getProgramAccounts(solanaWeb3.VOTE_ACCOUNT_KEY),
+    )
+    .with('uptimeJson', getAsync('!uptime'))
+    .get();
+
+  feeCalculator =
+    feeCalculator && feeCalculator.length > 1 ? feeCalculator[1] : null;
+
   let networkInflationRate = getNetworkInflationRate(inflation, currentSlot);
-  let supply = await connection.getTotalSupply();
-  let clusterNodes = await connection.getClusterNodes();
-  const leader = await connection.getSlotLeader();
-  let identities = await fetchValidatorIdentities(
-    clusterNodes.map(c => c.pubkey),
-  );
-  let voteAccounts = await connection.getVoteAccounts();
-  let allVoteAccounts = await connection.getProgramAccounts(
-    solanaWeb3.VOTE_ACCOUNT_KEY,
-  );
-  let uptimeJson = await getAsync('!uptime');
-  let uptime = uptimeJson && JSON.parse(uptimeJson);
+
+  let {identities} = await new FriendlyGet()
+    .with(
+      'identities',
+      fetchValidatorIdentities(_.map(clusterNodes, c => c.pubkey)),
+      [],
+    )
+    .get();
+
+  let uptime = uptimeJson ? JSON.parse(uptimeJson) : null;
 
   let totalStaked = _.reduce(
-    (voteAccounts.current || []).concat(voteAccounts.delinquent || []),
+    (voteAccounts ? voteAccounts.current : []).concat(
+      voteAccounts ? voteAccounts.delinquent : [],
+    ),
     (a, v) => {
       a += v.activatedStake || 0;
 
@@ -533,7 +560,7 @@ async function getClusterInfo() {
 
   const network = {};
 
-  for (const clusterNode of clusterNodes) {
+  for (const clusterNode of clusterNodes || []) {
     const {pubkey, rpc, tpu, gossip} = clusterNode;
 
     if (!tpu) {
@@ -562,7 +589,7 @@ async function getClusterInfo() {
     });
   }
 
-  for (let [votePubkey, voteAccountInfo] of allVoteAccounts) {
+  for (let [votePubkey, voteAccountInfo] of allVoteAccounts || []) {
     voteAccountInfo.owner =
       voteAccountInfo.owner && voteAccountInfo.owner.toString();
 
@@ -594,9 +621,11 @@ async function getClusterInfo() {
     node.nodePubkey = nodePubkey;
     node.voteAccount = voteAccount;
     node.votePubkey = votePubkey;
-    node.identity = identities.find(x => {
-      return x.pubkey === nodePubkey;
-    });
+    node.identity =
+      identities &&
+      identities.find(x => {
+        return x.pubkey === nodePubkey;
+      });
     node.uptime =
       uptime &&
       uptime.find(x => {
@@ -604,12 +633,14 @@ async function getClusterInfo() {
       });
 
     node.voteStatus =
-      voteAccounts.current.find(x => {
-        return x.nodePubkey === nodePubkey;
-      }) ||
-      voteAccounts.delinquent.find(x => {
-        return x.nodePubkey === nodePubkey;
-      });
+      (voteAccounts &&
+        voteAccounts.current.find(x => {
+          return x.nodePubkey === nodePubkey;
+        })) ||
+      (voteAccounts &&
+        voteAccounts.delinquent.find(x => {
+          return x.nodePubkey === nodePubkey;
+        }));
     node.activatedStake = node.voteStatus && node.voteStatus.activatedStake;
     node.commission = node.voteStatus && node.voteStatus.commission;
   }
@@ -620,9 +651,12 @@ async function getClusterInfo() {
       continue;
     }
 
-    const balanceLamports = await connection.getBalance(
-      new solanaWeb3.PublicKey(node),
-    );
+    const {balanceLamports} = await new FriendlyGet()
+      .with(
+        'balanceLamports',
+        connection.getBalance(new solanaWeb3.PublicKey(node)),
+      )
+      .get();
     let currentSlot = null;
     if (rpc) {
       try {
@@ -632,11 +666,16 @@ async function getClusterInfo() {
             `http://${rpc}`,
           );
         }
-        currentSlot = await Promise.race([
-          nodeConnection.getSlot(),
-          sleep(1000),
-        ]);
-        if (currentSlot === undefined) {
+        let {currentSlotLive} = await new FriendlyGet()
+          .with(
+            'currentSlotLive',
+            Promise.race([nodeConnection.getSlot(), sleep(1000)]),
+          )
+          .get();
+
+        if (currentSlotLive !== undefined) {
+          currentSlot = currentSlotLive;
+        } else {
           currentSlot = 'timeout';
         }
       } catch (err) {
@@ -711,7 +750,9 @@ async function fetchValidatorAvatars(keybaseUsernames) {
     const usernames = batch.join(',');
     const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${usernames}&fields=pictures,basics`;
     try {
-      const keybaseResponse = await fetch(keybaseApiUrl);
+      const {keybaseResponse} = await new FriendlyGet()
+        .with('keybaseResponse', fetch(keybaseApiUrl))
+        .get();
       const keybaseData = await keybaseResponse.json();
       if (keybaseData && keybaseData.them) {
         for (const {basics, pictures} of keybaseData.them) {
@@ -738,7 +779,11 @@ async function fetchValidatorAvatars(keybaseUsernames) {
 async function fetchValidatorIdentities(keys) {
   const configKey = new solanaWeb3.PublicKey(CONFIG_PROGRAM_ID);
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
-  const accounts = await connection.getProgramAccounts(configKey);
+
+  const {accounts} = await new FriendlyGet()
+    .with('accounts', connection.getProgramAccounts(configKey), [])
+    .get();
+
   const keySet = new Set(keys);
 
   let identities = await Promise.all(
@@ -761,7 +806,9 @@ async function fetchValidatorIdentities(keys) {
           const keybaseUsername = identity.keybaseUsername;
           if (keybaseUsername) {
             const keybaseUrl = `https://keybase.pub/${keybaseUsername}/solana/validator-${validatorKeyStr}`;
-            const keybaseResponse = await fetch(keybaseUrl, {method: 'HEAD'});
+            const {keybaseResponse} = await new FriendlyGet()
+              .with('keybaseResponse', fetch(keybaseUrl, {method: 'HEAD'}), {})
+              .get();
             const verified = keybaseResponse.status === 200;
             identity.verified = verified;
             identity.verifyUrl = keybaseUrl;
@@ -777,7 +824,11 @@ async function fetchValidatorIdentities(keys) {
   const keybaseUsernames = identities
     .map(i => i.keybaseUsername)
     .filter(u => u);
-  const avatarMap = await fetchValidatorAvatars(keybaseUsernames);
+
+  const {avatarMap} = await new FriendlyGet()
+    .with('avatarMap', fetchValidatorAvatars(keybaseUsernames), {})
+    .get();
+
   for (const identity of identities) {
     if (identity.keybaseUsername) {
       const avatarUrl = avatarMap.get(identity.keybaseUsername);
@@ -796,6 +847,10 @@ async function fetchValidatorIdentities(keys) {
  * @param slot
  */
 function getNetworkInflationRate(inflation, slot) {
+  if (!inflation || !slot) {
+    return null;
+  }
+
   const SLOTS_PER_SECOND = 1.0;
   const SECONDS_PER_YEAR = 365.25 * 24.0 * 60.0 * 60.0;
   const SLOTS_PER_YEAR = SLOTS_PER_SECOND * SECONDS_PER_YEAR;
