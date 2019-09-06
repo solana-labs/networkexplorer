@@ -3,6 +3,7 @@ import _ from 'lodash';
 import redis from 'redis';
 import {promisify} from 'util';
 
+import {FriendlyGet} from './friendlyGet';
 import config from './config';
 
 const FULLNODE_URL = process.env.FULLNODE_URL || 'http://localhost:8899';
@@ -27,9 +28,12 @@ const SLOTS_PER_EPOCH = 8192;
 
 async function getVoteAccountUptime(connection, x) {
   const t1 = new Date().getTime();
-  let voteAccount = await connection.getAccountInfo(
-    new solanaWeb3.PublicKey(x.votePubkey),
-  );
+  let {voteAccount} = await new FriendlyGet()
+    .with(
+      'voteAccount',
+      connection.getAccountInfo(new solanaWeb3.PublicKey(x.votePubkey)),
+    )
+    .get();
   const t2 = new Date().getTime();
 
   let voteState = solanaWeb3.VoteAccount.fromAccountData(voteAccount.data);
@@ -70,14 +74,16 @@ async function refreshUptime() {
   console.log('uptime updater: updating...');
   try {
     const connection = new solanaWeb3.Connection(FULLNODE_URL);
-    let voting = await connection.getVoteAccounts();
-
-    const resultsAsync = _.map(
-      voting.current.concat(...voting.delinquent),
-      v => {
-        return getVoteAccountUptime(connection, v);
-      },
+    let {voting} = await new FriendlyGet()
+      .with('voting', connection.getVoteAccounts())
+      .get();
+    let allAccounts = (voting && voting.current ? voting.current : []).concat(
+      voting && voting.delinquent ? voting.delinquent : [],
     );
+
+    const resultsAsync = _.map(allAccounts, v => {
+      return getVoteAccountUptime(connection, v);
+    });
 
     let results = await Promise.all(resultsAsync);
     results = _.filter(results, x => x);
