@@ -17,7 +17,7 @@ const Cards = ({
 }) => {
   const classes = useStyles();
   const {
-    validators,
+    activeValidators,
     inactiveValidators,
     supply,
     totalStaked,
@@ -77,7 +77,7 @@ const Cards = ({
     },
     {
       title: 'Active Validators',
-      value: validators.length,
+      value: activeValidators.length,
       changes: '',
       period: 'since yesterday',
       helpText:

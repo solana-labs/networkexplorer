@@ -28,7 +28,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const {validators} = NodesStore;
+  const {activeValidators} = NodesStore;
 
   const renderRow = row => {
     const uptime = getUptime(row);
@@ -82,7 +82,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
             term=""
           />
         </Typography>
-        <Typography variant="h5">{validators.length}</Typography>
+        <Typography variant="h5">{activeValidators.length}</Typography>
         {!separate && (
           <Link to="/validators/all" className={classes.link}>
             See all &gt;
@@ -104,12 +104,12 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
               root: classes.body,
             }}
           >
-            {map(renderRow)(validators)}
+            {map(renderRow)(activeValidators)}
           </TableBody>
         </Table>
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          {map(renderCard)(validators)}
+          {map(renderCard)(activeValidators)}
         </div>
       )}
     </div>
