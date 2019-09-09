@@ -42,6 +42,9 @@ export default makeStyles(theme => {
           textDecoration: 'none',
           padding: '5px 0',
           display: 'block',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
           '&:hover': {
             color: getColor('dark')(theme),
           },
