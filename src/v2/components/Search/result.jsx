@@ -22,15 +22,22 @@ const SearchResult = ({
 }: SearchResultProps) => {
   const classes = useStyles();
 
-  const renderItem = ({nodePubkey}: {nodePubkey: string}) => {
+  const renderItem = ({
+    findText,
+    nodePubkey,
+  }: {
+    findText: string,
+    nodePubkey: string,
+  }) => {
     const handleClick = () => {
       onClear();
       MixPanel.track('Click Search Dropdown', {nodePubkey});
     };
+
     return (
       <li className={classes.item} key={nodePubkey}>
         <Link onClick={handleClick} to={`/validators/${nodePubkey}`}>
-          {nodePubkey}
+          {findText}
         </Link>
       </li>
     );

@@ -1,7 +1,7 @@
 // @flow
 import React, {useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {compose, get, filter, toLower, contains} from 'lodash/fp';
+import {compose, get, reduce, toLower, contains} from 'lodash/fp';
 import {InputBase, IconButton} from '@material-ui/core';
 import {Search as SearchIcon} from '@material-ui/icons';
 import NodesStore from 'v2/stores/nodes';
@@ -44,26 +44,40 @@ const Search = () => {
       return;
     }
 
-    const filteredValidators = filter(v => {
+    const filteredValidators = reduce((acc, v) => {
       const lowerVal = toLower(value);
-      return (
+      if (
         compose(
           contains(lowerVal),
           toLower,
           get('nodePubkey'),
-        )(v) ||
+        )(v)
+      ) {
+        acc.push({...v, findText: get('nodePubkey')(v)});
+        return acc;
+      }
+      if (
         compose(
           contains(lowerVal),
           toLower,
           get('identity.name'),
-        )(v) ||
+        )(v)
+      ) {
+        acc.push({...v, findText: get('identity.name')(v)});
+        return acc;
+      }
+      if (
         compose(
           contains(lowerVal),
           toLower,
           get('identity.keybaseUsername'),
         )(v)
-      );
-    })(validators);
+      ) {
+        acc.push({...v, findText: get('identity.keybaseUsername')(v)});
+        return acc;
+      }
+      return acc;
+    }, [])(validators);
     setDirty(true);
     setSearchResult(filteredValidators);
   };
