@@ -54,6 +54,10 @@ class Store {
   }
 
   get validators() {
+    return filter(node => node.what === 'Validator')(this.network);
+  }
+
+  get activeValidators() {
     return filter(node => node.what === 'Validator' && node.activatedStake)(
       this.network,
     );
@@ -73,6 +77,7 @@ decorate(Store, {
   updateClusterInfo: action.bound,
   mapMarkers: computed,
   validators: computed,
+  activeValidators: computed,
   inactiveValidators: computed,
   fetchClusterInfo: action.bound,
 });

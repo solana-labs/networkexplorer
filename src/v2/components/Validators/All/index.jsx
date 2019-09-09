@@ -8,13 +8,13 @@ import ValidatorsTable from '../Table';
 import useStyles from './styles';
 
 const ValidatorsAll = () => {
-  const {validators, inactiveValidators} = NodesStore;
+  const {activeValidators, inactiveValidators} = NodesStore;
   const classes = useStyles();
   return (
     <Container>
       <SectionHeader title="Validators">
         <div className={classes.total}>
-          {validators.length + inactiveValidators.length}
+          {activeValidators.length + inactiveValidators.length}
         </div>
       </SectionHeader>
       <ValidatorsTable separate />
