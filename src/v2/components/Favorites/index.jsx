@@ -13,12 +13,14 @@ import useStyles from './styles';
 
 const TransactionsPage = () => {
   const classes = useStyles();
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState('applications');
   const theme = useTheme();
   const verticalTabs = useMediaQuery(theme.breakpoints.down('xs'));
   const handleTabChange = (event, tab) => setTab(tab);
-  const tabNav = ['Applications', 'Accounts'];
-  const renderTabNav = label => <TabNav key={label} label={label} />;
+  const tabNav = ['applications', 'accounts'];
+  const renderTabNav = label => (
+    <TabNav key={label} label={label} value={label} />
+  );
 
   return (
     <Container>
@@ -38,8 +40,8 @@ const TransactionsPage = () => {
       >
         {map(renderTabNav)(tabNav)}
       </Tabs>
-      {eq(0, tab) && <ApplicationsTable />}
-      {eq(1, tab) && <AccountsTable />}
+      {eq('applications', tab) && <ApplicationsTable />}
+      {eq('accounts', tab) && <AccountsTable />}
     </Container>
   );
 };

@@ -15,18 +15,12 @@ import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
 import Avatar from 'v2/components/UI/Avatar';
+import type {TableHeadProps} from 'v2/@types/table';
 
 import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
-type THead = {
-  name: string,
-  text: string,
-  term: string,
-  width?: number,
-};
-
-const tHeads: THead[] = [
+const tHeads: TableHeadProps[] = [
   {
     name: 'blocks',
     text: '',
@@ -79,7 +73,7 @@ const BlocksTable = ({separate}: {separate: boolean}) => {
       </TableRow>
     );
   };
-  const renderTH = ({name, width, ...rest}: THead) => (
+  const renderTH = ({name, width, ...rest}: TableHeadProps) => (
     <TableCell key={name} width={width}>
       {name}
       <HelpLink {...rest} />
