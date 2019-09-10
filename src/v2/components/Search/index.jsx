@@ -1,7 +1,7 @@
 // @flow
 import React, {useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {compose, get, reduce, toLower, contains} from 'lodash/fp';
+import {compose, compact, get, map, toLower, contains} from 'lodash/fp';
 import {InputBase, IconButton} from '@material-ui/core';
 import {Search as SearchIcon} from '@material-ui/icons';
 import NodesStore from 'v2/stores/nodes';
@@ -44,40 +44,25 @@ const Search = () => {
       return;
     }
 
-    const filteredValidators = reduce((acc, v) => {
-      const lowerVal = toLower(value);
-      if (
-        compose(
-          contains(lowerVal),
-          toLower,
-          get('nodePubkey'),
-        )(v)
-      ) {
-        acc.push({...v, findText: get('nodePubkey')(v)});
-        return acc;
-      }
-      if (
-        compose(
-          contains(lowerVal),
-          toLower,
-          get('identity.name'),
-        )(v)
-      ) {
-        acc.push({...v, findText: get('identity.name')(v)});
-        return acc;
-      }
-      if (
-        compose(
-          contains(lowerVal),
-          toLower,
-          get('identity.keybaseUsername'),
-        )(v)
-      ) {
-        acc.push({...v, findText: get('identity.keybaseUsername')(v)});
-        return acc;
-      }
-      return acc;
-    }, [])(validators);
+    const theQuery = toLower(value);
+
+    const propertyMatch = propKey => {
+      const findProp = compose(
+        contains(theQuery),
+        toLower,
+        get(propKey),
+      );
+      return v => (findProp(v) ? {...v, findText: get(propKey)(v)} : null);
+    };
+
+    const pubkeyMatch = propertyMatch('nodePubkey');
+    const nameMatch = propertyMatch('identity.name');
+    const keybaseMatch = propertyMatch('identity.keybaseUsername');
+
+    const fullSearch = v => pubkeyMatch(v) || nameMatch(v) || keybaseMatch(v);
+
+    const filteredValidators = compact(map(fullSearch)(validators));
+
     setDirty(true);
     setSearchResult(filteredValidators);
   };
