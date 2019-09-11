@@ -97,8 +97,16 @@ class RedisHandler {
   }
 
   redisTimelineImprovedPush(commands, key, value) {
-    commands.push(['rpush', key, value]);
-    commands.push(['ltrim', key, -1 * TIMELINE_MAX_ELEMENTS]);
+    commands.push([
+      'xadd',
+      key,
+      'MAXLEN',
+      '~',
+      TIMELINE_MAX_ELEMENTS,
+      '*',
+      'v',
+      value,
+    ]);
     commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
   }
 
@@ -188,7 +196,7 @@ class RedisHandler {
     // entry is a larger data structure since it contains txns
     if (message.t === 'entry') {
       // NEW : entry full data as-is (so we don't need to store txns separately)
-      this.redisKeyValueAdd(`!entry:${message.hash}`, original);
+      this.redisKeyValueAdd(commands, `!entry:${message.hash}`, original);
 
       let txns = message.transactions;
       let txCount = txns.length;
@@ -241,7 +249,7 @@ class RedisHandler {
       // MIXED : store transaction data under transaction id
       _.forEach(txns, txn => {
         // NEW: transaction to block (via entry) index
-        this.redisKeyValueAdd(`!tx:${txn.id}`, message.hash);
+        this.redisKeyValueAdd(commands, `!tx:${txn.id}`, message.hash);
 
         let tx = {};
 
@@ -296,6 +304,9 @@ class RedisHandler {
         // DEPRECATED
         this.redisTimelinePush(commands, '!txn-timeline', txnMsg);
 
+        // NEW
+        this.redisTimelineImprovedPush(commands, '!txn-timeline', txnMsg);
+
         tx.instructions.forEach(instruction => {
           // DEPRECATED
           this.redisTimelinePush(
@@ -319,7 +330,7 @@ class RedisHandler {
           // NEW
           this.redisSetAdd(
             commands,
-            `!programs:active:${txn_hour}`,
+            `!programs:active:${txn_min}`,
             instruction.program_id,
           );
         });
