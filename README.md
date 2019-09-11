@@ -3,8 +3,8 @@
 [![npm-downloads][npm-downloads-image]][npm-url]
 [![semantic-release][semantic-release-image]][semantic-release-url]
 
-[travis-image]: https://api.travis-ci.org/solana-labs/blockexplorer.svg?branch=master
-[travis-url]: https://travis-ci.org/solana-labs/blockexplorer
+[travis-image]: https://api.travis-ci.org/solana-labs/networkexplorer.svg?branch=master
+[travis-url]: https://travis-ci.org/solana-labs/networkexplorer
 [npm-image]: https://img.shields.io/npm/v/@solana/blockexplorer.svg?style=flat
 [npm-downloads-image]: https://img.shields.io/npm/dm/@solana/blockexplorer.svg?style=flat
 [npm-url]: https://www.npmjs.com/package/@solana/blockexplorer
