@@ -96,6 +96,16 @@ class RedisHandler {
     commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
   }
 
+  redisTimelineImprovedPush(commands, key, value) {
+    commands.push(['rpush', key, value]);
+    commands.push(['ltrim', key, -1 * TIMELINE_MAX_ELEMENTS]);
+    commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
+  }
+
+  redisKeyValueAdd(commands, key, value) {
+    commands.push(['setex', key, EXPIRE_TIMEOUT_SECS, value]);
+  }
+
   redisSetAdd(commands, key, value) {
     commands.push(['sadd', key, value]);
     commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
@@ -106,7 +116,7 @@ class RedisHandler {
     commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
   }
 
-  process(message) {
+  process(message, original) {
     const txn_sec = message.dt.substring(0, 19);
     const txn_min = message.dt.substring(0, 16);
     const txn_hour = message.dt.substring(0, 13);
@@ -114,8 +124,10 @@ class RedisHandler {
 
     let commands = [];
 
+    // block is a lightweight/tiny data structure since it's trailing
     if (message.t === 'block') {
       const msgJson = JSON.stringify(message);
+
       let blkMsg = [
         message.h,
         message.l,
@@ -124,11 +136,21 @@ class RedisHandler {
         message.hash,
       ].join('#');
 
+      // DEPRECATED
       this.redisTimelinePush(commands, '!blk-timeline', blkMsg);
+
+      // NEW
+      this.redisTimelineImprovedPush(commands, '!__timeline:blocks', blkMsg);
+
+      // SAME
       commands.push(['publish', '@blocks', blkMsg]);
 
+      // SAME
       commands.push(['set', '!blk-last-id', message.hash]);
+      // SAME
       commands.push(['set', '!blk-last-slot', message.s]);
+
+      // SAME
       this.redisHashMset(commands, `!blk:${message.hash}`, {
         t: 'blk',
         dt: message.dt,
@@ -139,6 +161,7 @@ class RedisHandler {
         data: msgJson,
       });
 
+      // write back slot/entry/block correspondence if necessary
       this.innerClient.smembers(`!ent-by-slot:${message.s}`, (err, result) => {
         if (err) {
           console.log('ERR!', err);
@@ -147,7 +170,9 @@ class RedisHandler {
 
         if (result && result.length > 0) {
           _.forEach(result, x => {
+            // SAME
             this.redisHashMset(commands, `!ent:${x}`, 'block_id', message.hash);
+            // SAME
             this.redisSetAdd(commands, `!blk-ent:${message.hash}`, x);
           });
           this.innerClient.batch(commands).exec(err2 => {
@@ -160,19 +185,27 @@ class RedisHandler {
       });
     }
 
+    // entry is a larger data structure since it contains txns
     if (message.t === 'entry') {
+      // NEW : entry full data as-is (so we don't need to store txns separately)
+      this.redisKeyValueAdd(`!entry:${message.hash}`, original);
+
       let txns = message.transactions;
       let txCount = txns.length;
 
       delete message.transactions;
       const msgJson = JSON.stringify(message);
 
+      // SAME
       commands.push(['set', '!ent-last-leader', message.l]);
+      // SAME
       commands.push(['set', '!ent-last-id', message.hash]);
+      // SAME
       commands.push(['set', '!ent-last-dt', message.dt]);
+      // SAME
       commands.push(['set', '!ent-height', message.h]);
 
-      // store entry data under entry hash
+      // SAME : store entry data under entry hash
       this.redisHashMset(commands, `!ent:${message.hash}`, {
         t: 'ent',
         dt: message.dt,
@@ -183,7 +216,7 @@ class RedisHandler {
         data: msgJson,
       });
 
-      // append block height:dt:id to timeline
+      // SAME : append block height:dt:id to timeline
       let entMsg = [
         message.h,
         message.l,
@@ -193,13 +226,23 @@ class RedisHandler {
         txCount,
       ].join('#');
 
+      // DEPRECATED
       this.redisTimelinePush(commands, '!ent-timeline', entMsg);
+
+      // NEW
+      this.redisTimelineImprovedPush(commands, '!__timeline:entries', entMsg);
+
+      // SAME
       commands.push(['publish', '@entries', entMsg]);
 
+      // SAME
       this.redisSetAdd(commands, `!ent-by-slot:${message.s}`, message.hash);
 
-      // store transaction data under transaction id
+      // MIXED : store transaction data under transaction id
       _.forEach(txns, txn => {
+        // NEW: transaction to block (via entry) index
+        this.redisKeyValueAdd(`!tx:${txn.id}`, message.hash);
+
         let tx = {};
 
         tx.h = message.h;
@@ -214,7 +257,7 @@ class RedisHandler {
 
         let txnJson = JSON.stringify(tx);
 
-        // store txn data
+        // DEPRECATED : store txn data (replace with thinner index)
         this.redisHashMset(commands, `!txn:${tx.id}`, {
           t: 'txn',
           dt: tx.dt,
@@ -247,20 +290,38 @@ class RedisHandler {
         }
         txnMsg = txnMsg.join('#');
 
+        // SAME (used to create txn -> block mapping)
         this.redisSetAdd(commands, `!ent-txn:${message.hash}`, tx.id);
+
+        // DEPRECATED
         this.redisTimelinePush(commands, '!txn-timeline', txnMsg);
 
         tx.instructions.forEach(instruction => {
+          // DEPRECATED
           this.redisTimelinePush(
             commands,
             `!txns-by-prgid-timeline:${instruction.program_id}`,
             txnMsg,
           );
+          // SAME
           commands.push([
             'publish',
             `@program_id:${instruction.program_id}`,
             txnMsg,
           ]);
+
+          // NEW
+          this.redisTimelineImprovedPush(
+            commands,
+            `!__timeline:program:${instruction.program_id}`,
+            txnMsg,
+          );
+          // NEW
+          this.redisSetAdd(
+            commands,
+            `!programs:active:${txn_hour}`,
+            instruction.program_id,
+          );
         });
       });
 
@@ -284,7 +345,7 @@ class RedisHandler {
       var self = this;
 
       this.innerClient.batch(commands).exec(() => {
-        // maybe update tps max
+        // SAME : maybe update tps max
         self.innerClient.mget(
           [`!txn-per-sec-max`, `!txn-per-sec:${txn_sec}`],
           (error, vals) => {
@@ -372,7 +433,7 @@ function makeServer() {
         : '<no_tx>';
 
       _.forEach(handlers, h => {
-        h.process(realMessage);
+        h.process(realMessage, part);
       });
 
       socket.destroy();
