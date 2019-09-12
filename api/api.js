@@ -884,6 +884,7 @@ function parseStreamEntry(data) {
   };
 }
 
+// NEW
 async function getTimelineInfo(timeline) {
   let timelineKey = `!__timeline:${timeline}`;
   let client = getClient();
@@ -922,6 +923,7 @@ async function getTimelineInfo(timeline) {
   };
 }
 
+// DEPRECATED (dev only)
 async function sendTimelineInfoResult(type, res) {
   try {
     let result = await getTimelineInfo(type);
@@ -936,12 +938,12 @@ async function sendTimelineInfoResult(type, res) {
   }
 }
 
-// NEW
+// DEPRECATED (dev only)
 app.get('/:type/timeline/info', (req, res) => {
   sendTimelineInfoResult(req.params.type, res);
 });
 
-// NEW
+// DEPRECATED (dev only)
 app.get('/programs/:id/timeline/info', (req, res) => {
   sendTimelineInfoResult(`program:${req.params.id}`, res);
 });
@@ -949,6 +951,7 @@ app.get('/programs/:id/timeline/info', (req, res) => {
 const MAX_PAGE_SIZE = 1000;
 const DEFAULT_PAGE_SIZE = 100;
 
+// NEW
 async function getTimelinePageAsync(
   timeline,
   start = '+',
@@ -977,6 +980,7 @@ async function getTimelinePageAsync(
   };
 }
 
+// DEPRECATED (dev only)
 async function sendTimelinePageResult(type, res, query) {
   try {
     let q = query || {};
@@ -1002,12 +1006,12 @@ async function sendTimelinePageResult(type, res, query) {
   }
 }
 
-// NEW
+// DEPRECATED (dev only)
 app.get('/:type/timeline', (req, res) => {
   sendTimelinePageResult(req.params.type, res, req.query);
 });
 
-// NEW
+// DEPRECATED (dev only)
 app.get('/programs/:id/timeline', (req, res) => {
   sendTimelinePageResult(`program:${req.params.id}`, res, req.query);
 });
