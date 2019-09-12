@@ -631,14 +631,8 @@ async function getClusterInfo() {
       });
 
     node.voteStatus =
-      (voteAccounts &&
-        voteAccounts.current.find(x => {
-          return x.nodePubkey === nodePubkey;
-        })) ||
-      (voteAccounts &&
-        voteAccounts.delinquent.find(x => {
-          return x.nodePubkey === nodePubkey;
-        }));
+      voteAccounts.current.find(x => x.nodePubkey === nodePubkey) ||
+      voteAccounts.delinquent.find(x => x.nodePubkey === nodePubkey);
     node.activatedStake = node.voteStatus && node.voteStatus.activatedStake;
     node.commission = node.voteStatus && node.voteStatus.commission;
   }
