@@ -521,12 +521,16 @@ async function getClusterInfo() {
     .with('inflation', connection.getInflation())
     .with('currentSlot', getAsync('!blk-last-slot'))
     .with('supply', connection.getTotalSupply())
-    .with('clusterNodes', connection.getClusterNodes())
+    .with('clusterNodes', connection.getClusterNodes(), [])
     .with('leader', connection.getSlotLeader())
-    .with('voteAccounts', connection.getVoteAccounts())
+    .with('voteAccounts', connection.getVoteAccounts(), {
+      current: [],
+      delinquent: [],
+    })
     .with(
       'allVoteAccounts',
       connection.getProgramAccounts(solanaWeb3.VOTE_ACCOUNT_KEY),
+      [],
     )
     .with('uptimeJson', getAsync('!uptime'))
     .get();
@@ -547,9 +551,7 @@ async function getClusterInfo() {
   let uptime = uptimeJson ? JSON.parse(uptimeJson) : null;
 
   let totalStaked = _.reduce(
-    (voteAccounts ? voteAccounts.current : []).concat(
-      voteAccounts ? voteAccounts.delinquent : [],
-    ),
+    voteAccounts.current.concat(voteAccounts.delinquent),
     (a, v) => {
       a += v.activatedStake || 0;
 
@@ -560,7 +562,7 @@ async function getClusterInfo() {
 
   const network = {};
 
-  for (const clusterNode of clusterNodes || []) {
+  for (const clusterNode of clusterNodes) {
     const {pubkey, rpc, tpu, gossip} = clusterNode;
 
     if (!tpu) {
@@ -589,7 +591,7 @@ async function getClusterInfo() {
     });
   }
 
-  for (let [votePubkey, voteAccountInfo] of allVoteAccounts || []) {
+  for (let [votePubkey, voteAccountInfo] of allVoteAccounts) {
     voteAccountInfo.owner =
       voteAccountInfo.owner && voteAccountInfo.owner.toString();
 
@@ -751,9 +753,10 @@ async function fetchValidatorAvatars(keybaseUsernames) {
     const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${usernames}&fields=pictures,basics`;
     try {
       const {keybaseResponse} = await new FriendlyGet()
-        .with('keybaseResponse', fetch(keybaseApiUrl))
+        .with('keybaseResponse', fetch(keybaseApiUrl), {})
         .get();
-      const keybaseData = await keybaseResponse.json();
+      const keybaseData = await (keybaseResponse.json &&
+        keybaseResponse.json());
       if (keybaseData && keybaseData.them) {
         for (const {basics, pictures} of keybaseData.them) {
           if (
