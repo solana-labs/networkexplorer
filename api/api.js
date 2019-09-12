@@ -114,6 +114,8 @@ const existsAsync = promisify(client.exists).bind(client);
 const lrangeAsync = promisify(client.lrange).bind(client);
 const hgetallAsync = promisify(client.hgetall).bind(client);
 const smembersAsync = promisify(client.smembers).bind(client);
+const xrangeAsync = promisify(client.xrange).bind(client);
+const xrevrangeAsync = promisify(client.xrevrange).bind(client);
 
 const blocksClient = getClient();
 
@@ -296,18 +298,22 @@ async function sendLrangeResult(key, first, last, res) {
   }
 }
 
+// DEPRECATED (old format)
 app.get('/blk-timeline', (req, res) => {
   sendLrangeResult(`!blk-timeline`, 0, 99, res);
 });
 
+// DEPRECATED (old format)
 app.get('/ent-timeline', (req, res) => {
   sendLrangeResult(`!ent-timeline`, 0, 99, res);
 });
 
+// DEPRECATED (old format)
 app.get('/txn-timeline', (req, res) => {
   sendLrangeResult(`!txn-timeline`, 0, 99, res);
 });
 
+// DEPRECATED (old format)
 app.get('/txns-by-prgid/:id', (req, res) => {
   let key = `!txns-by-prgid-timeline:${req.params.id}`;
   sendLrangeResult(key, 0, 99, res);
@@ -363,6 +369,7 @@ function geoipLookup(ip) {
   return geoip.lookup(ip);
 }
 
+// DEPRECATED (should be unused, performed internally now)
 app.get('/geoip/:ip', (req, res) => {
   const {ip} = req.params;
 
@@ -374,6 +381,7 @@ app.get('/geoip/:ip', (req, res) => {
   }
 });
 
+// DEPRECATED (entries not exposed externally at this time)
 async function sendEntryResult(req, res) {
   try {
     let result = await hgetallAsync(`!ent:${req.params.id}`);
@@ -396,10 +404,12 @@ async function sendEntryResult(req, res) {
   res.status(404).send('{"error":"not_found"}\n');
 }
 
+// DEPRECATED (entries not exposed externally at this time)
 app.get('/ent/:id', (req, res) => {
   sendEntryResult(req, res);
 });
 
+// DEPRECATED (old style)
 async function sendTransactionResult(req, res) {
   try {
     let result = await hgetallAsync(`!txn:${req.params.id}`);
@@ -423,10 +433,12 @@ async function sendTransactionResult(req, res) {
   res.status(404).send('{"error":"not_found"}\n');
 }
 
+// DEPRECATED (old style)
 app.get('/txn/:id', (req, res) => {
   sendTransactionResult(req, res);
 });
 
+// TODO - needs update
 async function sendSearchResults(req, res) {
   let types = ['txn', 'blk', 'ent', 'txns-by-prgid-timeline'];
   try {
@@ -450,10 +462,12 @@ async function sendSearchResults(req, res) {
   res.status(404).send('{"error":"not_found"}\n');
 }
 
+// TODO - needs update
 app.get('/search/:id', (req, res) => {
   sendSearchResults(req, res);
 });
 
+// TODO (old style)
 function sendAccountResult(req, res) {
   if (!req.params.ids) {
     // give up
@@ -494,6 +508,7 @@ function sendAccountResult(req, res) {
   }
 }
 
+// TODO (old style)
 app.get('/accts_bal/:ids', (req, res) => {
   sendAccountResult(req, res);
 });
@@ -727,6 +742,7 @@ async function sendClusterResult(req, res) {
   }
 }
 
+// SAME (for now)
 app.get('/cluster-info', (req, res) => {
   sendClusterResult(req, res);
 });
@@ -853,5 +869,147 @@ function getNetworkInflationRate(inflation, slot) {
     return inflation.terminal;
   }
 }
+
+function parseStreamEntry(data) {
+  if (!data || data.length < 2 || data[1].length < 2) {
+    return null;
+  }
+
+  let k = data[0];
+  let v = data[1][1];
+
+  return {
+    k,
+    v,
+  };
+}
+
+async function getTimelineInfo(timeline) {
+  let timelineKey = `!__timeline:${timeline}`;
+  let client = getClient();
+
+  let thePromise = new Promise((resolve, reject) => {
+    try {
+      client
+        .multi()
+        .xrange(timelineKey, '-', '+', 'COUNT', 1)
+        .xrevrange(timelineKey, '+', '-', 'COUNT', 1)
+        .xlen(timelineKey)
+        .exec((err, result) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        });
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+  let results = await thePromise;
+
+  let first = parseStreamEntry(results && results.length > 0 && results[0][0]);
+  let last = parseStreamEntry(results && results.length > 1 && results[1][0]);
+  let length = results[2];
+  let ts = new Date().toISOString();
+
+  return {
+    timeline,
+    last,
+    first,
+    length,
+    ts,
+  };
+}
+
+async function sendTimelineInfoResult(type, res) {
+  try {
+    let result = await getTimelineInfo(type);
+
+    if (result) {
+      res.send(JSON.stringify(result) + '\n');
+    } else {
+      res.status(404).send('{"error":"not_found"}\n');
+    }
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+  }
+}
+
+// NEW
+app.get('/:type/timeline/info', (req, res) => {
+  sendTimelineInfoResult(req.params.type, res);
+});
+
+// NEW
+app.get('/programs/:id/timeline/info', (req, res) => {
+  sendTimelineInfoResult(`program:${req.params.id}`, res);
+});
+
+const MAX_PAGE_SIZE = 1000;
+const DEFAULT_PAGE_SIZE = 100;
+
+async function getTimelinePageAsync(
+  timeline,
+  start = '+',
+  count = DEFAULT_PAGE_SIZE,
+  direction = '-',
+) {
+  let timelineKey = `!__timeline:${timeline}`;
+
+  let rawResults = await (direction === '+'
+    ? xrangeAsync(timelineKey, start, '+', 'COUNT', count + 1)
+    : xrevrangeAsync(timelineKey, start, '-', 'COUNT', count + 1));
+
+  let results = _.map(rawResults.slice(0, count), parseStreamEntry);
+  let length = results.length;
+  let ts = new Date().toISOString();
+  let has_next = rawResults.length > count;
+
+  return {
+    timeline,
+    start,
+    count,
+    results,
+    length,
+    has_next,
+    ts,
+  };
+}
+
+async function sendTimelinePageResult(type, res, query) {
+  try {
+    let q = query || {};
+
+    let start = q.start || '+';
+    let count = q.count || 100;
+    let direction = q.direction || '-';
+
+    let result = await getTimelinePageAsync(
+      type,
+      start,
+      Math.min(Math.max(count || DEFAULT_PAGE_SIZE, 0), MAX_PAGE_SIZE),
+      direction,
+    );
+
+    if (result) {
+      res.send(JSON.stringify(result) + '\n');
+    } else {
+      res.status(404).send('{"error":"not_found"}\n');
+    }
+  } catch (err) {
+    res.status(500).send('{"error":"server_error"}\n');
+  }
+}
+
+// NEW
+app.get('/:type/timeline', (req, res) => {
+  sendTimelinePageResult(req.params.type, res, req.query);
+});
+
+// NEW
+app.get('/programs/:id/timeline', (req, res) => {
+  sendTimelinePageResult(`program:${req.params.id}`, res, req.query);
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
