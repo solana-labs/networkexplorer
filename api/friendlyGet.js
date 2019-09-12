@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import allSettled from 'promise.allsettled';
 
-class FriendlyGet {
+export class FriendlyGet {
   constructor() {
     this.requests = {};
   }
@@ -63,5 +63,3 @@ class FriendlyGet {
     return compactResult;
   }
 }
-
-export {FriendlyGet};
