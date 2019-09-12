@@ -305,7 +305,7 @@ class RedisHandler {
         this.redisTimelinePush(commands, '!txn-timeline', txnMsg);
 
         // NEW
-        this.redisTimelineImprovedPush(commands, '!txn-timeline', txnMsg);
+        this.redisTimelineImprovedPush(commands, '!__timeline:transactions', txnMsg);
 
         tx.instructions.forEach(instruction => {
           // DEPRECATED
