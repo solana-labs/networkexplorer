@@ -623,11 +623,7 @@ async function getClusterInfo() {
     node.nodePubkey = nodePubkey;
     node.voteAccount = voteAccount;
     node.votePubkey = votePubkey;
-    node.identity =
-      identities &&
-      identities.find(x => {
-        return x.pubkey === nodePubkey;
-      });
+    node.identity = identities.find(x => x.pubkey === nodePubkey);
     node.uptime =
       uptime &&
       uptime.find(x => {
