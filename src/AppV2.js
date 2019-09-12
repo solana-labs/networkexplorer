@@ -1,15 +1,17 @@
 import {CssBaseline, makeStyles} from '@material-ui/core';
 import {MuiThemeProvider} from '@material-ui/core/styles';
+import {observer} from 'mobx-react-lite';
 import React, {lazy, Suspense} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {Route, Switch} from 'react-router-dom';
 import Header from 'v2/components/Header';
 import Footer from 'v2/components/Footer';
 import theme from 'v2/theme';
-import socket from 'v2/stores/socket';
+import FailedPanel from 'v2/components/UI/FailedPanel';
+import Socket from 'v2/stores/socket';
 
 try {
-  socket.init();
+  Socket.init();
 } catch (err) {
   console.error('Socket init failed:', err);
 }
@@ -35,6 +37,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     overflow: 'hidden',
+    minHeight: '100vh',
   },
   content: {
     marginLeft: 50,
@@ -42,6 +45,8 @@ const useStyles = makeStyles(theme => ({
     padding: '50px 24px 0 24px',
     maxWidth: 'calc(100% - 50px)',
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
       padding: 0,
@@ -66,13 +71,17 @@ const useStyles = makeStyles(theme => ({
 
 const App = () => {
   const classes = useStyles();
+  const {hasError} = Socket;
+
   return (
     <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <CssBaseline />
         <Header />
+
         <div className={classes.content}>
           <div className={classes.toolbar} />
+          {hasError && <FailedPanel />}
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route exact path="/" component={Dashboard} />
@@ -104,4 +113,4 @@ const App = () => {
   );
 };
 
-export default hot(App);
+export default hot(observer(App));

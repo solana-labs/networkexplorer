@@ -34,12 +34,17 @@ class Store {
   };
 
   fetchClusterInfo = flow(function*() {
-    const res = yield API.getClusterInfo();
-    const data = res.data;
-    this.network = data.network;
-    this.totalStaked = data.totalStaked;
-    this.supply = data.supply;
-    this.networkInflationRate = data.networkInflationRate;
+    try {
+      const res = yield API.getClusterInfo();
+      const data = res.data;
+      this.network = data.network;
+      this.totalStaked = data.totalStaked;
+      this.supply = data.supply;
+      this.networkInflationRate = data.networkInflationRate;
+      return res;
+    } catch (e) {
+      throw e;
+    }
   });
 
   get mapMarkers() {
