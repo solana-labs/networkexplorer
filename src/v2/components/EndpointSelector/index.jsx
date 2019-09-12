@@ -10,12 +10,13 @@ import useStyles from './styles';
 
 const EndpointSelector = () => {
   const classes = useStyles();
-  const {endpointName, updateEndpointName} = socketActions;
+  const {endpointName, updateEndpointName, setError} = socketActions;
   const handleEndpointChange = event => {
     const endpointName = event.target.value;
     EndpointConfig.setEndpointName(endpointName);
     updateEndpointName(endpointName);
     socketActions.init();
+    setError(false);
     updateBaseUrl();
   };
   const endPointsList = EndpointConfig.getEndpoints();

@@ -29,3 +29,5 @@ export const TDS_STAGES = [
     duration: TDS_DEFAULT_STAGE_LENGTH_BLOCKS,
   },
 ];
+
+export const CONNECTION_TIMEOUT = 10000;
