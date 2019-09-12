@@ -74,7 +74,7 @@ async function refreshUptime() {
   console.log('uptime updater: updating...');
   try {
     const connection = new solanaWeb3.Connection(FULLNODE_URL);
-    let {voting} = await new FriendlyGet()
+    let {__errors__, voting} = await new FriendlyGet()
       .with('voting', connection.getVoteAccounts())
       .get();
     let allAccounts = (voting && voting.current ? voting.current : []).concat(
@@ -89,7 +89,11 @@ async function refreshUptime() {
     results = _.filter(results, x => x);
     await setAsync('!uptime', JSON.stringify(results));
 
-    console.log('uptime updater: updated successfully.');
+    if (_.size(__errors__) === 0) {
+      console.log('uptime updater: updated successfully.');
+    } else {
+      console.log('ERROR updating uptime.');
+    }
   } catch (err) {
     console.log('ERROR updating uptime: ' + err);
   }
