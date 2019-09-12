@@ -235,6 +235,12 @@ async function sendMgetKeysZipValuesResult(keys, displayKeys, res) {
       res.status(404).send('{"error":"not_found"}\n');
     }
   } catch (err) {
+    console.warn(
+      'server_error',
+      'sendMgetKeysZipValuesResult',
+      keys,
+      JSON.stringify(err),
+    );
     res.status(500).send('{"error":"server_error"}\n');
   }
 }
@@ -294,6 +300,7 @@ async function sendLrangeResult(key, first, last, res) {
       res.status(404).send('{"error":"not_found"}\n');
     }
   } catch (err) {
+    console.warn('server_error', 'sendLrangeResult', key, JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
   }
 }
@@ -331,6 +338,7 @@ async function sendBlockResult(req, res) {
       return;
     }
   } catch (err) {
+    console.warn('server_error', 'sendBlockResult', JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
     return;
   }
@@ -398,6 +406,7 @@ async function sendEntryResult(req, res) {
       return;
     }
   } catch (err) {
+    console.warn('server_error', 'sendEntryResult', JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
     return;
   }
@@ -427,6 +436,7 @@ async function sendTransactionResult(req, res) {
       return;
     }
   } catch (err) {
+    console.warn('server_error', 'sendTransactionResult', JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
     return;
   }
@@ -454,6 +464,7 @@ async function sendSearchResults(req, res) {
       }
     }
   } catch (err) {
+    console.warn('server_error', 'sendSearchResults', JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
     return;
   }
@@ -503,6 +514,7 @@ function sendAccountResult(req, res) {
       res.send(JSON.stringify(consolidated) + '\n');
     });
   } catch (err) {
+    console.warn('server_error', 'sendAccountResult', JSON.stringify(err));
     res.status(500).send(`{"error":"server_error","err":"${err}"}\n`);
     return;
   }
@@ -737,6 +749,7 @@ async function sendClusterResult(req, res) {
       return;
     }
   } catch (err) {
+    console.warn('server_error', 'sendClusterResult', JSON.stringify(err));
     res.status(500).send(`{"error":"server_error","err":"${err}"}\n`);
     return;
   }
@@ -934,6 +947,7 @@ async function sendTimelineInfoResult(type, res) {
       res.status(404).send('{"error":"not_found"}\n');
     }
   } catch (err) {
+    console.warn('server_error', 'sendTimelineInfoResult', JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
   }
 }
@@ -1002,6 +1016,7 @@ async function sendTimelinePageResult(type, res, query) {
       res.status(404).send('{"error":"not_found"}\n');
     }
   } catch (err) {
+    console.warn('server_error', 'sendTimelinePageResult', JSON.stringify(err));
     res.status(500).send('{"error":"server_error"}\n');
   }
 }
