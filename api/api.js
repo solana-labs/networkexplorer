@@ -623,16 +623,12 @@ async function getClusterInfo() {
     node.nodePubkey = nodePubkey;
     node.voteAccount = voteAccount;
     node.votePubkey = votePubkey;
-    node.identity = identities.find(x => x.pubkey === nodePubkey);
-    node.uptime =
-      uptime &&
-      uptime.find(x => {
-        return x.nodePubkey === nodePubkey;
-      });
+    node.identity = _.find(identities, x => x.pubkey === nodePubkey);
+    node.uptime = _.find(uptime, x => x.nodePubkey === nodePubkey);
 
     node.voteStatus =
-      voteAccounts.current.find(x => x.nodePubkey === nodePubkey) ||
-      voteAccounts.delinquent.find(x => x.nodePubkey === nodePubkey);
+      _.find(voteAccounts.current, x => x.nodePubkey === nodePubkey) ||
+      _.find(voteAccounts.delinquent, x => x.nodePubkey === nodePubkey);
     node.activatedStake = node.voteStatus && node.voteStatus.activatedStake;
     node.commission = node.voteStatus && node.voteStatus.commission;
   }
