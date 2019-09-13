@@ -9,11 +9,11 @@ import Base58 from 'base-58';
 import dgram from 'dgram';
 import net from 'net';
 import redis from 'redis';
-import {Transaction} from '@solana/web3.js';
 import _ from 'lodash';
 import fs from 'fs';
 
 import config from './config';
+import {transactionFromJson} from './util';
 const b58e = Base58.encode;
 
 class BridgeFn {
@@ -33,36 +33,9 @@ class BridgeFn {
       outMessage.l = inMessage.l;
       outMessage.hash = b58e(inMessage.entry.hash);
 
-      outMessage.transactions = _.map(inMessage.entry.transactions, x => {
-        let txn = Transaction.from(Buffer.from(x));
-        let tx = {};
-
-        tx.dt = outMessage.dt;
-        tx.h = outMessage.h;
-        tx.id = b58e(txn.signatures[0].signature);
-        tx.s = outMessage.s;
-        tx.e = outMessage.hash;
-        tx.signatures = _.map(txn.signatures, y => {
-          return {signature: b58e(y.signature), public_key: y.publicKey._bn};
-        });
-
-        tx.instructions = _.map(txn.instructions, y => {
-          let inst = {};
-
-          inst.keys = _.map(y.keys, z => {
-            return z.pubkey.toBase58();
-          });
-          inst.program_id = y.programId.toBase58();
-          inst.data = b58e(y.data);
-
-          return inst;
-        });
-
-        tx.fee = txn.fee;
-        tx.recent_blockhash = txn.recentBlockhash;
-
-        return tx;
-      });
+      outMessage.transactions = _.map(inMessage.entry.transactions, x =>
+        transactionFromJson(x, outMessage),
+      );
     }
 
     if (inMessage.t === 'block') {
@@ -179,7 +152,7 @@ class RedisHandler {
         if (result && result.length > 0) {
           _.forEach(result, x => {
             // SAME
-            this.redisHashMset(commands, `!ent:${x}`, 'block_id', message.hash);
+            this.redisHashMset(commands, `!ent:${x}`, {block_id: message.hash});
             // SAME
             this.redisSetAdd(commands, `!blk-ent:${message.hash}`, x);
           });
