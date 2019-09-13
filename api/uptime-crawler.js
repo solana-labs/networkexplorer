@@ -5,8 +5,7 @@ import {promisify} from 'util';
 
 import {FriendlyGet} from './friendlyGet';
 import config from './config';
-
-const FULLNODE_URL = process.env.FULLNODE_URL || 'http://localhost:8899';
+import {FULLNODE_URL} from './fullnode-url';
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; // 10min
 

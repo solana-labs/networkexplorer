@@ -22,12 +22,8 @@ import * as solanaWeb3 from '@solana/web3.js';
 
 import {FriendlyGet} from './friendlyGet';
 import config from './config';
-
-//
-// FIXME: make configurable
-//
-//const FULLNODE_URL = 'http://beta.testnet.solana.com:8899';
-const FULLNODE_URL = 'http://localhost:8899';
+import {addNetworkExplorerRoutes} from './network-explorer';
+import {FULLNODE_URL} from './fullnode-url';
 
 const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 5000;
@@ -116,6 +112,19 @@ const hgetallAsync = promisify(client.hgetall).bind(client);
 const smembersAsync = promisify(client.smembers).bind(client);
 const xrangeAsync = promisify(client.xrange).bind(client);
 const xrevrangeAsync = promisify(client.xrevrange).bind(client);
+
+const redisX = {
+  client: getClient(),
+  setexAsync,
+  getAsync,
+  mgetAsync,
+  existsAsync,
+  lrangeAsync,
+  hgetallAsync,
+  smembersAsync,
+  xrangeAsync,
+  xrevrangeAsync,
+};
 
 const blocksClient = getClient();
 
@@ -1030,5 +1039,7 @@ app.get('/:type/timeline', (req, res) => {
 app.get('/programs/:id/timeline', (req, res) => {
   sendTimelinePageResult(`program:${req.params.id}`, res, req.query);
 });
+
+addNetworkExplorerRoutes(redisX, app);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
