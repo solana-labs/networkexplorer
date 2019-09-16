@@ -13,7 +13,7 @@ const HelpLink = ({text, term}: {text: string, term: string}) => {
     <Tooltip
       classes={{tooltip: classes.tooltip}}
       placement="top"
-      title={'Click for more info about: ' + text}
+      title={text}
     >
       <Link
         className={classes.link}
