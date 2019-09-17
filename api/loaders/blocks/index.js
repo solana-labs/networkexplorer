@@ -1,5 +1,5 @@
 import {getTimelineInfo, getTimelinePage} from '../timeline';
-import {parseBlock} from '../../../src/v2/utils/parseMessage';
+import {parseBlock} from '../parseMessage';
 
 /**
  * loadBlockIndex: retrieves raw data from the data store and returns it for formatting
