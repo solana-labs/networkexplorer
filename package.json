@@ -94,7 +94,7 @@
   },
   "scripts": {
     "build": "set -ex; npm run build:ui; npm run build:api; npm run build:proxy",
-    "build:api": "babel --presets env --plugins transform-runtime api/ -d build",
+    "build:api": "babel --presets env --plugins transform-runtime api/ -d build/api/",
     "build:proxy": "babel --presets env --plugins transform-runtime proxy/* -d build",
     "build:ui": "react-app-rewired build",
     "lint": "set -ex; npm run pretty; eslint .",
