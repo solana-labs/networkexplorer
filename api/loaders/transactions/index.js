@@ -1,5 +1,5 @@
 import {getTimelineInfo, getTimelinePage} from '../timeline';
-import {parseTransaction} from '../../../src/v2/utils/parseMessage';
+import {parseTransaction} from '../parseMessage';
 
 /**
  * loadTransactionIndex: retrieves raw data from the data store and returns it for formatting
