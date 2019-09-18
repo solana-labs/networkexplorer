@@ -6,23 +6,14 @@ export default makeStyles(theme => ({
     background: getColor('grey2')(theme),
     maxHeight: 290,
     overflow: 'hidden',
-    padding: '14px 35px',
+    height: '100%',
+    border: `1px solid ${getColor('grey5')(theme)}`,
+    position: 'relative',
   },
-  tooltip: {
-    background: '#fff',
-    color: getColor('dark')(theme),
-    padding: 10,
-    borderRadius: 0,
-  },
-  tooltipTitle: {
-    fontSize: 15,
-    marginBottom: 4,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-  },
-  tooltipDesc: {
-    fontSize: 12,
-    color: getColor('grey3')(theme),
+  mapTitle: {
+    position: 'absolute',
+    zIndex: 1000,
+    left: 24,
+    top: 13,
   },
 }));

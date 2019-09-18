@@ -15,7 +15,7 @@ export default makeStyles(theme => ({
   },
   mapCard: {
     height: 306,
-    '& svg': {
+    '& > svg': {
       width: '100%',
       height: 295,
       minHeight: 290,

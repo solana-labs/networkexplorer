@@ -3,41 +3,24 @@ import {Container, useTheme} from '@material-ui/core';
 import {observer} from 'mobx-react-lite';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
-import {map, find, eq} from 'lodash/fp';
+import {map, find} from 'lodash/fp';
 import {Match} from 'react-router-dom';
-import getUptime from 'v2/utils/getUptime';
 
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker,
-  Markers,
-  ZoomableGroup,
-} from 'react-simple-maps';
+import getUptime from 'v2/utils/getUptime';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
-import OverviewStore from 'v2/stores/networkOverview';
-import {mapStyle, markerStyle} from 'v2/theme';
-import MapTooltip from 'v2/components/UI/MapTooltip';
 import HelpLink from 'v2/components/HelpLink';
 import Button from 'v2/components/UI/Button';
 import Avatar from 'v2/components/UI/Avatar';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 
-import {LAMPORT_SOL_RATIO} from '../../../constants';
+import {LAMPORT_SOL_RATIO} from 'v2/constants';
+import ValidatorsMap from 'v2/components/ValidatorsMap';
 import useStyles from './styles';
-
-const mapStyles = {
-  default: mapStyle,
-  hover: mapStyle,
-  pressed: mapStyle,
-};
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
   const {validators, inactiveValidators, totalStaked} = NodesStore;
-  const {globalStats} = OverviewStore;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -58,27 +41,15 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     return <div>Loading...</div>;
   }
 
-  const {nodePubkey, gossip, activatedStake, commission, identity = {}} = node;
-
-  const renderMarker = () => (
-    <Marker
-      style={markerStyle(eq(globalStats['!entLastLeader'], nodePubkey))}
-      marker={node}
-    >
-      <MapTooltip
-        classes={{tooltip: classes.tooltip}}
-        title={() => (
-          <>
-            <div className={classes.tooltipTitle}>NODE: {nodePubkey}</div>
-            <div className={classes.tooltipDesc}>Gossip: {gossip}</div>
-          </>
-        )}
-      >
-        <circle cx={0} cy={0} r={5} />
-      </MapTooltip>
-    </Marker>
-  );
-
+  const {
+    nodePubkey,
+    gossip,
+    activatedStake,
+    commission,
+    identity = {},
+    coordinates,
+  } = node;
+  const markers = [{gossip, coordinates, name: nodePubkey}];
   const specs = [
     {
       label: 'Address',
@@ -152,18 +123,6 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     },
   ];
 
-  const mapConfig = {
-    projection: {
-      scale: 85,
-      rotation: [-11, 0, 0],
-    },
-    style: {
-      width: '100%',
-      height: 'auto',
-    },
-    center: [0, 20],
-  };
-
   const renderSpec = ({label, value}: {label: string, value: string}) => (
     <li key={label}>
       <div className={classes.label}>
@@ -216,32 +175,8 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
           )}
           {map(renderSpec)(specs)}
         </ul>
-        <div>
-          <ComposableMap
-            projectionConfig={mapConfig.projection}
-            width={390}
-            height={240}
-            style={mapConfig.style}
-          >
-            <ZoomableGroup center={mapConfig.center} disablePanning>
-              <Geographies
-                geography={`${process.env.PUBLIC_URL}/resources/world-50m-simplified.json`}
-              >
-                {(geographies, projection) =>
-                  geographies.map((geography, i) => (
-                    <Geography
-                      key={i}
-                      tabable={false}
-                      geography={geography}
-                      projection={projection}
-                      style={mapStyles}
-                    />
-                  ))
-                }
-              </Geographies>
-              <Markers>{node.coordinates && renderMarker()}</Markers>
-            </ZoomableGroup>
-          </ComposableMap>
+        <div className={classes.map}>
+          <ValidatorsMap markers={markers} />
         </div>
       </div>
     </Container>

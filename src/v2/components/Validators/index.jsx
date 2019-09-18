@@ -1,5 +1,5 @@
 // @flow
-import {Container, Grid} from '@material-ui/core';
+import {Container, Grid, Typography} from '@material-ui/core';
 import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {map} from 'lodash/fp';
@@ -10,15 +10,22 @@ import Mixpanel from 'v2/mixpanel';
 import Button from 'v2/components/UI/Button';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
+import ValidatorsMap from 'v2/components/ValidatorsMap';
+import HelpLink from '../HelpLink';
 
-import ValidatorsMap from './ValidatorsMap';
 import ValidatorsTable from './Table';
 import useStyles from './styles';
 import {LAMPORT_SOL_RATIO} from '../../constants';
 
 const Validators = () => {
   const classes = useStyles();
-  const {supply, validators, fetchClusterInfo, totalStaked} = NodesStore;
+  const {
+    supply,
+    validators,
+    fetchClusterInfo,
+    totalStaked,
+    mapMarkers,
+  } = NodesStore;
   const {isLoading} = Socket;
   useEffect(() => {
     fetchClusterInfo();
@@ -108,7 +115,13 @@ const Validators = () => {
               <Loader width="100%" height="480" y={-10} />
             </div>
           ) : (
-            <ValidatorsMap />
+            <div className={classes.map}>
+              <Typography className={classes.mapTitle}>
+                Active Validators Map
+                <HelpLink text="" term="" />
+              </Typography>
+              <ValidatorsMap markers={mapMarkers} />
+            </div>
           )}
         </Grid>
         <Grid item xs={12} md={3} zeroMinWidth>
