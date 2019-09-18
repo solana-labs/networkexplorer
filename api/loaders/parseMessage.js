@@ -51,4 +51,3 @@ export function parseClusterInfo(data) {
     feeCalculator,
   };
 }
-

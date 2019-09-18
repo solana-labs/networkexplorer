@@ -16,13 +16,18 @@ import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
 import Avatar from 'v2/components/UI/Avatar';
 import type {TableHeadProps} from 'v2/@types/table';
-
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
 const tHeads: TableHeadProps[] = [
   {
     name: 'blocks',
+    text: '',
+    term: '',
+  },
+  {
+    name: 'slot',
     text: '',
     term: '',
   },
@@ -37,42 +42,89 @@ const tHeads: TableHeadProps[] = [
     term: '',
   },
   {
-    name: 'uncles',
+    name: 'confidence',
     text: '',
     term: '',
   },
   {
-    name: 'miner',
+    name: 'leader',
     text: '',
     term: '',
     width: 200,
   },
 ];
 
-const BlocksTable = ({separate}: {separate: boolean}) => {
+const BlocksTable = ({
+  blocks,
+  separate,
+}: {
+  blocks: Array,
+  separate: boolean,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const blocks = [];
+
+  const asTime = x => {
+    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
+  };
 
   const renderRow = block => {
     return (
       <TableRow hover key={block.id}>
         <TableCell align="center">
           <Link to={`/blocks/${block.id}`} className={classes.name}>
-            7887319
+            {block.id}
           </Link>
         </TableCell>
-        <TableCell>55 sec ago</TableCell>
-        <TableCell>126</TableCell>
-        <TableCell>5</TableCell>
+        <TableCell>{block.slot}</TableCell>
+        <TableCell title={block.timestamp}>{asTime(block.timestamp)}</TableCell>
+        <TableCell>TODO</TableCell>
+        <TableCell>TODO</TableCell>
         <TableCell>
           <Avatar avatarUrl="" />
-          {block.pubkey}
+          {block.leader}
         </TableCell>
       </TableRow>
     );
   };
+
+  const renderCard = block => {
+    return (
+      <div className={classes.card} key={block.id}>
+        <ul>
+          <li>
+            <div className={classes.cardTitle}>Block</div>
+            <div>{block.id}</div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Slot</div>
+            <div>{block.slot}</div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Time</div>
+            <div title={block.timestamp}>{asTime(block.timestamp)}</div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Transactions</div>
+            <div>TODO</div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Confidence</div>
+            <div>TODO</div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Leader</div>
+            <div className={classes.leader}>
+              <Avatar avatarUrl="" />
+              <div>{block.leader}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
   const renderTH = ({name, width, ...rest}: TableHeadProps) => (
     <TableCell key={name} width={width}>
       {name}
@@ -93,53 +145,11 @@ const BlocksTable = ({separate}: {separate: boolean}) => {
             }}
           >
             {map(renderRow)(blocks)}
-            <TableRow hover>
-              <TableCell align="center">
-                <Link to={`/blocks/123`} className={classes.name}>
-                  7887319
-                </Link>
-              </TableCell>
-              <TableCell>55 sec ago</TableCell>
-              <TableCell>126</TableCell>
-              <TableCell>5</TableCell>
-              <TableCell>
-                <div className={classes.miner}>
-                  <Avatar avatarUrl="" />
-                  <div>0xAA15A3E6b97...</div>
-                </div>
-              </TableCell>
-            </TableRow>
           </TableBody>
         </Table>
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          <div className={classes.card}>
-            <ul>
-              <li>
-                <div className={classes.cardTitle}>Block</div>
-                <div>7887219</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Time</div>
-                <div>55 sec ago</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Transactions</div>
-                <div>126</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Uncles</div>
-                <div>5</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Miner</div>
-                <div className={classes.miner}>
-                  <Avatar avatarUrl="" />
-                  <div>0xAA15A3E6b97...</div>
-                </div>
-              </li>
-            </ul>
-          </div>
+          {map(renderCard)(blocks)}
         </div>
       )}
     </div>

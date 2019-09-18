@@ -19,6 +19,7 @@ export class TransactionIndexView {
       const slot = x.s;
       const tick_height = x.h;
       const entry_id = x.entry_id;
+      const block_id = x.block_id;
       const leader = x.l;
       const timestamp = x.dt;
 
@@ -41,6 +42,7 @@ export class TransactionIndexView {
           slot,
           tick_height,
           entry_id,
+          block_id,
           leader,
           instructions,
           timestamp,
@@ -55,6 +57,7 @@ export class TransactionIndexView {
       length: timelineData.length,
       count: timelineData.count,
       next: timelineData.next,
+      prev: timelineData.prev,
       timestamp: timelineData.dt,
     };
 

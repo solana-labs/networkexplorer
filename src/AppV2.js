@@ -90,8 +90,14 @@ const App = () => {
               <Route exact path="/validators/:id" component={ValidatorDetail} />
               <Route exact path="/tour-de-sol" component={TourDeSol} />
               <Route exact path="/blocks" component={Blocks} />
+              <Route exact path="/blocks/timeline/:start" component={Blocks} />
               <Route exact path="/blocks/:id" component={BlockDetail} />
               <Route exact path="/transactions" component={Transactions} />
+              <Route
+                exact
+                path="/transactions/timeline/:start"
+                component={Transactions}
+              />
               <Route
                 exact
                 path="/transactions/:id"

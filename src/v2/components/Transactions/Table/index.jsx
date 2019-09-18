@@ -17,7 +17,7 @@ import {map} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import type {TableHeadProps} from 'v2/@types/table';
-
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import useStyles from './styles';
 
 const tHeads: TableHeadProps[] = [
@@ -58,40 +58,98 @@ const TransactionsTable = ({
   transactions,
 }: {
   separate: boolean,
-  transactions: any[],
+  transactions: Array,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
 
+  const asTime = x => {
+    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
+  };
+
   const renderRow = transaction => {
     return (
       <TableRow hover key={transaction.id}>
         <TableCell align="center">
-          <Link to={`/transaction/${transaction.id}`} className={classes.name}>
-            7887319
+          <Link to={`/transactions/${transaction.id}`} className={classes.name}>
+            {transaction.id}
           </Link>
         </TableCell>
         <TableCell>
-          <Link to={`/blocks/${transaction.block}`} className={classes.name}>
-            7887319
+          <Link to={`/blocks/${transaction.blockId}`} className={classes.name}>
+            {transaction.blockId}
           </Link>
         </TableCell>
-        <TableCell>55 sec ago</TableCell>
+        <TableCell title={transaction.timestamp}>
+          {asTime(transaction.timestamp)}
+        </TableCell>
         <TableCell>
           <Link
-            to={`/applications/${transaction.app}`}
+            to={`/applications/${transaction.instructions[0].programId}`}
             className={classes.name}
           >
-            7887319
+            {transaction.instructions[0].programId}
           </Link>
         </TableCell>
         <TableCell>
-          <TypeLabel type="loader" label="loader" />
+          TODO <TypeLabel type="loader" label="loader" />
         </TableCell>
+        <TableCell>TODO</TableCell>
       </TableRow>
     );
   };
+
+  const renderCard = transaction => {
+    return (
+      <div className={classes.card}>
+        <ul>
+          <li>
+            <div className={classes.cardTitle}>Hash</div>
+            <Link
+              to={`/transactions/${transaction.id}`}
+              className={classes.name}
+            >
+              <div>{transaction.id}</div>
+            </Link>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Block</div>
+            <Link
+              to={`/blocks/${transaction.blockId}`}
+              className={classes.name}
+            >
+              {transaction.blockId}
+            </Link>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Time</div>
+            <div title={transaction.timestamp}>
+              {asTime(transaction.timestamp)}
+            </div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Application ID</div>
+            <Link
+              to={`/applications/${transaction.instructions[0].programId}`}
+              className={classes.name}
+            >
+              <div>{transaction.instructions[0].programId}</div>
+            </Link>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Type</div>
+            TODO <TypeLabel type="loader" label="loader" />
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Confirmations</div>
+            <div>TODO</div>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
   const renderTH = ({name, ...rest}: TableHeadProps) => (
     <TableCell key={name}>
       {name}
@@ -112,66 +170,11 @@ const TransactionsTable = ({
             }}
           >
             {map(renderRow)(transactions)}
-            <TableRow hover>
-              <TableCell align="center">
-                <Link to={`/transactions/234`} className={classes.name}>
-                  <div>5CpdpKwKUBJgD4Bd...</div>
-                </Link>
-              </TableCell>
-              <TableCell>
-                <Link to={`/blocks/456`} className={classes.name}>
-                  7887319
-                </Link>
-              </TableCell>
-              <TableCell>55 sec ago</TableCell>
-              <TableCell>
-                <Link to={`/applications/123`} className={classes.name}>
-                  <div>5CpdpKwKUBJgD4Bd...</div>
-                </Link>
-              </TableCell>
-              <TableCell>
-                <TypeLabel type="loader" label="loader" />
-              </TableCell>
-              <TableCell>5</TableCell>
-            </TableRow>
           </TableBody>
         </Table>
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          <div className={classes.card}>
-            <ul>
-              <li>
-                <div className={classes.cardTitle}>Hash</div>
-                <Link to={`/transaction/234`} className={classes.name}>
-                  <div>5CpdpKwKUBJgD4Bd...</div>
-                </Link>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Block</div>
-                <Link to={`/blocks/456`} className={classes.name}>
-                  7887319
-                </Link>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Time</div>
-                <div>55 sec ago</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Application ID</div>
-                <Link to={`/applications/123`} className={classes.name}>
-                  <div>5CpdpKwKUBJgD4Bd...</div>
-                </Link>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Type</div>
-                <TypeLabel type="loader" label="loader" />
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Confirmations</div>
-                <div>5</div>
-              </li>
-            </ul>
-          </div>
+          {map(renderCard)(transactions)}
         </div>
       )}
     </div>

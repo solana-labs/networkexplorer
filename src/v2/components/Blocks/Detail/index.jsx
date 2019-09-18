@@ -10,65 +10,82 @@ import Avatar from 'v2/components/UI/Avatar';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import TransactionsTable from 'v2/components/Transactions/Table';
+import Loader from 'v2/components/UI/Loader';
 
 import useStyles from './styles';
+import BlockDetailStore from 'v2/stores/blocks/detail';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const BlockDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
-  const {params} = match;
+  const {isLoading, blockId, block} = BlockDetailStore;
+
+  if (blockId !== match.params.id) {
+    BlockDetailStore.init({blockId: match.params.id});
+  }
 
   useEffect(() => {
-    Mixpanel.track(`Clicked Block ${params.id}`);
-  }, [params.id]);
+    Mixpanel.track(`Clicked Block ${match.params.id}`);
+  }, [match.params.id]);
 
-  const block = {};
-
-  if (!block) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <Loader width="533" height="290" />;
   }
+
+  const asTime = x => {
+    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
+  };
 
   const specs = [
     {
       label: 'Time',
-      hint: '',
-      value: '06/05/2019 11:27AM',
+      hint: block.timestamp,
+      value: block.timestamp && asTime(block.timestamp),
     },
     {
       label: 'Fee',
       hint: '',
-      value: '0.006 SOL | $0.60',
+      value: 'TODO',
     },
     {
       label: 'Height',
       hint: '',
-      value: '7887219',
+      value: block.slot,
     },
     {
       label: 'reward',
       hint: '',
-      value: '0',
+      value: 'TODO',
     },
     {
-      label: 'mined',
+      label: 'Leader',
       hint: '',
-      value() {
+      value: () => {
         return (
-          <Link to="" className={classes.mined}>
+          <Link to="" className={classes.leader}>
             <Avatar avatarUrl="" />
-            123123123
+            {block.leader}
           </Link>
         );
       },
     },
   ];
 
-  const renderSpec = ({label, value}: {label: string, value: string}) => (
+  const renderSpec = ({
+    label,
+    hint,
+    value,
+  }: {
+    label: string,
+    hint: string,
+    value: string,
+  }) => (
     <li key={label}>
       <div className={classes.label}>
         {label}
         <HelpLink term="" text="" />
       </div>
-      <div className={classes.value}>
+      <div className={classes.value} title={hint}>
         {typeof value === 'function' ? value() : value}
       </div>
     </li>
@@ -79,7 +96,8 @@ const BlockDetail = ({match}: {match: Match}) => {
       <div className={classes.root}>
         <SectionHeader title="Block Detail">
           <span className={classes.blockTitle}>
-            <CopyBtn text="123" />
+            {block.id}
+            <CopyBtn text={block.id} />
           </span>
         </SectionHeader>
         <div className={classes.body}>
@@ -87,7 +105,7 @@ const BlockDetail = ({match}: {match: Match}) => {
           <div></div>
         </div>
       </div>
-      <div className={classes.tableTitle}>Transactions</div>
+      <div className={classes.tableTitle}>Transactions (TODO)</div>
       <TransactionsTable transactions={[]} />
     </Container>
   );

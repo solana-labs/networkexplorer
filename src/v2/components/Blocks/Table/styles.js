@@ -95,7 +95,7 @@ export default makeStyles(theme => ({
     letterSpacing: 2,
     fontWeight: 'bold',
   },
-  miner: {
+  leader: {
     display: 'flex',
     alignItems: 'center',
     color: getColor('main')(theme),

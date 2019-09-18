@@ -33,7 +33,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
 
     const version = q.v || 'BlockIndexView@latest';
     const start = q.start || '+';
-    const count = q.count || DEFAULT_PAGE_SIZE;
+    const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
     const direction = q.direction || '-';
     const rawData = await loadBlockIndex(redisX, start, count, direction);
 
@@ -56,7 +56,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
 
     const version = q.v || 'TransactionIndexView@latest';
     const start = q.start || '+';
-    const count = q.count || DEFAULT_PAGE_SIZE;
+    const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
     const direction = q.direction || '-';
     const rawData = await loadTransactionIndex(redisX, start, count, direction);
 
@@ -65,7 +65,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
     );
   });
 
-  // Network Explorer Transaction Detail
+  // Network Explorer Transaction Detail.
   app.get('/explorer/transactions/:id', async (req, res) => {
     const q = req.query || {};
 

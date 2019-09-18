@@ -27,9 +27,7 @@ export async function getTimelineInfo(redisX, timeline, parseValue) {
     try {
       redisX.client
         .multi()
-        .xrange(timelineKey, '-', '+', 'COUNT', 1)
-        .xrevrange(timelineKey, '+', '-', 'COUNT', 1)
-        .xlen(timelineKey)
+        .xinfo('STREAM', timelineKey)
         .exec((err, result) => {
           if (!err) {
             resolve(result);
@@ -42,14 +40,17 @@ export async function getTimelineInfo(redisX, timeline, parseValue) {
     }
   });
 
-  const results = await thePromise;
+  const rawResults = await thePromise;
+  const results = _.fromPairs(_.chunk(rawResults[0], 2));
 
-  const [firstKey, rawFirst] = parseStreamEntry(results[0][0]);
+  const [firstKey, rawFirst] = results['first-entry'];
   const first = [firstKey, parseValue ? parseValue(rawFirst) : rawFirst];
 
-  const [lastKey, rawLast] = parseStreamEntry(results[1][0]);
+  const [lastKey, rawLast] = results['last-entry'];
   const last = [lastKey, parseValue ? parseValue(rawLast) : rawLast];
-  let count = results[2];
+
+  let count = results['length'];
+
   let dt = new Date().toISOString();
 
   return {
@@ -73,18 +74,47 @@ export async function getTimelineInfo(redisX, timeline, parseValue) {
 export async function getTimelinePage(
   redisX,
   timeline,
-  start = '+',
-  count = DEFAULT_PAGE_SIZE,
-  direction = '-',
+  start,
+  count,
+  direction,
   parseValue,
 ) {
   let timelineKey = `!__timeline:${timeline}`;
+  const safeCount = Math.min(MAX_PAGE_SIZE, Math.max(0, count));
 
-  let rawResults = await (direction === '+'
-    ? redisX.xrangeAsync(timelineKey, start, '+', 'COUNT', count + 1)
-    : redisX.xrevrangeAsync(timelineKey, start, '-', 'COUNT', count + 1));
+  const thePromise = new Promise((resolve, reject) => {
+    try {
+      let tx = redisX.client.multi();
 
-  let results = _.map(rawResults.slice(0, count), x => {
+      if (direction === '+') {
+        tx = tx.xrange(timelineKey, start, '+', 'COUNT', safeCount + 1);
+        tx = tx.xrevrange(timelineKey, start, '-', 'COUNT', safeCount + 1);
+      } else {
+        tx = tx.xrevrange(timelineKey, start, '-', 'COUNT', safeCount + 1);
+        tx = tx.xrange(timelineKey, start, '+', 'COUNT', safeCount + 1);
+      }
+
+      return tx.exec((err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+  const [rawResults, prevResults] = await thePromise;
+
+  const results = _.map(rawResults.slice(0, safeCount), x => {
+    const [k, v] = parseStreamEntry(x);
+
+    return [k, parseValue ? parseValue(v) : v];
+  });
+
+  let prevValue = _.map(prevResults, x => {
     const [k, v] = parseStreamEntry(x);
 
     return [k, parseValue ? parseValue(v) : v];
@@ -94,7 +124,9 @@ export async function getTimelinePage(
   let dt = new Date().toISOString();
 
   let next =
-    rawResults.length > count ? rawResults[rawResults.length - 1][0] : null;
+    rawResults.length > safeCount ? rawResults[rawResults.length - 1][0] : null;
+  let prev =
+    prevValue.length > safeCount ? prevValue[prevValue.length - 1][0] : null;
 
   return {
     timeline,
@@ -103,6 +135,7 @@ export async function getTimelinePage(
     length,
     count,
     next,
+    prev,
     dt,
   };
 }
