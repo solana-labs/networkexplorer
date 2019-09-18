@@ -1,17 +1,16 @@
 // @flow
 import React from 'react';
+import {map} from 'lodash/fp';
 
 import Application from './Application';
 
-const ApplicationsTab = ({applications}) => {
-  return (
-    <div>
-      <Application
-        id="0xAA15A3E6b97d09653b8b8d9c9e1D80daf5ba81e8"
-        accounts={[]}
-      />
-    </div>
-  );
+const ApplicationsTab = ({transaction}: {transaction: Object}) => {
+  const renderApplication = instruction => {
+    return (
+      <Application id={instruction.programId} accounts={instruction.keys} />
+    );
+  };
+  return <div>{map(renderApplication)(transaction.instructions)}</div>;
 };
 
 export default ApplicationsTab;

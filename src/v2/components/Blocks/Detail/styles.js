@@ -82,7 +82,7 @@ export default makeStyles(theme => ({
     letterSpacing: 2.5,
     marginBottom: 26,
   },
-  mined: {
+  leader: {
     display: 'flex',
     alignItems: 'center',
     '& div': {

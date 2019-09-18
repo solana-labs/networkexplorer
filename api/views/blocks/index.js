@@ -39,6 +39,7 @@ export class BlockIndexView {
       length: timelineData.length,
       count: timelineData.count,
       next: timelineData.next,
+      prev: timelineData.prev,
       timestamp: timelineData.dt,
     };
 

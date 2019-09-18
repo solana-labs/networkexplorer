@@ -10,11 +10,7 @@ const BOOK_VERSION = testnetDefaultChannel === 'edge' ? 'book-edge' : 'book';
 const HelpLink = ({text, term}: {text: string, term: string}) => {
   const classes = useStyles();
   return (
-    <Tooltip
-      classes={{tooltip: classes.tooltip}}
-      placement="top"
-      title={text}
-    >
+    <Tooltip classes={{tooltip: classes.tooltip}} placement="top" title={text}>
       <Link
         className={classes.link}
         href={`https://solana-labs.github.io/${BOOK_VERSION}/terminology.html#${term}`}

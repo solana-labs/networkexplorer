@@ -6,7 +6,7 @@ import Label from 'v2/components/UI/Label';
 
 import useStyles from './styles';
 
-const ApplicationStatus = () => {
+const ApplicationStatus = ({transaction}) => {
   const classes = useStyles();
   const specs = [
     {
@@ -15,7 +15,7 @@ const ApplicationStatus = () => {
     },
     {
       label: 'confirmations',
-      value: '5',
+      value: 'TODO',
     },
   ];
   const renderSpec = ({label, value}: {label: string, value: string}) => (
@@ -34,7 +34,7 @@ const ApplicationStatus = () => {
       <Grid item sm={5}>
         <Label text="confidence" hint="" />
         <div className={classes.circle}>
-          90%
+          TODO 90%
           <div />
         </div>
       </Grid>
