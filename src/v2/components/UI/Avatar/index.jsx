@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import {observer} from 'mobx-react-lite';
 import BaseAvatar from '@material-ui/core/Avatar';
 import theme from 'v2/theme';
 import getColor from 'v2/utils/getColor';
@@ -45,4 +46,4 @@ const Avatar = ({
   return <BaseAvatar src={avatarUrl} style={avatarStyle} />;
 };
 
-export default Avatar;
+export default observer(Avatar);

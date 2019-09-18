@@ -64,4 +64,18 @@ export default makeStyles(theme => ({
       height: '100%',
     },
   },
+  map: {
+    height: '100%',
+    border: `1px solid ${getColor('grey5')(theme)}`,
+    position: 'relative',
+    [theme.breakpoints.down('sm')]: {
+      height: 290,
+    },
+  },
+  mapTitle: {
+    position: 'absolute',
+    left: 24,
+    top: 13,
+    zIndex: 100,
+  },
 }));

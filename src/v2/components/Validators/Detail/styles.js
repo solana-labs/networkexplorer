@@ -97,4 +97,10 @@ export default makeStyles(theme => ({
     alignItem: 'center',
     color: getColor('main')(theme),
   },
+  map: {
+    height: 500,
+    [theme.breakpoints.down('sm')]: {
+      height: 250,
+    },
+  },
 }));

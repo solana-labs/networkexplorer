@@ -49,10 +49,12 @@ class Store {
 
   get mapMarkers() {
     return compose(
-      map(({nodePubkey: name, tpu: gossip, coordinates}) => ({
-        name,
+      map(({nodePubkey: pubkey, tpu: gossip, coordinates, identity}) => ({
+        pubkey,
         gossip,
         coordinates,
+        name: (identity && identity.name) || 'Unknown',
+        avatarUrl: (identity && identity.avatarUrl) || '',
       })),
       filter({what: 'Validator'}),
     )(this.network);
