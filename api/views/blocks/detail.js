@@ -7,7 +7,14 @@
 const __VERSION__ = 'BlockDetailView@1.0.0';
 
 export class BlockDetailView {
-  asVersion(rawData, version) {
+  asVersion(rawData, __errors__, version) {
+    if (__errors__) {
+      return {
+        __VERSION__,
+        __errors__,
+      };
+    }
+
     const entries = rawData.entries;
     const blockData = rawData.block;
 

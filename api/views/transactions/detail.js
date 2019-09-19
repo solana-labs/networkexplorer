@@ -8,7 +8,14 @@ import _ from 'lodash';
  */
 const __VERSION__ = 'TransactionDetailView@1.0.0';
 export class TransactionDetailView {
-  asVersion(rawData, version) {
+  asVersion(rawData, __errors__, version) {
+    if (__errors__) {
+      return {
+        __VERSION__,
+        __errors__,
+      };
+    }
+
     const transactionData = rawData.transaction;
     const entryData = rawData.entry;
     const blockData = rawData.block;

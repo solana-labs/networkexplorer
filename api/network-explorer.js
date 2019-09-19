@@ -7,6 +7,7 @@ import {loadBlockIndex} from './loaders/blocks/index';
 import {loadBlockDetail} from './loaders/blocks/detail';
 import {loadTransactionIndex} from './loaders/transactions/index';
 import {loadTransactionDetail} from './loaders/transactions/detail';
+import {FriendlyGet} from './friendlyGet';
 
 function prettify(req, data) {
   const isPretty = req.query && req.query.pretty === 'true';
@@ -35,9 +36,16 @@ export function addNetworkExplorerRoutes(redisX, app) {
     const start = q.start || '+';
     const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
     const direction = q.direction || '-';
-    const rawData = await loadBlockIndex(redisX, start, count, direction);
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with('rawData', loadBlockIndex(redisX, start, count, direction), {})
+      .get();
 
-    res.send(prettify(req, new BlockIndexView().asVersion(rawData, version)));
+    res.send(
+      prettify(
+        req,
+        new BlockIndexView().asVersion(rawData, __errors__, version),
+      ),
+    );
   });
 
   // Network Explorer Block Detail
@@ -45,9 +53,16 @@ export function addNetworkExplorerRoutes(redisX, app) {
     const q = req.query || {};
 
     const version = q.v || 'BlockDetailView@latest';
-    const rawData = await loadBlockDetail(redisX, req.params.id, version);
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with('rawData', loadBlockDetail(redisX, req.params.id, version), {})
+      .get();
 
-    res.send(prettify(req, new BlockDetailView().asVersion(rawData, version)));
+    res.send(
+      prettify(
+        req,
+        new BlockDetailView().asVersion(rawData, __errors__, version),
+      ),
+    );
   });
 
   // Network Explorer Transaction Index
@@ -58,10 +73,19 @@ export function addNetworkExplorerRoutes(redisX, app) {
     const start = q.start || '+';
     const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
     const direction = q.direction || '-';
-    const rawData = await loadTransactionIndex(redisX, start, count, direction);
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with(
+        'rawData',
+        loadTransactionIndex(redisX, start, count, direction),
+        {},
+      )
+      .get();
 
     res.send(
-      prettify(req, new TransactionIndexView().asVersion(rawData, version)),
+      prettify(
+        req,
+        new TransactionIndexView().asVersion(rawData, __errors__, version),
+      ),
     );
   });
 
@@ -70,10 +94,19 @@ export function addNetworkExplorerRoutes(redisX, app) {
     const q = req.query || {};
 
     const version = q.v || 'TransactionDetailView@latest';
-    const rawData = await loadTransactionDetail(redisX, req.params.id, version);
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with(
+        'rawData',
+        loadTransactionDetail(redisX, req.params.id, version),
+        {},
+      )
+      .get();
 
     res.send(
-      prettify(req, new TransactionDetailView().asVersion(rawData, version)),
+      prettify(
+        req,
+        new TransactionDetailView().asVersion(rawData, __errors__, version),
+      ),
     );
   });
 }
