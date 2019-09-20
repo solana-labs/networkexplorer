@@ -5,6 +5,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
 import {map, find, eq} from 'lodash/fp';
 import {Match} from 'react-router-dom';
+import getUptime from 'v2/utils/getUptime';
 
 import {
   ComposableMap,
@@ -50,6 +51,8 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
   let node =
     find({nodePubkey: params.id})(validators) ||
     find({nodePubkey: params.id})(inactiveValidators);
+
+  const uptime = getUptime(node);
 
   if (!node) {
     return <div>Loading...</div>;
@@ -113,7 +116,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Uptime',
       hint: '',
-      value: 'TODO',
+      value: `${uptime}%`,
     },
     {
       label: 'keybase',
