@@ -73,7 +73,7 @@
     "flow-typed": "^2.6.1",
     "history": "^4.10.1",
     "husky": "^3.0.5",
-    "lint-staged": "^9.2.5",
+    "lint-staged": "^9.3.0",
     "moment": "^2.24.0",
     "prettier": "^1.18.2",
     "qrcode.react": "^0.9.3",
