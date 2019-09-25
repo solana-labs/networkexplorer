@@ -43,7 +43,7 @@
     "redis": "^2.8.0",
     "serve": "^11.1.0",
     "use-debounce": "^3.0.1",
-    "yaml": "^1.6.0",
+    "yaml": "^1.7.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
