@@ -1,4 +1,4 @@
-// import _ from 'lodash';
+import _ from 'lodash';
 
 /**
  * ApplicationIndexView : supports the application index page
@@ -16,53 +16,47 @@ export class ApplicationIndexView {
       };
     }
 
-    // const timelineData = rawData.timelinePage;
-    // const timelineInfo = rawData.timelineInfo;
-    //
-    // const results = _.map(rawData.timelinePage.results, result => {
-    //   const [k, x] = result;
-    //   const id = x.id;
-    //   const slot = x.s;
-    //   const tick_height = x.h;
-    //   const leader = x.l;
-    //   const timestamp = x.dt;
-    //
-    //   return [
-    //     k,
-    //     {
-    //       id,
-    //       slot,
-    //       tick_height,
-    //       leader,
-    //       timestamp,
-    //     },
-    //   ];
-    // });
-    //
-    // const pageData = {
-    //   timeline: timelineData.timeline,
-    //   start: timelineData.start,
-    //   results,
-    //   length: timelineData.length,
-    //   count: timelineData.count,
-    //   next: timelineData.next,
-    //   prev: timelineData.prev,
-    //   timestamp: timelineData.dt,
-    // };
-    //
-    // const pageInfo = {
-    //   timeline: timelineInfo.timeline,
-    //   last: timelineInfo.last,
-    //   first: timelineInfo.first,
-    //   count: timelineInfo.count,
-    //   timestamp: timelineInfo.dt,
-    // };
+    const timelineData = rawData.timelinePage;
+    const timelineInfo = rawData.timelineInfo;
+
+    const results = _.map(timelineData.results, result => {
+      const [k, x] = result;
+      const program_id = x.program_id;
+      const timestamp = x.timestamp;
+
+      return [
+        k,
+        {
+          program_id,
+          timestamp,
+        },
+      ];
+    });
+
+    const pageData = {
+      timeline: timelineData.timeline,
+      start: timelineData.start,
+      results,
+      length: timelineData.length,
+      count: timelineData.count,
+      next: timelineData.next,
+      prev: timelineData.prev,
+      timestamp: timelineData.dt,
+    };
+
+    const pageInfo = {
+      timeline: timelineInfo.timeline,
+      last: timelineInfo.last,
+      first: timelineInfo.first,
+      count: timelineInfo.count,
+      timestamp: timelineInfo.dt,
+    };
 
     if (version === 'ApplicationIndexView@latest' || version === __VERSION__) {
       return {
         __VERSION__,
-        rawData,
-        // pageInfo,
+        pageData,
+        pageInfo,
       };
     }
 

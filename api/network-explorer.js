@@ -2,11 +2,13 @@ import {BlockIndexView} from './views/blocks/index';
 import {BlockDetailView} from './views/blocks/detail';
 import {TransactionIndexView} from './views/transactions/index';
 import {TransactionDetailView} from './views/transactions/detail';
+import {ApplicationIndexView} from './views/applications/index';
 import {DEFAULT_PAGE_SIZE} from './loaders/timeline';
 import {loadBlockIndex} from './loaders/blocks/index';
 import {loadBlockDetail} from './loaders/blocks/detail';
 import {loadTransactionIndex} from './loaders/transactions/index';
 import {loadTransactionDetail} from './loaders/transactions/detail';
+import {loadApplicationIndex} from './loaders/applications/index';
 import {FriendlyGet} from './friendlyGet';
 
 function prettify(req, data) {
@@ -106,6 +108,30 @@ export function addNetworkExplorerRoutes(redisX, app) {
       prettify(
         req,
         new TransactionDetailView().asVersion(rawData, __errors__, version),
+      ),
+    );
+  });
+
+  // Network Explorer Applications Index
+  app.get('/explorer/applications/index', async (req, res) => {
+    const q = req.query || {};
+
+    const version = q.v || 'ApplicationIndexView@latest';
+    const start = q.start || '';
+    const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
+    const direction = q.direction || '-';
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with(
+        'rawData',
+        loadApplicationIndex(redisX, start, count, direction),
+        {},
+      )
+      .get();
+
+    res.send(
+      prettify(
+        req,
+        new ApplicationIndexView().asVersion(rawData, __errors__, version),
       ),
     );
   });
