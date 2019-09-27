@@ -83,6 +83,11 @@ class RedisHandler {
     commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
   }
 
+  redisRecencySetPush(commands, key, itemKey, value) {
+    commands.push(['zadd', key, value, itemKey]);
+    commands.push(['expire', key, EXPIRE_TIMEOUT_SECS]);
+  }
+
   redisKeyValueAdd(commands, key, value) {
     commands.push(['setex', key, EXPIRE_TIMEOUT_SECS, value]);
   }
@@ -98,6 +103,7 @@ class RedisHandler {
   }
 
   process(message, original) {
+    const now_score = new Date().getTime();
     const txn_sec = message.dt.substring(0, 19);
     const txn_min = message.dt.substring(0, 16);
     const txn_hour = message.dt.substring(0, 13);
@@ -305,10 +311,11 @@ class RedisHandler {
             txnMsg,
           );
           // NEW
-          this.redisSetAdd(
+          this.redisRecencySetPush(
             commands,
-            `!programs:active:${txn_min}`,
+            `!__recent:programs`,
             instruction.program_id,
+            now_score,
           );
         });
       });
