@@ -4,7 +4,7 @@ import {Container, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
-import {Match, Link} from 'react-router-dom';
+import {Match} from 'react-router-dom';
 import {ReactComponent as StarIcon} from 'v2/assets/icons/star.svg';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import HelpLink from 'v2/components/HelpLink';

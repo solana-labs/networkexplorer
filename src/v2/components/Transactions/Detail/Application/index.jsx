@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import {observer} from 'mobx-react-lite';
 import _ from 'lodash';
 import {Grid} from '@material-ui/core';
 import Label from 'v2/components/UI/Label';
