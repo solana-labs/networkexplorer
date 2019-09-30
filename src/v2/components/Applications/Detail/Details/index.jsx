@@ -1,29 +1,41 @@
 import React from 'react';
 import Avatar from 'v2/components/UI/Avatar';
 import Label from 'v2/components/UI/Label';
+import _ from 'lodash';
+// import useStyles from './styles';
+import {observer} from 'mobx-react-lite';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@material-ui/core';
 
-import useStyles from './styles';
+const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
+  // const classes = useStyles();
 
-const ApplicationDetails = () => {
-  const classes = useStyles();
-  return (
-    <ul className={classes.list}>
-      <li className={classes.item}>
-        <Label text="to" hint="" />
-        <div>
-          <Avatar avatarUrl="" name="" width={33} height={33} pubkey="123" />
-          <span>0xAA15A3E6b97d09653b8b8d9c9e1D80daf5ba81e8</span>
-        </div>
-      </li>
-      <li className={classes.item}>
-        <Label text="from" hint="" />
-        <div>
-          <Avatar avatarUrl="" name="" width={33} height={33} pubkey="123" />
-          <span>0xAA15A3E6b97d09653b8b8d9c9e1D80daf5ba81e8</span>
-        </div>
-      </li>
-    </ul>
-  );
+  const renderAccount = (account, i) => {
+    return (
+      <TableRow key={account.pubkey}>
+        <TableCell>
+          <Label text={`Account ${i + 1}`} hint="" />
+        </TableCell>
+        <TableCell>
+          <Avatar
+            avatarUrl=""
+            name=""
+            width={33}
+            height={33}
+            pubkey={account.pubkey}
+          />
+          <span>{account.pubkey}</span>
+        </TableCell>
+        <TableCell>Balance: {account.lamports}</TableCell>
+      </TableRow>
+    );
+  };
+
+  return <Table><TableBody>{_.map(programAccounts, renderAccount)}</TableBody></Table>;
 };
 
-export default ApplicationDetails;
+export default observer(ApplicationDetails);

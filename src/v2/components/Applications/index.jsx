@@ -1,22 +1,47 @@
+// @flow
 import {Container} from '@material-ui/core';
 import React from 'react';
+import {observer} from 'mobx-react-lite';
 import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
+import ApplicationsTimelineStore from 'v2/stores/applications/timeline';
 import Table from './Table';
-
 import useStyles from './styles';
+import {Link, Match} from 'react-router-dom';
 
-const ApplicationsPage = () => {
+const ApplicationsPage = ({match}: {match: Match}) => {
   const classes = useStyles();
+  const {
+    applications,
+    applicationCount,
+    start,
+    next,
+    prev,
+  } = ApplicationsTimelineStore;
+
+  if (start !== match.params.start) {
+    ApplicationsTimelineStore.init({start: match.params.start});
+  }
+
+  const nav = (
+    <div className={classes.totalApplications}>
+      STYLE_ME :
+      {prev && <Link to={`/applications/timeline/${prev}`}>prev page</Link>}:
+      {next && <Link to={`/applications/timeline/${next}`}>next page</Link>}:
+    </div>
+  );
+
   return (
     <Container>
       <SectionHeader title="Applications">
         <HelpLink text="" term="" />
-        <div className={classes.totalBlocks}>234,654</div>
+        <div className={classes.totalApplications}>{applicationCount}</div>
       </SectionHeader>
-      <Table />
+      {nav}
+      <Table applications={applications} />
+      {nav}
     </Container>
   );
 };
 
-export default ApplicationsPage;
+export default observer(ApplicationsPage);

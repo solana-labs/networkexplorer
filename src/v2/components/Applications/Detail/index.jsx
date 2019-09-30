@@ -1,25 +1,51 @@
 // @flow
+import {observer} from 'mobx-react-lite';
 import {Container, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
+import {Match, Link} from 'react-router-dom';
 import {ReactComponent as StarIcon} from 'v2/assets/icons/star.svg';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
+import Loader from 'v2/components/UI/Loader';
 
 import TabNav from '../../UI/TabNav';
 import ApplicationDetails from './Details';
 import ApplicationCode from './Code';
 import useStyles from './styles';
+import ApplicationDetailStore from 'v2/stores/applications/detail';
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-const TransactionDetail = () => {
+const ApplicationDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
+  const {
+    isLoading,
+    applicationId,
+    accountInfo,
+    programAccounts,
+    applicationView,
+    timestamp,
+  } = ApplicationDetailStore;
+
+  if (applicationId !== match.params.id) {
+    ApplicationDetailStore.init({applicationId: match.params.id});
+  }
+
+  const asTime = x => {
+    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
+  };
+
   const [tab, setTab] = useState(0);
   const theme = useTheme();
   const verticalTable = useMediaQuery(theme.breakpoints.down('xs'));
+
+  if (isLoading) {
+    return <Loader width="533" height="290" />;
+  }
 
   const handleTabChange = (event, tab) => setTab(tab);
 
@@ -27,7 +53,7 @@ const TransactionDetail = () => {
     {
       label: 'Balance',
       hint: '',
-      value: '0.006 SOL | $1.12',
+      value: `${accountInfo.lamports} LAMPORTS`,
     },
     {
       label: 'Type',
@@ -35,6 +61,7 @@ const TransactionDetail = () => {
       value() {
         return (
           <div className={classes.types}>
+            TODO
             <TypeLabel type="system" label="system" />
             <TypeLabel type="consensus" label="consensus" />
           </div>
@@ -44,13 +71,17 @@ const TransactionDetail = () => {
     {
       label: 'Nickname',
       hint: '',
-      value: 'Testname',
+      value: accountInfo.data,
     },
     {
       label: 'Description',
       hint: '',
-      value:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      value: 'TODO',
+    },
+    {
+      label: 'Time',
+      hint: '',
+      value: timestamp && asTime(timestamp),
     },
   ];
 
@@ -66,7 +97,7 @@ const TransactionDetail = () => {
     </li>
   );
 
-  const tabNav = ['Details', 'code/course'];
+  const tabNav = ['Accounts', 'code/source'];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
 
@@ -74,11 +105,9 @@ const TransactionDetail = () => {
     <Container>
       <div className={classes.root}>
         <SectionHeader title="Application Detail">
-          <div className={classes.blockTitle}>
-            <span>
-              0x03e125a40b39a637028bce780af3544e51cfa2f61abbe7c8ec8059f7178bce74
-            </span>
-            <CopyBtn text={'123'} />
+          <div className={classes.applicationTitle}>
+            <span>{applicationId}</span>
+            <CopyBtn text={applicationId} />
             <QRPopup />
             <button>
               <StarIcon />
@@ -98,11 +127,11 @@ const TransactionDetail = () => {
         >
           {map(renderTabNav)(tabNav)}
         </Tabs>
-        {eq(0, tab) && <ApplicationDetails />}
-        {eq(1, tab) && <ApplicationCode />}
+        {eq(0, tab) && <ApplicationDetails programAccounts={programAccounts} />}
+        {eq(1, tab) && <ApplicationCode applicationView={applicationView} />}
       </div>
     </Container>
   );
 };
 
-export default TransactionDetail;
+export default observer(ApplicationDetail);
