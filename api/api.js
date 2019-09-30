@@ -112,6 +112,7 @@ const hgetallAsync = promisify(client.hgetall).bind(client);
 const smembersAsync = promisify(client.smembers).bind(client);
 const xrangeAsync = promisify(client.xrange).bind(client);
 const xrevrangeAsync = promisify(client.xrevrange).bind(client);
+const zscoreAsync = promisify(client.zscore).bind(client);
 
 const redisX = {
   client: getClient(),
@@ -124,6 +125,7 @@ const redisX = {
   smembersAsync,
   xrangeAsync,
   xrevrangeAsync,
+  zscoreAsync,
 };
 
 const blocksClient = getClient();

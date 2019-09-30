@@ -3,12 +3,14 @@ import {BlockDetailView} from './views/blocks/detail';
 import {TransactionIndexView} from './views/transactions/index';
 import {TransactionDetailView} from './views/transactions/detail';
 import {ApplicationIndexView} from './views/applications/index';
+import {ApplicationDetailView} from './views/applications/detail';
 import {DEFAULT_PAGE_SIZE} from './loaders/timeline';
 import {loadBlockIndex} from './loaders/blocks/index';
 import {loadBlockDetail} from './loaders/blocks/detail';
 import {loadTransactionIndex} from './loaders/transactions/index';
 import {loadTransactionDetail} from './loaders/transactions/detail';
 import {loadApplicationIndex} from './loaders/applications/index';
+import {loadApplicationDetail} from './loaders/applications/detail';
 import {FriendlyGet} from './friendlyGet';
 
 function prettify(req, data) {
@@ -91,7 +93,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
     );
   });
 
-  // Network Explorer Transaction Detail.
+  // Network Explorer Transaction Detail
   app.get('/explorer/transactions/:id', async (req, res) => {
     const q = req.query || {};
 
@@ -132,6 +134,27 @@ export function addNetworkExplorerRoutes(redisX, app) {
       prettify(
         req,
         new ApplicationIndexView().asVersion(rawData, __errors__, version),
+      ),
+    );
+  });
+
+  // Network Explorer Application Detail
+  app.get('/explorer/applications/:id', async (req, res) => {
+    const q = req.query || {};
+
+    const version = q.v || 'ApplicationDetailView@latest';
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with(
+        'rawData',
+        loadApplicationDetail(redisX, req.params.id, version),
+        {},
+      )
+      .get();
+
+    res.send(
+      prettify(
+        req,
+        new ApplicationDetailView().asVersion(rawData, __errors__, version),
       ),
     );
   });
