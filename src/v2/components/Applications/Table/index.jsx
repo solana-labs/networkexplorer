@@ -17,7 +17,7 @@ import {map} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import type {TableHeadProps} from 'v2/@types/table';
-
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import useStyles from './styles';
 
 const tHeads: TableHeadProps[] = [
@@ -32,33 +32,73 @@ const tHeads: TableHeadProps[] = [
     term: '',
   },
   {
-    name: 'balance',
+    name: 'time',
     text: '',
     term: '',
   },
 ];
 
-const ApplicationsTable = ({separate}: {separate: boolean}) => {
+const ApplicationsTable = ({
+  separate,
+  applications,
+}: {
+  separate: boolean,
+  applications: Array,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const blocks = [];
+
+  const asTime = x => {
+    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
+  };
 
   const renderRow = application => {
     return (
-      <TableRow hover key={application.id}>
+      <TableRow hover key={application.programId}>
         <TableCell align="center">
-          <Link to={`/applications/${application.id}`} className={classes.name}>
-            7887319
+          <Link
+            to={`/applications/${application.programId}`}
+            className={classes.name}
+          >
+            {application.programId}
           </Link>
         </TableCell>
         <TableCell>
-          <TypeLabel type="other" label="other" />
+          TODO <TypeLabel type="other" label="other" />
         </TableCell>
-        <TableCell>0.006 SOL | $1.12</TableCell>
+        <TableCell title={application.timestamp}>
+          {asTime(application.timestamp)}
+        </TableCell>
       </TableRow>
     );
   };
+
+  const renderCard = application => {
+    return (
+      <div className={classes.card}>
+        <ul>
+          <li>
+            <div className={classes.cardTitle}>Application id</div>
+            <div>{application.programId}</div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Type</div>
+            <div>
+              TODO <TypeLabel type="other" label="other" />
+            </div>
+          </li>
+          <li>
+            <div className={classes.cardTitle}>Time</div>
+            <div title={application.timestamp}>
+              {asTime(application.timestamp)}
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
   const renderTH = ({name, width, ...rest}: TableHeadProps) => (
     <TableCell key={name} width={width}>
       {name}
@@ -78,40 +118,12 @@ const ApplicationsTable = ({separate}: {separate: boolean}) => {
               root: classes.body,
             }}
           >
-            {map(renderRow)(blocks)}
-            <TableRow hover>
-              <TableCell align="center">
-                <Link to={`/applications/1234`} className={classes.name}>
-                  7887319
-                </Link>
-              </TableCell>
-              <TableCell>
-                <TypeLabel type="other" label="other" />
-              </TableCell>
-              <TableCell>0.006 SOL | $1.12</TableCell>
-            </TableRow>
+            {map(renderRow)(applications)}
           </TableBody>
         </Table>
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          <div className={classes.card}>
-            <ul>
-              <li>
-                <div className={classes.cardTitle}>Application id</div>
-                <div>7887219</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Type</div>
-                <div>
-                  <TypeLabel type="other" label="other" />
-                </div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Balance</div>
-                <div>0.006 SOL | $1.12</div>
-              </li>
-            </ul>
-          </div>
+          {map(renderCard)(applications)}
         </div>
       )}
     </div>

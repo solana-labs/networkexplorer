@@ -32,6 +32,23 @@ export default makeStyles(theme => ({
       alignItems: 'flex-start',
     },
   },
+  name: {
+    display: 'flex',
+    alignItems: 'center',
+    color: getColor('main')(theme),
+    textDecoration: 'none',
+    '& div': {
+      '&:first-child': {
+        marginRight: 15,
+      },
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 22,
+    },
+  },
   address: {
     color: getColor('main')(theme),
     lineHeight: '29px',
