@@ -103,7 +103,7 @@ class RedisHandler {
   }
 
   process(message, original) {
-    const now_score = new Date().getTime();
+    const now_score = new Date(message.dt).getTime();
     const txn_sec = message.dt.substring(0, 19);
     const txn_min = message.dt.substring(0, 16);
     const txn_hour = message.dt.substring(0, 13);
