@@ -18,7 +18,8 @@ import ApplicationDetails from './Details';
 import ApplicationCode from './Code';
 import useStyles from './styles';
 import ApplicationDetailStore from 'v2/stores/applications/detail';
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import {LAMPORT_SOL_RATIO} from 'v2/constants';
 
 const ApplicationDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
@@ -53,7 +54,7 @@ const ApplicationDetail = ({match}: {match: Match}) => {
     {
       label: 'Balance',
       hint: '',
-      value: `${accountInfo.lamports} LAMPORTS`,
+      value: `${(accountInfo.lamports * LAMPORT_SOL_RATIO).toFixed(8)} SOL`,
     },
     {
       label: 'Type',
@@ -79,7 +80,7 @@ const ApplicationDetail = ({match}: {match: Match}) => {
       value: 'TODO',
     },
     {
-      label: 'Time',
+      label: 'Last Called',
       hint: '',
       value: timestamp && asTime(timestamp),
     },
