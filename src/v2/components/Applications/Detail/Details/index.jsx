@@ -4,12 +4,7 @@ import Label from 'v2/components/UI/Label';
 import _ from 'lodash';
 // import useStyles from './styles';
 import {observer} from 'mobx-react-lite';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from '@material-ui/core';
+import {Table, TableBody, TableCell, TableRow} from '@material-ui/core';
 
 const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
   // const classes = useStyles();
@@ -35,7 +30,11 @@ const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
     );
   };
 
-  return <Table><TableBody>{_.map(programAccounts, renderAccount)}</TableBody></Table>;
+  return (
+    <Table>
+      <TableBody>{_.map(programAccounts, renderAccount)}</TableBody>
+    </Table>
+  );
 };
 
 export default observer(ApplicationDetails);
