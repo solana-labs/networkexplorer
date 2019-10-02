@@ -18,6 +18,9 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     whiteSpace: 'nowrap',
     marginRight: 25,
+    [theme.breakpoints.down('sm')]: {
+      whiteSpace: 'normal',
+    },
   },
   decor: {
     position: 'absolute',
