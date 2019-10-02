@@ -33,11 +33,16 @@ const Partnership = () => {
         Partner with us
       </Button>
       <div className={classes.links}>
-        <a href="https://forums.solana.com/" onClick={handleDiscuss}>
+        <a
+          href="https://forums.solana.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleDiscuss}
+        >
           Discuss on forums
           <img src={iconRight} width={53} alt="" />
         </a>
-        <a href="https://solana.com/">
+        <a href="https://solana.com/" target="_blank" rel="noopener noreferrer">
           Website disclaimer
           <img src={iconRight} width={53} alt="" />
         </a>
