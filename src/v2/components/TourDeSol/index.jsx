@@ -8,6 +8,7 @@ import SectionHeader from 'v2/components/UI/SectionHeader';
 import OverviewStore from 'v2/stores/networkOverview';
 import {TDS_ACTIVE_STAGE, TDS_STAGES, SLOTS_PER_DAY} from 'v2/constants';
 import socketActions from 'v2/stores/socket';
+import {parse as queryParse} from 'query-string';
 
 import Ranking from './Ranking';
 import Stage from './Stage';
@@ -15,10 +16,11 @@ import Table from './Table';
 import Cards from './Cards';
 import useStyles from './styles';
 
-const TourDeSol = ({history}: {history: RouterHistory}) => {
+const TourDeSol = ({history, location}: {history: RouterHistory, location: Location}) => {
   const {endpointName} = socketActions;
+  const queryParams = queryParse(location.search);
   useEffect(() => {
-    if (!eq('tds', endpointName)) {
+    if (!eq('tds', endpointName) && !eq('true', queryParams.force)) {
       history.replace(`/`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
