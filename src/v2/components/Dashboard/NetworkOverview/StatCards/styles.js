@@ -31,4 +31,12 @@ export default makeStyles(theme => ({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  tooltip: {
+    backgroundColor: getColor('white')(theme),
+    color: getColor('dark')(theme),
+    fontSize: 12,
+    lineHeight: '16px',
+    borderRadius: 0,
+    padding: 11,
+  },
 }));
