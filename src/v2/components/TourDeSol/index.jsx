@@ -16,7 +16,13 @@ import Table from './Table';
 import Cards from './Cards';
 import useStyles from './styles';
 
-const TourDeSol = ({history, location}: {history: RouterHistory, location: Location}) => {
+const TourDeSol = ({
+  history,
+  location,
+}: {
+  history: RouterHistory,
+  location: Location,
+}) => {
   const {endpointName} = socketActions;
   const queryParams = queryParse(location.search);
   useEffect(() => {

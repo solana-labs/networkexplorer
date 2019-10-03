@@ -1,14 +1,24 @@
 // @flow
 import React from 'react';
+import {withSnackbar, WithSnackbarProps} from 'notistack';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {ReactComponent as CopyIcon} from 'v2/assets/icons/copy.svg';
 
 import useStyles from './styles';
 
-const CopyBtn = ({text}: {text: string | number}) => {
+const CopyBtn = ({
+  text,
+  enqueueSnackbar,
+}: {text: string | number} & WithSnackbarProps) => {
   const classes = useStyles();
+  const onCopy = () => {
+    enqueueSnackbar('Successfully copied to clipboard', {
+      variant: 'success',
+      autoHideDuration: 2000,
+    });
+  };
   return (
-    <CopyToClipboard text={text}>
+    <CopyToClipboard text={text} onCopy={onCopy}>
       <div className={classes.root}>
         <CopyIcon />
       </div>
@@ -16,4 +26,4 @@ const CopyBtn = ({text}: {text: string | number}) => {
   );
 };
 
-export default CopyBtn;
+export default withSnackbar(CopyBtn);
