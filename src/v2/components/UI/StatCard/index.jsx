@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import {Paper, Typography} from '@material-ui/core';
+import {Paper, Tooltip, Typography} from '@material-ui/core';
 import HelpLink from 'v2/components/HelpLink';
 
 import useStyles from './styles';
@@ -22,9 +22,20 @@ const StatCard = (props: StatCardProps) => {
       return value();
     }
     return (
-      <Typography noWrap align="center" variant="h2" className={classes.value}>
-        {value}
-      </Typography>
+      <Tooltip
+        classes={{tooltip: classes.tooltip}}
+        placement="top"
+        title={value}
+      >
+        <Typography
+          noWrap
+          align="center"
+          variant="h2"
+          className={classes.value}
+        >
+          {value}
+        </Typography>
+      </Tooltip>
     );
   };
   const renderChanges = () => {

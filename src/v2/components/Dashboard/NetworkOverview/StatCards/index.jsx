@@ -4,7 +4,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {map, size} from 'lodash/fp';
-import {Grid, Typography} from '@material-ui/core';
+import {Grid, Typography, Tooltip} from '@material-ui/core';
 import Card from 'v2/components/UI/StatCard';
 import Loader from 'v2/components/UI/Loader';
 import OverviewStore from 'v2/stores/networkOverview';
@@ -45,14 +45,20 @@ const StatCards = () => {
       title: 'Current Leader',
       value() {
         return (
-          <Link
-            className={classes.leader}
-            to={`/validators/${globalStats['!entLastLeader']}`}
+          <Tooltip
+            classes={{tooltip: classes.tooltip}}
+            placement="top"
+            title={globalStats['!entLastLeader']}
           >
-            <Typography noWrap align="center" variant="h2">
-              {globalStats['!entLastLeader']}
-            </Typography>
-          </Link>
+            <Link
+              className={classes.leader}
+              to={`/validators/${globalStats['!entLastLeader']}`}
+            >
+              <Typography noWrap align="center" variant="h2">
+                {globalStats['!entLastLeader']}
+              </Typography>
+            </Link>
+          </Tooltip>
         );
       },
       helpTerm: 'leader',
