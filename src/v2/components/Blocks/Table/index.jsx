@@ -17,6 +17,7 @@ import {map} from 'lodash/fp';
 import Avatar from 'v2/components/UI/Avatar';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+
 import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
@@ -40,17 +41,19 @@ const tHeads: TableHeadProps[] = [
     name: 'transactions',
     text: '',
     term: '',
+    width: 190,
   },
   {
     name: 'confidence',
     text: '',
     term: '',
+    width: 165,
   },
   {
     name: 'leader',
     text: '',
     term: '',
-    width: 200,
+    width: 240,
   },
 ];
 
@@ -74,7 +77,7 @@ const BlocksTable = ({
       <TableRow hover key={block.id}>
         <TableCell align="center">
           <Link to={`/blocks/${block.id}`} className={classes.name}>
-            {block.id}
+            <div>{block.id}</div>
           </Link>
         </TableCell>
         <TableCell>{block.slot}</TableCell>
@@ -82,8 +85,10 @@ const BlocksTable = ({
         <TableCell>TODO</TableCell>
         <TableCell>TODO</TableCell>
         <TableCell>
-          <Avatar avatarUrl="" />
-          {block.leader}
+          <Link to={`/validators/${block.leader}`} className={classes.name}>
+            <Avatar avatarUrl="" />
+            <div>{block.leader}</div>
+          </Link>
         </TableCell>
       </TableRow>
     );
