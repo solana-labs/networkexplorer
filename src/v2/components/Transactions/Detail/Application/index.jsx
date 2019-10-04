@@ -5,8 +5,8 @@ import {Grid} from '@material-ui/core';
 import Label from 'v2/components/UI/Label';
 import Avatar from 'v2/components/UI/Avatar';
 import TypeLabel from 'v2/components/UI/TypeLabel';
+
 import useStyles from './styles';
-import {Link} from 'react-router-dom';
 
 type TApplication = {
   id: string,
@@ -27,12 +27,8 @@ const Application = ({id, accounts}: TApplication) => {
       <Grid container spacing={5}>
         <Grid item md={5}>
           <Label text="Application id" hint="" />
-          <div className={classes.address}>
-            <Link to={`/applications/${id}`} className={classes.name}>
-              {id}
-            </Link>
-          </div>
-          <div>
+          <div className={classes.id}>
+            <div className={classes.address}>{id}</div>
             TODO:
             <TypeLabel type="other" label="other" />
             <TypeLabel type="consensus" label="consensus" />
