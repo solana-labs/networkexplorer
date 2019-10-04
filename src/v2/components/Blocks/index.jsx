@@ -1,13 +1,16 @@
 // @flow
 import {Container} from '@material-ui/core';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import BlocksTimelineStore from 'v2/stores/blocks/timeline';
+import {Link, Match} from 'react-router-dom';
+
 import Table from './Table';
 import useStyles from './styles';
-import {Link, Match} from 'react-router-dom';
 
 const BlocksPage = ({match}: {match: Match}) => {
   const classes = useStyles();
@@ -18,9 +21,17 @@ const BlocksPage = ({match}: {match: Match}) => {
   }
 
   const nav = (
-    <div className={classes.total}>
-      STYLE_ME :{prev && <Link to={`/blocks/timeline/${prev}`}>prev page</Link>}
-      :{next && <Link to={`/blocks/timeline/${next}`}>next page</Link>}:
+    <div className={classes.nav}>
+      {prev && (
+        <Link to={`/blocks/timeline/${prev}`}>
+          <NavigateBeforeIcon />
+        </Link>
+      )}
+      {next && (
+        <Link to={`/blocks/timeline/${next}`}>
+          <NavigateNextIcon />
+        </Link>
+      )}
     </div>
   );
 

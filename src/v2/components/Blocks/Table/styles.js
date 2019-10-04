@@ -78,6 +78,11 @@ export default makeStyles(theme => ({
         [theme.breakpoints.down('xs')]: {
           width: '50%',
         },
+        '& div:last-child': {
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+        },
       },
     },
   },
@@ -101,6 +106,9 @@ export default makeStyles(theme => ({
     color: getColor('main')(theme),
     '& div': {
       marginLeft: 5,
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
     },
   },
 }));
