@@ -1,9 +1,11 @@
+//@flow
 import {Popover} from '@material-ui/core';
+import QRCode from 'qrcode.react';
 import React, {useState} from 'react';
 
 import useStyles from './styles';
 
-const QRPopup = () => {
+const QRPopup = ({url = ''}: {url: string}) => {
   const classes = useStyles();
   const [qrEl, setQrEl] = useState(null);
   const handleQrOpen = event => setQrEl(event.currentTarget);
@@ -14,6 +16,7 @@ const QRPopup = () => {
         QR code
       </button>
       <Popover
+        classes={{paper: classes.popup}}
         open={Boolean(qrEl)}
         onClose={handleQrClose}
         anchorEl={qrEl}
@@ -26,7 +29,10 @@ const QRPopup = () => {
           horizontal: 'center',
         }}
       >
-        <img src="http://placehold.it/315" alt="" />
+        <QRCode
+          value={url}
+          style={{width: '120px', height: '120px', display: 'block'}}
+        />
       </Popover>
     </div>
   );

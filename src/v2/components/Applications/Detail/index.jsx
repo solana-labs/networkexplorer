@@ -101,6 +101,7 @@ const ApplicationDetail = ({match}: {match: Match}) => {
   const tabNav = ['Accounts', 'code/source'];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
+  const url = window.location.href;
 
   return (
     <Container>
@@ -109,7 +110,7 @@ const ApplicationDetail = ({match}: {match: Match}) => {
           <div className={classes.applicationTitle}>
             <span>{applicationId}</span>
             <CopyBtn text={applicationId} />
-            <QRPopup />
+            <QRPopup url={url} />
             <button>
               <StarIcon />
             </button>
