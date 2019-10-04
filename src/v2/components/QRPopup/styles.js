@@ -12,4 +12,8 @@ export default makeStyles(theme => ({
     background: 'transparent',
     padding: 0,
   },
+  popup: {
+    padding: 10,
+    background: getColor('white')(theme),
+  },
 }));

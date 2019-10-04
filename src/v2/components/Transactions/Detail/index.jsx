@@ -106,6 +106,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
   ];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
+  const url = window.location.href;
 
   return (
     <Container>
@@ -114,7 +115,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
           <div className={classes.blockTitle}>
             <span>{transaction.id}</span>
             <CopyBtn text={transaction.id} />
-            <QRPopup />
+            <QRPopup url={url} />
           </div>
         </SectionHeader>
         <div className={classes.body}>
