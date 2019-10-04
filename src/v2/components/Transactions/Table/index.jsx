@@ -18,6 +18,7 @@ import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+
 import useStyles from './styles';
 
 const tHeads: TableHeadProps[] = [
@@ -102,7 +103,7 @@ const TransactionsTable = ({
 
   const renderCard = transaction => {
     return (
-      <div className={classes.card}>
+      <div className={classes.card} key={transaction.id}>
         <ul>
           <li>
             <div className={classes.cardTitle}>Hash</div>
