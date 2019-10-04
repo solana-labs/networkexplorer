@@ -83,7 +83,7 @@ const Validators = () => {
           changes={() => (
             <div className={classes.changes}>
               {changes && <div>{changes}%</div>}
-              <div className={classes.period}>{period}</div>
+              {/* <div className={classes.period}>{period}</div> */}
             </div>
           )}
           {...props}
