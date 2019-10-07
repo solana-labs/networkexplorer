@@ -21,6 +21,8 @@ import getUptime from 'v2/utils/getUptime';
 import Avatar from 'v2/components/UI/Avatar';
 
 import {LAMPORT_SOL_RATIO} from '../../../constants';
+import Socket from '../../../stores/socket';
+import Loader from '../../UI/Loader';
 import useStyles from './styles';
 
 const ValidatorsTable = ({separate}: {separate: boolean}) => {
@@ -28,6 +30,16 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
   const {activeValidators, inactiveValidators} = NodesStore;
+  const {isLoading} = Socket;
+
+  if (isLoading) {
+    return (
+      <div className={classes.loader}>
+        <Loader width="100%" height={100} />
+      </div>
+    );
+  }
+
   const renderRow = row => {
     const uptime = row.uptime && getUptime(row);
     const {identity = {}, nodePubkey, activatedStake, commission} = row;
