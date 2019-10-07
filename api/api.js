@@ -11,6 +11,7 @@ import expressWs from 'express-ws';
 import {promisify} from 'util';
 import redis from 'redis';
 import WebSocket from 'ws';
+import {filter, flow, map, uniq} from 'lodash/fp';
 import _ from 'lodash';
 import './inbound-stream';
 import './uptime-crawler';
@@ -775,7 +776,12 @@ async function fetchValidatorAvatars(keybaseUsernames) {
   const avatarMap = new Map();
   let batch = keybaseUsernames.splice(0, MAX_KEYBASE_USER_LOOKUP);
   while (batch.length > 0) {
-    const usernames = batch.join(',');
+    // see: https://github.com/keybase/keybase-issues/issues/757#issuecomment-45229307
+    const usernames = flow(
+      uniq,
+      filter(x => x.match(/^[a-zA-Z0-9][a-zA-Z0-9_]{1,14}$/)),
+      map(encodeURIComponent),
+    )(batch).join(',');
     const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${usernames}&fields=pictures,basics`;
     try {
       const {keybaseResponse} = await new FriendlyGet()
