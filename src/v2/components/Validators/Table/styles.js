@@ -12,6 +12,9 @@ export default makeStyles(theme => ({
       marginBottom: 50,
     },
   },
+  loader: {
+    marginTop: 14,
+  },
   separateRoot: {
     padding: 0,
     background: 'transparent',
