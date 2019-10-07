@@ -23,6 +23,7 @@ import Avatar from 'v2/components/UI/Avatar';
 import {LAMPORT_SOL_RATIO} from '../../../constants';
 import Socket from '../../../stores/socket';
 import Loader from '../../UI/Loader';
+import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
 const ValidatorsTable = ({separate}: {separate: boolean}) => {
@@ -112,10 +113,18 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         <Table>
           <TableHead className={classes.head}>
             <TableRow>
-              <TableCell align="center">Name/Moniker</TableCell>
-              <TableCell width={170}>Staked SOL</TableCell>
-              <TableCell width={170}>Commission</TableCell>
-              <TableCell width={130}>Uptime</TableCell>
+              <TableCell align="center">
+                Name/Moniker <HelpLink text="" term="" />
+              </TableCell>
+              <TableCell width={170}>
+                Staked SOL <HelpLink text="" term="" />
+              </TableCell>
+              <TableCell width={190}>
+                Commission <HelpLink text="" term="" />
+              </TableCell>
+              <TableCell width={130}>
+                Uptime <HelpLink text="" term="" />
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody
