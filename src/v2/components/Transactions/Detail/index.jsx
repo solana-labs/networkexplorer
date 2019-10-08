@@ -4,20 +4,21 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import TransactionCode from './Code';
 import HelpLink from 'v2/components/HelpLink';
 import QRPopup from 'v2/components/QRPopup';
-import CopyBtn from '../../UI/CopyBtn';
-import TabNav from '../../UI/TabNav';
 import Loader from 'v2/components/UI/Loader';
+import TabNav from 'v2/components/UI/TabNav';
+import CopyBtn from 'v2/components/UI/CopyBtn';
 import {observer} from 'mobx-react-lite';
 import _ from 'lodash';
+import TransactionDetailStore from 'v2/stores/transactions/detail';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import {Link, Match} from 'react-router-dom';
+
 import ApplicationsTab from './ApplicationsTab';
 import ApplicationStatus from './Status';
 import useStyles from './styles';
-import TransactionDetailStore from 'v2/stores/transactions/detail';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import {Match} from 'react-router-dom';
+import TransactionCode from './Code';
 
 const TransactionDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
@@ -59,7 +60,13 @@ const TransactionDetail = ({match}: {match: Match}) => {
     {
       label: 'Block',
       hint: '',
-      value: transaction.blockId,
+      value() {
+        return (
+          <Link to={`/blocks/${transaction.blockId}`}>
+            {transaction.blockId}
+          </Link>
+        );
+      },
     },
     {
       label: 'Confirmations',
@@ -107,7 +114,6 @@ const TransactionDetail = ({match}: {match: Match}) => {
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
   const url = window.location.href;
-
   return (
     <Container>
       <div className={classes.root}>
