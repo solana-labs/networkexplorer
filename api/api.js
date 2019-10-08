@@ -779,7 +779,7 @@ async function fetchValidatorAvatars(keybaseUsernames) {
     // see: https://github.com/keybase/keybase-issues/issues/757#issuecomment-45229307
     const usernames = flow(
       uniq,
-      filter(x => x.match(/^[a-zA-Z0-9][a-zA-Z0-9_]{1,14}$/)),
+      filter(x => x.match(/^[a-zA-Z0-9][a-zA-Z0-9_]{1,14}$/) && !x.match(/__/)),
       map(encodeURIComponent),
     )(batch).join(',');
     const keybaseApiUrl = `https://keybase.io/_/api/1.0/user/lookup.json?usernames=${usernames}&fields=pictures,basics`;
