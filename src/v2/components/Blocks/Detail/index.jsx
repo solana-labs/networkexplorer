@@ -11,10 +11,10 @@ import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import TransactionsTable from 'v2/components/Transactions/Table';
 import Loader from 'v2/components/UI/Loader';
-
-import useStyles from './styles';
 import BlockDetailStore from 'v2/stores/blocks/detail';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+
+import useStyles from './styles';
 
 const BlockDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
@@ -27,6 +27,8 @@ const BlockDetail = ({match}: {match: Match}) => {
   useEffect(() => {
     Mixpanel.track(`Clicked Block ${match.params.id}`);
   }, [match.params.id]);
+
+  if (!block) return null;
 
   if (isLoading) {
     return <Loader width="533" height="290" />;
@@ -60,9 +62,9 @@ const BlockDetail = ({match}: {match: Match}) => {
     {
       label: 'Leader',
       hint: '',
-      value: () => {
+      value() {
         return (
-          <Link to="" className={classes.leader}>
+          <Link to={`/validators/${block.leader}`} className={classes.leader}>
             <Avatar avatarUrl="" />
             {block.leader}
           </Link>
