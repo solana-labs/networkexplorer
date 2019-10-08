@@ -1,30 +1,48 @@
 // @flow
 
 import React from 'react';
-import {
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Grid,
-} from '@material-ui/core';
+import {Typography, TableCell, TableRow, Grid} from '@material-ui/core';
 import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
-import {map} from 'lodash/fp';
+import {map, concat} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
 import Avatar from 'v2/components/UI/Avatar';
+import Table from 'v2/components/UI/Table';
+import {LAMPORT_SOL_RATIO} from 'v2/constants';
+import Socket from 'v2/stores/socket';
+import Loader from 'v2/components/UI/Loader';
 
-import {LAMPORT_SOL_RATIO} from '../../../constants';
-import Socket from '../../../stores/socket';
-import Loader from '../../UI/Loader';
-import HelpLink from '../../HelpLink';
 import useStyles from './styles';
+
+const fields = [
+  {
+    id: 'identity.name',
+    label: 'Name/Moniker',
+    text: '',
+    term: '',
+  },
+  {
+    id: 'activatedStake',
+    label: 'Staked SOL',
+    text: '',
+    term: '',
+  },
+  {
+    id: 'commission',
+    label: 'Commission',
+    text: '',
+    term: '',
+  },
+  {
+    id: 'uptime.uptime.[0].percentage',
+    label: 'Uptime',
+    text: 'term',
+  },
+];
 
 const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
@@ -95,6 +113,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       </div>
     );
   };
+
+  const allValidators = concat(activeValidators)(inactiveValidators);
+
   return (
     <div className={cn(classes.root, separate && classes.separateRoot)}>
       {!separate && (
@@ -103,39 +124,18 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           <Typography variant="h5">
             {activeValidators.length + inactiveValidators.length}
           </Typography>
-
           <Link to="/validators/all" className={classes.link}>
             See all &gt;
           </Link>
         </div>
       )}
       {showTable ? (
-        <Table>
-          <TableHead className={classes.head}>
-            <TableRow>
-              <TableCell align="center">
-                Name/Moniker <HelpLink text="" term="" />
-              </TableCell>
-              <TableCell width={170}>
-                Staked SOL <HelpLink text="" term="" />
-              </TableCell>
-              <TableCell width={190}>
-                Commission <HelpLink text="" term="" />
-              </TableCell>
-              <TableCell width={130}>
-                Uptime <HelpLink text="" term="" />
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody
-            classes={{
-              root: classes.body,
-            }}
-          >
-            {map(renderRow)(activeValidators)}
-            {map(renderRow)(inactiveValidators)}
-          </TableBody>
-        </Table>
+        <Table
+          fields={fields}
+          data={allValidators}
+          initialSort="identity.name"
+          renderRow={renderRow}
+        />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
           {map(renderCard)(activeValidators)}

@@ -19,16 +19,6 @@ export default makeStyles(theme => ({
     padding: 0,
     background: 'transparent',
   },
-  head: {
-    border: '1px solid #979797',
-    '& th': {
-      textTransform: 'uppercase',
-      fontSize: 15,
-      letterSpacing: 2,
-      fontWeight: 'bold',
-      borderBottom: 'none',
-    },
-  },
   body: {
     '& td': {
       fontSize: 15,
