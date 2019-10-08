@@ -84,7 +84,7 @@
     "react-chartjs-2": "^2.8.0",
     "react-debounce-render": "^5.0.0",
     "react-dom": "^16.10.2",
-    "react-hot-loader": "^4.12.14",
+    "react-hot-loader": "^4.12.15",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "robust-websocket": "^1.0.0",
