@@ -53,7 +53,7 @@ class Store {
         pubkey,
         gossip,
         coordinates,
-        name: (identity && identity.name) || 'Unknown',
+        name: (identity && identity.name) || identity.pubkey,
         avatarUrl: (identity && identity.avatarUrl) || '',
       })),
       filter({what: 'Validator'}),
