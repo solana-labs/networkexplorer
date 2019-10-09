@@ -7,7 +7,7 @@ import useStyles from './styles';
 
 const Marker = ({scale, marker}: {scale: number, marker: any}) => {
   const classes = useStyles();
-  const size = scale < 4 ? 10 * scale : 40;
+  const transformScale = scale < 4 ? scale / 4 : 1;
   return (
     <MapTooltip
       classes={{tooltip: classes.tooltip}}
@@ -18,10 +18,13 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
         </>
       )}
     >
-      <div className={classes.marker}>
+      <div
+        className={classes.marker}
+        style={{transform: `scale(${transformScale})`}}
+      >
         <Avatar
-          width={size}
-          height={size}
+          width={40}
+          height={40}
           avatarUrl={marker.avatarUrl}
           name={marker.name}
           pubkey={marker.pubkey}
