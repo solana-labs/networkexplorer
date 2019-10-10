@@ -1,38 +1,32 @@
+// @flow
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
-import {get, map, maxBy, compose} from 'lodash/fp';
+import {map} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
-import NodesStore from 'v2/stores/nodes';
 import {ReactComponent as BicycleIcon} from 'v2/assets/icons/bicycle.svg';
 import Avatar from 'v2/components/UI/Avatar';
-
 import useStyles from './styles';
 
-const Ranking = () => {
+const Ranking = ({activeValidators}: {activeValidators: Array}) => {
   const classes = useStyles();
-  const {validators} = NodesStore;
-
-  const maxVal = compose(
-    get('stake'),
-    maxBy('stake'),
-  )(validators);
 
   const renderNode = node => {
-    const position = (node.stake * 100) / maxVal;
-    const {identity = {}, nodePubkey} = node;
+    const {name, pubkey, avatarUrl, slot, activatedStake, score} = node;
+    const title = `SLOT: ${slot} | STAKE: ${activatedStake.toFixed(8)} | SCORE: ${score}`;
+
     return (
-      <li key={nodePubkey} className={classes.item}>
-        <Link to={`/validators/${nodePubkey}`} className={classes.name}>
-          <Avatar pubkey={nodePubkey} avatarUrl={identity.avatarUrl} />
-          <span>{identity.name || nodePubkey}</span>
+      <li key={pubkey} className={classes.item}>
+        <Link to={`/validators/${pubkey}`} className={classes.name}>
+          <Avatar pubkey={pubkey} avatarUrl={avatarUrl} />
+          <span>{name || pubkey}</span>
         </Link>
         <div className={classes.bar}>
           <div
             className={classes.icon}
-            style={{left: `calc(${position}% - 26px)`}}
+            style={{left: `calc(${score}% - 26px)`}}
           >
-            <BicycleIcon />
+            <BicycleIcon title={title} />
           </div>
         </div>
       </li>
@@ -45,7 +39,7 @@ const Ranking = () => {
         Top Validator Ranking
         <HelpLink text="" term="" />
       </div>
-      <ul className={classes.list}>{map(renderNode)(validators)}</ul>
+      <ul className={classes.list}>{map(renderNode)(activeValidators)}</ul>
     </div>
   );
 };

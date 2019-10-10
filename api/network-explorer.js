@@ -1,3 +1,4 @@
+import {TourDeSolIndexView} from './views/tourdesol';
 import {BlockIndexView} from './views/blocks/index';
 import {BlockDetailView} from './views/blocks/detail';
 import {TransactionIndexView} from './views/transactions/index';
@@ -5,6 +6,7 @@ import {TransactionDetailView} from './views/transactions/detail';
 import {ApplicationIndexView} from './views/applications/index';
 import {ApplicationDetailView} from './views/applications/detail';
 import {DEFAULT_PAGE_SIZE} from './loaders/timeline';
+import {loadTourDeSolIndex} from './loaders/tourdesol';
 import {loadBlockIndex} from './loaders/blocks/index';
 import {loadBlockDetail} from './loaders/blocks/detail';
 import {loadTransactionIndex} from './loaders/transactions/index';
@@ -32,6 +34,25 @@ function prettify(req, data) {
 //                                                      |_|
 //
 export function addNetworkExplorerRoutes(redisX, app) {
+  // Network Explorer Tour de Sol Index
+  app.get('/explorer/tourdesol/index', async (req, res) => {
+    const q = req.query || {};
+
+    const isDemo = q.isDemo || false;
+    const activeStage = q.activeStage && parseInt(q.activeStage);
+    const version = q.v || 'TourDeSolIndexView@latest';
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with('rawData', loadTourDeSolIndex(redisX, {isDemo, activeStage}), {})
+      .get();
+
+    res.send(
+      prettify(
+        req,
+        new TourDeSolIndexView().asVersion(rawData, __errors__, version),
+      ),
+    );
+  });
+
   // Network Explorer Block Index
   app.get('/explorer/blocks/index', async (req, res) => {
     const q = req.query || {};

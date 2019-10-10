@@ -3,6 +3,8 @@ import _ from 'lodash';
 import Base58 from 'base-58';
 const b58e = Base58.encode;
 
+export const LAMPORT_SOL_RATIO = 0.0000000000582;
+
 export function transactionFromJson(x, outMessage = {}) {
   let txn = Transaction.from(Buffer.from(x));
   let tx = {};
