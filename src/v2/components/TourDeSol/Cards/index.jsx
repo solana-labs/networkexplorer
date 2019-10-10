@@ -2,28 +2,29 @@
 import {map} from 'lodash/fp';
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import NodesStore from 'v2/stores/nodes';
 import Card from 'v2/components/UI/StatCard';
 
-import Socket from '../../../stores/socket';
 import Loader from '../../UI/Loader';
 import useStyles from './styles';
-import {LAMPORT_SOL_RATIO} from '../../../constants';
 
 const Cards = ({
-  stageDurationBlocks = null,
-  blocksLeftInStage = null,
-  daysLeftInStage = null,
+  isLoading,
+  clusterStats,
+}: {
+  isLoading: Boolean,
+  clusterStats: Object,
 }) => {
   const classes = useStyles();
   const {
+    stageDurationBlocks,
+    slotsLeftInStage,
+    daysLeftInStage,
     activeValidators,
     inactiveValidators,
-    supply,
+    totalSupply,
     totalStaked,
     networkInflationRate,
-  } = NodesStore;
-  const {isLoading} = Socket;
+  } = clusterStats;
 
   const cards = [
     {
@@ -36,7 +37,7 @@ const Cards = ({
     },
     {
       title: 'Blocks Left In Stage',
-      value: blocksLeftInStage || '...',
+      value: slotsLeftInStage || '...',
       changes: '',
       period: 'since yesterday',
       helpText:
@@ -53,7 +54,7 @@ const Cards = ({
     },
     {
       title: 'Circulating SOL',
-      value: (supply / Math.pow(2, 34)).toFixed(2),
+      value: totalSupply && totalSupply.toFixed(2),
       changes: '',
       period: 'since yesterday',
       helpText: 'The total number of SOL in existence.',
@@ -61,7 +62,7 @@ const Cards = ({
     },
     {
       title: 'Staked SOL',
-      value: (totalStaked * LAMPORT_SOL_RATIO).toFixed(8),
+      value: totalStaked && totalStaked.toFixed(8),
       changes: '',
       period: 'since yesterday',
       helpText: 'Amount of SOL staked to validators and activated',
@@ -69,7 +70,8 @@ const Cards = ({
     },
     {
       title: 'Current Network Inflation Rate',
-      value: (networkInflationRate * 100.0).toFixed(3) + '%',
+      value:
+        networkInflationRate && (networkInflationRate * 100.0).toFixed(3) + '%',
       changes: '',
       period: 'since yesterday',
       helpText: "The network's current annual SOL inflation rate.",
@@ -77,7 +79,7 @@ const Cards = ({
     },
     {
       title: 'Active Validators',
-      value: activeValidators.length,
+      value: activeValidators,
       changes: '',
       period: 'since yesterday',
       helpText:
@@ -86,7 +88,7 @@ const Cards = ({
     },
     {
       title: 'Inactive Validators',
-      value: inactiveValidators.length,
+      value: inactiveValidators,
       changes: '',
       period: 'since yesterday',
       helpText:
