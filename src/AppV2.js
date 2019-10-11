@@ -34,6 +34,7 @@ const ApplicationDetail = lazy(() =>
   import('v2/components/Applications/Detail'),
 );
 const Favorites = lazy(() => import('v2/components/Favorites'));
+const AccountDetail = lazy(() => import('v2/components/Account/Detail'));
 
 const useStyles = makeStyles(() => {
   return {
@@ -132,6 +133,7 @@ const App = () => {
                   component={ApplicationDetail}
                 />
                 <Route exact path="/favorites" component={Favorites} />
+                <Route exact path="/account/:id" component={AccountDetail} />
               </Switch>
             </Suspense>
             <Footer />

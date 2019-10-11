@@ -2,6 +2,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {Grid} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import Label from 'v2/components/UI/Label';
 import Avatar from 'v2/components/UI/Avatar';
 import TypeLabel from 'v2/components/UI/TypeLabel';
@@ -18,8 +19,10 @@ const Application = ({id, accounts}: TApplication) => {
   const renderAccount = (account, i) => (
     <div className={classes.account}>
       <Label text={`Account ${i + 1}`} hint="" />
-      <Avatar avatarUrl="" name="" width={33} height={33} pubkey={id} />
-      <div className={classes.address}>{account}</div>
+      <Link to={`/account/${id}`} className={classes.accountLink}>
+        <Avatar avatarUrl="" name="" width={33} height={33} pubkey={id} />
+        <div className={classes.address}>{account}</div>
+      </Link>
     </div>
   );
   return (

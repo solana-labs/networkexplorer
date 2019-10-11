@@ -16,6 +16,7 @@ export default makeStyles(theme => ({
     transition: '.15s ease-in-out',
     marginLeft: 5,
     marginTop: -2,
+    verticalAlign: 'middle',
     '&:hover': {
       color: getColor('main')(theme),
       borderColor: getColor('main')(theme),
