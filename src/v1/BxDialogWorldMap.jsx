@@ -42,7 +42,7 @@ class Node extends React.Component {
       console.log(rpcUrl);
       if (window.confirm('Are you sure you want to terminate this node?')) {
         const connection = new Connection(rpcUrl);
-        const result = await connection.fullnodeExit();
+        const result = await connection.validatorExit();
         if (!result) {
           window.alert('Node declined to exit');
         } else {
