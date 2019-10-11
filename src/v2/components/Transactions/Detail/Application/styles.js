@@ -12,15 +12,20 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: 40,
-    '& > div:first-child': {
-      marginRight: 25,
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
     },
+  },
+  accountLink: {
+    display: 'flex',
+    textDecoration: 'none',
+    marginLeft: 25,
     '& > div:nth-child(2)': {
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
     },
-
     '& > div:last-child': {
       marginLeft: 25,
       [theme.breakpoints.down('xs')]: {
@@ -30,6 +35,7 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
       alignItems: 'flex-start',
+      marginLeft: 0,
     },
   },
   address: {
