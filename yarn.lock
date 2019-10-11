@@ -11202,10 +11202,10 @@ normalize-url@^4.0.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.1.0.tgz#307e74c87473efa81969ad1b4bb91f1990178904"
   integrity sha512-X781mkWeK6PDMAZJfGn/wnwil4dV6pIdF9euiNqtA89uJvZuNDJO2YyJxiwpPhTQcF5pYUU1v+kcOxzYV6rZlA==
 
-notistack@^0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/notistack/-/notistack-0.9.3.tgz#0d06f4928e525a62583ce2c6e42a61cd9e102c62"
-  integrity sha512-o7puNccTZT/1rYINUpBhLYg2p1dpA3HoJ/EW4jekHV7Ybe4JD7IW14CVjo1fsw8+mi5p6rt1HfqVZ4DpaJRPHw==
+notistack@^0.9.4:
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/notistack/-/notistack-0.9.4.tgz#20226ccc9ef7ee5aa16f6693c4e4ddff92e0de24"
+  integrity sha512-rtGZqznIlIbZH+wfHMhIGMFMqeJX4N/7CQikJ+XrCsGnZNL9gZyhifxLYrts0tUl+dKNpy7npswfRfiM7Soixg==
   dependencies:
     classnames "^2.2.6"
     hoist-non-react-statics "^3.3.0"
