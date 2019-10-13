@@ -38,7 +38,7 @@
     "pem": "^1.14.3",
     "promise.allsettled": "^1.0.1",
     "prop-types": "^15.7.2",
-    "react-content-loader": "^4.2.2",
+    "react-content-loader": "^4.3.2",
     "react-copy-to-clipboard": "^5.0.1",
     "react-simple-maps": "^0.12.1",
     "redis": "^2.8.0",
