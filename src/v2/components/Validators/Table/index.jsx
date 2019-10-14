@@ -15,7 +15,6 @@ import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
 import HelpLink from 'v2/components/HelpLink';
-
 import ValidatorName from 'v2/components/UI/ValidatorName';
 import useStyles from './styles';
 

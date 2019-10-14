@@ -12,7 +12,6 @@ import {map} from 'lodash/fp';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import ValidatorName from 'v2/components/UI/ValidatorName';
-
 import useStyles from './styles';
 
 const fields: TableHeadProps[] = [
