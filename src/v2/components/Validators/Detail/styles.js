@@ -3,31 +3,8 @@ import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
   validatorName: {
-    fontSize: 15,
-    color: getColor('main')(theme),
-    textTransform: 'none',
-    fontWeight: 'normal',
-    letterSpacing: 'normal',
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: 40,
     marginRight: 'auto',
-    flexShrink: 1,
-    minWidth: 1,
-    [theme.breakpoints.down('sm')]: {
-      marginLeft: 0,
-      marginTop: 5,
-    },
-    '& > span:nth-child(2)': {
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      marginLeft: 22,
-    },
-    '& div:last-child': {
-      cursor: 'pointer',
-      marginLeft: 14,
-    },
+    marginLeft: 40,
   },
   headerBtn: {
     marginLeft: 40,

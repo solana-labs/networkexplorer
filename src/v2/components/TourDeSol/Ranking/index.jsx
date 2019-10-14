@@ -1,11 +1,10 @@
 // @flow
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
 import HelpLink from 'v2/components/HelpLink';
 import {ReactComponent as BicycleIcon} from 'v2/assets/icons/bicycle.svg';
-import Avatar from 'v2/components/UI/Avatar';
+import ValidatorName from 'v2/components/UI/ValidatorName';
 import useStyles from './styles';
 
 const Ranking = ({activeValidators}: {activeValidators: Array}) => {
@@ -13,14 +12,15 @@ const Ranking = ({activeValidators}: {activeValidators: Array}) => {
 
   const renderNode = node => {
     const {name, pubkey, avatarUrl, slot, activatedStake, score} = node;
-    const title = `SLOT: ${slot} | STAKE: ${activatedStake.toFixed(8)} | SCORE: ${score}`;
+    const title = `SLOT: ${slot} | STAKE: ${activatedStake.toFixed(
+      8,
+    )} | SCORE: ${score}`;
 
     return (
       <li key={pubkey} className={classes.item}>
-        <Link to={`/validators/${pubkey}`} className={classes.name}>
-          <Avatar pubkey={pubkey} avatarUrl={avatarUrl} />
-          <span>{name || pubkey}</span>
-        </Link>
+        <div className={classes.name}>
+          <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
+        </div>
         <div className={classes.bar}>
           <div
             className={classes.icon}

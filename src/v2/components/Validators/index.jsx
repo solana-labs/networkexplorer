@@ -11,7 +11,7 @@ import Button from 'v2/components/UI/Button';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
 import ValidatorsMap from 'v2/components/ValidatorsMap';
-import HelpLink from '../HelpLink';
+import HelpLink from 'v2/components/HelpLink';
 
 import ValidatorsTable from './Table';
 import useStyles from './styles';

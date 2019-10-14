@@ -14,11 +14,11 @@ import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
-import Avatar from 'v2/components/UI/Avatar';
+
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-
-import HelpLink from '../../HelpLink';
+import HelpLink from 'v2/components/HelpLink';
+import ValidatorName from 'v2/components/UI/ValidatorName';
 import useStyles from './styles';
 
 const tHeads: TableHeadProps[] = [
@@ -85,10 +85,7 @@ const BlocksTable = ({
         <TableCell>TODO</TableCell>
         <TableCell>TODO</TableCell>
         <TableCell>
-          <Link to={`/validators/${block.leader}`} className={classes.name}>
-            <Avatar avatarUrl="" />
-            <div>{block.leader}</div>
-          </Link>
+          <ValidatorName pubkey={block.leader} name={block.leader} avatar="" />
         </TableCell>
       </TableRow>
     );
@@ -120,10 +117,11 @@ const BlocksTable = ({
           </li>
           <li>
             <div className={classes.cardTitle}>Leader</div>
-            <div className={classes.leader}>
-              <Avatar avatarUrl="" />
-              <div>{block.leader}</div>
-            </div>
+            <ValidatorName
+              pubkey={block.leader}
+              name={block.leader}
+              avatar=""
+            />
           </li>
         </ul>
       </div>

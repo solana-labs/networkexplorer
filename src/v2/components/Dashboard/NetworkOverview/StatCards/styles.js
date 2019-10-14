@@ -19,11 +19,11 @@ export default makeStyles(theme => ({
   leader: {
     textDecoration: 'none',
     '& h2': {
-      fontSize: 20,
+      fontSize: 30,
       lineHeight: 1.3,
       fontWeight: 'bold',
       color: getColor('main')(theme),
-      marginTop: 35,
+      marginTop: 25,
       letterSpacing: 3.4,
     },
   },
