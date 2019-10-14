@@ -1,37 +1,35 @@
 // @flow
 
 import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import {TableCell, TableRow} from '@material-ui/core';
 import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
-import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
+import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+
 import useStyles from './styles';
 
-const tHeads: TableHeadProps[] = [
+const fields: TableHeadProps[] = [
   {
+    label: 'Application Id',
     name: 'Application Id',
     text: '',
     term: '',
   },
   {
+    label: 'Type',
     name: 'type',
     text: '',
     term: '',
   },
   {
+    label: 'Time',
     name: 'time',
     text: '',
     term: '',
@@ -56,16 +54,15 @@ const ApplicationsTable = ({
   const renderRow = application => {
     return (
       <TableRow hover key={application.programId}>
-        <TableCell align="center">
-          <Link
-            to={`/applications/${application.programId}`}
-            className={classes.name}
-          >
+        <TableCell>
+          <Link to={`/applications/${application.programId}`}>
             {application.programId}
           </Link>
         </TableCell>
         <TableCell>
-          TODO <TypeLabel type="other" label="other" />
+          <div>
+            <TypeLabel type="other" label="TODO" />
+          </div>
         </TableCell>
         <TableCell title={application.timestamp}>
           {asTime(application.timestamp)}
@@ -99,28 +96,10 @@ const ApplicationsTable = ({
     );
   };
 
-  const renderTH = ({name, width, ...rest}: TableHeadProps) => (
-    <TableCell key={name} width={width}>
-      {name}
-      <HelpLink {...rest} />
-    </TableCell>
-  );
-
   return (
     <div className={classes.root}>
       {showTable ? (
-        <Table>
-          <TableHead className={classes.head}>
-            <TableRow>{map(renderTH)(tHeads)}</TableRow>
-          </TableHead>
-          <TableBody
-            classes={{
-              root: classes.body,
-            }}
-          >
-            {map(renderRow)(applications)}
-          </TableBody>
-        </Table>
+        <Table fields={fields} renderRow={renderRow} data={applications} />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
           {map(renderCard)(applications)}

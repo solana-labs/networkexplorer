@@ -13,29 +13,6 @@ export default makeStyles(theme => ({
       marginBottom: 50,
     },
   },
-  head: {
-    border: '1px solid #979797',
-    '& th': {
-      textTransform: 'uppercase',
-      fontSize: 15,
-      letterSpacing: 2,
-      paddingRight: 5,
-      fontWeight: 'bold',
-      borderBottom: 'none',
-    },
-  },
-  body: {
-    '& td': {
-      fontSize: 15,
-      paddingTop: 18,
-      paddingBottom: 18,
-      paddingRight: 5,
-      maxWidth: 0,
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-    },
-  },
   header: {
     display: 'flex',
     alignItems: 'baseline',
@@ -55,23 +32,6 @@ export default makeStyles(theme => ({
     color: getColor('main')(theme),
     fontSize: 15,
     textDecoration: 'none',
-  },
-  name: {
-    display: 'flex',
-    alignItems: 'center',
-    color: getColor('main')(theme),
-    textDecoration: 'none',
-    '& div': {
-      '&:first-child': {
-        marginRight: 22,
-      },
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-    },
-    [theme.breakpoints.down('sm')]: {
-      marginBottom: 22,
-    },
   },
   list: {
     display: 'flex',
