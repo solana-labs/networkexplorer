@@ -38,6 +38,13 @@ const AccountDetail = lazy(() => import('v2/components/Account/Detail'));
 
 const useStyles = makeStyles(() => {
   return {
+    '@global': {
+      a: {
+        color: getColor('main')(theme),
+        textDecoration: 'none',
+        lineHeight: 1.9,
+      },
+    },
     root: {
       display: 'flex',
       overflow: 'hidden',

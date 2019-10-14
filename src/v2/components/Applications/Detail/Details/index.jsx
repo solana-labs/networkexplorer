@@ -1,14 +1,11 @@
 import React from 'react';
-import Avatar from 'v2/components/UI/Avatar';
 import Label from 'v2/components/UI/Label';
 import _ from 'lodash';
-// import useStyles from './styles';
 import {observer} from 'mobx-react-lite';
 import {Table, TableBody, TableCell, TableRow} from '@material-ui/core';
+import ValidatorName from 'v2/components/UI/ValidatorName';
 
 const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
-  // const classes = useStyles();
-
   const renderAccount = (account, i) => {
     return (
       <TableRow key={account.pubkey}>
@@ -16,14 +13,11 @@ const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
           <Label text={`Account ${i + 1}`} hint="" />
         </TableCell>
         <TableCell>
-          <Avatar
-            avatarUrl=""
-            name=""
-            width={33}
-            height={33}
+          <ValidatorName
             pubkey={account.pubkey}
+            name={account.pubkey}
+            avatar=""
           />
-          <span>{account.pubkey}</span>
         </TableCell>
         <TableCell>Balance: {account.lamports}</TableCell>
       </TableRow>

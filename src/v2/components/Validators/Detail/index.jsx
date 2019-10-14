@@ -5,15 +5,14 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
 import {map, find} from 'lodash/fp';
 import {Match} from 'react-router-dom';
-
 import getUptime from 'v2/utils/getUptime';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
 import HelpLink from 'v2/components/HelpLink';
 import Button from 'v2/components/UI/Button';
-import Avatar from 'v2/components/UI/Avatar';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
+import ValidatorName from 'v2/components/UI/ValidatorName';
 
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import ValidatorsMap from 'v2/components/ValidatorsMap';
@@ -140,8 +139,11 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
       <SectionHeader title="Validator Detail">
         {!isMobile && (
           <div className={classes.validatorName}>
-            <Avatar pubkey={nodePubkey} avatarUrl={identity.avatarUrl} />
-            <span>{identity.name || nodePubkey}</span>
+            <ValidatorName
+              pubkey={nodePubkey}
+              name={identity.name}
+              avatar={identity.avatarUrl}
+            />
           </div>
         )}
         {!identity.keybaseUsername && (

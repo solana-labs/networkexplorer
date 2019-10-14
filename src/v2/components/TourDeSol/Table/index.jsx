@@ -16,7 +16,7 @@ import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
-import Avatar from 'v2/components/UI/Avatar';
+import ValidatorName from 'v2/components/UI/ValidatorName';
 
 import HelpLink from '../../HelpLink';
 import useStyles from './styles';
@@ -38,10 +38,7 @@ const ValidatorsTable = ({
       <TableRow hover key={pubkey}>
         <TableCell>{rank}</TableCell>
         <TableCell>
-          <Link to={`/validators/${pubkey}`} className={classes.name}>
-            <Avatar pubkey={pubkey} avatarUrl={avatarUrl} />
-            <div>{name || pubkey}</div>
-          </Link>
+          <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
         </TableCell>
         <TableCell>{activatedStake.toFixed(8)}</TableCell>
         <TableCell>{uptimePercent}%</TableCell>
@@ -55,10 +52,7 @@ const ValidatorsTable = ({
         className={cn(classes.card, separate && classes.cardVertical)}
         key={pubkey}
       >
-        <Link to={`/validators/${pubkey}`} className={classes.name}>
-          <Avatar pubkey={pubkey} avatarUrl={avatarUrl} />
-          <div>{name || pubkey}</div>
-        </Link>
+        <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
         <Grid container>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>

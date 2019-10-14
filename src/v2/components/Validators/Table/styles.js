@@ -50,23 +50,6 @@ export default makeStyles(theme => ({
     fontSize: 15,
     textDecoration: 'none',
   },
-  name: {
-    display: 'flex',
-    alignItems: 'center',
-    color: getColor('main')(theme),
-    textDecoration: 'none',
-    '& div': {
-      '&:first-child': {
-        marginRight: 15,
-      },
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-    },
-    [theme.breakpoints.down('sm')]: {
-      marginBottom: 22,
-    },
-  },
   list: {
     display: 'flex',
     width: '100%',

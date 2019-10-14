@@ -10,12 +10,11 @@ import {Link} from 'react-router-dom';
 import {map, concat} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
-import Avatar from 'v2/components/UI/Avatar';
 import Table from 'v2/components/UI/Table';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
-
+import ValidatorName from 'v2/components/UI/ValidatorName';
 import useStyles from './styles';
 
 const fields = [
@@ -64,11 +63,12 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
     const {identity = {}, nodePubkey, activatedStake, commission} = row;
     return (
       <TableRow hover key={nodePubkey}>
-        <TableCell align="center">
-          <Link to={`/validators/${nodePubkey}`} className={classes.name}>
-            <Avatar pubkey={nodePubkey} avatarUrl={identity.avatarUrl} />
-            <div>{identity.name || nodePubkey}</div>
-          </Link>
+        <TableCell>
+          <ValidatorName
+            pubkey={nodePubkey}
+            name={identity.name}
+            avatar={identity.avatarUrl}
+          />
         </TableCell>
         <TableCell>
           {(activatedStake &&
@@ -88,10 +88,11 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
         className={cn(classes.card, separate && classes.cardVertical)}
         key={nodePubkey}
       >
-        <Link to={`/validators/${nodePubkey}`} className={classes.name}>
-          <Avatar pubkey={nodePubkey} avatarUrl={identity.avatarUrl} />
-          <div>{identity.name || nodePubkey}</div>
-        </Link>
+        <ValidatorName
+          pubkey={nodePubkey}
+          name={identity.name}
+          avatar={identity.avatarUrl}
+        />
         <Grid container spacing={1}>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>

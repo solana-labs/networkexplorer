@@ -18,20 +18,8 @@ export default makeStyles(theme => ({
   },
   name: {
     width: 130,
-    color: getColor('main')(theme),
     marginRight: 26,
     flexShrink: 0,
-    display: 'flex',
-    alignItems: 'center',
-    textDecoration: 'none',
-    '& span': {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    '& div:first-child': {
-      marginRight: 15,
-    },
   },
   bar: {
     flex: 1,
