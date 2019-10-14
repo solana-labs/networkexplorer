@@ -1,59 +1,56 @@
 // @flow
 
 import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import {TableCell, TableRow} from '@material-ui/core';
 import cn from 'classnames';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
-
+import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import HelpLink from 'v2/components/HelpLink';
 import ValidatorName from 'v2/components/UI/ValidatorName';
+
 import useStyles from './styles';
 
-const tHeads: TableHeadProps[] = [
+const fields: TableHeadProps[] = [
   {
+    label: 'Blocks',
     name: 'blocks',
     text: '',
     term: '',
   },
   {
+    label: 'slot',
     name: 'slot',
     text: '',
     term: '',
   },
   {
+    label: 'time',
     name: 'time',
     text: '',
     term: '',
   },
   {
+    label: 'transactions',
     name: 'transactions',
     text: '',
     term: '',
-    width: 190,
   },
   {
+    label: 'confidence',
     name: 'confidence',
     text: '',
     term: '',
-    width: 165,
   },
   {
+    label: 'leader',
     name: 'leader',
     text: '',
     term: '',
-    width: 240,
   },
 ];
 
@@ -76,14 +73,12 @@ const BlocksTable = ({
     return (
       <TableRow hover key={block.id}>
         <TableCell align="center">
-          <Link to={`/blocks/${block.id}`} className={classes.name}>
-            <div>{block.id}</div>
-          </Link>
+          <Link to={`/blocks/${block.id}`}>{block.id}</Link>
         </TableCell>
-        <TableCell>{block.slot}</TableCell>
-        <TableCell title={block.timestamp}>{asTime(block.timestamp)}</TableCell>
-        <TableCell>TODO</TableCell>
-        <TableCell>TODO</TableCell>
+        <TableCell width={100}>{block.slot}</TableCell>
+        <TableCell width={140}>{asTime(block.timestamp)}</TableCell>
+        <TableCell width={200}>TODO</TableCell>
+        <TableCell width={140}>TODO</TableCell>
         <TableCell>
           <ValidatorName pubkey={block.leader} name={block.leader} avatar="" />
         </TableCell>
@@ -128,28 +123,10 @@ const BlocksTable = ({
     );
   };
 
-  const renderTH = ({name, width, ...rest}: TableHeadProps) => (
-    <TableCell key={name} width={width}>
-      {name}
-      <HelpLink {...rest} />
-    </TableCell>
-  );
-
   return (
     <div className={classes.root}>
       {showTable ? (
-        <Table>
-          <TableHead className={classes.head}>
-            <TableRow>{map(renderTH)(tHeads)}</TableRow>
-          </TableHead>
-          <TableBody
-            classes={{
-              root: classes.body,
-            }}
-          >
-            {map(renderRow)(blocks)}
-          </TableBody>
-        </Table>
+        <Table fields={fields} data={blocks} renderRow={renderRow} />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
           {map(renderCard)(blocks)}

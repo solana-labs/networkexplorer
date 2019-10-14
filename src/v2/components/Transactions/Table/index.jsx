@@ -1,53 +1,53 @@
 // @flow
 
 import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import {TableCell, TableRow} from '@material-ui/core';
 import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
-import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
+import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 import useStyles from './styles';
 
-const tHeads: TableHeadProps[] = [
+const fields: TableHeadProps[] = [
   {
-    name: 'hash',
+    id: 'hash',
+    label: 'hash',
     text: '',
     term: '',
   },
   {
+    label: 'block',
     name: 'block',
     text: '',
     term: '',
   },
   {
+    label: 'time',
     name: 'time',
     text: '',
     term: '',
   },
   {
+    label: 'application id',
     name: 'application id',
     text: '',
     term: '',
   },
   {
+    label: 'type',
     name: 'type',
     text: '',
     term: '',
   },
   {
+    label: 'confirmations',
     name: 'confirmations',
     text: '',
     term: '',
@@ -72,20 +72,16 @@ const TransactionsTable = ({
   const renderRow = transaction => {
     return (
       <TableRow hover key={transaction.id}>
-        <TableCell align="center">
-          <Link to={`/transactions/${transaction.id}`} className={classes.name}>
-            {transaction.id}
-          </Link>
+        <TableCell>
+          <Link to={`/transactions/${transaction.id}`}>{transaction.id}</Link>
         </TableCell>
         <TableCell>
-          <Link to={`/blocks/${transaction.blockId}`} className={classes.name}>
+          <Link to={`/blocks/${transaction.blockId}`}>
             {transaction.blockId}
           </Link>
         </TableCell>
-        <TableCell title={transaction.timestamp}>
-          {asTime(transaction.timestamp)}
-        </TableCell>
-        <TableCell>
+        <TableCell width={135}>{asTime(transaction.timestamp)}</TableCell>
+        <TableCell width={230}>
           <Link
             to={`/applications/${transaction.instructions[0].programId}`}
             className={classes.name}
@@ -93,10 +89,12 @@ const TransactionsTable = ({
             {transaction.instructions[0].programId}
           </Link>
         </TableCell>
-        <TableCell>
-          TODO <TypeLabel type="loader" label="loader" />
+        <TableCell width={110}>
+          <div>
+            <TypeLabel type="loader" label="TODO" />
+          </div>
         </TableCell>
-        <TableCell>TODO</TableCell>
+        <TableCell width={200}>TODO</TableCell>
       </TableRow>
     );
   };
@@ -151,28 +149,10 @@ const TransactionsTable = ({
     );
   };
 
-  const renderTH = ({name, ...rest}: TableHeadProps) => (
-    <TableCell key={name}>
-      {name}
-      <HelpLink {...rest} />
-    </TableCell>
-  );
-
   return (
     <div className={classes.root}>
       {showTable ? (
-        <Table>
-          <TableHead className={classes.head}>
-            <TableRow>{map(renderTH)(tHeads)}</TableRow>
-          </TableHead>
-          <TableBody
-            classes={{
-              root: classes.body,
-            }}
-          >
-            {map(renderRow)(transactions)}
-          </TableBody>
-        </Table>
+        <Table fields={fields} renderRow={renderRow} data={transactions} />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
           {map(renderCard)(transactions)}

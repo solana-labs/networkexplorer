@@ -14,6 +14,8 @@ import Table from 'v2/components/UI/Table';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
+import HelpLink from 'v2/components/HelpLink';
+
 import ValidatorName from 'v2/components/UI/ValidatorName';
 import useStyles from './styles';
 
@@ -122,9 +124,8 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       {!separate && (
         <div className={classes.header}>
           <Typography>Validators</Typography>
-          <Typography variant="h5">
-            {activeValidators.length + inactiveValidators.length}
-          </Typography>
+          <HelpLink text="" term="" />
+          <Typography variant="h5">{allValidators.length}</Typography>
           <Link to="/validators/all" className={classes.link}>
             See all &gt;
           </Link>

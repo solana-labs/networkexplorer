@@ -10,35 +10,6 @@ export default makeStyles(theme => ({
       marginBottom: 50,
     },
   },
-  head: {
-    border: '1px solid #979797',
-    '& th': {
-      textTransform: 'uppercase',
-      fontSize: 15,
-      letterSpacing: 2,
-      fontWeight: 'bold',
-      borderBottom: 'none',
-      paddingRight: 16,
-      '&:first-child': {
-        paddingLeft: 40,
-      },
-    },
-  },
-  body: {
-    '& td': {
-      fontSize: 15,
-      paddingTop: 18,
-      paddingBottom: 18,
-      maxWidth: 0,
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-      paddingRight: 16,
-      '&:first-child': {
-        paddingLeft: 40,
-      },
-    },
-  },
   list: {
     width: '100%',
   },
@@ -82,16 +53,5 @@ export default makeStyles(theme => ({
     color: '#C4C4C4',
     letterSpacing: 2,
     fontWeight: 'bold',
-  },
-  leader: {
-    display: 'flex',
-    alignItems: 'center',
-    color: getColor('main')(theme),
-    '& div': {
-      marginLeft: 5,
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-    },
   },
 }));

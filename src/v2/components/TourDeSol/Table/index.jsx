@@ -1,25 +1,44 @@
 // @flow
 
 import React from 'react';
-import {
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Grid,
-} from '@material-ui/core';
+import {Typography, TableCell, TableRow, Grid} from '@material-ui/core';
 import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {map} from 'lodash/fp';
+import Table from 'v2/components/UI/Table';
+import HelpLink from 'v2/components/HelpLink';
 import ValidatorName from 'v2/components/UI/ValidatorName';
-
-import HelpLink from '../../HelpLink';
 import useStyles from './styles';
+
+const fields = [
+  {
+    label: 'ranking',
+    name: 'ranking',
+    text: '',
+    term: '',
+  },
+  {
+    label: 'name',
+    name: 'name',
+    text: '',
+    term: '',
+  },
+  {
+    label: 'Staked sol',
+    name: 'staked_sol',
+    text: '',
+    term: '',
+  },
+  {
+    label: 'Uptime',
+    name: 'uptime',
+    text: '',
+    term: '',
+  },
+];
 
 const ValidatorsTable = ({
   activeValidators,
@@ -36,12 +55,12 @@ const ValidatorsTable = ({
     const {name, pubkey, avatarUrl, activatedStake, uptimePercent, rank} = row;
     return (
       <TableRow hover key={pubkey}>
-        <TableCell>{rank}</TableCell>
+        <TableCell width={150}>{rank}</TableCell>
         <TableCell>
           <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
         </TableCell>
-        <TableCell>{activatedStake.toFixed(8)}</TableCell>
-        <TableCell>{uptimePercent}%</TableCell>
+        <TableCell width={200}>{activatedStake.toFixed(8)}</TableCell>
+        <TableCell width={150}>{uptimePercent}%</TableCell>
       </TableRow>
     );
   };
@@ -84,23 +103,7 @@ const ValidatorsTable = ({
         )}
       </div>
       {showTable ? (
-        <Table>
-          <TableHead className={classes.head}>
-            <TableRow>
-              <TableCell width={100}>Ranking</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell width={150}>Staked SOL</TableCell>
-              <TableCell width={110}>Uptime</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody
-            classes={{
-              root: classes.body,
-            }}
-          >
-            {map(renderRow)(activeValidators)}
-          </TableBody>
-        </Table>
+        <Table fields={fields} renderRow={renderRow} data={activeValidators} />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
           {map(renderCard)(activeValidators)}

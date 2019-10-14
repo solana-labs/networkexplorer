@@ -16,6 +16,11 @@ export default makeStyles(() => ({
       maxWidth: 1,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      '& > *': {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: 'block',
+      },
     },
   },
 }));

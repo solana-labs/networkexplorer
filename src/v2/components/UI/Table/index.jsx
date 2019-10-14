@@ -42,9 +42,10 @@ function getSorting(order, orderBy) {
 
 const EnhancedTableHead = props => {
   const classes = useStyles();
-  const {fields, order, orderBy, onRequestSort, text, term} = props;
+  const {fields, order, orderBy, onRequestSort, sortable} = props;
 
   const createSortHandler = property => event => {
+    if (!sortable) return;
     onRequestSort(event, property);
   };
 
@@ -60,12 +61,13 @@ const EnhancedTableHead = props => {
               sortDirection={orderBy === headCell.id ? order : false}
             >
               <TableSortLabel
+                hideSortIcon={!sortable}
                 active={orderBy === headCell.id}
                 direction={order}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
-                <HelpLink text={text} term={term} />
+                <HelpLink text={headCell.text} term={headCell.term} />
               </TableSortLabel>
             </TableCell>
           ),
@@ -78,7 +80,7 @@ const EnhancedTableHead = props => {
 
 const EnhancedTable = props => {
   const classes = useStyles();
-  const {data = [], fields, renderRow, initialSort = 'name'} = props;
+  const {data = [], fields, renderRow, initialSort = ''} = props;
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = React.useState(initialSort);
   const handleRequestSort = (event, property) => {
@@ -90,6 +92,7 @@ const EnhancedTable = props => {
   return (
     <Table className={classes.root}>
       <EnhancedTableHead
+        sortable={Boolean(initialSort)}
         classes={classes}
         order={order}
         orderBy={orderBy}
@@ -102,7 +105,5 @@ const EnhancedTable = props => {
     </Table>
   );
 };
-
-EnhancedTable.propTypes = {};
 
 export default EnhancedTable;

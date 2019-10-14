@@ -32,9 +32,9 @@ export default makeStyles(theme => ({
   },
   header: {
     display: 'flex',
-    alignItems: 'baseline',
+    alignItems: 'center',
     flexWrap: 'wrap',
-    '& *:first-child': {
+    '& *:nth-child(2)': {
       marginRight: 35,
     },
     marginBottom: 23,
