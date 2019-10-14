@@ -1,13 +1,15 @@
 // @flow
 import {Container} from '@material-ui/core';
 import React from 'react';
+import {Link, Match} from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {observer} from 'mobx-react-lite';
 import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import TransactionsTimelineStore from 'v2/stores/transactions/timeline';
-import {Link, Match} from 'react-router-dom';
+import CTypography from 'v2/components/UI/CTypography';
+import formatNum from '../../utils/formatNum';
 
 import Table from './Table';
 import useStyles from './styles';
@@ -45,7 +47,9 @@ const TransactionsPage = ({match}: {match: Match}) => {
     <Container>
       <SectionHeader title="Transactions">
         <HelpLink text="" term="" />
-        <div className={classes.total}>{transactionCount}</div>
+        <CTypography type="caption" className={classes.total}>
+          {formatNum(transactionCount)}
+        </CTypography>
       </SectionHeader>
       {nav}
       <Table transactions={transactions} />

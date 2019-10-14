@@ -24,6 +24,7 @@ export default createMuiTheme({
       pink: '#f71ef4',
       blue: '#2069f6',
       yellow: '#ffc617',
+      caption: '#c4c4c4',
     },
     secondary: {
       main: '#000',

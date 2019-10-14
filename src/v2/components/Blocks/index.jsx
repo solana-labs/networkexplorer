@@ -8,6 +8,8 @@ import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import BlocksTimelineStore from 'v2/stores/blocks/timeline';
 import {Link, Match} from 'react-router-dom';
+import formatNum from 'v2/utils/formatNum';
+import CTypography from 'v2/components/UI/CTypography';
 
 import Table from './Table';
 import useStyles from './styles';
@@ -39,7 +41,9 @@ const BlocksPage = ({match}: {match: Match}) => {
     <Container>
       <SectionHeader title="Blocks">
         <HelpLink text="" term="" />
-        <div className={classes.total}>{blockCount}</div>
+        <CTypography className={classes.total} type="caption">
+          {formatNum(blockCount)}
+        </CTypography>
       </SectionHeader>
       {nav}
       <Table blocks={blocks} />
