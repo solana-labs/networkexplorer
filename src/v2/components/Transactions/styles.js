@@ -4,7 +4,7 @@ import getColor from 'v2/utils/getColor';
 export default makeStyles(theme => ({
   total: {
     marginRight: 'auto',
-    marginLeft: 25,
+    marginLeft: 15,
   },
   nav: {
     display: 'flex',

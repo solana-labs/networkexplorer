@@ -17,7 +17,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
-    marginRight: 25,
+    marginRight: 5,
     [theme.breakpoints.down('sm')]: {
       whiteSpace: 'normal',
     },

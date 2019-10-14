@@ -1,8 +1,8 @@
 import {makeStyles} from '@material-ui/core';
 
 export default makeStyles({
-  totalBlocks: {
+  total: {
     marginRight: 'auto',
-    marginLeft: 100,
+    marginLeft: 15,
   },
 });

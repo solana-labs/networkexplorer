@@ -5,6 +5,8 @@ import {observer} from 'mobx-react-lite';
 import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import ApplicationsTimelineStore from 'v2/stores/applications/timeline';
+import formatNum from 'v2/utils/formatNum';
+import CTypography from 'v2/components/UI/CTypography';
 import Table from './Table';
 import useStyles from './styles';
 import {Link, Match} from 'react-router-dom';
@@ -35,7 +37,9 @@ const ApplicationsPage = ({match}: {match: Match}) => {
     <Container>
       <SectionHeader title="Applications">
         <HelpLink text="" term="" />
-        <div className={classes.totalApplications}>{applicationCount}</div>
+        <CTypography type="caption" className={classes.total}>
+          {formatNum(applicationCount)}
+        </CTypography>
       </SectionHeader>
       {nav}
       <Table applications={applications} />
