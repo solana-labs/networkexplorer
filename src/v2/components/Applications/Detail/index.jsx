@@ -1,6 +1,6 @@
 // @flow
 import {observer} from 'mobx-react-lite';
-import {Container, Tabs, useTheme} from '@material-ui/core';
+import {Container, IconButton, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
@@ -12,14 +12,14 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import Loader from 'v2/components/UI/Loader';
+import ApplicationDetailStore from 'v2/stores/applications/detail';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import {LAMPORT_SOL_RATIO} from 'v2/constants';
 
 import TabNav from '../../UI/TabNav';
 import ApplicationDetails from './Details';
 import ApplicationCode from './Code';
 import useStyles from './styles';
-import ApplicationDetailStore from 'v2/stores/applications/detail';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import {LAMPORT_SOL_RATIO} from 'v2/constants';
 
 const ApplicationDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
@@ -47,6 +47,8 @@ const ApplicationDetail = ({match}: {match: Match}) => {
   if (isLoading) {
     return <Loader width="533" height="290" />;
   }
+
+  if (!accountInfo) return null;
 
   const handleTabChange = (event, tab) => setTab(tab);
 
@@ -111,9 +113,9 @@ const ApplicationDetail = ({match}: {match: Match}) => {
             <span>{applicationId}</span>
             <CopyBtn text={applicationId} />
             <QRPopup url={url} />
-            <button>
+            <IconButton size="small">
               <StarIcon />
-            </button>
+            </IconButton>
           </div>
         </SectionHeader>
         <div className={classes.body}>
