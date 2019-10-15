@@ -1,6 +1,7 @@
+//@flow
 import React from 'react';
 import Label from 'v2/components/UI/Label';
-import _ from 'lodash';
+import {map} from 'lodash/fp';
 import {observer} from 'mobx-react-lite';
 import {Table, TableBody, TableCell, TableRow} from '@material-ui/core';
 import ValidatorName from 'v2/components/UI/ValidatorName';
@@ -26,7 +27,7 @@ const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
 
   return (
     <Table>
-      <TableBody>{_.map(programAccounts, renderAccount)}</TableBody>
+      <TableBody>{map(renderAccount)(programAccounts)}</TableBody>
     </Table>
   );
 };
