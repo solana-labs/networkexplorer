@@ -2,6 +2,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {Grid} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import Label from 'v2/components/UI/Label';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import ValidatorName from 'v2/components/UI/ValidatorName';
@@ -27,10 +28,11 @@ const Application = ({id, accounts}: TApplication) => {
         <Grid item md={5}>
           <Label text="Application id" hint="" />
           <div className={classes.id}>
-            <div className={classes.address}>{id}</div>
-            TODO:
-            <TypeLabel type="other" label="other" />
-            <TypeLabel type="consensus" label="consensus" />
+            <div>
+              <Link to={`/applications/${id}`}>{id}</Link>
+            </div>
+            <TypeLabel type="other" label="TODO:" />
+            <TypeLabel type="consensus" label="TODO:" />
           </div>
         </Grid>
         <Grid item md={7}>

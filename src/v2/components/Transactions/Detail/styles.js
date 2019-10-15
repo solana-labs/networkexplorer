@@ -5,7 +5,7 @@ export default makeStyles(theme => ({
   blockTitle: {
     display: 'flex',
     alignItems: 'center',
-    marginLeft: 100,
+    marginLeft: 40,
     marginRight: 'auto',
     overflow: 'hidden',
     '& div': {
@@ -17,11 +17,8 @@ export default makeStyles(theme => ({
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     },
-    [theme.breakpoints.down('md')]: {
-      flexWrap: 'wrap',
-      marginLeft: 0,
-    },
     [theme.breakpoints.down('sm')]: {
+      marginLeft: 0,
       '& span': {
         width: '100%',
         marginBottom: 3,
@@ -85,12 +82,10 @@ export default makeStyles(theme => ({
     lineHeight: '29px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    '& a': {
-      color: getColor('main')(theme),
-      textDecoration: 'none',
-      '&:hover': {
-        textDecoration: 'underline',
-      },
+    '& > *': {
+      display: 'block',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
   },
   tabs: {
