@@ -1,3 +1,4 @@
+import util from 'util';
 import _ from 'lodash';
 import allSettled from 'promise.allsettled';
 
@@ -57,7 +58,7 @@ export class FriendlyGet {
 
     if (_.size(__errors__) > 0) {
       compactResult.__errors__ = __errors__;
-      console.warn('FRIENDLY_GET_HAD_PROBLEMS', JSON.stringify(__errors__));
+      console.warn('FRIENDLY_GET_HAD_PROBLEMS', util.inspect(__errors__));
     }
 
     return compactResult;
