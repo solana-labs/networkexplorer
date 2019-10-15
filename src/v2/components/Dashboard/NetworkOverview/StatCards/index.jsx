@@ -48,7 +48,7 @@ const StatCards = () => {
           <Tooltip
             classes={{tooltip: classes.tooltip}}
             placement="top"
-            title={globalStats['!entLastLeader']}
+            title={globalStats['!entLastLeader'] || ''}
           >
             <Link
               className={classes.leader}
