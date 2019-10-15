@@ -5,11 +5,12 @@ export default makeStyles(theme => ({
   applicationTitle: {
     display: 'flex',
     alignItems: 'center',
-    marginLeft: 100,
+    marginLeft: 40,
     marginRight: 'auto',
     overflow: 'hidden',
     '& div': {
       marginLeft: 15,
+      marginRight: 5,
       display: 'flex',
       alignItems: 'center',
     },
