@@ -48,16 +48,25 @@ class Store {
   });
 
   get mapMarkers() {
-    return compose(
-      map(({nodePubkey: pubkey, tpu: gossip, coordinates, identity}) => ({
-        pubkey,
-        gossip,
-        coordinates,
-        name: (identity && identity.name) || identity.pubkey,
-        avatarUrl: (identity && identity.avatarUrl) || '',
-      })),
-      filter({what: 'Validator'}),
-    )(this.network);
+    if (!this.network || !this.network.length) {
+      return [];
+    }
+
+    try {
+      return compose(
+        map(({nodePubkey: pubkey, tpu: gossip, coordinates, identity}) => ({
+          pubkey,
+          gossip,
+          coordinates,
+          name: (identity && identity.name) || identity.pubkey,
+          avatarUrl: (identity && identity.avatarUrl) || '',
+        })),
+        filter({what: 'Validator'}),
+      )(this.network);
+    } catch (e) {
+      console.error('mapMarkers()', e);
+      return [];
+    }
   }
 
   get validators() {
