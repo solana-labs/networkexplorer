@@ -2,8 +2,8 @@ import {filter, reduce, orderBy} from 'lodash/fp';
 
 import {LAMPORT_SOL_RATIO} from '../../util';
 
-const slotsPerDay = (1.0 * 24 * 60 * 60) / 0.8;
-const TDS_DEFAULT_STAGE_LENGTH_BLOCKS = slotsPerDay * 5.0;
+const SLOTS_PER_DAY = (1.0 * 24 * 60 * 60) / 0.8;
+const TDS_DEFAULT_STAGE_LENGTH_BLOCKS = SLOTS_PER_DAY * 5.0;
 
 const stages = [
   {id: 0, title: 'Stage 0', hidden: true},
@@ -62,7 +62,7 @@ export class TourDeSolIndexView {
     const slotsLeftInStage =
       currentStage && currentStage.duration && currentStage.duration - lastSlot;
     const daysLeftInStage =
-      slotsLeftInStage && (slotsLeftInStage / slotsPerDay).toFixed(3);
+      slotsLeftInStage && (slotsLeftInStage / SLOTS_PER_DAY).toFixed(3);
 
     const clusterStats = {
       lastSlot,
@@ -132,7 +132,7 @@ export class TourDeSolIndexView {
         activeValidators: result.accum,
         stages,
         activeStage,
-        slotsPerDay,
+        slotsPerDay: SLOTS_PER_DAY,
       };
     }
 
