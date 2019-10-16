@@ -45,7 +45,7 @@ const TransactionsPage = ({match}: {match: Match}) => {
 
   return (
     <Container>
-      <SectionHeader title="Transactions">
+      <SectionHeader title="Recent Transactions">
         <HelpLink text="" term="" />
         <CTypography type="caption" className={classes.total}>
           {formatNum(transactionCount)}

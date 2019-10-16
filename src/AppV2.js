@@ -33,8 +33,9 @@ const Applications = lazy(() => import('v2/components/Applications'));
 const ApplicationDetail = lazy(() =>
   import('v2/components/Applications/Detail'),
 );
+const Accounts = lazy(() => import('v2/components/Accounts'));
+const AccountDetail = lazy(() => import('v2/components/Accounts/Detail'));
 const Favorites = lazy(() => import('v2/components/Favorites'));
-const AccountDetail = lazy(() => import('v2/components/Account/Detail'));
 
 const useStyles = makeStyles(() => {
   return {
@@ -136,11 +137,22 @@ const App = () => {
                 <Route exact path="/applications" component={Applications} />
                 <Route
                   exact
+                  path="/applications/timeline/:start"
+                  component={Applications}
+                />
+                <Route
+                  exact
                   path="/applications/:id"
                   component={ApplicationDetail}
                 />
+                <Route exact path="/accounts" component={Accounts} />
+                <Route
+                  exact
+                  path="/accounts/timeline/:start"
+                  component={Applications}
+                />
+                <Route exact path="/accounts/:id" component={AccountDetail} />
                 <Route exact path="/favorites" component={Favorites} />
-                <Route exact path="/account/:id" component={AccountDetail} />
               </Switch>
             </Suspense>
             <Footer />
