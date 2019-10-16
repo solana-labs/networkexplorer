@@ -48,7 +48,7 @@ class Store {
   });
 
   get mapMarkers() {
-    if (!this.network || !this.network.length) {
+    if (!this.network) {
       return [];
     }
 
