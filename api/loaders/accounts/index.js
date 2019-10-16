@@ -1,6 +1,6 @@
 import {getRecencySetInfo, getRecencySetPage} from '../recency';
 
-function parseApplicationEntry(data) {
+function parseAccountEntry(data) {
   if (!data || data.length < 2) {
     return null;
   }
@@ -12,7 +12,7 @@ function parseApplicationEntry(data) {
 }
 
 /**
- * loadApplicationIndex: retrieves raw data from the data store and returns it for formatting
+ * loadAccountIndex: retrieves raw data from the data store and returns it for formatting
  *
  * @param redisX
  * @param start
@@ -20,10 +20,10 @@ function parseApplicationEntry(data) {
  * @param direction
  * @returns {Promise<{timelinePage: *, timelineInfo: *}>}
  */
-export async function loadApplicationIndex(redisX, start, count, direction) {
-  const timelineInfo = await getRecencySetInfo(redisX, 'applications', parseApplicationEntry);
+export async function loadAccountIndex(redisX, start, count, direction) {
+  const timelineInfo = await getRecencySetInfo(redisX, 'accounts', parseAccountEntry);
 
-  const timelinePage = await getRecencySetPage(redisX, 'applications', start, count, direction);
+  const timelinePage = await getRecencySetPage(redisX, 'accounts', start, count, direction);
 
   return {
     timelineInfo,
