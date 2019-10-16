@@ -5,6 +5,8 @@ import {TransactionIndexView} from './views/transactions/index';
 import {TransactionDetailView} from './views/transactions/detail';
 import {ApplicationIndexView} from './views/applications/index';
 import {ApplicationDetailView} from './views/applications/detail';
+import {AccountIndexView} from './views/accounts/index';
+import {AccountDetailView} from './views/accounts/detail';
 import {DEFAULT_PAGE_SIZE} from './loaders/timeline';
 import {loadTourDeSolIndex} from './loaders/tourdesol';
 import {loadBlockIndex} from './loaders/blocks/index';
@@ -13,6 +15,8 @@ import {loadTransactionIndex} from './loaders/transactions/index';
 import {loadTransactionDetail} from './loaders/transactions/detail';
 import {loadApplicationIndex} from './loaders/applications/index';
 import {loadApplicationDetail} from './loaders/applications/detail';
+import {loadAccountIndex} from './loaders/accounts/index';
+import {loadAccountDetail} from './loaders/accounts/detail';
 import {FriendlyGet} from './friendlyGet';
 
 function prettify(req, data) {
@@ -176,6 +180,51 @@ export function addNetworkExplorerRoutes(redisX, app) {
       prettify(
         req,
         new ApplicationDetailView().asVersion(rawData, __errors__, version),
+      ),
+    );
+  });
+
+  // Network Explorer Accounts Index
+  app.get('/explorer/accounts/index', async (req, res) => {
+    const q = req.query || {};
+
+    const version = q.v || 'AccountIndexView@latest';
+    const start = q.start || '';
+    const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
+    const direction = q.direction || '-';
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with(
+        'rawData',
+        loadAccountIndex(redisX, start, count, direction),
+        {},
+      )
+      .get();
+
+    res.send(
+      prettify(
+        req,
+        new AccountIndexView().asVersion(rawData, __errors__, version),
+      ),
+    );
+  });
+
+  // Network Explorer Account Detail
+  app.get('/explorer/accounts/:id', async (req, res) => {
+    const q = req.query || {};
+
+    const version = q.v || 'AccountDetailView@latest';
+    const {__errors__, rawData} = await new FriendlyGet()
+      .with(
+        'rawData',
+        loadAccountDetail(redisX, req.params.id, version),
+        {},
+      )
+      .get();
+
+    res.send(
+      prettify(
+        req,
+        new AccountDetailView().asVersion(rawData, __errors__, version),
       ),
     );
   });
