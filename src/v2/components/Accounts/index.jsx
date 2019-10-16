@@ -4,48 +4,48 @@ import React from 'react';
 import {observer} from 'mobx-react-lite';
 import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import ApplicationsTimelineStore from 'v2/stores/applications/timeline';
+import AccountsTimelineStore from 'v2/stores/accounts/timeline';
 import formatNum from 'v2/utils/formatNum';
 import CTypography from 'v2/components/UI/CTypography';
 import Table from './Table';
 import useStyles from './styles';
 import {Link, Match} from 'react-router-dom';
 
-const ApplicationsPage = ({match}: {match: Match}) => {
+const AccountsPage = ({match}: {match: Match}) => {
   const classes = useStyles();
   const {
-    applications,
-    applicationCount,
+    accounts,
+    accountCount,
     start,
     next,
     prev,
-  } = ApplicationsTimelineStore;
+  } = AccountsTimelineStore;
 
   if (start !== match.params.start) {
-    ApplicationsTimelineStore.init({start: match.params.start});
+    AccountsTimelineStore.init({start: match.params.start});
   }
 
   const nav = (
     <div className={classes.total}>
       STYLE_ME :
-      {prev && <Link to={`/applications/timeline/${prev}`}>prev page</Link>}:
-      {next && <Link to={`/applications/timeline/${next}`}>next page</Link>}:
+      {prev && <Link to={`/accounts/timeline/${prev}`}>prev page</Link>}:
+      {next && <Link to={`/accounts/timeline/${next}`}>next page</Link>}:
     </div>
   );
 
   return (
     <Container>
-      <SectionHeader title="Recently Active Applications">
+      <SectionHeader title="Recently Active Accounts">
         <HelpLink text="" term="" />
         <CTypography type="caption" className={classes.total}>
-          {formatNum(applicationCount)}
+          {formatNum(accountCount)}
         </CTypography>
       </SectionHeader>
       {nav}
-      <Table applications={applications} />
+      <Table accounts={accounts} />
       {nav}
     </Container>
   );
 };
 
-export default observer(ApplicationsPage);
+export default observer(AccountsPage);

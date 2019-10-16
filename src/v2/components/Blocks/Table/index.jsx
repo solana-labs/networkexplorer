@@ -16,8 +16,8 @@ import useStyles from './styles';
 
 const fields: TableHeadProps[] = [
   {
-    label: 'Blocks',
-    name: 'blocks',
+    label: 'Block',
+    name: 'block',
     text: '',
     term: '',
   },
