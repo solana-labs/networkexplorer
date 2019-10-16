@@ -1,13 +1,20 @@
 // @flow
 
-import React from 'react';
-import {Typography, TableCell, TableRow, Grid} from '@material-ui/core';
+import React, {useState} from 'react';
+import {
+  Typography,
+  TableCell,
+  TableRow,
+  Grid,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
-import {map, concat} from 'lodash/fp';
+import {eq, map, concat} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
 import Table from 'v2/components/UI/Table';
@@ -16,6 +23,7 @@ import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
 import HelpLink from 'v2/components/HelpLink';
 import ValidatorName from 'v2/components/UI/ValidatorName';
+
 import useStyles from './styles';
 
 const fields = [
@@ -45,12 +53,15 @@ const fields = [
 ];
 
 const ValidatorsTable = ({separate}: {separate: boolean}) => {
+  const [tab, setTab] = useState('active');
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
   const {activeValidators, inactiveValidators} = NodesStore;
   const {isLoading} = Socket;
-
+  const isActiveTab = eq(tab);
+  const switchTab = tab => () => setTab(tab);
+  const selectTab = e => setTab(e.target.value);
   if (isLoading) {
     return (
       <div className={classes.loader}>
@@ -117,30 +128,62 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   };
 
   const allValidators = concat(activeValidators)(inactiveValidators);
-
   return (
     <div className={cn(classes.root, separate && classes.separateRoot)}>
-      {!separate && (
-        <div className={classes.header}>
-          <Typography>Validators</Typography>
+      <div className={classes.header}>
+        <div className={classes.tabNav}>
+          <button
+            className={cn(classes.tabBtn, {
+              [classes.activeTabBtn]: isActiveTab('active'),
+            })}
+            type="button"
+            onClick={switchTab('active')}
+          >
+            ({activeValidators.length}) Active Validators
+          </button>
+          <button
+            className={cn(classes.tabBtn, {
+              [classes.activeTabBtn]: isActiveTab('inactive'),
+            })}
+            type="button"
+            onClick={switchTab('inactive')}
+          >
+            ({inactiveValidators.length}) Inactive Validators
+          </button>
           <HelpLink text="" term="" />
-          <Typography variant="h5">{allValidators.length}</Typography>
-          <Link to="/validators/all" className={classes.link}>
-            See all &gt;
-          </Link>
         </div>
-      )}
+        {!separate && (
+          <>
+            <Typography variant="h5">{allValidators.length}</Typography>
+            <Link to="/validators/all" className={classes.link}>
+              See all &gt;
+            </Link>
+          </>
+        )}
+      </div>
+      <div className={classes.tabSelect}>
+        <Select
+          className={classes.tabSelectRoot}
+          value={tab}
+          onChange={selectTab}
+        >
+          <MenuItem value="active">Active Validators</MenuItem>
+          <MenuItem value="inactive">Inactive Validators</MenuItem>
+        </Select>
+        <HelpLink text="" term="" />
+      </div>
       {showTable ? (
         <Table
           fields={fields}
-          data={allValidators}
+          data={isActiveTab('active') ? activeValidators : inactiveValidators}
           initialSort="identity.name"
           renderRow={renderRow}
         />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          {map(renderCard)(activeValidators)}
-          {map(renderCard)(inactiveValidators)}
+          {map(renderCard)(
+            isActiveTab('active') ? activeValidators : inactiveValidators,
+          )}
         </div>
       )}
     </div>
