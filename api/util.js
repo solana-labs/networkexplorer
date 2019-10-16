@@ -19,7 +19,7 @@ export function transactionFromJson(x, outMessage = {}) {
 
   tx.id = b58e(txn.signatures[0].signature);
   tx.signatures = _.map(txn.signatures, y => {
-    return {signature: b58e(y.signature), public_key: y.publicKey._bn};
+    return {signature: b58e(y.signature), public_key: y.publicKey.toBase58()};
   });
 
   tx.instructions = _.map(txn.instructions, y => {
