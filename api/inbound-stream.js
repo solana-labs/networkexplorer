@@ -290,33 +290,60 @@ class RedisHandler {
           txnMsg,
         );
 
-        tx.instructions.forEach(instruction => {
-          // DEPRECATED
-          this.redisTimelinePush(
-            commands,
-            `!txns-by-prgid-timeline:${instruction.program_id}`,
-            txnMsg,
-          );
-          // SAME
-          commands.push([
-            'publish',
-            `@program_id:${instruction.program_id}`,
-            txnMsg,
-          ]);
+        const txPrograms = {};
+        const txAccounts = {};
 
-          // NEW
-          this.redisTimelineImprovedPush(
-            commands,
-            `!__timeline:program:${instruction.program_id}`,
-            txnMsg,
-          );
-          // NEW
-          this.redisRecencySetPush(
-            commands,
-            `!__recent:programs`,
-            instruction.program_id,
-            now_score,
-          );
+        tx.instructions.forEach(instruction => {
+          if (!txPrograms[instruction.program_id]) {
+            txPrograms[instruction.program_id] = true;
+
+            // DEPRECATED
+            this.redisTimelinePush(
+              commands,
+              `!txns-by-prgid-timeline:${instruction.program_id}`,
+              txnMsg,
+            );
+            // SAME
+            commands.push([
+              'publish',
+              `@program_id:${instruction.program_id}`,
+              txnMsg,
+            ]);
+
+            // NEW
+            this.redisTimelineImprovedPush(
+              commands,
+              `!__timeline:program:${instruction.program_id}`,
+              txnMsg,
+            );
+            // NEW
+            this.redisRecencySetPush(
+              commands,
+              `!__recent:programs`,
+              instruction.program_id,
+              now_score,
+            );
+          }
+
+          instruction.keys.forEach(key => {
+            if (!txAccounts[key]) {
+              txAccounts[key] = true;
+
+              // NEW
+              this.redisTimelineImprovedPush(
+                commands,
+                `!__timeline:account:${key}`,
+                txnMsg,
+              );
+              // NEW
+              this.redisRecencySetPush(
+                commands,
+                `!__recent:accounts`,
+                key,
+                now_score,
+              );
+            }
+          });
         });
       });
 
