@@ -34,21 +34,21 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     flexWrap: 'wrap',
-    '& *:nth-child(2)': {
-      marginRight: 35,
-    },
-    marginBottom: 23,
+    marginBottom: -1,
     [theme.breakpoints.down('sm')]: {
-      padding: '10px 27px 0',
+      padding: '10px 18px 0',
       marginBottom: 10,
     },
   },
   link: {
-    marginLeft: 'auto',
+    marginLeft: 100,
     textTransform: 'uppercase',
     color: getColor('main')(theme),
     fontSize: 15,
     textDecoration: 'none',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 'auto',
+    },
   },
   list: {
     display: 'flex',
@@ -79,5 +79,53 @@ export default makeStyles(theme => ({
     color: '#C4C4C4',
     letterSpacing: 2,
     fontWeight: 'bold',
+  },
+  tabNav: {
+    marginRight: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  tabSelect: {
+    display: 'none',
+    marginBottom: 8,
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+      padding: '0 18px',
+    },
+  },
+  tabSelectRoot: {
+    '& > div:focus': {
+      backgroundColor: 'transparent',
+    },
+    '&::after': {
+      display: 'none',
+    },
+    '&::before': {
+      display: 'none',
+    },
+  },
+  tabBtn: {
+    fontSize: 18,
+    fontFamily: 'Exo, sans-serif',
+    color: getColor('grey3')(theme),
+    border: `1px solid ${getColor('grey3')(theme)}`,
+    height: 46,
+    backgroundColor: 'transparent',
+    marginRight: -1,
+    padding: '0 14px',
+    outline: 'none',
+    cursor: 'pointer',
+    '&:nth-child(2)': {
+      marginRight: 25,
+    },
+  },
+  activeTabBtn: {
+    backgroundColor: getColor('main')(theme),
+    color: getColor('grey2')(theme),
+    borderColor: getColor('main')(theme),
+    borderBottomColor: getColor('grey3')(theme),
   },
 }));
