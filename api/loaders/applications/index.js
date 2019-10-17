@@ -21,9 +21,19 @@ function parseApplicationEntry(data) {
  * @returns {Promise<{timelinePage: *, timelineInfo: *}>}
  */
 export async function loadApplicationIndex(redisX, start, count, direction) {
-  const timelineInfo = await getRecencySetInfo(redisX, 'applications', parseApplicationEntry);
+  const timelineInfo = await getRecencySetInfo(
+    redisX,
+    'applications',
+    parseApplicationEntry,
+  );
 
-  const timelinePage = await getRecencySetPage(redisX, 'applications', start, count, direction);
+  const timelinePage = await getRecencySetPage(
+    redisX,
+    'applications',
+    start,
+    count,
+    direction,
+  );
 
   return {
     timelineInfo,

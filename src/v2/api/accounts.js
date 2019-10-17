@@ -9,7 +9,7 @@ const ACCOUNT_DETAIL_VERSION = 'AccountDetailView@1.0.0';
 export function apiGetAccountDetail({accountId, version}) {
   return api(
     `/explorer/accounts/${encodeURIComponent(accountId)}?v=${version ||
-    ACCOUNT_DETAIL_VERSION}`,
+      ACCOUNT_DETAIL_VERSION}`,
   );
 }
 

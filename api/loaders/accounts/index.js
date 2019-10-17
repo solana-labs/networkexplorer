@@ -21,9 +21,19 @@ function parseAccountEntry(data) {
  * @returns {Promise<{timelinePage: *, timelineInfo: *}>}
  */
 export async function loadAccountIndex(redisX, start, count, direction) {
-  const timelineInfo = await getRecencySetInfo(redisX, 'accounts', parseAccountEntry);
+  const timelineInfo = await getRecencySetInfo(
+    redisX,
+    'accounts',
+    parseAccountEntry,
+  );
 
-  const timelinePage = await getRecencySetPage(redisX, 'accounts', start, count, direction);
+  const timelinePage = await getRecencySetPage(
+    redisX,
+    'accounts',
+    start,
+    count,
+    direction,
+  );
 
   return {
     timelineInfo,
