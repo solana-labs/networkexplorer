@@ -61,4 +61,4 @@ decorate(Store, {
 
 const TransactionsTimelineStore = new Store();
 
-export default observable(TransactionsTimelineStore);
+export default TransactionsTimelineStore;
