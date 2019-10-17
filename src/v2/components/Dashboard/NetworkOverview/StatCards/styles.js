@@ -38,5 +38,7 @@ export default makeStyles(theme => ({
     lineHeight: '16px',
     borderRadius: 0,
     padding: 11,
+    whiteSpace: 'nowrap',
+    maxWidth: '100%'
   },
 }));
