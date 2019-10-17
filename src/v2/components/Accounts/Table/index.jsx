@@ -55,9 +55,7 @@ const AccountsTable = ({
     return (
       <TableRow hover key={account.programId}>
         <TableCell>
-          <Link to={`/accounts/${account.programId}`}>
-            {account.programId}
-          </Link>
+          <Link to={`/accounts/${account.programId}`}>{account.programId}</Link>
         </TableCell>
         <TableCell>
           <div>
@@ -87,9 +85,7 @@ const AccountsTable = ({
           </li>
           <li>
             <div className={classes.cardTitle}>Time</div>
-            <div title={account.timestamp}>
-              {asTime(account.timestamp)}
-            </div>
+            <div title={account.timestamp}>{asTime(account.timestamp)}</div>
           </li>
         </ul>
       </div>

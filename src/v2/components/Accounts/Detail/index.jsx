@@ -14,20 +14,15 @@ import Loader from 'v2/components/UI/Loader';
 import AccountDetailStore from 'v2/stores/accounts/detail';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import TabNav from 'v2/components/UI/TabNav';
-import Chart from './Chart';
 
+import Chart from './Chart';
 import Transactions from './Transactions';
 import AccountCode from './Code';
 import useStyles from './styles';
 
 const AccountDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
-  const {
-    isLoading,
-    accountId,
-    accountInfo,
-    accountView,
-  } = AccountDetailStore;
+  const {isLoading, accountId, accountInfo, accountView} = AccountDetailStore;
 
   if (accountId !== match.params.id) {
     AccountDetailStore.init({accountId: match.params.id});
