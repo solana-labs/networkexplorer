@@ -39,6 +39,6 @@ export default makeStyles(theme => ({
     borderRadius: 0,
     padding: 11,
     whiteSpace: 'nowrap',
-    maxWidth: '100%'
+    maxWidth: '100%',
   },
 }));

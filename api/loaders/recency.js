@@ -11,7 +11,11 @@ export const DEFAULT_PAGE_SIZE = 100;
  * @param parseFunction
  * @returns {Promise<{dt: *, last: *, count: *, timeline: *, first: *}>}
  */
-export async function getRecencySetInfo(redisX, timeline, parseFunction = (x) => x) {
+export async function getRecencySetInfo(
+  redisX,
+  timeline,
+  parseFunction = x => x,
+) {
   const timelineKey = `!__recent:${timeline}`;
 
   const thePromise = new Promise((resolve, reject) => {
@@ -64,7 +68,13 @@ export async function getRecencySetInfo(redisX, timeline, parseFunction = (x) =>
  * @param direction
  * @returns {Promise<{next: *, dt: *, prev: *, start: *, length: *, count: *, timeline: *, results: *}>}
  */
-export async function getRecencySetPage(redisX, timeline, start, count, direction) {
+export async function getRecencySetPage(
+  redisX,
+  timeline,
+  start,
+  count,
+  direction,
+) {
   const timelineKey = `!__recent:${timeline}`;
   const safeCount = Math.min(MAX_PAGE_SIZE, Math.max(0, count));
   const safeStart = start ? parseInt(start) : 0;
