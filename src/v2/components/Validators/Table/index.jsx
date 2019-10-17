@@ -57,7 +57,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const {activeValidators, inactiveValidators} = NodesStore;
+  const {activeValidators, inactiveValidators, totalStaked} = NodesStore;
   const {isLoading} = Socket;
   const isActiveTab = eq(tab);
   const switchTab = tab => () => setTab(tab);
@@ -83,11 +83,18 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           />
         </TableCell>
         <TableCell>
-          {(activatedStake &&
-            (activatedStake * LAMPORT_SOL_RATIO).toFixed(8)) ||
-            'N/A'}
+          {activatedStake && (
+            <div>
+              {(activatedStake * LAMPORT_SOL_RATIO).toFixed(8) || 'N/A'} (
+              {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
+            </div>
+          )}
         </TableCell>
-        <TableCell>{commission || 'N/A'}</TableCell>
+        <TableCell>
+          {commission || 'N/A'}
+          {Boolean(commission) &&
+            ` (${(100 * (commission / 0xff)).toFixed(3)}%)`}
+        </TableCell>
         <TableCell>{(uptime && uptime + '%') || 'Unavailable'}</TableCell>
       </TableRow>
     );
@@ -109,14 +116,17 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
             <div>
-              {(activatedStake &&
-                (activatedStake * LAMPORT_SOL_RATIO).toFixed(4)) ||
-                'N/A'}
+              {(activatedStake * LAMPORT_SOL_RATIO).toFixed(8) || 'N/A'} (
+              {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
             </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Commission</div>
-            <div>{commission || 'N/A'}</div>
+            <div>
+              {commission || 'N/A'}
+              {Boolean(commission) &&
+                ` (${(100 * (commission / 0xff)).toFixed(3)}%)`}
+            </div>
           </Grid>
           <Grid item xs={4} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
