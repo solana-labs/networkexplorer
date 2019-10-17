@@ -70,7 +70,7 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
     );
   }
 
-  const renderRow = row => {
+  const renderRow = ({data: row}) => {
     const uptime = row.uptime && getUptime(row);
     const {identity = {}, nodePubkey, activatedStake, commission} = row;
     return (

@@ -51,7 +51,7 @@ const AccountsTable = ({
     return formatDistanceToNow(Date.parse(x), {addSuffix: true});
   };
 
-  const renderRow = account => {
+  const renderRow = ({data: account}) => {
     return (
       <TableRow hover key={account.programId}>
         <TableCell>

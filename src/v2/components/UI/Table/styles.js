@@ -1,18 +1,9 @@
 import {makeStyles} from '@material-ui/core';
 
 export default makeStyles(() => ({
-  head: {
-    border: '1px solid #979797',
-    '& th': {
-      textTransform: 'uppercase',
-      fontSize: 15,
-      letterSpacing: 2,
-      fontWeight: 'bold',
-      borderBottom: 'none',
-    },
-  },
   root: {
-    '& td': {
+    maxWidth: '100%',
+    '& .MuiTableCell-root.MuiTableCell-body': {
       maxWidth: 1,
       overflow: 'hidden',
       textOverflow: 'ellipsis',

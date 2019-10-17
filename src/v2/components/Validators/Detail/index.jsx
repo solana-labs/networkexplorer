@@ -13,9 +13,9 @@ import Button from 'v2/components/UI/Button';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import ValidatorName from 'v2/components/UI/ValidatorName';
-
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import ValidatorsMap from 'v2/components/ValidatorsMap';
+
 import useStyles from './styles';
 
 const ValidatorsDetail = ({match}: {match: Match}) => {

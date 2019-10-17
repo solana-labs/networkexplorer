@@ -68,7 +68,7 @@ const BlocksTable = ({
     return formatDistanceToNow(Date.parse(x), {addSuffix: true});
   };
 
-  const renderRow = block => {
+  const renderRow = ({data: block}) => {
     return (
       <TableRow hover key={block.id}>
         <TableCell align="center">

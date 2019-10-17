@@ -35,6 +35,7 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     marginBottom: -1,
+    borderBottom: `1px solid ${getColor('grey3')(theme)}`,
     [theme.breakpoints.down('sm')]: {
       padding: '10px 18px 0',
       marginBottom: 10,
@@ -84,6 +85,7 @@ export default makeStyles(theme => ({
     marginRight: 'auto',
     display: 'flex',
     alignItems: 'center',
+    marginBottom: -1,
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },

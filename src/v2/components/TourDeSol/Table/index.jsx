@@ -51,7 +51,7 @@ const ValidatorsTable = ({
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
 
-  const renderRow = row => {
+  const renderRow = ({data: row}) => {
     const {name, pubkey, avatarUrl, activatedStake, uptimePercent, rank} = row;
     return (
       <TableRow hover key={pubkey}>
