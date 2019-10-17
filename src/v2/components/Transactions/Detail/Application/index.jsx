@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import {map} from 'lodash/fp';
+import {map} from 'lodash';
 import {Grid} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import Label from 'v2/components/UI/Label';
@@ -36,7 +36,7 @@ const Application = ({id, accounts}: TApplication) => {
           </div>
         </Grid>
         <Grid item md={7}>
-          {map(renderAccount)(accounts)}
+          {map(accounts, renderAccount)}
         </Grid>
       </Grid>
     </div>
