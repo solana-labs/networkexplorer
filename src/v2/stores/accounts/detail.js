@@ -45,4 +45,4 @@ decorate(Store, {
 
 const AccountDetailStore = new Store();
 
-export default observable(AccountDetailStore);
+export default AccountDetailStore;

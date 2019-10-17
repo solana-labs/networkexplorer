@@ -36,4 +36,4 @@ decorate(Store, {
 
 const BlockDetailStore = new Store();
 
-export default observable(BlockDetailStore);
+export default BlockDetailStore;

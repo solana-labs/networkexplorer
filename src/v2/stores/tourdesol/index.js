@@ -56,4 +56,4 @@ decorate(Store, {
 
 const TourDeSolIndexStore = new Store();
 
-export default observable(TourDeSolIndexStore);
+export default TourDeSolIndexStore;

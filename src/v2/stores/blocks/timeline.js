@@ -61,4 +61,4 @@ decorate(Store, {
 
 const BlocksTimelineStore = new Store();
 
-export default observable(BlocksTimelineStore);
+export default BlocksTimelineStore;

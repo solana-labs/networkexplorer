@@ -39,4 +39,4 @@ decorate(Store, {
 
 const TransactionDetailStore = new Store();
 
-export default observable(TransactionDetailStore);
+export default TransactionDetailStore;

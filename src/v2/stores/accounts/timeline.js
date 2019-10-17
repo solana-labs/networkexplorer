@@ -1,6 +1,6 @@
 import {action, flow, observable, decorate} from 'mobx';
 import {apiGetAccountsTimelinePage} from 'v2/api/accounts';
-import _ from 'lodash';
+import {map} from 'lodash';
 
 class Store {
   isLoading = false;
@@ -34,7 +34,7 @@ class Store {
     this.res = res;
 
     this.accountTimeline = res.data;
-    this.accounts = _.map(res.data.pageData.results, x => x[1]);
+    this.accounts = map(res.data.pageData.results, x => x[1]);
     this.accountCount = res.data.pageInfo.count;
     this.next = res.data.pageData.next;
     this.prev = res.data.pageData.prev;
@@ -50,7 +50,6 @@ class Store {
 decorate(Store, {
   init: action.bound,
   start: observable,
-  accountTimeline: observable,
   accounts: observable,
   accountCount: observable,
   next: observable,
@@ -61,4 +60,4 @@ decorate(Store, {
 
 const AccountsTimelineStore = new Store();
 
-export default observable(AccountsTimelineStore);
+export default AccountsTimelineStore;
