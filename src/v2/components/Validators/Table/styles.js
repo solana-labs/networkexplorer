@@ -108,7 +108,7 @@ export default makeStyles(theme => ({
     },
   },
   tabBtn: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Exo, sans-serif',
     color: getColor('grey3')(theme),
     border: `1px solid ${getColor('grey3')(theme)}`,
