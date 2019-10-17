@@ -51,7 +51,7 @@ const ApplicationsTable = ({
     return formatDistanceToNow(Date.parse(x), {addSuffix: true});
   };
 
-  const renderRow = application => {
+  const renderRow = ({data: application}) => {
     return (
       <TableRow hover key={application.programId}>
         <TableCell>

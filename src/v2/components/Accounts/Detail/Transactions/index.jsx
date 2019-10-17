@@ -61,7 +61,7 @@ const demoData = [
 
 const Transactions = ({transactions}: {transactions: Array}) => {
   const classes = useStyles();
-  const renderRow = transaction => {
+  const renderRow = ({data: transaction}) => {
     return (
       <TableRow key={transaction.hash}>
         <TableCell>{transaction.hash}</TableCell>

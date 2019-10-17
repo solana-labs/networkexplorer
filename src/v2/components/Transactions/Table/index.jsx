@@ -69,7 +69,7 @@ const TransactionsTable = ({
     return formatDistanceToNow(Date.parse(x), {addSuffix: true});
   };
 
-  const renderRow = transaction => {
+  const renderRow = ({data: transaction}) => {
     return (
       <TableRow hover key={transaction.id}>
         <TableCell>

@@ -30,6 +30,7 @@
     "ip": "^1.1.5",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
+    "material-table": "^1.52.0",
     "mixpanel-browser": "^2.29.1",
     "mobx": "^5.14.0",
     "mobx-react-lite": "^1.5.0",

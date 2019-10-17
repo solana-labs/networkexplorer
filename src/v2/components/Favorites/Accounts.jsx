@@ -48,7 +48,7 @@ const AccountsTable = ({separate}: {separate: boolean}) => {
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
   const blocks = [];
 
-  const renderRow = application => {
+  const renderRow = ({data: application}) => {
     return (
       <TableRow hover key={application.id}>
         <TableCell align="center">

@@ -1,108 +1,91 @@
-import React, {useState} from 'react';
-import {map, get} from 'lodash/fp';
-import {
-  TableBody,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableSortLabel,
-} from '@material-ui/core';
+/* eslint-disable react/display-name */
+import React, {forwardRef} from 'react';
+import {map} from 'lodash/fp';
+import MaterialTable from 'material-table';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+import HelpLink from 'v2/components/HelpLink';
 
-import HelpLink from '../../HelpLink';
 import useStyles from './styles';
 
-function desc(a, b, orderBy) {
-  const getA = get(orderBy)(a);
-  const getB = get(orderBy)(b);
-  if (getB < getA) {
-    return -1;
-  }
-  if (getB > getA) {
-    return 1;
-  }
-  return 0;
-}
-
-function stableSort(array, cmp) {
-  const stabilizedThis = map((el, index) => [el, index])(array);
-  stabilizedThis.sort((a, b) => {
-    const order = cmp(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return map(el => el[0])(stabilizedThis);
-}
-
-function getSorting(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => desc(a, b, orderBy)
-    : (a, b) => -desc(a, b, orderBy);
-}
-
-const EnhancedTableHead = props => {
-  const classes = useStyles();
-  const {fields, order, orderBy, onRequestSort, sortable} = props;
-
-  const createSortHandler = property => event => {
-    if (!sortable) return;
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead className={classes.head}>
-      <TableRow>
-        {map(
-          headCell => (
-            <TableCell
-              key={headCell.id}
-              align={headCell.align || 'left'}
-              padding={headCell.disablePadding ? 'none' : 'default'}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              <TableSortLabel
-                hideSortIcon={!sortable}
-                active={orderBy === headCell.id}
-                direction={order}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                <HelpLink text={headCell.text} term={headCell.term} />
-              </TableSortLabel>
-            </TableCell>
-          ),
-          fields,
-        )}
-      </TableRow>
-    </TableHead>
-  );
+const tableIcons = {
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+};
+const tableStyle = {
+  backgroundColor: 'transparent',
+};
+const headerStyle = {
+  fontSize: 15,
+  textTransform: 'uppercase',
+  fontWeight: 'bold',
+  backgroundColor: 'transparent',
+  letterSpacing: 2,
 };
 
 const EnhancedTable = props => {
   const classes = useStyles();
-  const {data = [], fields, renderRow, initialSort = ''} = props;
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = React.useState(initialSort);
-  const handleRequestSort = (event, property) => {
-    const isDesc = orderBy === property && order === 'desc';
-    setOrder(isDesc ? 'asc' : 'desc');
-    setOrderBy(property);
-  };
-
+  const {data = [], fields, renderRow, ...rest} = props;
+  const columns = map(({label, id: field, text, term, ...rest}) => ({
+    title: (
+      <div style={{whiteSpace: 'nowrap'}}>
+        {label} <HelpLink text={text} term={term} />
+      </div>
+    ),
+    field,
+    ...rest,
+  }))(fields);
   return (
-    <Table className={classes.root}>
-      <EnhancedTableHead
-        sortable={Boolean(initialSort)}
-        classes={classes}
-        order={order}
-        orderBy={orderBy}
-        onRequestSort={handleRequestSort}
-        fields={fields}
+    <div className={classes.root}>
+      <MaterialTable
+        style={tableStyle}
+        icons={tableIcons}
+        columns={columns}
+        data={data}
+        components={{
+          Row: renderRow,
+        }}
+        options={{
+          search: false,
+          toolbar: false,
+          paging: false,
+          headerStyle,
+        }}
+        {...rest}
       />
-      <TableBody>
-        {map(renderRow)(stableSort(data, getSorting(order, orderBy)))}
-      </TableBody>
-    </Table>
+    </div>
   );
 };
 
