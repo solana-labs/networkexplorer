@@ -7,19 +7,14 @@ import SectionHeader from 'v2/components/UI/SectionHeader';
 import AccountsTimelineStore from 'v2/stores/accounts/timeline';
 import formatNum from 'v2/utils/formatNum';
 import CTypography from 'v2/components/UI/CTypography';
+import {Link, Match} from 'react-router-dom';
+
 import Table from './Table';
 import useStyles from './styles';
-import {Link, Match} from 'react-router-dom';
 
 const AccountsPage = ({match}: {match: Match}) => {
   const classes = useStyles();
-  const {
-    accounts,
-    accountCount,
-    start,
-    next,
-    prev,
-  } = AccountsTimelineStore;
+  const {accounts, accountCount, start, next, prev} = AccountsTimelineStore;
 
   if (start !== match.params.start) {
     AccountsTimelineStore.init({start: match.params.start});

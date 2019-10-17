@@ -2,6 +2,7 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import {TableCell, TableRow} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import Table from 'v2/components/UI/Table';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 
@@ -64,16 +65,26 @@ const Transactions = ({transactions}: {transactions: Array}) => {
     return (
       <TableRow key={transaction.hash}>
         <TableCell>{transaction.hash}</TableCell>
-        <TableCell>{transaction.block}</TableCell>
         <TableCell>
-          {transaction.time}
-          <span className={classes.timeType}>{transaction.timeType}</span>
+          <Link to={`/blocks/${transaction.block}`}>{transaction.block}</Link>
         </TableCell>
-        <TableCell>{transaction.application_id}</TableCell>
         <TableCell>
-          <TypeLabel type={transaction.type} label={transaction.type} />
+          <div>
+            {transaction.time}
+            <span className={classes.timeType}>{transaction.timeType}</span>
+          </div>
         </TableCell>
-        <TableCell>{transaction.confirmations}</TableCell>
+        <TableCell>
+          <Link to={`/applications/${transaction.application_id}`}>
+            {transaction.application_id}
+          </Link>
+        </TableCell>
+        <TableCell>
+          <div>
+            <TypeLabel type={transaction.type} label={transaction.type} />
+          </div>
+        </TableCell>
+        <TableCell width={200}>{transaction.confirmations}</TableCell>
       </TableRow>
     );
   };

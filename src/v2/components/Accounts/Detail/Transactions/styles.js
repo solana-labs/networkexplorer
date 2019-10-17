@@ -9,6 +9,6 @@ export default makeStyles(theme => ({
     borderRadius: 2,
     color: getColor('dark')(theme),
     padding: '2px 10px',
-    marginLeft: 20,
+    marginLeft: 10,
   },
 }));
