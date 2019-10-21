@@ -3,19 +3,20 @@ import * as solanaWeb3 from '@solana/web3.js';
 import {FriendlyGet} from '../../friendlyGet';
 import {FULLNODE_URL} from '../../fullnode-url';
 
-async function loadAccountTimestamp(redisX, accountId) {
-  const result = await redisX.zscoreAsync('!__recent:accounts', accountId);
+async function loadProgramTimestamp(redisX, programId) {
+  const result = await redisX.zscoreAsync('!__recent:programs', programId);
 
   return result;
 }
 
 /**
- * loadAccountDetail: retrieves raw data about an account from the data store and returns it for formatting
+ * loadProgramDetail: retrieves raw data about a program from the data store and returns it for formatting
+ *
  * @param redisX
- * @param accountId
+ * @param programId
  * @returns {Promise<{accountInfo: *, __errors__: *, programAccounts: *, programId: *, timestamp: *}>}
  */
-export async function loadAccountDetail(redisX, accountId) {
+export async function loadProgramDetail(redisX, programId) {
   const connection = new solanaWeb3.Connection(FULLNODE_URL);
 
   const {
@@ -26,18 +27,18 @@ export async function loadAccountDetail(redisX, accountId) {
   } = await new FriendlyGet()
     .with(
       'accountInfo',
-      connection.getAccountInfo(new solanaWeb3.PublicKey(accountId)),
+      connection.getAccountInfo(new solanaWeb3.PublicKey(programId)),
     )
     .with(
       'programAccounts',
-      connection.getProgramAccounts(new solanaWeb3.PublicKey(accountId)),
+      connection.getProgramAccounts(new solanaWeb3.PublicKey(programId)),
     )
-    .with('timestamp', loadAccountTimestamp(redisX, accountId))
+    .with('timestamp', loadProgramTimestamp(redisX, programId))
     .get();
 
   return {
     __errors__,
-    accountId,
+    programId,
     accountInfo,
     programAccounts,
     timestamp,

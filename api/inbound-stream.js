@@ -313,13 +313,13 @@ class RedisHandler {
             // NEW
             this.redisTimelineImprovedPush(
               commands,
-              `!__timeline:application:${instruction.program_id}`,
+              `!__timeline:program:${instruction.program_id}`,
               txnMsg,
             );
             // NEW
             this.redisRecencySetPush(
               commands,
-              `!__recent:applications`,
+              `!__recent:programs`,
               instruction.program_id,
               now_score,
             );

@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
 /**
- * ApplicationIndexView : supports the application index page
+ * ProgramIndexView : supports the program index page
  *
  * Changes:
  *   - 20190912.01 : initial version
  */
-const __VERSION__ = 'ApplicationIndexView@1.0.0';
-export class ApplicationIndexView {
+const __VERSION__ = 'ProgramIndexView@1.0.0';
+export class ProgramIndexView {
   asVersion(rawData, __errors__, version) {
     if (__errors__) {
       return {
@@ -52,7 +52,7 @@ export class ApplicationIndexView {
       timestamp: timelineInfo.dt,
     };
 
-    if (version === 'ApplicationIndexView@latest' || version === __VERSION__) {
+    if (version === 'ProgramIndexView@latest' || version === __VERSION__) {
       return {
         __VERSION__,
         pageData,

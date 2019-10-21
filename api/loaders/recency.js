@@ -4,7 +4,7 @@ export const MAX_PAGE_SIZE = 1000;
 export const DEFAULT_PAGE_SIZE = 100;
 
 /**
- * getRecencySetInfo: obtain description of recent accounts/applications set
+ * getRecencySetInfo: obtain description of recent accounts/programs set
  *
  * @param redisX
  * @param timeline
@@ -59,7 +59,7 @@ export async function getRecencySetInfo(
 }
 
 /**
- * getRecencySetPage: get one page of recent accounts/applications index
+ * getRecencySetPage: get one page of recent accounts/programs index
  *
  * @param redisX
  * @param timeline

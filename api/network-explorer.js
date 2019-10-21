@@ -3,8 +3,8 @@ import {BlockIndexView} from './views/blocks/index';
 import {BlockDetailView} from './views/blocks/detail';
 import {TransactionIndexView} from './views/transactions/index';
 import {TransactionDetailView} from './views/transactions/detail';
-import {ApplicationIndexView} from './views/applications/index';
-import {ApplicationDetailView} from './views/applications/detail';
+import {ProgramIndexView} from './views/programs/index';
+import {ProgramDetailView} from './views/programs/detail';
 import {AccountIndexView} from './views/accounts/index';
 import {AccountDetailView} from './views/accounts/detail';
 import {DEFAULT_PAGE_SIZE} from './loaders/timeline';
@@ -13,8 +13,8 @@ import {loadBlockIndex} from './loaders/blocks/index';
 import {loadBlockDetail} from './loaders/blocks/detail';
 import {loadTransactionIndex} from './loaders/transactions/index';
 import {loadTransactionDetail} from './loaders/transactions/detail';
-import {loadApplicationIndex} from './loaders/applications/index';
-import {loadApplicationDetail} from './loaders/applications/detail';
+import {loadProgramIndex} from './loaders/programs/index';
+import {loadProgramDetail} from './loaders/programs/detail';
 import {loadAccountIndex} from './loaders/accounts/index';
 import {loadAccountDetail} from './loaders/accounts/detail';
 import {FriendlyGet} from './friendlyGet';
@@ -139,18 +139,18 @@ export function addNetworkExplorerRoutes(redisX, app) {
     );
   });
 
-  // Network Explorer Applications Index
-  app.get('/explorer/applications/index', async (req, res) => {
+  // Network Explorer Programs Index
+  app.get('/explorer/programs/index', async (req, res) => {
     const q = req.query || {};
 
-    const version = q.v || 'ApplicationIndexView@latest';
+    const version = q.v || 'ProgramIndexView@latest';
     const start = q.start || '';
     const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
     const direction = q.direction || '-';
     const {__errors__, rawData} = await new FriendlyGet()
       .with(
         'rawData',
-        loadApplicationIndex(redisX, start, count, direction),
+        loadProgramIndex(redisX, start, count, direction),
         {},
       )
       .get();
@@ -158,20 +158,20 @@ export function addNetworkExplorerRoutes(redisX, app) {
     res.send(
       prettify(
         req,
-        new ApplicationIndexView().asVersion(rawData, __errors__, version),
+        new ProgramIndexView().asVersion(rawData, __errors__, version),
       ),
     );
   });
 
-  // Network Explorer Application Detail
-  app.get('/explorer/applications/:id', async (req, res) => {
+  // Network Explorer Program Detail
+  app.get('/explorer/programs/:id', async (req, res) => {
     const q = req.query || {};
 
-    const version = q.v || 'ApplicationDetailView@latest';
+    const version = q.v || 'ProgramDetailView@latest';
     const {__errors__, rawData} = await new FriendlyGet()
       .with(
         'rawData',
-        loadApplicationDetail(redisX, req.params.id, version),
+        loadProgramDetail(redisX, req.params.id, version),
         {},
       )
       .get();
@@ -179,7 +179,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
     res.send(
       prettify(
         req,
-        new ApplicationDetailView().asVersion(rawData, __errors__, version),
+        new ProgramDetailView().asVersion(rawData, __errors__, version),
       ),
     );
   });
