@@ -51,12 +51,7 @@ class Bx2NavDrawer extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Tour De Sol" />
           </ListItem>
-          <ListItem
-            button
-            key="Programs"
-            component={Link}
-            to="/v2/programs"
-          >
+          <ListItem button key="Programs" component={Link} to="/v2/programs">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>

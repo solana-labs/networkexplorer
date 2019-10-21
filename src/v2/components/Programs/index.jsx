@@ -13,13 +13,7 @@ import {Link, Match} from 'react-router-dom';
 
 const ProgramsPage = ({match}: {match: Match}) => {
   const classes = useStyles();
-  const {
-    programs,
-    programCount,
-    start,
-    next,
-    prev,
-  } = ProgramsTimelineStore;
+  const {programs, programCount, start, next, prev} = ProgramsTimelineStore;
 
   if (start !== match.params.start) {
     ProgramsTimelineStore.init({start: match.params.start});
