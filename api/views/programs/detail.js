@@ -3,14 +3,14 @@ import Base58 from 'base-58';
 const b58e = Base58.encode;
 
 /**
- * ApplicationDetailView : supports the application detail page
+ * ProgramDetailView : supports the program detail page
  *
  * Changes:
  *   - 20190912.01 : initial version
  */
-const __VERSION__ = 'ApplicationDetailView@1.0.0';
+const __VERSION__ = 'ProgramDetailView@1.0.0';
 
-export class ApplicationDetailView {
+export class ProgramDetailView {
   asVersion(rawData, __errors__, version) {
     if (__errors__) {
       return {
@@ -19,7 +19,7 @@ export class ApplicationDetailView {
       };
     }
 
-    const applicationId = rawData.applicationId;
+    const programId = rawData.programId;
 
     const accountInfo = rawData.accountInfo && {
       data: rawData.accountInfo.data.toString(),
@@ -42,13 +42,13 @@ export class ApplicationDetailView {
 
     const data = {
       __VERSION__,
-      applicationId,
+      programId,
       accountInfo,
       programAccounts,
       timestamp: rawData.timestamp && new Date(parseInt(rawData.timestamp)),
     };
 
-    if (version === 'ApplicationDetailView@latest' || version === __VERSION__) {
+    if (version === 'ProgramDetailView@latest' || version === __VERSION__) {
       return data;
     }
 
