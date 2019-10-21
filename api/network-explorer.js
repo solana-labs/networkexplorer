@@ -148,11 +148,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
     const count = q.count ? parseInt(q.count) : DEFAULT_PAGE_SIZE;
     const direction = q.direction || '-';
     const {__errors__, rawData} = await new FriendlyGet()
-      .with(
-        'rawData',
-        loadProgramIndex(redisX, start, count, direction),
-        {},
-      )
+      .with('rawData', loadProgramIndex(redisX, start, count, direction), {})
       .get();
 
     res.send(
@@ -169,11 +165,7 @@ export function addNetworkExplorerRoutes(redisX, app) {
 
     const version = q.v || 'ProgramDetailView@latest';
     const {__errors__, rawData} = await new FriendlyGet()
-      .with(
-        'rawData',
-        loadProgramDetail(redisX, req.params.id, version),
-        {},
-      )
+      .with('rawData', loadProgramDetail(redisX, req.params.id, version), {})
       .get();
 
     res.send(

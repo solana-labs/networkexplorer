@@ -9,7 +9,7 @@ const PROGRAM_DETAIL_VERSION = 'ProgramDetailView@1.0.0';
 export function apiGetProgramDetail({programId, version}) {
   return api(
     `/explorer/programs/${encodeURIComponent(programId)}?v=${version ||
-    PROGRAM_DETAIL_VERSION}`,
+      PROGRAM_DETAIL_VERSION}`,
   );
 }
 
