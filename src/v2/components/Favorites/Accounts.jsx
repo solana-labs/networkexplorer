@@ -48,11 +48,11 @@ const AccountsTable = ({separate}: {separate: boolean}) => {
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
   const blocks = [];
 
-  const renderRow = ({data: application}) => {
+  const renderRow = ({data: program}) => {
     return (
-      <TableRow hover key={application.id}>
+      <TableRow hover key={program.id}>
         <TableCell align="center">
-          <Link to={`/applications/${application.id}`} className={classes.name}>
+          <Link to={`/programs/${program.id}`} className={classes.name}>
             7887319
           </Link>
         </TableCell>
@@ -84,7 +84,7 @@ const AccountsTable = ({separate}: {separate: boolean}) => {
             {map(renderRow)(blocks)}
             <TableRow hover>
               <TableCell align="center">
-                <Link to={`/applications/1234`} className={classes.name}>
+                <Link to={`/programs/1234`} className={classes.name}>
                   7887319
                 </Link>
               </TableCell>
@@ -99,7 +99,7 @@ const AccountsTable = ({separate}: {separate: boolean}) => {
           <div className={classes.card}>
             <ul>
               <li>
-                <div className={classes.cardTitle}>Application id</div>
+                <div className={classes.cardTitle}>Program id</div>
                 <div>7887219</div>
               </li>
               <li>

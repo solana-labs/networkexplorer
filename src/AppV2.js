@@ -29,9 +29,9 @@ const Transactions = lazy(() => import('v2/components/Transactions'));
 const TransactionDetail = lazy(() =>
   import('v2/components/Transactions/Detail'),
 );
-const Applications = lazy(() => import('v2/components/Applications'));
-const ApplicationDetail = lazy(() =>
-  import('v2/components/Applications/Detail'),
+const Programs = lazy(() => import('v2/components/Programs'));
+const ProgramDetail = lazy(() =>
+  import('v2/components/Programs/Detail'),
 );
 const Accounts = lazy(() => import('v2/components/Accounts'));
 const AccountDetail = lazy(() => import('v2/components/Accounts/Detail'));
@@ -134,22 +134,22 @@ const App = () => {
                   path="/transactions/:id"
                   component={TransactionDetail}
                 />
-                <Route exact path="/applications" component={Applications} />
+                <Route exact path="/programs" component={Programs} />
                 <Route
                   exact
-                  path="/applications/timeline/:start"
-                  component={Applications}
+                  path="/programs/timeline/:start"
+                  component={Programs}
                 />
                 <Route
                   exact
-                  path="/applications/:id"
-                  component={ApplicationDetail}
+                  path="/programs/:id"
+                  component={ProgramDetail}
                 />
                 <Route exact path="/accounts" component={Accounts} />
                 <Route
                   exact
                   path="/accounts/timeline/:start"
-                  component={Applications}
+                  component={Accounts}
                 />
                 <Route exact path="/accounts/:id" component={AccountDetail} />
                 <Route exact path="/favorites" component={Favorites} />

@@ -35,8 +35,8 @@ const fields: TableHeadProps[] = [
     term: '',
   },
   {
-    label: 'application id',
-    name: 'application id',
+    label: 'program id',
+    name: 'program id',
     text: '',
     term: '',
   },
@@ -83,7 +83,7 @@ const TransactionsTable = ({
         <TableCell width={135}>{asTime(transaction.timestamp)}</TableCell>
         <TableCell width={230}>
           <Link
-            to={`/applications/${transaction.instructions[0].programId}`}
+            to={`/programs/${transaction.instructions[0].programId}`}
             className={classes.name}
           >
             {transaction.instructions[0].programId}
@@ -128,9 +128,9 @@ const TransactionsTable = ({
             </div>
           </li>
           <li>
-            <div className={classes.cardTitle}>Application ID</div>
+            <div className={classes.cardTitle}>Program ID</div>
             <Link
-              to={`/applications/${transaction.instructions[0].programId}`}
+              to={`/programs/${transaction.instructions[0].programId}`}
               className={classes.name}
             >
               <div>{transaction.instructions[0].programId}</div>

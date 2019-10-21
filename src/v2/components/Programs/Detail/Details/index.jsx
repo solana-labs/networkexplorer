@@ -6,7 +6,7 @@ import {observer} from 'mobx-react-lite';
 import {Table, TableBody, TableCell, TableRow} from '@material-ui/core';
 import ValidatorName from 'v2/components/UI/ValidatorName';
 
-const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
+const ProgramDetails = ({programAccounts}: {programAccounts: Object}) => {
   const renderAccount = (account, i) => {
     return (
       <TableRow key={account.pubkey}>
@@ -32,4 +32,4 @@ const ApplicationDetails = ({programAccounts}: {programAccounts: Object}) => {
   );
 };
 
-export default observer(ApplicationDetails);
+export default observer(ProgramDetails);

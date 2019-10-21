@@ -5,23 +5,23 @@ import {observer} from 'mobx-react-lite';
 import useStyles from './styles';
 import YAML from 'yaml';
 
-const ApplicationCode = ({applicationView}: {applicationView: Object}) => {
+const ProgramCode = ({programView}: {programView: Object}) => {
   const classes = useStyles();
-  const applicationCode = YAML.stringify(applicationView);
+  const programCode = YAML.stringify(programView);
 
   return (
     <div>
       <div className={classes.header}>
-        <CopyBtn text={applicationCode} />
+        <CopyBtn text={programCode} />
         <HelpLink text="" term="" />
       </div>
       <div className={classes.code}>
         <code>
-          <code>{applicationCode}</code>
+          <code>{programCode}</code>
         </code>
       </div>
     </div>
   );
 };
 
-export default observer(ApplicationCode);
+export default observer(ProgramCode);

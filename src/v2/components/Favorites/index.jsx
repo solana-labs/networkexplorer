@@ -5,7 +5,7 @@ import {eq, map} from 'lodash/fp';
 import React, {useState} from 'react';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import TabNav from 'v2/components/UI/TabNav';
-import ApplicationsTable from 'v2/components/Applications/Table';
+import ProgramsTable from 'v2/components/Programs/Table';
 import {ReactComponent as WarnIcon} from 'v2/assets/icons/warn.svg';
 
 import AccountsTable from './Accounts';
@@ -13,11 +13,11 @@ import useStyles from './styles';
 
 const TransactionsPage = () => {
   const classes = useStyles();
-  const [tab, setTab] = useState('applications');
+  const [tab, setTab] = useState('programs');
   const theme = useTheme();
   const verticalTabs = useMediaQuery(theme.breakpoints.down('xs'));
   const handleTabChange = (event, tab) => setTab(tab);
-  const tabNav = ['applications', 'accounts'];
+  const tabNav = ['programs', 'accounts'];
   const renderTabNav = label => (
     <TabNav key={label} label={label} value={label} />
   );
@@ -40,7 +40,7 @@ const TransactionsPage = () => {
       >
         {map(renderTabNav)(tabNav)}
       </Tabs>
-      {eq('applications', tab) && <ApplicationsTable />}
+      {eq('programs', tab) && <ProgramsTable />}
       {eq('accounts', tab) && <AccountsTable />}
     </Container>
   );

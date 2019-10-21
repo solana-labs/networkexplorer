@@ -1,5 +1,5 @@
 import {action, flow, observable, decorate} from 'mobx';
-import {apiGetApplicationsTimelinePage} from 'v2/api/applications';
+import {apiGetProgramsTimelinePage} from 'v2/api/programs';
 import _ from 'lodash';
 
 class Store {
@@ -8,20 +8,20 @@ class Store {
   count = null;
   direction = null;
   res = {};
-  applications = [];
-  applicationTimeline = {};
-  applicationCount = null;
+  programs = [];
+  programTimeline = {};
+  programCount = null;
   next = null;
   prev = null;
 
   init = flow(function*({start, count, direction}) {
     if (
-      this.applicationTimeline.pageInfo &&
+      this.programTimeline.pageInfo &&
       start === this.start &&
       count === this.count &&
       direction === this.direction
     ) {
-      return this.applicationTimeline;
+      return this.programTimeline;
     }
 
     this.setLoading(true);
@@ -29,13 +29,13 @@ class Store {
     this.count = count;
     this.direction = direction;
 
-    const res = yield apiGetApplicationsTimelinePage({start, count, direction});
+    const res = yield apiGetProgramsTimelinePage({start, count, direction});
 
     this.res = res;
 
-    this.applicationTimeline = res.data;
-    this.applications = _.map(res.data.pageData.results, x => x[1]);
-    this.applicationCount = res.data.pageInfo.count;
+    this.programTimeline = res.data;
+    this.programs = _.map(res.data.pageData.results, x => x[1]);
+    this.programCount = res.data.pageInfo.count;
     this.next = res.data.pageData.next;
     this.prev = res.data.pageData.prev;
     this.setLoading(false);
@@ -50,15 +50,15 @@ class Store {
 decorate(Store, {
   init: action.bound,
   start: observable,
-  applicationTimeline: observable,
-  applications: observable,
-  applicationCount: observable,
+  programTimeline: observable,
+  programs: observable,
+  programCount: observable,
   next: observable,
   prev: observable,
   setLoading: action.bound,
   isLoading: observable,
 });
 
-const ApplicationsTimelineStore = new Store();
+const ProgramsTimelineStore = new Store();
 
-export default ApplicationsTimelineStore;
+export default ProgramsTimelineStore;

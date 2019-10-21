@@ -15,8 +15,8 @@ import TransactionDetailStore from 'v2/stores/transactions/detail';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {Link, Match} from 'react-router-dom';
 
-import ApplicationsTab from './ApplicationsTab';
-import ApplicationStatus from './Status';
+import ProgramsTab from './ProgramsTab';
+import ProgramStatus from './Status';
 import useStyles from './styles';
 import TransactionCode from './Code';
 
@@ -107,7 +107,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
   const programs = _.values(programMap);
 
   const tabNav = [
-    `Applications: ${programs.length}`,
+    `Programs: ${programs.length}`,
     'status: success',
     'code/source',
   ];
@@ -137,8 +137,8 @@ const TransactionDetail = ({match}: {match: Match}) => {
         >
           {map(renderTabNav)(tabNav)}
         </Tabs>
-        {eq(0, tab) && <ApplicationsTab transaction={transaction} />}
-        {eq(1, tab) && <ApplicationStatus transaction={transaction} />}
+        {eq(0, tab) && <ProgramsTab transaction={transaction} />}
+        {eq(1, tab) && <ProgramStatus transaction={transaction} />}
         {eq(2, tab) && <TransactionCode transactionView={transactionView} />}
       </div>
     </Container>

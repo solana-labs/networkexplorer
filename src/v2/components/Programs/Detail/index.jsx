@@ -12,28 +12,28 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import Loader from 'v2/components/UI/Loader';
-import ApplicationDetailStore from 'v2/stores/applications/detail';
+import ProgramDetailStore from 'v2/stores/programs/detail';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 
 import TabNav from '../../UI/TabNav';
-import ApplicationDetails from './Details';
-import ApplicationCode from './Code';
+import ProgramDetails from './Details';
+import ProgramCode from './Code';
 import useStyles from './styles';
 
-const ApplicationDetail = ({match}: {match: Match}) => {
+const ProgramDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
   const {
     isLoading,
-    applicationId,
+    programId,
     accountInfo,
     programAccounts,
-    applicationView,
+    programView,
     timestamp,
-  } = ApplicationDetailStore;
+  } = ProgramDetailStore;
 
-  if (applicationId !== match.params.id) {
-    ApplicationDetailStore.init({applicationId: match.params.id});
+  if (programId !== match.params.id) {
+    ProgramDetailStore.init({programId: match.params.id});
   }
 
   const asTime = x => {
@@ -108,10 +108,10 @@ const ApplicationDetail = ({match}: {match: Match}) => {
   return (
     <Container>
       <div className={classes.root}>
-        <SectionHeader title="Application Detail">
-          <div className={classes.applicationTitle}>
-            <span>{applicationId}</span>
-            <CopyBtn text={applicationId} />
+        <SectionHeader title="Program Detail">
+          <div className={classes.programTitle}>
+            <span>{programId}</span>
+            <CopyBtn text={programId} />
             <QRPopup url={url} />
             <IconButton size="small">
               <StarIcon />
@@ -131,11 +131,11 @@ const ApplicationDetail = ({match}: {match: Match}) => {
         >
           {map(renderTabNav)(tabNav)}
         </Tabs>
-        {eq(0, tab) && <ApplicationDetails programAccounts={programAccounts} />}
-        {eq(1, tab) && <ApplicationCode applicationView={applicationView} />}
+        {eq(0, tab) && <ProgramDetails programAccounts={programAccounts} />}
+        {eq(1, tab) && <ProgramCode programView={programView} />}
       </div>
     </Container>
   );
 };
 
-export default observer(ApplicationDetail);
+export default observer(ProgramDetail);

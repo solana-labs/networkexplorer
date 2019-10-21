@@ -8,12 +8,12 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 
 import useStyles from './styles';
 
-type TApplication = {
+type TProgram = {
   id: string,
   accounts: string[],
 };
 
-const Application = ({id, accounts}: TApplication) => {
+const Program = ({id, accounts}: TProgram) => {
   const classes = useStyles();
   const renderAccount = account => (
     <div className={classes.account}>
@@ -34,7 +34,7 @@ const Application = ({id, accounts}: TApplication) => {
     <div className={classes.root}>
       <Grid container>
         <Grid item sm={5}>
-          <Label text="Application id" hint="" />
+          <Label text="Program id" hint="" />
           <div className={classes.id}>
             <div className={classes.address}>{id}</div>
             <TypeLabel type="other" label="other" />
@@ -50,4 +50,4 @@ const Application = ({id, accounts}: TApplication) => {
   );
 };
 
-export default Application;
+export default Program;
