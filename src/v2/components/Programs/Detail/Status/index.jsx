@@ -7,7 +7,7 @@ import HelpLink from 'v2/components/HelpLink';
 import Label from '../../../UI/Label';
 import useStyles from './styles';
 
-const ApplicationStatus = () => {
+const ProgramStatus = () => {
   const classes = useStyles();
   const specs = [
     {
@@ -43,4 +43,4 @@ const ApplicationStatus = () => {
   );
 };
 
-export default ApplicationStatus;
+export default ProgramStatus;

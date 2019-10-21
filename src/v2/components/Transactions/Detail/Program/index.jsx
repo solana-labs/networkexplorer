@@ -9,12 +9,12 @@ import ValidatorName from 'v2/components/UI/ValidatorName';
 
 import useStyles from './styles';
 
-type TApplication = {
+type TProgram = {
   id: string,
   accounts: string[],
 };
 
-const Application = ({id, accounts}: TApplication) => {
+const Program = ({id, accounts}: TProgram) => {
   const classes = useStyles();
   const renderAccount = (account, i) => (
     <div className={classes.account}>
@@ -26,10 +26,10 @@ const Application = ({id, accounts}: TApplication) => {
     <div className={classes.root}>
       <Grid container spacing={5}>
         <Grid item md={5}>
-          <Label text="Application id" hint="" />
+          <Label text="Program id" hint="" />
           <div className={classes.id}>
             <div>
-              <Link to={`/applications/${id}`}>{id}</Link>
+              <Link to={`/programs/${id}`}>{id}</Link>
             </div>
             <TypeLabel type="other" label="TODO:" />
             <TypeLabel type="consensus" label="TODO:" />
@@ -43,4 +43,4 @@ const Application = ({id, accounts}: TApplication) => {
   );
 };
 
-export default Application;
+export default Program;

@@ -1,25 +1,25 @@
 import {action, flow, observable, decorate} from 'mobx';
-import {apiGetApplicationDetail} from 'v2/api/applications';
+import {apiGetProgramDetail} from 'v2/api/programs';
 
 class Store {
   isLoading = false;
-  applicationId = null;
-  applicationView = {};
+  programId = null;
+  programView = {};
   accountInfo = {};
   programAccounts = [];
   timestamp = null;
 
-  init = flow(function*({applicationId}) {
+  init = flow(function*({programId}) {
     this.setLoading(true);
-    this.applicationId = applicationId;
+    this.programId = programId;
 
     if (this.accountInfo.pubkey) {
       return this.accountInfo;
     }
 
-    const res = yield apiGetApplicationDetail({applicationId});
+    const res = yield apiGetProgramDetail({programId});
 
-    this.applicationView = res.data;
+    this.programView = res.data;
     this.accountInfo = res.data.accountInfo;
     this.programAccounts.replace(res.data.programAccounts);
     this.timestamp = res.data.timestamp;
@@ -38,11 +38,11 @@ decorate(Store, {
   isLoading: observable,
   accountInfo: observable,
   programAccounts: observable,
-  applicationId: observable,
+  programId: observable,
   timestamp: observable,
-  applicationView: observable,
+  programView: observable,
 });
 
-const ApplicationDetailStore = new Store();
+const ProgramDetailStore = new Store();
 
-export default ApplicationDetailStore;
+export default ProgramDetailStore;

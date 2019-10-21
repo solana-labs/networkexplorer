@@ -24,7 +24,7 @@ import {ReactComponent as dashboard} from './assets/dashboard.svg';
 import {ReactComponent as transactions} from './assets/transactions.svg';
 import {ReactComponent as validators} from './assets/validators.svg';
 import {ReactComponent as tourdesol} from './assets/tourdesol.svg';
-import {ReactComponent as applications} from './assets/applications.svg';
+import {ReactComponent as programs} from './assets/programs.svg';
 import {ReactComponent as blocks} from './assets/blocks.svg';
 import {ReactComponent as favorites} from './assets/favorites.svg';
 import useStyles from './styles';
@@ -34,7 +34,7 @@ const icons = {
   transactions,
   validators,
   tourdesol,
-  applications,
+  programs,
   blocks,
   favorites,
 };
@@ -44,7 +44,7 @@ const navTracks = {
   transactions: 'Clicked Transactions Page',
   validators: 'Clicked Validators Page',
   tourdesol: 'Clicked TDS Page',
-  applications: 'Clicked Applications page',
+  programs: 'Clicked Programs page',
   blocks: 'Clicked Blocks page',
   favorites: 'Clicked Favorites page',
 };
@@ -82,7 +82,7 @@ const NavBar = ({
       disabled: true,
     },
     {
-      link: 'applications',
+      link: 'programs',
       disabled: true,
     },
     {

@@ -23,7 +23,7 @@ const ViewAll = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Button variant="contained" size="large" fullWidth color="primary">
-              View all applications
+              View all programs
             </Button>
           </Grid>
           <Grid item xs={12} sm={4}>

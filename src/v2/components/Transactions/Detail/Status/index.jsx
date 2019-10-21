@@ -6,7 +6,7 @@ import Label from 'v2/components/UI/Label';
 
 import useStyles from './styles';
 
-const ApplicationStatus = ({transaction}) => {
+const ProgramStatus = ({transaction}) => {
   const classes = useStyles();
   const specs = [
     {
@@ -42,4 +42,4 @@ const ApplicationStatus = ({transaction}) => {
   );
 };
 
-export default ApplicationStatus;
+export default ProgramStatus;

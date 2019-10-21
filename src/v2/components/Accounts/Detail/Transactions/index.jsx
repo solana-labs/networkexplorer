@@ -28,8 +28,8 @@ const fields = [
     term: '',
   },
   {
-    id: 'application_id',
-    label: 'Application Id',
+    id: 'program_id',
+    label: 'Program Id',
     text: '',
     term: '',
   },
@@ -53,7 +53,7 @@ const demoData = [
     block: '7887219',
     time: '55 sec ago',
     timeType: 'in',
-    application_id: '5CpdpKwKUBJgD4Bdase123as12asd21312',
+    program_id: '5CpdpKwKUBJgD4Bdase123as12asd21312',
     type: 'other',
     confirmations: 5,
   },
@@ -75,8 +75,8 @@ const Transactions = ({transactions}: {transactions: Array}) => {
           </div>
         </TableCell>
         <TableCell>
-          <Link to={`/applications/${transaction.application_id}`}>
-            {transaction.application_id}
+          <Link to={`/programs/${transaction.program_id}`}>
+            {transaction.program_id}
           </Link>
         </TableCell>
         <TableCell>

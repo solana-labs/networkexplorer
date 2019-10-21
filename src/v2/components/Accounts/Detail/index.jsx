@@ -82,7 +82,7 @@ const AccountDetail = ({match}: {match: Match}) => {
     <Container>
       <div className={classes.root}>
         <SectionHeader title="Account Detail">
-          <div className={classes.applicationTitle}>
+          <div className={classes.programTitle}>
             <span>{accountId}</span>
             <CopyBtn text={accountId} />
             <QRPopup url={url} />

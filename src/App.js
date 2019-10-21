@@ -743,10 +743,10 @@ class App extends Component {
                 )}
               />
               <Route
-                path="/v2/applications"
+                path="/v2/programs"
                 exact
                 render={() => (
-                  <Bx2BlankComponentThemed message="Hello Applications" />
+                  <Bx2BlankComponentThemed message="Hello Programs" />
                 )}
               />
               <Route

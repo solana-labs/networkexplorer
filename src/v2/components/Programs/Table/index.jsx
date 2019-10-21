@@ -17,8 +17,8 @@ import useStyles from './styles';
 
 const fields: TableHeadProps[] = [
   {
-    label: 'Application Id',
-    name: 'Application Id',
+    label: 'Program Id',
+    name: 'Program Id',
     text: '',
     term: '',
   },
@@ -36,12 +36,12 @@ const fields: TableHeadProps[] = [
   },
 ];
 
-const ApplicationsTable = ({
+const ProgramsTable = ({
   separate,
-  applications,
+  programs,
 }: {
   separate: boolean,
-  applications: Array,
+  programs: Array,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -51,12 +51,12 @@ const ApplicationsTable = ({
     return formatDistanceToNow(Date.parse(x), {addSuffix: true});
   };
 
-  const renderRow = ({data: application}) => {
+  const renderRow = ({data: program}) => {
     return (
-      <TableRow hover key={application.programId}>
+      <TableRow hover key={program.programId}>
         <TableCell>
-          <Link to={`/applications/${application.programId}`}>
-            {application.programId}
+          <Link to={`/programs/${program.programId}`}>
+            {program.programId}
           </Link>
         </TableCell>
         <TableCell>
@@ -64,20 +64,20 @@ const ApplicationsTable = ({
             <TypeLabel type="other" label="TODO" />
           </div>
         </TableCell>
-        <TableCell title={application.timestamp}>
-          {asTime(application.timestamp)}
+        <TableCell title={program.timestamp}>
+          {asTime(program.timestamp)}
         </TableCell>
       </TableRow>
     );
   };
 
-  const renderCard = application => {
+  const renderCard = program => {
     return (
       <div className={classes.card}>
         <ul>
           <li>
-            <div className={classes.cardTitle}>Application id</div>
-            <div>{application.programId}</div>
+            <div className={classes.cardTitle}>Program id</div>
+            <div>{program.programId}</div>
           </li>
           <li>
             <div className={classes.cardTitle}>Type</div>
@@ -87,8 +87,8 @@ const ApplicationsTable = ({
           </li>
           <li>
             <div className={classes.cardTitle}>Time</div>
-            <div title={application.timestamp}>
-              {asTime(application.timestamp)}
+            <div title={program.timestamp}>
+              {asTime(program.timestamp)}
             </div>
           </li>
         </ul>
@@ -99,14 +99,14 @@ const ApplicationsTable = ({
   return (
     <div className={classes.root}>
       {showTable ? (
-        <Table fields={fields} renderRow={renderRow} data={applications} />
+        <Table fields={fields} renderRow={renderRow} data={programs} />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          {map(renderCard)(applications)}
+          {map(renderCard)(programs)}
         </div>
       )}
     </div>
   );
 };
 
-export default observer(ApplicationsTable);
+export default observer(ProgramsTable);

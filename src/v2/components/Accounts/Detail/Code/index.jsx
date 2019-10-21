@@ -9,17 +9,17 @@ import useStyles from './styles';
 
 const AccountCode = ({accountView}: {accountView: Object}) => {
   const classes = useStyles();
-  const applicationCode = YAML.stringify(accountView);
+  const accountCode = YAML.stringify(accountView);
 
   return (
     <div>
       <div className={classes.header}>
-        <CopyBtn text={applicationCode} />
+        <CopyBtn text={accountCode} />
         <HelpLink text="" term="" />
       </div>
       <div className={classes.code}>
         <code>
-          <code>{applicationCode}</code>
+          <code>{accountCode}</code>
         </code>
       </div>
     </div>
