@@ -80,7 +80,7 @@
     "prettier": "^1.18.2",
     "query-string": "^6.8.3",
     "qrcode.react": "^0.9.3",
-    "react": "^16.10.2",
+    "react": "^16.11.0",
     "react-app-rewired": "^2.1.4",
     "react-chartjs-2": "^2.8.0",
     "react-debounce-render": "^5.0.0",
