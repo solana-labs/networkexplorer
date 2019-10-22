@@ -51,12 +51,16 @@ export class TourDeSolIndexView {
 
     const {isDemo, activeStage, clusterInfo, lastSlot} = rawData;
 
-    const activeValidatorsRaw = filter(
-      node => node.what === 'Validator' && node.activatedStake,
-    )(clusterInfo.network);
-    const inactiveValidatorsRaw = filter(
-      node => node.what === 'Validator' && !node.activatedStake,
-    )(clusterInfo.network);
+    const activeValidatorsRaw =
+      clusterInfo &&
+      filter(node => node.what === 'Validator' && node.activatedStake)(
+        clusterInfo.network,
+      );
+    const inactiveValidatorsRaw =
+      clusterInfo &&
+      filter(node => node.what === 'Validator' && !node.activatedStake)(
+        clusterInfo.network,
+      );
 
     const currentStage = activeStage ? stages[activeStage] : null;
     const slotsLeftInStage =
@@ -69,11 +73,11 @@ export class TourDeSolIndexView {
       slotsLeftInStage,
       daysLeftInStage,
       stageDurationBlocks: currentStage && currentStage.duration,
-      networkInflationRate: clusterInfo.networkInflationRate,
-      totalSupply: clusterInfo.supply * LAMPORT_SOL_RATIO,
-      totalStaked: clusterInfo.totalStaked * LAMPORT_SOL_RATIO,
-      activeValidators: activeValidatorsRaw.length,
-      inactiveValidators: inactiveValidatorsRaw.length,
+      networkInflationRate: clusterInfo && clusterInfo.networkInflationRate,
+      totalSupply: clusterInfo && clusterInfo.supply * LAMPORT_SOL_RATIO,
+      totalStaked: clusterInfo && clusterInfo.totalStaked * LAMPORT_SOL_RATIO,
+      activeValidators: activeValidatorsRaw && activeValidatorsRaw.length,
+      inactiveValidators: inactiveValidatorsRaw && inactiveValidatorsRaw.length,
     };
 
     const scoreParams = this.computeScoreParams(
@@ -86,13 +90,17 @@ export class TourDeSolIndexView {
     const activeValidatorsPre = reduce((a, x) => {
       const pubkey = x.nodePubkey;
       const slot = x.currentSlot;
-      const {name, avatarUrl} = x.identity;
+      const name = x.identity && x.identity.name;
+      const avatarUrl = x.identity && x.identity.avatarUrl;
       const activatedStake = x.activatedStake * LAMPORT_SOL_RATIO;
+      const activatedStakePercent =
+        clusterInfo && 100.0 * (x.activatedStake / clusterInfo.totalStaked);
+
       const uptimePercent =
         x.uptime &&
         x.uptime.uptime &&
         x.uptime.uptime.length &&
-        100.0 * parseFloat(x.uptime.uptime[0].percentage);
+        Math.min(100.0, 100.0 * parseFloat(x.uptime.uptime[0].percentage));
       const score = this.computeNodeScore(x, scoreParams);
 
       const validator = {
@@ -100,6 +108,7 @@ export class TourDeSolIndexView {
         pubkey,
         avatarUrl,
         activatedStake,
+        activatedStakePercent,
         slot,
         uptimePercent,
         score,
@@ -127,7 +136,6 @@ export class TourDeSolIndexView {
     if (version === 'TourDeSolIndexView@latest' || version === __VERSION__) {
       return {
         __VERSION__,
-        rawData,
         clusterStats,
         activeValidators: result.accum,
         stages,
