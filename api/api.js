@@ -15,7 +15,8 @@ import {filter, flow, map, uniq} from 'lodash/fp';
 import _ from 'lodash';
 import './inbound-stream';
 import './uptime-crawler';
-import geoip from 'geoip-lite';
+import IPGeolocationAPI from 'ip-geolocation-api-javascript-sdk';
+import GeolocationParams from 'ip-geolocation-api-javascript-sdk/GeolocationParams';
 import YAML from 'yaml';
 import fs from 'fs';
 import assert from 'assert';
@@ -31,6 +32,14 @@ const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 5000;
 const CLUSTER_INFO_CACHE_TIME_SECS = 4500;
 const CONFIG_PROGRAM_ID = 'Config1111111111111111111111111111111111111';
 const MAX_KEYBASE_USER_LOOKUP = 50;
+
+const GEOLOCATION_API_KEY = process.env.GEOLOCATION_API_KEY || '';
+if (GEOLOCATION_API_KEY == '') {
+  console.error('GEOLOCATION_API_KEY not found in the environment');
+  console.error('Obtain an API key from https://ipgeolocation.io');
+}
+
+const ipgeolocationApi = new IPGeolocationAPI(GEOLOCATION_API_KEY, false);
 
 const app = express();
 
@@ -382,11 +391,19 @@ if (fs.existsSync(geoipWhitelistFile)) {
 }
 
 function geoipLookup(ip) {
+  if (GEOLOCATION_API_KEY == '') {
+    return null;
+  }
   if (geoipWhitelist[ip]) {
     return geoipWhitelist[ip];
   }
-
-  return geoip.lookup(ip);
+  return new Promise(resolve => {
+    const geolocationParams = new GeolocationParams();
+    geolocationParams.setIPAddress(ip);
+    ipgeolocationApi.getGeolocation(json => {
+      return resolve(json);
+    }, geolocationParams);
+  });
 }
 
 // DEPRECATED (should be unused, performed internally now)
@@ -609,8 +626,8 @@ async function getClusterInfo() {
     }
 
     let ip = tpu.split(':')[0];
-    const geoip = geoipLookup(ip);
-    let ll = geoip ? geoip.ll : null;
+    const geoip = await geoipLookup(ip);
+    let ll = geoip ? [geoip.latitude, geoip.longitude] : null;
 
     // compute different but deterministic offsets
     let offsetLat = randomOffset(ip);
