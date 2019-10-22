@@ -44,22 +44,25 @@ const fields = [
 const ValidatorsTable = ({
   activeValidators,
   separate,
-  totalStaked,
 }: {
   activeValidators: Array,
   separate: boolean,
-  totalStaked: number,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
 
   const renderRow = ({data: row}) => {
-    const {name, pubkey, avatarUrl, activatedStake, uptimePercent, rank} = row;
-    const uptime =
-      uptimePercent > 100
-        ? 100
-        : parseFloat(uptimePercent.toFixed(uptimePercent ? 4 : 2));
+    const {
+      name,
+      pubkey,
+      avatarUrl,
+      activatedStake,
+      activatedStakePercent,
+      uptimePercent,
+      rank,
+    } = row;
+
     return (
       <TableRow hover key={pubkey}>
         <TableCell width={100}>{rank}</TableCell>
@@ -68,20 +71,25 @@ const ValidatorsTable = ({
         </TableCell>
         <TableCell width={200}>
           {activatedStake.toFixed(8) || 'N/A'} (
-          {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
+          {activatedStakePercent.toFixed(3)}%)
         </TableCell>
         <TableCell width={150}>
-          {(uptime && `${uptime}%`) || 'Unavailable'}
+          {(uptimePercent &&
+            `${uptimePercent.toFixed(uptimePercent ? 4 : 2)}%`) ||
+            'Unavailable'}
         </TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
-    const {name, pubkey, avatarUrl, activatedStake, uptimePercent} = card;
-    const uptime =
-      uptimePercent > 100
-        ? 100
-        : parseFloat(uptimePercent.toFixed(uptimePercent ? 4 : 2));
+    const {
+      name,
+      pubkey,
+      avatarUrl,
+      activatedStake,
+      activatedStakePercent,
+      uptimePercent,
+    } = card;
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
@@ -92,13 +100,17 @@ const ValidatorsTable = ({
           <Grid item xs={6} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
             <div>
-              {activatedStake.toFixed(4) || 'N/A'}(
-              {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
+              {activatedStake.toFixed(4) || 'N/A'} (
+              {activatedStakePercent.toFixed(3)}%)
             </div>
           </Grid>
           <Grid item xs={6} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>{(uptime && `${uptime}%`) || 'Unavailable'}</div>
+            <div>
+              {(uptimePercent &&
+                `${uptimePercent.toFixed(uptimePercent ? 4 : 2)}%`) ||
+                'Unavailable'}
+            </div>
           </Grid>
         </Grid>
       </div>
