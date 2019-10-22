@@ -71,7 +71,10 @@ const TourDeSol = ({
       <Grid container spacing={2}>
         <Grid item xs={12} md={8} lg={9} className={classes.leftCol}>
           <Ranking activeValidators={activeValidators} />
-          <Table activeValidators={activeValidators} />
+          <Table
+            activeValidators={activeValidators}
+            totalStaked={clusterStats.totalStaked}
+          />
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
           <Cards isLoading={isLoading} clusterStats={clusterStats} />

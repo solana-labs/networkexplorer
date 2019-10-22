@@ -11,30 +11,31 @@ import {map} from 'lodash/fp';
 import Table from 'v2/components/UI/Table';
 import HelpLink from 'v2/components/HelpLink';
 import ValidatorName from 'v2/components/UI/ValidatorName';
+
 import useStyles from './styles';
 
 const fields = [
   {
     label: 'ranking',
-    name: 'ranking',
+    id: 'rank',
     text: '',
     term: '',
   },
   {
     label: 'name',
-    name: 'name',
+    id: 'name',
     text: '',
     term: '',
   },
   {
     label: 'Staked sol',
-    name: 'staked_sol',
+    id: 'activatedStake',
     text: '',
     term: '',
   },
   {
     label: 'Uptime',
-    name: 'uptime',
+    id: 'uptimePercent',
     text: '',
     term: '',
   },
@@ -43,9 +44,11 @@ const fields = [
 const ValidatorsTable = ({
   activeValidators,
   separate,
+  totalStaked,
 }: {
   activeValidators: Array,
   separate: boolean,
+  totalStaked: number,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -53,19 +56,32 @@ const ValidatorsTable = ({
 
   const renderRow = ({data: row}) => {
     const {name, pubkey, avatarUrl, activatedStake, uptimePercent, rank} = row;
+    const uptime =
+      uptimePercent > 100
+        ? 100
+        : parseFloat(uptimePercent.toFixed(uptimePercent ? 4 : 2));
     return (
       <TableRow hover key={pubkey}>
-        <TableCell width={150}>{rank}</TableCell>
+        <TableCell width={100}>{rank}</TableCell>
         <TableCell>
           <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
         </TableCell>
-        <TableCell width={200}>{activatedStake.toFixed(8)}</TableCell>
-        <TableCell width={150}>{uptimePercent}%</TableCell>
+        <TableCell width={200}>
+          {activatedStake.toFixed(8) || 'N/A'} (
+          {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
+        </TableCell>
+        <TableCell width={150}>
+          {(uptime && `${uptime}%`) || 'Unavailable'}
+        </TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
     const {name, pubkey, avatarUrl, activatedStake, uptimePercent} = card;
+    const uptime =
+      uptimePercent > 100
+        ? 100
+        : parseFloat(uptimePercent.toFixed(uptimePercent ? 4 : 2));
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
@@ -73,13 +89,16 @@ const ValidatorsTable = ({
       >
         <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
         <Grid container>
-          <Grid item xs={4} zeroMinWidth>
+          <Grid item xs={6} zeroMinWidth>
             <div className={classes.cardTitle}>Stake</div>
-            <div>{activatedStake.toFixed(4)} </div>
+            <div>
+              {activatedStake.toFixed(4) || 'N/A'}(
+              {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
+            </div>
           </Grid>
-          <Grid item xs={4} zeroMinWidth>
+          <Grid item xs={6} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>{uptimePercent}%</div>
+            <div>{(uptime && `${uptime}%`) || 'Unavailable'}</div>
           </Grid>
         </Grid>
       </div>
