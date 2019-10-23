@@ -5,6 +5,101 @@ const b58e = Base58.encode;
 
 export const LAMPORT_SOL_RATIO = 0.0000000000582;
 
+const DEFAULT_CUMULATIVE_UPTIME_EPOCHS = 64;
+const TDS_MAGIC_EPOCH = 10;
+
+export function calculateUptimeValues(epochInfo, epochSchedule, uptimeValues) {
+  const {epoch} = epochInfo;
+  const {
+    first_normal_epoch: firstNormalEpoch,
+    slots_per_epoch: slotsPerEpoch,
+  } = epochSchedule;
+
+  const lastEpoch = epoch - 1;
+  const firstEpoch = Math.max(firstNormalEpoch, TDS_MAGIC_EPOCH);
+
+  if (lastEpoch < firstEpoch) {
+    return {
+      lastEpochUptimePercent: null,
+      lastEpochUptimeCreditsEarned: null,
+      lastEpochUptimeCreditsPossible: null,
+      cumulativeUptimeCreditsEarned: null,
+      cumulativeUptimeCreditsPossible: null,
+      cumulativeUptimePercent: null,
+      complete: false,
+      epochs: 0,
+    };
+  }
+
+  const accumulated = _.reduce(
+    uptimeValues,
+    (a, v) => {
+      const {
+        lastEpochUptimeCreditsEarned,
+        cumulativeUptimeCreditsEarned,
+        epochsSeen,
+      } = a;
+
+      const {epoch: thisEpoch, credits_earned: creditsEarned} = v;
+
+      if (
+        thisEpoch < firstEpoch ||
+        thisEpoch > lastEpoch ||
+        epochsSeen[thisEpoch]
+      ) {
+        return a;
+      }
+
+      epochsSeen[thisEpoch] = true;
+
+      return {
+        lastEpochUptimeCreditsEarned:
+          thisEpoch === lastEpoch
+            ? creditsEarned
+            : lastEpochUptimeCreditsEarned,
+        cumulativeUptimeCreditsEarned:
+          creditsEarned + cumulativeUptimeCreditsEarned,
+        epochsSeen,
+      };
+    },
+    {
+      lastEpochUptimeCreditsEarned: 0,
+      cumulativeUptimeCreditsEarned: 0,
+      epochsSeen: {},
+    },
+  );
+
+  const {
+    lastEpochUptimeCreditsEarned,
+    cumulativeUptimeCreditsEarned,
+    epochsSeen,
+  } = accumulated;
+
+  const lastEpochUptimeCreditsPossible = slotsPerEpoch;
+  const cumulativeUptimeCreditsPossible =
+    Math.min(DEFAULT_CUMULATIVE_UPTIME_EPOCHS, lastEpoch - firstEpoch + 1) *
+    slotsPerEpoch;
+
+  const lastEpochUptimePercent =
+    (100 * (lastEpochUptimeCreditsEarned * 1.0)) /
+    (lastEpochUptimeCreditsPossible * 1.0);
+  const cumulativeUptimePercent =
+    (100 * (cumulativeUptimeCreditsEarned * 1.0)) /
+    (cumulativeUptimeCreditsPossible * 1.0);
+
+  return {
+    lastEpoch,
+    lastEpochUptimePercent,
+    lastEpochUptimeCreditsEarned,
+    lastEpochUptimeCreditsPossible,
+    cumulativeUptimeCreditsEarned,
+    cumulativeUptimeCreditsPossible,
+    cumulativeUptimePercent,
+    complete: lastEpoch - firstEpoch >= DEFAULT_CUMULATIVE_UPTIME_EPOCHS,
+    uptimeEpochs: _.size(epochsSeen),
+  };
+}
+
 export function transactionFromJson(x, outMessage = {}) {
   let txn = Transaction.from(Buffer.from(x));
   let tx = {};

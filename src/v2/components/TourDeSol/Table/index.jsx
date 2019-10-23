@@ -59,7 +59,9 @@ const ValidatorsTable = ({
       avatarUrl,
       activatedStake,
       activatedStakePercent,
-      uptimePercent,
+      lastEpochUptimePercent,
+      cumulativeUptimePercent,
+      uptimeEpochs,
       rank,
     } = row;
 
@@ -73,9 +75,23 @@ const ValidatorsTable = ({
           {activatedStake.toFixed(8) || 'N/A'} (
           {activatedStakePercent.toFixed(3)}%)
         </TableCell>
-        <TableCell width={150}>
-          {(uptimePercent &&
-            `${uptimePercent.toFixed(uptimePercent ? 4 : 2)}%`) ||
+        <TableCell
+          width={150}
+          title={
+            lastEpochUptimePercent &&
+            cumulativeUptimePercent &&
+            uptimeEpochs &&
+            `Last Epoch Uptime: ${lastEpochUptimePercent.toFixed(
+              1,
+            )}%; Recent Cumulative Uptime: ${cumulativeUptimePercent.toFixed(
+              3,
+            )}%; Epochs: ${uptimeEpochs}`
+          }
+        >
+          {(cumulativeUptimePercent &&
+            `${cumulativeUptimePercent.toFixed(
+              cumulativeUptimePercent ? 4 : 2,
+            )}%`) ||
             'Unavailable'}
         </TableCell>
       </TableRow>
@@ -88,7 +104,9 @@ const ValidatorsTable = ({
       avatarUrl,
       activatedStake,
       activatedStakePercent,
-      uptimePercent,
+      lastEpochUptimePercent,
+      cumulativeUptimePercent,
+      uptimeEpochs,
     } = card;
     return (
       <div
@@ -106,9 +124,22 @@ const ValidatorsTable = ({
           </Grid>
           <Grid item xs={6} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div>
-              {(uptimePercent &&
-                `${uptimePercent.toFixed(uptimePercent ? 4 : 2)}%`) ||
+            <div
+              title={
+                lastEpochUptimePercent &&
+                cumulativeUptimePercent &&
+                uptimeEpochs &&
+                `Last Epoch Uptime: ${lastEpochUptimePercent.toFixed(
+                  1,
+                )}%; Recent Cumulative Uptime: ${cumulativeUptimePercent.toFixed(
+                  3,
+                )}%; Epochs: ${uptimeEpochs}`
+              }
+            >
+              {(cumulativeUptimePercent &&
+                `${cumulativeUptimePercent.toFixed(
+                  cumulativeUptimePercent ? 4 : 2,
+                )}%`) ||
                 'Unavailable'}
             </div>
           </Grid>
