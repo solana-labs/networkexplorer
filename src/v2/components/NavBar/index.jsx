@@ -78,15 +78,13 @@ const NavBar = ({
       title: 'tour de sol',
     }),
     {
+      link: 'blocks',
+    },
+    {
       link: 'transactions',
-      disabled: true,
     },
     {
       link: 'programs',
-      disabled: true,
-    },
-    {
-      link: 'blocks',
       disabled: true,
     },
     {
