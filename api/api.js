@@ -390,20 +390,32 @@ if (fs.existsSync(geoipWhitelistFile)) {
   }
 }
 
-function geoipLookup(ip) {
+const GEOIP_CACHE_TTL = 2 * 24 * 60 * 60; // 2d
+
+async function geoipLookup(ip) {
   if (GEOLOCATION_API_KEY == '') {
     return null;
   }
   if (geoipWhitelist[ip]) {
     return geoipWhitelist[ip];
   }
-  return new Promise(resolve => {
+
+  const val = await getAsync(`!ip:${ip}`);
+  if (val) {
+    return JSON.parse(val);
+  }
+
+  const remoteVal = await new Promise(resolve => {
     const geolocationParams = new GeolocationParams();
     geolocationParams.setIPAddress(ip);
     ipgeolocationApi.getGeolocation(json => {
       return resolve(json);
     }, geolocationParams);
   });
+
+  await setexAsync(`!ip:${ip}`, GEOIP_CACHE_TTL, JSON.stringify(remoteVal));
+
+  return remoteVal;
 }
 
 // DEPRECATED (should be unused, performed internally now)
