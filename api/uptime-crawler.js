@@ -20,12 +20,52 @@ function getClient() {
 const client = getClient();
 const setAsync = promisify(client.set).bind(client);
 
-// FIXME: this should be a genesis block API call (eventually), see:
-// https://github.com/solana-labs/solana/blob/master/cli/src/wallet.rs#L680
-// https://github.com/solana-labs/solana/blob/master/sdk/src/timing.rs#L14
-const SLOTS_PER_EPOCH = 8192;
+function getSlotsInEpoch(epochSchedule, epoch) {
+  if (!epochSchedule.warmup || epoch >= epochSchedule.first_normal_epoch) {
+    return epochSchedule.slots_per_epoch;
+  }
 
-async function getVoteAccountUptime(connection, x) {
+  return null;
+}
+
+function getUptime(epochSchedule, voteState, lat, ts) {
+  const uptime = _.reduce(
+    voteState.epochCredits,
+    (a, v) => {
+      const slotsInEpoch =
+        epochSchedule &&
+        v &&
+        v.epoch &&
+        getSlotsInEpoch(epochSchedule, v.epoch);
+
+      if (!slotsInEpoch) {
+        return a;
+      }
+
+      const credits = v.credits - v.prevCredits;
+
+      a.unshift({
+        epoch: v.epoch,
+        credits_earned: credits,
+        slots_in_epoch: slotsInEpoch,
+        percentage: ((credits * 1.0) / (slotsInEpoch * 1.0)).toFixed(6),
+      });
+
+      return a;
+    },
+    [],
+  );
+
+  return {
+    nodePubkey: voteState.nodePubkey.toString(),
+    authorizedVoterPubkey: voteState.authorizedVoterPubkey.toString(),
+    uptime,
+    lat,
+    ts,
+  };
+}
+
+async function getVoteAccountUptime(connection, epochSchedule, x) {
   const t1 = new Date().getTime();
   let {voteAccount} = await new FriendlyGet()
     .with(
@@ -37,32 +77,12 @@ async function getVoteAccountUptime(connection, x) {
 
   let voteState = solanaWeb3.VoteAccount.fromAccountData(voteAccount.data);
   if (voteState) {
-    const uptime = _.reduce(
-      voteState.epochCredits,
-      (a, v) => {
-        let credits = v.credits - v.prevCredits;
-
-        a.unshift({
-          epoch: v.epoch,
-          credits_earned: credits,
-          slots_in_epoch: SLOTS_PER_EPOCH,
-          percentage: ((credits * 1.0) / (SLOTS_PER_EPOCH * 1.0)).toFixed(6),
-        });
-
-        return a;
-      },
-      [],
+    return getUptime(
+      epochSchedule,
+      voteState,
+      t2 - t1,
+      new Date(t1).toISOString(),
     );
-
-    const uptimeValue = {
-      nodePubkey: voteState.nodePubkey.toString(),
-      authorizedVoterPubkey: voteState.authorizedVoterPubkey.toString(),
-      uptime: uptime,
-      lat: t2 - t1,
-      ts: t1,
-    };
-
-    return uptimeValue;
   } else {
     console.log('eep, no vote state: ', x.votePubkey);
     return null;
@@ -73,15 +93,16 @@ async function refreshUptime() {
   console.log('uptime updater: updating...');
   try {
     const connection = new solanaWeb3.Connection(FULLNODE_URL);
-    let {__errors__, voting} = await new FriendlyGet()
+    let {__errors__, voting, epochSchedule} = await new FriendlyGet()
       .with('voting', connection.getVoteAccounts())
+      .with('epochSchedule', connection.getEpochSchedule())
       .get();
     let allAccounts = (voting && voting.current ? voting.current : []).concat(
       voting && voting.delinquent ? voting.delinquent : [],
     );
 
     const resultsAsync = _.map(allAccounts, v => {
-      return getVoteAccountUptime(connection, v);
+      return getVoteAccountUptime(connection, epochSchedule, v);
     });
 
     let results = await Promise.all(resultsAsync);

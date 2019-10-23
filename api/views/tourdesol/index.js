@@ -1,6 +1,6 @@
 import {filter, reduce, orderBy} from 'lodash/fp';
 
-import {LAMPORT_SOL_RATIO} from '../../util';
+import {calculateUptimeValues, LAMPORT_SOL_RATIO} from '../../util';
 
 const SLOTS_PER_DAY = (1.0 * 24 * 60 * 60) / 0.8;
 const TDS_DEFAULT_STAGE_LENGTH_BLOCKS = SLOTS_PER_DAY * 5.0;
@@ -49,7 +49,14 @@ export class TourDeSolIndexView {
       };
     }
 
-    const {isDemo, activeStage, clusterInfo, lastSlot} = rawData;
+    const {
+      isDemo,
+      activeStage,
+      clusterInfo,
+      lastSlot,
+      epochInfo,
+      epochSchedule,
+    } = rawData;
 
     const activeValidatorsRaw =
       clusterInfo &&
@@ -96,11 +103,18 @@ export class TourDeSolIndexView {
       const activatedStakePercent =
         clusterInfo && 100.0 * (x.activatedStake / clusterInfo.totalStaked);
 
-      const uptimePercent =
-        x.uptime &&
-        x.uptime.uptime &&
-        x.uptime.uptime.length &&
-        Math.min(100.0, 100.0 * parseFloat(x.uptime.uptime[0].percentage));
+      const uptime = calculateUptimeValues(
+        epochInfo,
+        epochSchedule,
+        x.uptime.uptime,
+      );
+
+      const {
+        lastEpochUptimePercent,
+        cumulativeUptimePercent,
+        uptimeEpochs,
+      } = uptime;
+
       const score = this.computeNodeScore(x, scoreParams);
 
       const validator = {
@@ -110,7 +124,10 @@ export class TourDeSolIndexView {
         activatedStake,
         activatedStakePercent,
         slot,
-        uptimePercent,
+        lastEpochUptimePercent,
+        cumulativeUptimePercent,
+        uptimeEpochs,
+        uptime,
         score,
       };
 
