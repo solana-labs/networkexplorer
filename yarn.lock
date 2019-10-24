@@ -6941,10 +6941,10 @@ file-loader@3.0.1:
     loader-utils "^1.0.2"
     schema-utils "^1.0.0"
 
-filefy@0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/filefy/-/filefy-0.1.9.tgz#9f342c2f3f804505cb5011107fcb345378b282bf"
-  integrity sha512-M+9HcR+Hu0LTh5qYTHRnmA2dm+WBHCG6WU+Biw/84RamiV41DzEArSLockUQ0qCSV1fJI0BoCpnniVG/Ch5tMw==
+filefy@0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/filefy/-/filefy-0.1.10.tgz#174677c8e2fa5bc39a3af0ed6fb492f16b8fbf42"
+  integrity sha512-VgoRVOOY1WkTpWH+KBy8zcU1G7uQTVsXqhWEgzryB9A5hg2aqCyZ6aQ/5PSzlqM5+6cnVrX6oYV0XqD3HZSnmQ==
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -10420,17 +10420,17 @@ marked@^0.7.0:
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.7.0.tgz#b64201f051d271b1edc10a04d1ae9b74bb8e5c0e"
   integrity sha512-c+yYdCZJQrsRjTPhUx7VKkApw9bwDkNbHUKo1ovgcfDjb2kc8rLuRbIFyXL5WOEUwzSSKo3IXpph2K6DqB/KZg==
 
-material-table@^1.52.0:
-  version "1.52.0"
-  resolved "https://registry.yarnpkg.com/material-table/-/material-table-1.52.0.tgz#ae32e76bf36058385ba070666769e628e236f5a1"
-  integrity sha512-MWlijCQRqCJIlg3BRjMmWGN5c2FdsgLFqZ74lq9Lhh+i2a9UORqzpX1HVxlIa9E2wbgp38DzlyPclmno+WWgeQ==
+material-table@^1.53.0:
+  version "1.53.0"
+  resolved "https://registry.yarnpkg.com/material-table/-/material-table-1.53.0.tgz#d6e14a71ae57ad5096ec862aff926ecd1ed995fb"
+  integrity sha512-nsPXYABMb4MQEfz1SOlQi6vFJuzZPR4AMyE/EbP26/gkHL/jsa+Z5pBG3liiHbGUy7flONckpzqYWZ3wLf5iKw==
   dependencies:
     "@date-io/date-fns" "^1.1.0"
     "@material-ui/pickers" "^3.2.2"
     classnames "^2.2.6"
     date-fns "^2.0.0-alpha.27"
     debounce "^1.2.0"
-    filefy "0.1.9"
+    filefy "0.1.10"
     prop-types "^15.6.2"
     react-beautiful-dnd "11.0.3"
     react-double-scrollbar "0.0.15"
