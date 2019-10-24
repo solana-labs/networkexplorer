@@ -12,6 +12,7 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import TableCard from 'v2/components/UI/TableCard';
 
 import useStyles from './styles';
 
@@ -70,26 +71,26 @@ const ProgramsTable = ({
   };
 
   const renderCard = program => {
-    return (
-      <div className={classes.card}>
-        <ul>
-          <li>
-            <div className={classes.cardTitle}>Program id</div>
-            <div>{program.programId}</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Type</div>
-            <div>
-              TODO <TypeLabel type="other" label="other" />
-            </div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Time</div>
-            <div title={program.timestamp}>{asTime(program.timestamp)}</div>
-          </li>
-        </ul>
-      </div>
-    );
+    const {programId, timestamp} = program;
+    const data = [
+      {
+        label: 'Program id',
+        value: programId,
+      },
+      {
+        label: 'Type',
+        value: (
+          <div>
+            TODO <TypeLabel type="other" label="other" />
+          </div>
+        ),
+      },
+      {
+        label: 'Time',
+        value: asTime(timestamp),
+      },
+    ];
+    return <TableCard data={data} key={programId} />;
   };
 
   return (

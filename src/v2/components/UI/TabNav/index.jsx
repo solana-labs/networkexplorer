@@ -1,6 +1,6 @@
 // @flow
 import {Tab} from '@material-ui/core';
-import React from 'react';
+import React, {forwardRef} from 'react';
 import arrowDarkIcon from 'v2/assets/icons/arrow-right-dark.png';
 import arrowIcon from 'v2/assets/icons/arrow-right-green.png';
 
@@ -15,14 +15,20 @@ const TabNav = ({label, ...rest}: {label: string}) => {
         root: classes.tab,
         selected: classes.tabSelected,
       }}
-      component={({className, 'aria-selected': selected, onClick}) => {
-        return (
-          <div className={className} onClick={onClick}>
-            {label}
-            <img src={selected ? arrowDarkIcon : arrowIcon} width={52} alt="" />
-          </div>
-        );
-      }}
+      component={forwardRef(
+        ({className, 'aria-selected': selected, onClick}, ref) => {
+          return (
+            <div className={className} onClick={onClick} ref={ref}>
+              {label}
+              <img
+                src={selected ? arrowDarkIcon : arrowIcon}
+                width={52}
+                alt=""
+              />
+            </div>
+          );
+        },
+      )}
     />
   );
 };

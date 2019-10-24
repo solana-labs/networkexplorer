@@ -5,7 +5,6 @@ import {
   Typography,
   TableCell,
   TableRow,
-  Grid,
   Select,
   MenuItem,
 } from '@material-ui/core';
@@ -18,11 +17,11 @@ import {eq, map, concat} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
 import getUptime from 'v2/utils/getUptime';
 import Table from 'v2/components/UI/Table';
-import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
 import HelpLink from 'v2/components/HelpLink';
 import ValidatorName from 'v2/components/UI/ValidatorName';
+import TableCard from 'v2/components/UI/TableCard';
 
 import useStyles from './styles';
 
@@ -57,7 +56,8 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const {activeValidators, inactiveValidators, totalStaked} = NodesStore;
+  const {activeValidators, inactiveValidators} = NodesStore;
+
   const {isLoading} = Socket;
   const isActiveTab = eq(tab);
   const switchTab = tab => () => setTab(tab);
@@ -72,7 +72,13 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
 
   const renderRow = ({data: row}) => {
     const uptime = row.uptime && getUptime(row);
-    const {identity = {}, nodePubkey, activatedStake, commission} = row;
+    const {
+      identity = {},
+      nodePubkey,
+      stakedSol,
+      stakedSolPercent,
+      commission,
+    } = row;
     return (
       <TableRow hover key={nodePubkey}>
         <TableCell>
@@ -83,12 +89,9 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           />
         </TableCell>
         <TableCell>
-          {activatedStake && (
-            <div>
-              {(activatedStake * LAMPORT_SOL_RATIO).toFixed(8) || 'N/A'} (
-              {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
-            </div>
-          )}
+          <div>
+            {stakedSol || 'N/A'} ({stakedSolPercent}%)
+          </div>
         </TableCell>
         <TableCell>
           {commission || 'N/A'}
@@ -101,40 +104,44 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   };
   const renderCard = card => {
     const uptime = card.uptime && getUptime(card);
-    const {identity = {}, nodePubkey, activatedStake, commission} = card;
-    return (
-      <div
-        className={cn(classes.card, separate && classes.cardVertical)}
-        key={nodePubkey}
-      >
-        <ValidatorName
-          pubkey={nodePubkey}
-          name={identity.name}
-          avatar={identity.avatarUrl}
-        />
-        <Grid container spacing={1}>
-          <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Stake</div>
-            <div>
-              {(activatedStake * LAMPORT_SOL_RATIO).toFixed(8) || 'N/A'} (
-              {(100 * (activatedStake / totalStaked)).toFixed(3)}%)
-            </div>
-          </Grid>
-          <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Commission</div>
-            <div>
-              {commission || 'N/A'}
-              {Boolean(commission) &&
-                ` (${(100 * (commission / 0xff)).toFixed(3)}%)`}
-            </div>
-          </Grid>
-          <Grid item xs={4} zeroMinWidth>
-            <div className={classes.cardTitle}>Uptime</div>
-            <div>{(uptime && uptime + '%') || 'Unavailable'}</div>
-          </Grid>
-        </Grid>
-      </div>
-    );
+    const {
+      identity = {},
+      nodePubkey,
+      stakedSol,
+      stakedSolPercent,
+      commission,
+    } = card;
+    const data = [
+      {
+        label: 'Name',
+        value: (
+          <ValidatorName
+            pubkey={nodePubkey}
+            name={identity.name}
+            avatar={identity.avatarUrl}
+          />
+        ),
+      },
+      {
+        label: 'Stake',
+        value: `${stakedSol || 'N/A'} (${stakedSolPercent}%)`,
+      },
+      {
+        label: 'Commission',
+        value: (
+          <div>
+            {commission || 'N/A'}
+            {Boolean(commission) &&
+              ` (${(100 * (commission / 0xff)).toFixed(3)}%)`}
+          </div>
+        ),
+      },
+      {
+        label: 'Uptime',
+        value: (uptime && uptime + '%') || 'Unavailable',
+      },
+    ];
+    return <TableCard vertical={separate} key={nodePubkey} data={data} />;
   };
 
   const allValidators = concat(activeValidators)(inactiveValidators);
