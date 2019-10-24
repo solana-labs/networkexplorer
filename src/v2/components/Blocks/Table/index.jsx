@@ -12,6 +12,8 @@ import {map} from 'lodash/fp';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import ValidatorName from 'v2/components/UI/ValidatorName';
+import TableCard from 'v2/components/UI/TableCard';
+
 import useStyles from './styles';
 
 const fields: TableHeadProps[] = [
@@ -86,40 +88,34 @@ const BlocksTable = ({
   };
 
   const renderCard = block => {
-    return (
-      <div className={classes.card} key={block.id}>
-        <ul>
-          <li>
-            <div className={classes.cardTitle}>Block</div>
-            <div>{block.id}</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Slot</div>
-            <div>{block.slot}</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Time</div>
-            <div title={block.timestamp}>{asTime(block.timestamp)}</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Transactions</div>
-            <div>TODO</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Confidence</div>
-            <div>TODO</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Leader</div>
-            <ValidatorName
-              pubkey={block.leader}
-              name={block.leader}
-              avatar=""
-            />
-          </li>
-        </ul>
-      </div>
-    );
+    const {id, slot, timestamp, leader} = block;
+    const data = [
+      {
+        label: 'Block',
+        value: id,
+      },
+      {
+        label: 'Slot',
+        value: slot,
+      },
+      {
+        label: 'Time',
+        value: asTime(timestamp),
+      },
+      {
+        label: 'Transactions',
+        value: 'TODO',
+      },
+      {
+        label: 'Confidence',
+        value: 'TODO',
+      },
+      {
+        label: 'Leader',
+        value: <ValidatorName pubkey={leader} name={leader} avatar="" />,
+      },
+    ];
+    return <TableCard key={block.id} data={data} />;
   };
 
   return (

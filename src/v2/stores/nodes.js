@@ -2,11 +2,20 @@ import {compose, filter, map} from 'lodash/fp';
 import {action, computed, decorate, observable, flow} from 'mobx';
 import * as API from 'v2/api/stats';
 
+import {LAMPORT_SOL_RATIO} from '../constants';
+
+const addNetworkSolInfo = totalStaked => node => ({
+  ...node,
+  stakedSol: (node.activatedStake * LAMPORT_SOL_RATIO).toFixed(8),
+  stakedSolPercent: (100 * (node.activatedStake / totalStaked)).toFixed(3),
+});
+
 class Store {
   cluster = {
     network: {},
   };
   clusterChanges = {};
+  network = [];
 
   // constructor() {
   //   observe(this, 'network', ({oldValue, newValue}) => {
@@ -27,7 +36,9 @@ class Store {
 
   updateClusterInfo = data => {
     data = JSON.parse(data);
-    this.network = data.network || {};
+    this.network = data.network
+      ? map(addNetworkSolInfo(data.totalStaked))(data.network)
+      : [];
     this.totalStaked = data.totalStaked;
     this.supply = data.supply;
     this.networkInflationRate = data.networkInflationRate;
@@ -37,7 +48,9 @@ class Store {
     try {
       const res = yield API.getClusterInfo();
       const data = res.data;
-      this.network = data.network;
+      this.network = data.network
+        ? map(addNetworkSolInfo(data.totalStaked))(data.network)
+        : [];
       this.totalStaked = data.totalStaked;
       this.supply = data.supply;
       this.networkInflationRate = data.networkInflationRate;
@@ -48,7 +61,7 @@ class Store {
   });
 
   get mapMarkers() {
-    if (!this.network) {
+    if (!this.network.length) {
       return [];
     }
 

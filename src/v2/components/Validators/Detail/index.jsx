@@ -13,13 +13,12 @@ import Button from 'v2/components/UI/Button';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import ValidatorName from 'v2/components/UI/ValidatorName';
-import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import ValidatorsMap from 'v2/components/ValidatorsMap';
 
 import useStyles from './styles';
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
-  const {validators, inactiveValidators, totalStaked} = NodesStore;
+  const {validators, inactiveValidators} = NodesStore;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -43,11 +42,13 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
   const {
     nodePubkey,
     gossip,
-    activatedStake,
     commission,
     identity = {},
     coordinates,
+    stakedSol,
+    stakedSolPercent,
   } = node;
+
   const markers = [{gossip, coordinates, name: nodePubkey}];
   const specs = [
     {
@@ -65,10 +66,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Staked SOL',
       hint: '',
-      value: `${(activatedStake * LAMPORT_SOL_RATIO).toFixed(8)} (${(
-        100 *
-        (activatedStake / totalStaked)
-      ).toFixed(3)}%)`,
+      value: `${stakedSol} (${stakedSolPercent}%)`,
     },
     {
       label: 'Website',

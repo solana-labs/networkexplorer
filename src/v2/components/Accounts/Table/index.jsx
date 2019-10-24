@@ -12,6 +12,7 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import TableCard from 'v2/components/UI/TableCard';
 
 import useStyles from './styles';
 
@@ -70,26 +71,22 @@ const AccountsTable = ({
   };
 
   const renderCard = account => {
-    return (
-      <div className={classes.card}>
-        <ul>
-          <li>
-            <div className={classes.cardTitle}>Account id</div>
-            <div>{account.programId}</div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Type</div>
-            <div>
-              TODO <TypeLabel type="other" label="other" />
-            </div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Time</div>
-            <div title={account.timestamp}>{asTime(account.timestamp)}</div>
-          </li>
-        </ul>
-      </div>
-    );
+    const {programId, timestamp, pubkey} = account;
+    const data = [
+      {
+        label: 'Account id',
+        value: programId,
+      },
+      {
+        label: 'Type',
+        value: <TypeLabel type="other" label="TODO" />,
+      },
+      {
+        label: 'Time',
+        value: asTime(timestamp),
+      },
+    ];
+    return <TableCard vertical={separate} key={pubkey} data={data} />;
   };
 
   return (

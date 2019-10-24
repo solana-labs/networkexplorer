@@ -12,6 +12,7 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import TableCard from 'v2/components/UI/TableCard';
 
 import useStyles from './styles';
 
@@ -100,53 +101,46 @@ const TransactionsTable = ({
   };
 
   const renderCard = transaction => {
-    return (
-      <div className={classes.card} key={transaction.id}>
-        <ul>
-          <li>
-            <div className={classes.cardTitle}>Hash</div>
-            <Link
-              to={`/transactions/${transaction.id}`}
-              className={classes.name}
-            >
-              <div>{transaction.id}</div>
-            </Link>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Block</div>
-            <Link
-              to={`/blocks/${transaction.blockId}`}
-              className={classes.name}
-            >
-              {transaction.blockId}
-            </Link>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Time</div>
-            <div title={transaction.timestamp}>
-              {asTime(transaction.timestamp)}
-            </div>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Program ID</div>
-            <Link
-              to={`/programs/${transaction.instructions[0].programId}`}
-              className={classes.name}
-            >
-              <div>{transaction.instructions[0].programId}</div>
-            </Link>
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Type</div>
-            TODO <TypeLabel type="loader" label="loader" />
-          </li>
-          <li>
-            <div className={classes.cardTitle}>Confirmations</div>
-            <div>TODO</div>
-          </li>
-        </ul>
-      </div>
-    );
+    const {id, blockId, timestamp, instructions} = transaction;
+    const data = [
+      {
+        label: 'Hash',
+        value: (
+          <Link to={`/transactions/${id}`}>
+            <div>{id}</div>
+          </Link>
+        ),
+      },
+      {
+        label: 'Block',
+        value: (
+          <Link to={`/blocks/${blockId}`}>
+            <div>{blockId}</div>
+          </Link>
+        ),
+      },
+      {
+        label: 'Time',
+        value: asTime(timestamp),
+      },
+      {
+        label: 'Program ID',
+        value: (
+          <Link to={`/programs/${instructions[0].programId}`}>
+            <div>{instructions[0].programId}</div>
+          </Link>
+        ),
+      },
+      {
+        label: 'Type',
+        value: <TypeLabel type="loader" label="TODO" />,
+      },
+      {
+        label: 'Confirmations',
+        value: 'TODO',
+      },
+    ];
+    return <TableCard key={id} data={data} />;
   };
 
   return (
