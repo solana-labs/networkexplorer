@@ -4,9 +4,9 @@ import getColor from 'v2/utils/getColor';
 export default makeStyles(theme => ({
   card: {
     padding: 7,
-    background: getColor('grey2')(theme),
+    background: getColor('grey5')(theme),
     marginBottom: 1,
-    borderRight: `1px solid ${getColor('dark')(theme)}`,
+    marginRight: 12,
     '& ul': {
       padding: 0,
       margin: 0,
@@ -14,10 +14,7 @@ export default makeStyles(theme => ({
       flexWrap: 'wrap',
       '& li': {
         padding: 10,
-        width: '33.33%',
-        [theme.breakpoints.down('xs')]: {
-          width: '50%',
-        },
+        width: '50%',
         '& div:last-child': {
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
