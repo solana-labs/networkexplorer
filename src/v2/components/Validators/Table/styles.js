@@ -39,7 +39,7 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       padding: '10px 18px 0',
       marginBottom: 10,
-      borderBottom: 'none'
+      borderBottom: 'none',
     },
   },
   link: {

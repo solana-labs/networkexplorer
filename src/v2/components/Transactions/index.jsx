@@ -1,15 +1,14 @@
 // @flow
 import {Container} from '@material-ui/core';
 import React from 'react';
-import {Link, Match} from 'react-router-dom';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import {Match} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import HelpLink from 'v2/components/HelpLink';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import TransactionsTimelineStore from 'v2/stores/transactions/timeline';
 import CTypography from 'v2/components/UI/CTypography';
-import formatNum from '../../utils/formatNum';
+import formatNum from 'v2/utils/formatNum';
+import TableNav from 'v2/components/UI/TableNav';
 
 import Table from './Table';
 import useStyles from './styles';
@@ -28,21 +27,6 @@ const TransactionsPage = ({match}: {match: Match}) => {
     TransactionsTimelineStore.init({start: match.params.start});
   }
 
-  const nav = (
-    <div className={classes.nav}>
-      {prev && (
-        <Link to={`/transactions/timeline/${prev}`}>
-          <NavigateBeforeIcon />
-        </Link>
-      )}
-      {next && (
-        <Link to={`/transactions/timeline/${next}`}>
-          <NavigateNextIcon />
-        </Link>
-      )}
-    </div>
-  );
-
   return (
     <Container>
       <SectionHeader title="Recent Transactions">
@@ -51,9 +35,15 @@ const TransactionsPage = ({match}: {match: Match}) => {
           {formatNum(transactionCount)}
         </CTypography>
       </SectionHeader>
-      {nav}
+      <TableNav
+        prev={`/transactions/timeline/${prev}`}
+        next={`/transactions/timeline/${next}`}
+      />
       <Table transactions={transactions} />
-      {nav}
+      <TableNav
+        prev={`/transactions/timeline/${prev}`}
+        next={`/transactions/timeline/${next}`}
+      />
     </Container>
   );
 };
