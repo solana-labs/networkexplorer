@@ -62,7 +62,7 @@
     "babel-preset-env": "^1.7.0",
     "chart.js": "^2.8.0",
     "customize-cra": "^0.8.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.4.0",
     "eslint-config-react-app": "^5.0.2",
     "eslint-import-resolver-alias": "^1.1.2",
