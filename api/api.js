@@ -645,8 +645,8 @@ async function getClusterInfo() {
     let offsetLat = randomOffset(ip);
     let offsetLng = randomOffset(tpu);
 
-    let lat = ((ll && ll[0]) || DEFAULT_LAT) + offsetLat;
-    let lng = ((ll && ll[1]) || DEFAULT_LNG) + offsetLng;
+    let lat = +((ll && ll[0]) || DEFAULT_LAT) + offsetLat;
+    let lng = +((ll && ll[1]) || DEFAULT_LNG) + offsetLng;
 
     network[pubkey] = Object.assign(network[pubkey] || {}, {
       online: true,
