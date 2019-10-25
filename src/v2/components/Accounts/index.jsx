@@ -7,7 +7,8 @@ import SectionHeader from 'v2/components/UI/SectionHeader';
 import AccountsTimelineStore from 'v2/stores/accounts/timeline';
 import formatNum from 'v2/utils/formatNum';
 import CTypography from 'v2/components/UI/CTypography';
-import {Link, Match} from 'react-router-dom';
+import {Match} from 'react-router-dom';
+import TableNav from 'v2/components/UI/TableNav';
 
 import Table from './Table';
 import useStyles from './styles';
@@ -20,14 +21,6 @@ const AccountsPage = ({match}: {match: Match}) => {
     AccountsTimelineStore.init({start: match.params.start});
   }
 
-  const nav = (
-    <div className={classes.total}>
-      STYLE_ME :
-      {prev && <Link to={`/accounts/timeline/${prev}`}>prev page</Link>}:
-      {next && <Link to={`/accounts/timeline/${next}`}>next page</Link>}:
-    </div>
-  );
-
   return (
     <Container>
       <SectionHeader title="Recently Active Accounts">
@@ -36,9 +29,15 @@ const AccountsPage = ({match}: {match: Match}) => {
           {formatNum(accountCount)}
         </CTypography>
       </SectionHeader>
-      {nav}
+      <TableNav
+        prev={`/accounts/timeline/${prev}`}
+        next={`/accounts/timeline/${next}`}
+      />
       <Table accounts={accounts} />
-      {nav}
+      <TableNav
+        prev={`/accounts/timeline/${prev}`}
+        next={`/accounts/timeline/${next}`}
+      />
     </Container>
   );
 };

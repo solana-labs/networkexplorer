@@ -2,11 +2,7 @@ import {makeStyles} from '@material-ui/core';
 import getColor from 'v2/utils/getColor';
 
 export default makeStyles(theme => ({
-  total: {
-    marginRight: 'auto',
-    marginLeft: 15,
-  },
-  nav: {
+  root: {
     display: 'flex',
     justifyContent: 'flex-end',
     marginTop: 10,
