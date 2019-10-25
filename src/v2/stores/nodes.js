@@ -1,4 +1,4 @@
-import {compose, filter, map} from 'lodash/fp';
+import {filter, reject, map, getOr} from 'lodash/fp';
 import {action, computed, decorate, observable, flow} from 'mobx';
 import * as API from 'v2/api/stats';
 
@@ -11,31 +11,12 @@ const addNetworkSolInfo = totalStaked => node => ({
 });
 
 class Store {
-  cluster = {
-    network: {},
-  };
-  clusterChanges = {};
   network = [];
 
-  // constructor() {
-  //   observe(this, 'network', ({oldValue, newValue}) => {
-  //     if (!keys(oldValue).length) {
-  //       return;
-  //     }
-  //     this.clusterChanges = compose(
-  //       mapValues.convert({cap: false})((value, key) => {
-  //         if (eq('nodes', key)) {
-  //           return calcChanges(oldValue[key].length, value.length);
-  //         }
-  //         return calcChanges(oldValue[key], value);
-  //       }),
-  //       pick(['nodes', 'supply']),
-  //     )(newValue);
-  //   });
-  // }
-
   updateClusterInfo = data => {
-    data = JSON.parse(data);
+    if (typeof data === 'string') {
+      data = JSON.parse(data);
+    }
     this.network = data.network
       ? map(addNetworkSolInfo(data.totalStaked))(data.network)
       : [];
@@ -48,12 +29,7 @@ class Store {
     try {
       const res = yield API.getClusterInfo();
       const data = res.data;
-      this.network = data.network
-        ? map(addNetworkSolInfo(data.totalStaked))(data.network)
-        : [];
-      this.totalStaked = data.totalStaked;
-      this.supply = data.supply;
-      this.networkInflationRate = data.networkInflationRate;
+      this.updateClusterInfo(data);
       return res;
     } catch (e) {
       throw e;
@@ -66,16 +42,15 @@ class Store {
     }
 
     try {
-      return compose(
-        map(({nodePubkey: pubkey, tpu: gossip, coordinates, identity}) => ({
+      return map(
+        ({nodePubkey: pubkey = '', tpu: gossip, coordinates, identity}) => ({
           pubkey,
           gossip,
           coordinates,
-          name: (identity && identity.name) || pubkey || '',
-          avatarUrl: (identity && identity.avatarUrl) || '',
-        })),
-        filter({what: 'Validator'}),
-      )(this.network);
+          name: getOr(pubkey, 'name')(identity),
+          avatarUrl: getOr('', 'avatarUrl')(identity),
+        }),
+      )(this.validators);
     } catch (e) {
       console.error('mapMarkers()', e);
       return [];
@@ -83,19 +58,15 @@ class Store {
   }
 
   get validators() {
-    return filter(node => node.what === 'Validator')(this.network);
+    return filter({what: 'Validator'})(this.network);
   }
 
   get activeValidators() {
-    return filter(node => node.what === 'Validator' && node.activatedStake)(
-      this.network,
-    );
+    return filter('activatedStake')(this.validators);
   }
 
   get inactiveValidators() {
-    return filter(node => node.what === 'Validator' && !node.activatedStake)(
-      this.network,
-    );
+    return reject('activatedStake')(this.validators);
   }
 }
 
