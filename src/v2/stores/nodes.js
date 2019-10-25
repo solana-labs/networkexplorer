@@ -46,7 +46,12 @@ class Store {
         ({nodePubkey: pubkey = '', tpu: gossip, coordinates, identity}) => ({
           pubkey,
           gossip,
-          coordinates,
+          coordinates:
+            -180 < coordinates[0] &&
+            coordinates[0] < 180 &&
+            (-90 < coordinates[1] && coordinates[1] < 90)
+              ? coordinates
+              : [0, 0],
           name: getOr(pubkey, 'name')(identity),
           avatarUrl: getOr('', 'avatarUrl')(identity),
         }),
