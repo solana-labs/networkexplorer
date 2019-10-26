@@ -89,7 +89,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "robust-websocket": "^1.0.0",
-    "semantic-release": "^15.13.27",
+    "semantic-release": "^15.13.28",
     "watch": "^1.0.2"
   },
   "bin": {
