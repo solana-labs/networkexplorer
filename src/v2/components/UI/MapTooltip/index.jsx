@@ -8,7 +8,12 @@ type MapTooltipProps = {
 };
 
 const MapTooltip = ({title, ...rest}: MapTooltipProps & TooltipProps) => (
-  <Tooltip classes={{...rest.classes}} {...rest} title={title()} />
+  <Tooltip
+    classes={{...rest.classes}}
+    {...rest}
+    title={title()}
+    PopperProps={{disablePortal: true}}
+  />
 );
 
 export default MapTooltip;
