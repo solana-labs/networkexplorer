@@ -16,10 +16,16 @@ type TProgram = {
 
 const Program = ({id, accounts}: TProgram) => {
   const classes = useStyles();
+
   const renderAccount = (account, i) => (
-    <div className={classes.account}>
+    <div className={classes.account} key={account}>
       <Label text={`Account ${i + 1}`} hint="" />
-      <ValidatorName pubkey={id} name={account} avatar="" />
+      <ValidatorName
+        to={`/accounts/${account}`}
+        pubkey={id}
+        name={account}
+        avatar=""
+      />
     </div>
   );
   return (
