@@ -19,13 +19,7 @@ import {LAMPORT_SOL_RATIO} from '../../constants';
 
 const Validators = () => {
   const classes = useStyles();
-  const {
-    supply,
-    validators,
-    fetchClusterInfo,
-    totalStaked,
-    mapMarkers,
-  } = NodesStore;
+  const {supply, validators, fetchClusterInfo, totalStaked} = NodesStore;
   const {isLoading} = Socket;
   useEffect(() => {
     fetchClusterInfo();
@@ -120,7 +114,7 @@ const Validators = () => {
                 Active Validators Map
                 <HelpLink text="" term="" />
               </Typography>
-              <ValidatorsMap markers={mapMarkers} />
+              <ValidatorsMap markers={validators} />
             </div>
           )}
         </Grid>

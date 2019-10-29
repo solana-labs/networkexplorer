@@ -5,8 +5,10 @@ export default makeStyles(theme => ({
   tooltip: {
     background: '#fff',
     color: getColor('dark')(theme),
-    padding: 10,
+    padding: `10px 18px`,
     borderRadius: 0,
+    maxWidth: 300,
+    zIndex: 1000,
   },
   tooltipTitle: {
     fontSize: 15,
@@ -23,6 +25,22 @@ export default makeStyles(theme => ({
     transition: '.15s ease-in-out',
     '&:hover': {
       transform: 'scale(2)',
+    },
+  },
+  inner: {
+    '& a': {
+      color: getColor('greenDark')(theme),
+      fontSize: 21,
+    },
+  },
+  info: {
+    marginTop: 10,
+    fontSize: 17,
+    lineHeight: '30px',
+    '& > div': {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
   },
 }));

@@ -15,7 +15,6 @@ import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
 import {eq, map, concat} from 'lodash/fp';
 import NodesStore from 'v2/stores/nodes';
-import getUptime from 'v2/utils/getUptime';
 import Table from 'v2/components/UI/Table';
 import Socket from 'v2/stores/socket';
 import Loader from 'v2/components/UI/Loader';
@@ -71,13 +70,13 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
   }
 
   const renderRow = ({data: row}) => {
-    const uptime = row.uptime && getUptime(row);
     const {
       identity = {},
       nodePubkey,
       stakedSol,
       stakedSolPercent,
-      commission,
+      calcCommission,
+      calcUptime,
     } = row;
     return (
       <TableRow hover key={nodePubkey}>
@@ -89,27 +88,21 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           />
         </TableCell>
         <TableCell>
-          <div>
-            {stakedSol || 'N/A'} ({stakedSolPercent}%)
-          </div>
+          <div>{stakedSol ? `${stakedSol} (${stakedSolPercent}%)` : 'N/A'}</div>
         </TableCell>
-        <TableCell>
-          {commission || 'N/A'}
-          {Boolean(commission) &&
-            ` (${(100 * (commission / 0xff)).toFixed(3)}%)`}
-        </TableCell>
-        <TableCell>{(uptime && uptime + '%') || 'Unavailable'}</TableCell>
+        <TableCell>{calcCommission ? `${calcCommission}%` : 'N/A'}</TableCell>
+        <TableCell>{calcUptime ? `${calcUptime}%` : 'Unavailable'}</TableCell>
       </TableRow>
     );
   };
   const renderCard = card => {
-    const uptime = card.uptime && getUptime(card);
     const {
       identity = {},
       nodePubkey,
       stakedSol,
       stakedSolPercent,
-      commission,
+      calcCommission,
+      calcUptime,
     } = card;
     const data = [
       {
@@ -124,21 +117,15 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       },
       {
         label: 'Stake',
-        value: `${stakedSol || 'N/A'} (${stakedSolPercent}%)`,
+        value: stakedSol ? `${stakedSol} (${stakedSolPercent}%)` : 'N/A',
       },
       {
         label: 'Commission',
-        value: (
-          <div>
-            {commission || 'N/A'}
-            {Boolean(commission) &&
-              ` (${(100 * (commission / 0xff)).toFixed(3)}%)`}
-          </div>
-        ),
+        value: <div>{calcCommission ? `${calcCommission}%` : 'N/A'}</div>,
       },
       {
         label: 'Uptime',
-        value: (uptime && uptime + '%') || 'Unavailable',
+        value: calcUptime ? `${calcUptime}%` : 'Unavailable',
       },
     ];
     return <TableCard vertical={separate} key={nodePubkey} data={data} />;
