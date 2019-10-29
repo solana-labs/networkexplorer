@@ -5,7 +5,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import React, {useEffect} from 'react';
 import {map, find} from 'lodash/fp';
 import {Match} from 'react-router-dom';
-import getUptime from 'v2/utils/getUptime';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
 import HelpLink from 'v2/components/HelpLink';
@@ -33,8 +32,6 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     find({nodePubkey: params.id})(validators) ||
     find({nodePubkey: params.id})(inactiveValidators);
 
-  const uptime = getUptime(node);
-
   if (!node) {
     return <div>Loading...</div>;
   }
@@ -47,6 +44,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     coordinates,
     stakedSol,
     stakedSolPercent,
+    calcUptime,
   } = node;
 
   const markers = [{gossip, coordinates, name: nodePubkey}];
@@ -66,7 +64,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Staked SOL',
       hint: '',
-      value: `${stakedSol} (${stakedSolPercent}%)`,
+      value: stakedSol ? `${stakedSol} (${stakedSolPercent}%)` : 'N/A',
     },
     {
       label: 'Website',
@@ -84,7 +82,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Uptime',
       hint: '',
-      value: `${uptime}%`,
+      value: `${calcUptime}%`,
     },
     {
       label: 'keybase',

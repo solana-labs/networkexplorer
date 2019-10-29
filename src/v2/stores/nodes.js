@@ -1,6 +1,7 @@
-import {filter, reject, map, getOr} from 'lodash/fp';
+import {filter, reject, map} from 'lodash/fp';
 import {action, computed, decorate, observable, flow} from 'mobx';
 import * as API from 'v2/api/stats';
+import getUptime from 'v2/utils/getUptime';
 
 import {LAMPORT_SOL_RATIO} from '../constants';
 
@@ -8,6 +9,8 @@ const addNetworkSolInfo = totalStaked => node => ({
   ...node,
   stakedSol: (node.activatedStake * LAMPORT_SOL_RATIO).toFixed(8),
   stakedSolPercent: (100 * (node.activatedStake / totalStaked)).toFixed(3),
+  calcCommission: (100 * (node.commission / 0xff)).toFixed(3),
+  calcUptime: getUptime(node.uptime),
 });
 
 class Store {
@@ -36,32 +39,6 @@ class Store {
     }
   });
 
-  get mapMarkers() {
-    if (!this.network.length) {
-      return [];
-    }
-
-    try {
-      return map(
-        ({nodePubkey: pubkey = '', tpu: gossip, coordinates, identity}) => ({
-          pubkey,
-          gossip,
-          coordinates:
-            -180 < coordinates[0] &&
-            coordinates[0] < 180 &&
-            (-90 < coordinates[1] && coordinates[1] < 90)
-              ? coordinates
-              : [0, 0],
-          name: getOr(pubkey, 'name')(identity),
-          avatarUrl: getOr('', 'avatarUrl')(identity),
-        }),
-      )(this.validators);
-    } catch (e) {
-      console.error('mapMarkers()', e);
-      return [];
-    }
-  }
-
   get validators() {
     return filter({what: 'Validator'})(this.network);
   }
@@ -80,7 +57,6 @@ decorate(Store, {
   supply: observable,
   stakedTokens: observable,
   updateClusterInfo: action.bound,
-  mapMarkers: computed,
   validators: computed,
   activeValidators: computed,
   inactiveValidators: computed,

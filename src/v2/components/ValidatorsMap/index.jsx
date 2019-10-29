@@ -104,7 +104,7 @@ const renderMarkers = zoom =>
   map(marker => {
     return (
       <Marker
-        key={get('name')(marker)}
+        key={get('nodePubkey')(marker)}
         lng={get('coordinates[0]')(marker)}
         lat={get('coordinates[1]')(marker)}
         scale={zoom}

@@ -10,7 +10,7 @@ import useStyles from './styles';
 
 const NodesMap = () => {
   const classes = useStyles();
-  const {mapMarkers} = NodesStore;
+  const {validators} = NodesStore;
   const {isLoading} = Socket;
   if (isLoading) {
     return <Loader width="533" height="290" />;
@@ -21,7 +21,7 @@ const NodesMap = () => {
       <Typography className={classes.mapTitle}>
         Active Validators Map
       </Typography>
-      <ValidatorsMap markers={mapMarkers} />
+      <ValidatorsMap markers={validators} />
     </div>
   );
 };
