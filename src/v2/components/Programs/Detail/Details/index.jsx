@@ -15,6 +15,7 @@ const ProgramDetails = ({programAccounts}: {programAccounts: Object}) => {
         </TableCell>
         <TableCell>
           <ValidatorName
+            to={`/accounts/${account.pubkey}`}
             pubkey={account.pubkey}
             name={account.pubkey}
             avatar=""
