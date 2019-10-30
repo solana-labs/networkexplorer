@@ -11,7 +11,7 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
   const transformScale = scale < 4 ? scale / 4 : 1;
   const {
     nodePubkey,
-    identity,
+    identity = {},
     calcCommission,
     calcUptime,
     stakedSol,

@@ -1,17 +1,20 @@
 // @flow
 import {Container, Tabs, useTheme} from '@material-ui/core';
+import {observer} from 'mobx-react-lite';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
-import {eq, map} from 'lodash/fp';
+import {eq, map, values} from 'lodash/fp';
 import React, {useState} from 'react';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import TabNav from 'v2/components/UI/TabNav';
 import ProgramsTable from 'v2/components/Programs/Table';
 import {ReactComponent as WarnIcon} from 'v2/assets/icons/warn.svg';
+import FavoritesStore from 'v2/stores/favorites';
 
 import AccountsTable from './Accounts';
 import useStyles from './styles';
 
 const TransactionsPage = () => {
+  const {endpointFavorites} = FavoritesStore;
   const classes = useStyles();
   const [tab, setTab] = useState('programs');
   const theme = useTheme();
@@ -40,10 +43,12 @@ const TransactionsPage = () => {
       >
         {map(renderTabNav)(tabNav)}
       </Tabs>
-      {eq('programs', tab) && <ProgramsTable />}
+      {eq('programs', tab) && (
+        <ProgramsTable programs={values(endpointFavorites.programs)} />
+      )}
       {eq('accounts', tab) && <AccountsTable />}
     </Container>
   );
 };
 
-export default TransactionsPage;
+export default observer(TransactionsPage);
