@@ -85,7 +85,6 @@ const NavBar = ({
     },
     {
       link: 'programs',
-      disabled: true,
     },
     {
       link: 'favorites',
