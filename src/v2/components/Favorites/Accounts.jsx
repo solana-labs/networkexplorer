@@ -1,121 +1,93 @@
 // @flow
 
 import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import {TableCell, TableRow} from '@material-ui/core';
 import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
 import {Link} from 'react-router-dom';
-import {map} from 'lodash/fp';
-import HelpLink from 'v2/components/HelpLink';
+import {map, values} from 'lodash/fp';
+import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
+import TableCard from 'v2/components/UI/TableCard';
+import FavoritesStore from 'v2/stores/favorites';
 
 import useStyles from './styles';
 
-const tHeads: TableHeadProps[] = [
+const fields: TableHeadProps[] = [
   {
-    name: 'Account Id',
+    id: 'id',
+    label: 'Account Id',
     text: '',
     term: '',
   },
   {
-    name: 'nickname',
+    id: 'name',
+    label: 'nickname',
     text: '',
     term: '',
   },
   {
-    name: 'balance',
+    id: 'balance',
+    label: 'balance',
     text: '',
     term: '',
   },
   {
-    name: 'transactions',
+    id: 'transactions',
+    label: 'transactions',
     text: '',
     term: '',
   },
 ];
 
 const AccountsTable = ({separate}: {separate: boolean}) => {
+  const {endpointFavorites} = FavoritesStore;
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-  const blocks = [];
 
-  const renderRow = ({data: program}) => {
+  const renderRow = ({data: account}) => {
+    const {id, owner} = account;
     return (
-      <TableRow hover key={program.id}>
+      <TableRow hover key={id}>
         <TableCell align="center">
-          <Link to={`/programs/${program.id}`} className={classes.name}>
-            7887319
-          </Link>
+          <Link to={`/accounts/${id}`}>{id}</Link>
         </TableCell>
-        <TableCell>TESTNAME</TableCell>
+        <TableCell>{owner}</TableCell>
         <TableCell>0.006 SOL | $1.12</TableCell>
         <TableCell>1234</TableCell>
       </TableRow>
     );
   };
-  const renderTH = ({name, width, ...rest}: TableHeadProps) => (
-    <TableCell key={name} width={width}>
-      {name}
-      <HelpLink {...rest} />
-    </TableCell>
-  );
+
+  const renderCard = account => {
+    const {id, owner} = account;
+    const data = [
+      {
+        label: 'Account Id',
+        value: id,
+      },
+      {
+        label: 'Nickname',
+        value: owner,
+      },
+    ];
+    return <TableCard key={id} data={data} />;
+  };
 
   return (
     <div className={classes.root}>
       {showTable ? (
-        <Table>
-          <TableHead className={classes.head}>
-            <TableRow>{map(renderTH)(tHeads)}</TableRow>
-          </TableHead>
-          <TableBody
-            classes={{
-              root: classes.body,
-            }}
-          >
-            {map(renderRow)(blocks)}
-            <TableRow hover>
-              <TableCell align="center">
-                <Link to={`/programs/1234`} className={classes.name}>
-                  7887319
-                </Link>
-              </TableCell>
-              <TableCell>TESTNAME</TableCell>
-              <TableCell>0.006 SOL | $1.12</TableCell>
-              <TableCell>1234</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <Table
+          fields={fields}
+          renderRow={renderRow}
+          data={values(endpointFavorites.accounts)}
+        />
       ) : (
         <div className={cn(classes.list, separate && classes.vertical)}>
-          <div className={classes.card}>
-            <ul>
-              <li>
-                <div className={classes.cardTitle}>Program id</div>
-                <div>7887219</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Nickname</div>
-                <div>TESTNAME</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Balance</div>
-                <div>0.006 SOL | $1.12</div>
-              </li>
-              <li>
-                <div className={classes.cardTitle}>Transactions</div>
-                <div>2345</div>
-              </li>
-            </ul>
-          </div>
+          {map(renderCard)(values(endpointFavorites.accounts))}
         </div>
       )}
     </div>

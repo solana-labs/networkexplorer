@@ -1,11 +1,10 @@
 // @flow
 import {observer} from 'mobx-react-lite';
-import {Container, IconButton, Tabs, useTheme} from '@material-ui/core';
+import {Container, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
 import {Match} from 'react-router-dom';
-import {ReactComponent as StarIcon} from 'v2/assets/icons/star.svg';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import HelpLink from 'v2/components/HelpLink';
 import QRPopup from 'v2/components/QRPopup';
@@ -14,6 +13,7 @@ import Loader from 'v2/components/UI/Loader';
 import AccountDetailStore from 'v2/stores/accounts/detail';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import TabNav from 'v2/components/UI/TabNav';
+import AddToFavorites from 'v2/components/AddToFavorites';
 
 import Chart from './Chart';
 import Transactions from './Transactions';
@@ -22,7 +22,12 @@ import useStyles from './styles';
 
 const AccountDetail = ({match}: {match: Match}) => {
   const classes = useStyles();
-  const {isLoading, accountId, accountInfo, accountView} = AccountDetailStore;
+  const {
+    isLoading,
+    accountId,
+    accountInfo = {},
+    accountView,
+  } = AccountDetailStore;
 
   if (accountId !== match.params.id) {
     AccountDetailStore.init({accountId: match.params.id});
@@ -42,7 +47,9 @@ const AccountDetail = ({match}: {match: Match}) => {
     {
       label: 'Balance',
       hint: '',
-      value: `${(accountInfo.lamports * LAMPORT_SOL_RATIO).toFixed(8)} SOL`,
+      value: `${((accountInfo.lamports || 0) * LAMPORT_SOL_RATIO).toFixed(
+        8,
+      )} SOL`,
     },
     {
       label: 'Transactions',
@@ -77,6 +84,10 @@ const AccountDetail = ({match}: {match: Match}) => {
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
   const url = window.location.href;
+  const favoritesData = {
+    id: accountId,
+    ...accountInfo,
+  };
 
   return (
     <Container>
@@ -86,9 +97,7 @@ const AccountDetail = ({match}: {match: Match}) => {
             <span>{accountId}</span>
             <CopyBtn text={accountId} />
             <QRPopup url={url} />
-            <IconButton size="small">
-              <StarIcon />
-            </IconButton>
+            <AddToFavorites item={favoritesData} type="accounts" />
           </div>
         </SectionHeader>
         <div className={classes.body}>
