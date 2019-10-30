@@ -25,8 +25,8 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
         <div className={classes.inner}>
           <ValidatorName
             pubkey={nodePubkey}
-            name={identity.name}
-            avatar={identity.avatarUrl}
+            name={identity ? identity.name : ""}
+            avatar={identity ? identity.avatarUrl : ""}
           />
           <div className={classes.info}>
             <div>
