@@ -1,6 +1,6 @@
 // @flow
 import GoogleMap from 'google-map-react';
-import {get, map} from 'lodash/fp';
+import {get, map, uniqueId} from 'lodash/fp';
 import {observer} from 'mobx-react-lite';
 import React, {useState} from 'react';
 
@@ -104,7 +104,7 @@ const renderMarkers = zoom =>
   map(marker => {
     return (
       <Marker
-        key={get('nodePubkey')(marker)}
+        key={uniqueId('marker')}
         lng={get('coordinates[0]')(marker)}
         lat={get('coordinates[1]')(marker)}
         scale={zoom}

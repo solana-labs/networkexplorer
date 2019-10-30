@@ -38,16 +38,13 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
 
   const {
     nodePubkey,
-    gossip,
     commission,
     identity = {},
-    coordinates,
     stakedSol,
     stakedSolPercent,
     calcUptime,
   } = node;
 
-  const markers = [{gossip, coordinates, name: nodePubkey}];
   const specs = [
     {
       label: 'Address',
@@ -174,7 +171,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
           {map(renderSpec)(specs)}
         </ul>
         <div className={classes.map}>
-          <ValidatorsMap markers={markers} />
+          <ValidatorsMap markers={[node]} />
         </div>
       </div>
     </Container>
