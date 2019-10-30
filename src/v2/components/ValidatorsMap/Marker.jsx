@@ -2,8 +2,8 @@
 import React from 'react';
 import MapTooltip from 'v2/components/UI/MapTooltip';
 import Avatar from 'v2/components/UI/Avatar';
-
 import ValidatorName from 'v2/components//UI/ValidatorName';
+
 import useStyles from './styles';
 
 const Marker = ({scale, marker}: {scale: number, marker: any}) => {
@@ -11,7 +11,7 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
   const transformScale = scale < 4 ? scale / 4 : 1;
   const {
     nodePubkey,
-    identity,
+    identity = {},
     calcCommission,
     calcUptime,
     stakedSol,
@@ -25,8 +25,8 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
         <div className={classes.inner}>
           <ValidatorName
             pubkey={nodePubkey}
-            name={identity ? identity.name : ''}
-            avatar={identity ? identity.avatarUrl : ''}
+            name={identity.name}
+            avatar={identity.avatarUrl}
           />
           <div className={classes.info}>
             <div>
@@ -48,9 +48,9 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
         <Avatar
           width={40}
           height={40}
-          avatarUrl={marker.avatarUrl}
-          name={marker.name}
-          pubkey={marker.pubkey}
+          avatarUrl={identity.avatarUrl}
+          name={identity.name}
+          pubkey={nodePubkey}
         />
       </div>
     </MapTooltip>

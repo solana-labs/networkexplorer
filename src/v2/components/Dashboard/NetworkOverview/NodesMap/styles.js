@@ -5,7 +5,6 @@ export default makeStyles(theme => ({
   card: {
     background: getColor('grey2')(theme),
     maxHeight: 290,
-    overflow: 'hidden',
     height: '100%',
     border: `1px solid ${getColor('grey5')(theme)}`,
     position: 'relative',
