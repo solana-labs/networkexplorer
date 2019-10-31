@@ -29,15 +29,9 @@ const BlocksPage = ({match}: {match: Match}) => {
           {formatNum(blockCount)}
         </CTypography>
       </SectionHeader>
-      <TableNav
-        prev={`/blocks/timeline/${prev}`}
-        next={`/blocks/timeline/${next}`}
-      />
+      <TableNav baseUrl={'/blocks/timeline/'} prev={prev} next={next} />
       <Table blocks={blocks} />
-      <TableNav
-        prev={`/blocks/timeline/${prev}`}
-        next={`/blocks/timeline/${next}`}
-      />
+      <TableNav baseUrl={'/blocks/timeline/'} prev={prev} next={next} />
     </Container>
   );
 };

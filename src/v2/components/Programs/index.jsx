@@ -29,15 +29,9 @@ const ProgramsPage = ({match}: {match: Match}) => {
           {formatNum(programCount)}
         </CTypography>
       </SectionHeader>
-      <TableNav
-        prev={`/programs/timeline/${prev}`}
-        next={`/programs/timeline/${next}`}
-      />
+      <TableNav baseUrl={'/programs/timeline/'} prev={prev} next={next} />
       <Table programs={programs} />
-      <TableNav
-        prev={`/programs/timeline/${prev}`}
-        next={`/programs/timeline/${next}`}
-      />
+      <TableNav baseUrl={'/programs/timeline/'} prev={prev} next={next} />
     </Container>
   );
 };

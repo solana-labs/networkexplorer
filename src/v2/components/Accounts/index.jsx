@@ -29,15 +29,9 @@ const AccountsPage = ({match}: {match: Match}) => {
           {formatNum(accountCount)}
         </CTypography>
       </SectionHeader>
-      <TableNav
-        prev={`/accounts/timeline/${prev}`}
-        next={`/accounts/timeline/${next}`}
-      />
+      <TableNav baseUrl={'/accounts/timeline/'} prev={prev} next={next} />
       <Table accounts={accounts} />
-      <TableNav
-        prev={`/accounts/timeline/${prev}`}
-        next={`/accounts/timeline/${next}`}
-      />
+      <TableNav baseUrl={'/accounts/timeline/'} prev={prev} next={next} />
     </Container>
   );
 };
