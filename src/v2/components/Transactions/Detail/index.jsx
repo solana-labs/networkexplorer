@@ -59,7 +59,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
     },
     {
       label: 'Block',
-      hint: '',
+      hint: transaction.blockId,
       value() {
         return (
           <Link to={`/blocks/${transaction.blockId}`}>
@@ -80,13 +80,21 @@ const TransactionDetail = ({match}: {match: Match}) => {
     },
   ];
 
-  const renderSpec = ({label, value}: {label: string, value: string}) => (
+  const renderSpec = ({
+    label,
+    hint,
+    value,
+  }: {
+    label: string,
+    hint: string,
+    value: string,
+  }) => (
     <li key={label}>
       <div className={classes.label}>
         {label}
         <HelpLink term="" text="" />
       </div>
-      <div className={classes.value}>
+      <div className={classes.value} title={hint}>
         {typeof value === 'function' ? value() : value}
       </div>
     </li>

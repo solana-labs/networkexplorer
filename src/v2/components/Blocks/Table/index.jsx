@@ -77,7 +77,9 @@ const BlocksTable = ({
           <Link to={`/blocks/${block.id}`}>{block.id}</Link>
         </TableCell>
         <TableCell width={100}>{block.slot}</TableCell>
-        <TableCell width={140}>{asTime(block.timestamp)}</TableCell>
+        <TableCell width={140} title={block.timestamp}>
+          {asTime(block.timestamp)}
+        </TableCell>
         <TableCell width={200}>TODO</TableCell>
         <TableCell width={140}>TODO</TableCell>
         <TableCell>
