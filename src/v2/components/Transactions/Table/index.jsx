@@ -73,10 +73,10 @@ const TransactionsTable = ({
   const renderRow = ({data: transaction}) => {
     return (
       <TableRow hover key={transaction.id}>
-        <TableCell>
+        <TableCell title={transaction.id}>
           <Link to={`/transactions/${transaction.id}`}>{transaction.id}</Link>
         </TableCell>
-        <TableCell>
+        <TableCell title={transaction.blockId}>
           <Link to={`/blocks/${transaction.blockId}`}>
             {transaction.blockId}
           </Link>
@@ -84,7 +84,7 @@ const TransactionsTable = ({
         <TableCell width={135} title={transaction.timestamp}>
           {asTime(transaction.timestamp)}
         </TableCell>
-        <TableCell width={230}>
+        <TableCell width={230} title={transaction.instructions[0].programId}>
           <Link
             to={`/programs/${transaction.instructions[0].programId}`}
             className={classes.name}
