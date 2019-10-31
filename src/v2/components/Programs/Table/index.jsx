@@ -11,7 +11,6 @@ import {map} from 'lodash/fp';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import TableCard from 'v2/components/UI/TableCard';
 
 import useStyles from './styles';
@@ -19,19 +18,13 @@ import useStyles from './styles';
 const fields: TableHeadProps[] = [
   {
     label: 'Program Id',
-    name: 'Program Id',
+    id: 'id',
     text: '',
     term: '',
   },
   {
     label: 'Type',
-    name: 'type',
-    text: '',
-    term: '',
-  },
-  {
-    label: 'Time',
-    name: 'time',
+    id: 'type',
     text: '',
     term: '',
   },
@@ -48,34 +41,27 @@ const ProgramsTable = ({
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
 
-  const asTime = x => {
-    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
-  };
-
   const renderRow = ({data: program}) => {
     return (
-      <TableRow hover key={program.programId}>
+      <TableRow hover key={program.id}>
         <TableCell>
-          <Link to={`/programs/${program.programId}`}>{program.programId}</Link>
+          <Link to={`/programs/${program.id}`}>{program.id}</Link>
         </TableCell>
         <TableCell>
           <div>
             <TypeLabel type="other" label="TODO" />
           </div>
         </TableCell>
-        <TableCell title={program.timestamp}>
-          {asTime(program.timestamp)}
-        </TableCell>
       </TableRow>
     );
   };
 
   const renderCard = program => {
-    const {programId, timestamp} = program;
+    const {id} = program;
     const data = [
       {
         label: 'Program id',
-        value: programId,
+        value: id,
       },
       {
         label: 'Type',
@@ -85,12 +71,8 @@ const ProgramsTable = ({
           </div>
         ),
       },
-      {
-        label: 'Time',
-        value: asTime(timestamp),
-      },
     ];
-    return <TableCard data={data} key={programId} />;
+    return <TableCard data={data} key={id} />;
   };
 
   return (

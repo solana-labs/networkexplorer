@@ -88,7 +88,6 @@ const NavBar = ({
     },
     {
       link: 'favorites',
-      disabled: true,
     },
   ];
   const renderLink = ({
