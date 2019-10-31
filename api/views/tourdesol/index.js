@@ -113,6 +113,7 @@ export class TourDeSolIndexView {
         lastEpochUptimePercent,
         cumulativeUptimePercent,
         uptimeEpochs,
+        uptimeComplete,
       } = uptime;
 
       const score = this.computeNodeScore(x, scoreParams);
@@ -127,6 +128,7 @@ export class TourDeSolIndexView {
         lastEpochUptimePercent,
         cumulativeUptimePercent,
         uptimeEpochs,
+        uptimeComplete,
         uptime,
         score,
       };
