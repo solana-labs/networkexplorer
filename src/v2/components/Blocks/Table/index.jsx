@@ -73,7 +73,7 @@ const BlocksTable = ({
   const renderRow = ({data: block}) => {
     return (
       <TableRow hover key={block.id}>
-        <TableCell align="center">
+        <TableCell align="center" title={block.id}>
           <Link to={`/blocks/${block.id}`}>{block.id}</Link>
         </TableCell>
         <TableCell width={100}>{block.slot}</TableCell>

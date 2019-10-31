@@ -55,7 +55,7 @@ const ProgramsTable = ({
   const renderRow = ({data: program}) => {
     return (
       <TableRow hover key={program.programId}>
-        <TableCell>
+        <TableCell title={program.programId}>
           <Link to={`/programs/${program.programId}`}>{program.programId}</Link>
         </TableCell>
         <TableCell>
