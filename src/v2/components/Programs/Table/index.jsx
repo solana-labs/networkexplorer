@@ -12,19 +12,26 @@ import TypeLabel from 'v2/components/UI/TypeLabel';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import TableCard from 'v2/components/UI/TableCard';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 import useStyles from './styles';
 
 const fields: TableHeadProps[] = [
   {
     label: 'Program Id',
-    id: 'id',
+    id: 'programId',
     text: '',
     term: '',
   },
   {
     label: 'Type',
     id: 'type',
+    text: '',
+    term: '',
+  },
+  {
+    label: 'Last Called',
+    id: 'timestamp',
     text: '',
     term: '',
   },
@@ -41,27 +48,34 @@ const ProgramsTable = ({
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
 
+  const asTime = x => {
+    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
+  };
+
   const renderRow = ({data: program}) => {
     return (
-      <TableRow hover key={program.id}>
+      <TableRow hover key={program.programId}>
         <TableCell>
-          <Link to={`/programs/${program.id}`}>{program.id}</Link>
+          <Link to={`/programs/${program.programId}`}>{program.programId}</Link>
         </TableCell>
         <TableCell>
           <div>
             <TypeLabel type="other" label="TODO" />
           </div>
         </TableCell>
+        <TableCell width={135} title={program.timestamp}>
+          {asTime(program.timestamp)}
+        </TableCell>
       </TableRow>
     );
   };
 
   const renderCard = program => {
-    const {id} = program;
+    const {programId} = program;
     const data = [
       {
         label: 'Program id',
-        value: id,
+        value: programId,
       },
       {
         label: 'Type',
@@ -72,7 +86,7 @@ const ProgramsTable = ({
         ),
       },
     ];
-    return <TableCard data={data} key={id} />;
+    return <TableCard data={data} key={programId} />;
   };
 
   return (
