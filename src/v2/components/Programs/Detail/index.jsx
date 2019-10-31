@@ -106,7 +106,7 @@ const ProgramDetail = ({match}: {match: Match}) => {
   const url = window.location.href;
   const favoritesData = {
     id: programId,
-    ...accountInfo,
+    type: accountInfo.type,
   };
 
   return (

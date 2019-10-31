@@ -86,7 +86,7 @@ const AccountDetail = ({match}: {match: Match}) => {
   const url = window.location.href;
   const favoritesData = {
     id: accountId,
-    ...accountInfo,
+    type: accountInfo.type,
   };
 
   return (
