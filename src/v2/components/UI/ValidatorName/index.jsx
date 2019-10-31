@@ -17,11 +17,13 @@ const ValidatorName = ({
   to?: string,
 }) => {
   const classes = useStyles();
+  const displayText = name || pubkey;
+
   return (
     <div>
       <Link to={to || `/validators/${pubkey}`} className={classes.root}>
         <Avatar pubkey={pubkey} avatarUrl={avatar} />
-        <div>{name || pubkey}</div>
+        <div title={displayText}>{displayText}</div>
       </Link>
     </div>
   );
