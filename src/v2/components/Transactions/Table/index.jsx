@@ -81,7 +81,9 @@ const TransactionsTable = ({
             {transaction.blockId}
           </Link>
         </TableCell>
-        <TableCell width={135}>{asTime(transaction.timestamp)}</TableCell>
+        <TableCell width={135} title={transaction.timestamp}>
+          {asTime(transaction.timestamp)}
+        </TableCell>
         <TableCell width={230}>
           <Link
             to={`/programs/${transaction.instructions[0].programId}`}
