@@ -26,8 +26,9 @@ export function calculateUptimeValues(epochInfo, epochSchedule, uptimeValues) {
       cumulativeUptimeCreditsEarned: null,
       cumulativeUptimeCreditsPossible: null,
       cumulativeUptimePercent: null,
-      complete: false,
-      epochs: 0,
+      uptimeComplete: false,
+      uptimeEpochs: 0,
+      uptimeEpochsSeen: {},
     };
   }
 
@@ -80,12 +81,17 @@ export function calculateUptimeValues(epochInfo, epochSchedule, uptimeValues) {
     Math.min(DEFAULT_CUMULATIVE_UPTIME_EPOCHS, lastEpoch - firstEpoch + 1) *
     slotsPerEpoch;
 
-  const lastEpochUptimePercent =
+  const lastEpochUptimePercent = Math.min(
+    100.0,
     (100 * (lastEpochUptimeCreditsEarned * 1.0)) /
-    (lastEpochUptimeCreditsPossible * 1.0);
-  const cumulativeUptimePercent =
+      (lastEpochUptimeCreditsPossible * 1.0),
+  );
+
+  const cumulativeUptimePercent = Math.min(
+    100.0,
     (100 * (cumulativeUptimeCreditsEarned * 1.0)) /
-    (cumulativeUptimeCreditsPossible * 1.0);
+      (cumulativeUptimeCreditsPossible * 1.0),
+  );
 
   return {
     lastEpoch,
@@ -95,8 +101,9 @@ export function calculateUptimeValues(epochInfo, epochSchedule, uptimeValues) {
     cumulativeUptimeCreditsEarned,
     cumulativeUptimeCreditsPossible,
     cumulativeUptimePercent,
-    complete: lastEpoch - firstEpoch >= DEFAULT_CUMULATIVE_UPTIME_EPOCHS,
+    uptimeComplete: lastEpoch - firstEpoch >= DEFAULT_CUMULATIVE_UPTIME_EPOCHS,
     uptimeEpochs: _.size(epochsSeen),
+    uptimeEpochsSeen: epochsSeen,
   };
 }
 

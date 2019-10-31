@@ -13,10 +13,11 @@ import HelpLink from 'v2/components/HelpLink';
 import ValidatorName from 'v2/components/UI/ValidatorName';
 
 import useStyles from './styles';
+import Uptime from '../../UI/Uptime';
 
 const fields = [
   {
-    label: 'ranking',
+    label: 'rank',
     id: 'rank',
     text: '',
     term: '',
@@ -30,6 +31,12 @@ const fields = [
   {
     label: 'Staked sol',
     id: 'activatedStake',
+    text: '',
+    term: '',
+  },
+  {
+    label: 'Slot',
+    id: 'slot',
     text: '',
     term: '',
   },
@@ -59,40 +66,32 @@ const ValidatorsTable = ({
       avatarUrl,
       activatedStake,
       activatedStakePercent,
+      slot,
       lastEpochUptimePercent,
       cumulativeUptimePercent,
       uptimeEpochs,
+      uptimeComplete,
       rank,
     } = row;
 
     return (
       <TableRow hover key={pubkey}>
-        <TableCell width={100}>{rank}</TableCell>
-        <TableCell>
+        <TableCell width={20}>{rank}</TableCell>
+        <TableCell width={300}>
           <ValidatorName pubkey={pubkey} name={name} avatar={avatarUrl} />
         </TableCell>
         <TableCell width={200}>
           {activatedStake.toFixed(8) || 'N/A'} (
           {activatedStakePercent.toFixed(3)}%)
         </TableCell>
-        <TableCell
-          width={150}
-          title={
-            lastEpochUptimePercent &&
-            cumulativeUptimePercent &&
-            uptimeEpochs &&
-            `Last Epoch Uptime: ${lastEpochUptimePercent.toFixed(
-              1,
-            )}%; Recent Cumulative Uptime: ${cumulativeUptimePercent.toFixed(
-              3,
-            )}%; Epochs: ${uptimeEpochs}`
-          }
-        >
-          {(cumulativeUptimePercent &&
-            `${cumulativeUptimePercent.toFixed(
-              cumulativeUptimePercent ? 4 : 2,
-            )}%`) ||
-            'Unavailable'}
+        <TableCell width={80}>{slot}</TableCell>
+        <TableCell width={120}>
+          <Uptime
+            lastEpochUptimePercent={lastEpochUptimePercent}
+            cumulativeUptimePercent={cumulativeUptimePercent}
+            uptimeEpochs={uptimeEpochs}
+            uptimeComplete={uptimeComplete}
+          />
         </TableCell>
       </TableRow>
     );
@@ -107,7 +106,9 @@ const ValidatorsTable = ({
       lastEpochUptimePercent,
       cumulativeUptimePercent,
       uptimeEpochs,
+      uptimeComplete,
     } = card;
+
     return (
       <div
         className={cn(classes.card, separate && classes.cardVertical)}
@@ -124,29 +125,18 @@ const ValidatorsTable = ({
           </Grid>
           <Grid item xs={6} zeroMinWidth>
             <div className={classes.cardTitle}>Uptime</div>
-            <div
-              title={
-                lastEpochUptimePercent &&
-                cumulativeUptimePercent &&
-                uptimeEpochs &&
-                `Last Epoch Uptime: ${lastEpochUptimePercent.toFixed(
-                  1,
-                )}%; Recent Cumulative Uptime: ${cumulativeUptimePercent.toFixed(
-                  3,
-                )}%; Epochs: ${uptimeEpochs}`
-              }
-            >
-              {(cumulativeUptimePercent &&
-                `${cumulativeUptimePercent.toFixed(
-                  cumulativeUptimePercent ? 4 : 2,
-                )}%`) ||
-                'Unavailable'}
-            </div>
+            <Uptime
+              lastEpochUptimePercent={lastEpochUptimePercent}
+              cumulativeUptimePercent={cumulativeUptimePercent}
+              uptimeEpochs={uptimeEpochs}
+              uptimeComplete={uptimeComplete}
+            />
           </Grid>
         </Grid>
       </div>
     );
   };
+
   return (
     <div className={classes.root}>
       <div className={classes.header}>
