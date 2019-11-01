@@ -4,8 +4,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
 import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import HelpLink from 'v2/components/HelpLink';
 import QRPopup from 'v2/components/QRPopup';
+import InfoRow from 'v2/components/InfoRow';
 import Loader from 'v2/components/UI/Loader';
 import TabNav from 'v2/components/UI/TabNav';
 import CopyBtn from 'v2/components/UI/CopyBtn';
@@ -60,13 +60,9 @@ const TransactionDetail = ({match}: {match: Match}) => {
     {
       label: 'Block',
       hint: transaction.blockId,
-      value() {
-        return (
-          <Link to={`/blocks/${transaction.blockId}`}>
-            {transaction.blockId}
-          </Link>
-        );
-      },
+      value: (
+        <Link to={`/blocks/${transaction.blockId}`}>{transaction.blockId}</Link>
+      ),
     },
     {
       label: 'Confirmations',
@@ -80,25 +76,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
     },
   ];
 
-  const renderSpec = ({
-    label,
-    hint,
-    value,
-  }: {
-    label: string,
-    hint: string,
-    value: string,
-  }) => (
-    <li key={label}>
-      <div className={classes.label}>
-        {label}
-        <HelpLink term="" text="" />
-      </div>
-      <div className={classes.value} title={hint}>
-        {typeof value === 'function' ? value() : value}
-      </div>
-    </li>
-  );
+  const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   const programMap = _.reduce(
     transaction.instructions,
@@ -133,7 +111,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
           </div>
         </SectionHeader>
         <div className={classes.body}>
-          <ul className={classes.spec}>{map(renderSpec)(specs)}</ul>
+          <div className={classes.spec}>{map(renderSpec)(specs)}</div>
         </div>
         <Tabs
           orientation={verticalTabs ? 'vertical' : 'horizontal'}

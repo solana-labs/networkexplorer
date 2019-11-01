@@ -6,7 +6,6 @@ import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
 import {Match} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import HelpLink from 'v2/components/HelpLink';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
@@ -15,8 +14,9 @@ import ProgramDetailStore from 'v2/stores/programs/detail';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import AddToFavorites from 'v2/components/AddToFavorites';
+import InfoRow from 'v2/components/InfoRow';
+import TabNav from 'v2/components/UI/TabNav';
 
-import TabNav from '../../UI/TabNav';
 import ProgramDetails from './Details';
 import ProgramCode from './Code';
 import useStyles from './styles';
@@ -61,15 +61,13 @@ const ProgramDetail = ({match}: {match: Match}) => {
     {
       label: 'Type',
       hint: '',
-      value() {
-        return (
-          <div className={classes.types}>
-            TODO
-            <TypeLabel type="system" label="system" />
-            <TypeLabel type="consensus" label="consensus" />
-          </div>
-        );
-      },
+      value: (
+        <div className={classes.types}>
+          TODO
+          <TypeLabel type="system" label="system" />
+          <TypeLabel type="consensus" label="consensus" />
+        </div>
+      ),
     },
     {
       label: 'Nickname',
@@ -88,17 +86,7 @@ const ProgramDetail = ({match}: {match: Match}) => {
     },
   ];
 
-  const renderSpec = ({label, value}: {label: string, value: string}) => (
-    <li key={label}>
-      <div className={classes.label}>
-        {label}
-        <HelpLink term="" text="" />
-      </div>
-      <div className={classes.value}>
-        {typeof value === 'function' ? value() : value}
-      </div>
-    </li>
-  );
+  const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   const tabNav = ['Accounts', 'code/source'];
 
@@ -121,7 +109,7 @@ const ProgramDetail = ({match}: {match: Match}) => {
           </div>
         </SectionHeader>
         <div className={classes.body}>
-          <ul className={classes.spec}>{map(renderSpec)(specs)}</ul>
+          <div className={classes.spec}>{map(renderSpec)(specs)}</div>
         </div>
         <Tabs
           orientation={verticalTable ? 'vertical' : 'horizontal'}

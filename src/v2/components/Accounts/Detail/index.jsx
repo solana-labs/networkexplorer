@@ -6,7 +6,6 @@ import {map, eq} from 'lodash/fp';
 import React, {useState} from 'react';
 import {Match} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import HelpLink from 'v2/components/HelpLink';
 import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import Loader from 'v2/components/UI/Loader';
@@ -14,6 +13,7 @@ import AccountDetailStore from 'v2/stores/accounts/detail';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import TabNav from 'v2/components/UI/TabNav';
 import AddToFavorites from 'v2/components/AddToFavorites';
+import InfoRow from 'v2/components/InfoRow';
 
 import Chart from './Chart';
 import Transactions from './Transactions';
@@ -68,17 +68,7 @@ const AccountDetail = ({match}: {match: Match}) => {
     },
   ];
 
-  const renderSpec = ({label, value}: {label: string, value: string}) => (
-    <li key={label}>
-      <div className={classes.label}>
-        {label}
-        <HelpLink term="" text="" />
-      </div>
-      <div className={classes.value}>
-        {typeof value === 'function' ? value() : value}
-      </div>
-    </li>
-  );
+  const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   const tabNav = ['transaction', 'analytics', 'code/source'];
 
@@ -101,7 +91,7 @@ const AccountDetail = ({match}: {match: Match}) => {
           </div>
         </SectionHeader>
         <div className={classes.body}>
-          <ul className={classes.spec}>{map(renderSpec)(specs)}</ul>
+          <div className={classes.spec}>{map(renderSpec)(specs)}</div>
         </div>
         <Tabs
           orientation={verticalTable ? 'vertical' : 'horizontal'}

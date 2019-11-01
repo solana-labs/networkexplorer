@@ -3,6 +3,7 @@ import {map} from 'lodash/fp';
 import React from 'react';
 import {Grid} from '@material-ui/core';
 import Label from 'v2/components/UI/Label';
+import InfoRow from 'v2/components/InfoRow';
 
 import useStyles from './styles';
 
@@ -18,18 +19,11 @@ const ProgramStatus = ({transaction}) => {
       value: 'TODO',
     },
   ];
-  const renderSpec = ({label, value}: {label: string, value: string}) => (
-    <li key={label}>
-      <Label text={label} hint="" />
-      <div className={classes.value}>
-        {typeof value === 'function' ? value() : value}
-      </div>
-    </li>
-  );
+  const renderSpec = info => <InfoRow key={info.label} {...info} />;
   return (
     <Grid container>
       <Grid item sm={7}>
-        <ul className={classes.spec}>{map(renderSpec)(specs)}</ul>
+        <div className={classes.spec}>{map(renderSpec)(specs)}</div>
       </Grid>
       <Grid item sm={5}>
         <Label text="confidence" hint="" />

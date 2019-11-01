@@ -25,68 +25,10 @@ export default makeStyles(theme => ({
       },
     },
   },
-  qrBtn: {
-    color: getColor('main')(theme),
-    border: `1px solid ${getColor('main')(theme)}`,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    height: 18,
-    width: 55,
-    background: 'transparent',
-    padding: 0,
-    marginLeft: 15,
-  },
   spec: {
     display: 'flex',
     flexWrap: 'wrap',
     padding: 0,
-    '& li': {
-      width: '50%',
-      display: 'flex',
-      marginBottom: 48,
-      [theme.breakpoints.down('sm')]: {
-        marginBottom: 32,
-        flexDirection: 'column',
-      },
-      '&:nth-child(odd)': {
-        width: 'calc(50% - 80px)',
-        marginRight: 80,
-        [theme.breakpoints.down('xs')]: {
-          marginRight: 40,
-          width: 'calc(50% - 40px)',
-        },
-      },
-    },
-  },
-  label: {
-    textTransform: 'uppercase',
-    fontSize: 15,
-    fontWeight: 'bold',
-    letterSpacing: 2,
-    width: 150,
-    flexShrink: 0,
-    marginRight: 40,
-    color: getColor('grey4')(theme),
-    display: 'flex',
-    alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
-      marginRight: 20,
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-      marginRight: 0,
-    },
-  },
-  value: {
-    fontSize: 15,
-    lineHeight: '29px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    '& > *': {
-      display: 'block',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
   },
   tabs: {
     marginBottom: 50,

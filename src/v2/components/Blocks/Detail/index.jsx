@@ -6,13 +6,13 @@ import {map} from 'lodash/fp';
 import {Match} from 'react-router-dom';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import SectionHeader from 'v2/components/UI/SectionHeader';
-import HelpLink from 'v2/components/HelpLink';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import TransactionsTable from 'v2/components/Transactions/Table';
 import Loader from 'v2/components/UI/Loader';
 import BlockDetailStore from 'v2/stores/blocks/detail';
 import ValidatorName from 'v2/components/UI/ValidatorName';
+import InfoRow from 'v2/components/InfoRow';
 
 import useStyles from './styles';
 
@@ -62,33 +62,13 @@ const BlockDetail = ({match}: {match: Match}) => {
     {
       label: 'Leader',
       hint: '',
-      value() {
-        return (
-          <ValidatorName pubkey={block.leader} name={block.leader} avatar="" />
-        );
-      },
+      value: (
+        <ValidatorName pubkey={block.leader} name={block.leader} avatar="" />
+      ),
     },
   ];
 
-  const renderSpec = ({
-    label,
-    hint,
-    value,
-  }: {
-    label: string,
-    hint: string,
-    value: string,
-  }) => (
-    <li key={label}>
-      <div className={classes.label}>
-        {label}
-        <HelpLink term="" text="" />
-      </div>
-      <div className={classes.value} title={hint}>
-        {typeof value === 'function' ? value() : value}
-      </div>
-    </li>
-  );
+  const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   return (
     <Container>
@@ -100,8 +80,7 @@ const BlockDetail = ({match}: {match: Match}) => {
           </span>
         </SectionHeader>
         <div className={classes.body}>
-          <ul className={classes.spec}>{map(renderSpec)(specs)}</ul>
-          <div></div>
+          <div className={classes.spec}>{map(renderSpec)(specs)}</div>
         </div>
       </div>
       <div className={classes.tableTitle}>Transactions (TODO)</div>
