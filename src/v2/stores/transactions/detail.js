@@ -2,18 +2,14 @@ import {action, flow, observable, decorate} from 'mobx';
 import {apiGetTransactionDetail} from 'v2/api/transactions';
 
 class Store {
-  isLoading = false;
   transactionId = null;
+  isLoading = true;
   transactionView = {};
   transaction = {};
 
   init = flow(function*({transactionId}) {
     this.setLoading(true);
     this.transactionId = transactionId;
-
-    if (this.transaction.id) {
-      return this.transaction;
-    }
 
     const res = yield apiGetTransactionDetail({transactionId});
 
@@ -31,6 +27,7 @@ class Store {
 
 decorate(Store, {
   setLoading: action.bound,
+  init: action.bound,
   isLoading: observable,
   transaction: observable,
   transactionId: observable,

@@ -45,4 +45,7 @@ export default makeStyles(theme => ({
     backgroundColor: getColor('main')(theme),
     color: getColor('dark')(theme),
   },
+  loader: {
+    marginTop: 40,
+  },
 }));
