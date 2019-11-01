@@ -16,6 +16,7 @@ import AddToFavorites from 'v2/components/AddToFavorites';
 import InfoRow from 'v2/components/InfoRow';
 import TabNav from 'v2/components/UI/TabNav';
 import asTime from 'v2/utils/asTime';
+import currentURL from 'v2/utils/currentURL';
 
 import ProgramDetails from './Details';
 import ProgramCode from './Code';
@@ -87,7 +88,7 @@ const ProgramDetail = ({match}: {match: Match}) => {
   const tabNav = ['Accounts', 'code/source'];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
-  const url = window.location.href;
+  const url = currentURL();
   const favoritesData = {
     id: programId,
     type: accountInfo.type,

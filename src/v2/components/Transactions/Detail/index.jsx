@@ -14,6 +14,7 @@ import _ from 'lodash';
 import TransactionDetailStore from 'v2/stores/transactions/detail';
 import {Link, Match} from 'react-router-dom';
 import asTime from 'v2/utils/asTime';
+import currentURL from 'v2/utils/currentURL';
 
 import ProgramsTab from './ProgramsTab';
 import ProgramStatus from './Status';
@@ -95,7 +96,7 @@ const TransactionDetail = ({match}: {match: Match}) => {
   ];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
-  const url = window.location.href;
+  const url = currentURL();
   return (
     <Container>
       <div className={classes.root}>
