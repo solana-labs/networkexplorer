@@ -7,12 +7,12 @@ import {map, find} from 'lodash/fp';
 import {Match} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import NodesStore from 'v2/stores/nodes';
-import HelpLink from 'v2/components/HelpLink';
 import Button from 'v2/components/UI/Button';
 import Mixpanel from 'v2/mixpanel';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import ValidatorName from 'v2/components/UI/ValidatorName';
 import ValidatorsMap from 'v2/components/ValidatorsMap';
+import InfoRow from 'v2/components/InfoRow';
 
 import useStyles from './styles';
 
@@ -49,14 +49,12 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Address',
       hint: '',
-      value() {
-        return (
-          <div className={classes.address}>
-            <span className={classes.value}>{nodePubkey} </span>
-            <CopyBtn text={nodePubkey} />
-          </div>
-        );
-      },
+      value: (
+        <div className={classes.address}>
+          <span className={classes.value}>{nodePubkey} </span>
+          <CopyBtn text={nodePubkey} />
+        </div>
+      ),
     },
     {
       label: 'Staked SOL',
@@ -66,15 +64,11 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Website',
       hint: '',
-      value() {
-        return identity.website ? (
-          <a target="_blank" rel="noopener noreferrer" href={identity.website}>
-            {identity.website}
-          </a>
-        ) : (
-          ''
-        );
-      },
+      value: (
+        <a target="_blank" rel="noopener noreferrer" href={identity.website}>
+          {identity.website}
+        </a>
+      ),
     },
     {
       label: 'Uptime',
@@ -84,19 +78,15 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'keybase',
       hint: '',
-      value() {
-        return identity.keybaseUsername ? (
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://keybase.io/${identity.keybaseUsername}`}
-          >
-            {identity.keybaseUsername}
-          </a>
-        ) : (
-          ''
-        );
-      },
+      value: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`https://keybase.io/${identity.keybaseUsername}`}
+        >
+          {identity.keybaseUsername}
+        </a>
+      ),
     },
     {
       label: 'Missed blocks',
@@ -115,17 +105,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     },
   ];
 
-  const renderSpec = ({label, value}: {label: string, value: string}) => (
-    <li key={label}>
-      <div className={classes.label}>
-        {label}
-        <HelpLink />
-      </div>
-      <div className={classes.value}>
-        {typeof value === 'function' ? value() : value}
-      </div>
-    </li>
-  );
+  const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   return (
     <Container>

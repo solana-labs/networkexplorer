@@ -9,38 +9,8 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
-    '& li': {
-      display: 'flex',
-      marginBottom: 48,
-      width: '100%',
-      '& > div:first-child': {
-        width: 150,
-        marginRight: 40,
-      },
-      [theme.breakpoints.down('sm')]: {
-        marginBottom: 32,
-        flexDirection: 'column',
-      },
-      '&:nth-child(odd)': {
-        marginRight: 80,
-        [theme.breakpoints.down('xs')]: {
-          marginRight: 0,
-        },
-      },
-    },
-  },
-  value: {
-    fontSize: 15,
-    lineHeight: '29px',
-    overflow: 'hidden',
-    textTransform: 'uppercase',
-    textOverflow: 'ellipsis',
-    '& a': {
-      color: getColor('main')(theme),
-      textDecoration: 'none',
-      '&:hover': {
-        textDecoration: 'underline',
-      },
+    '& > div': {
+      width: '100%!important',
     },
   },
   circle: {
