@@ -3,7 +3,6 @@
 import React from 'react';
 import {TableCell, TableRow} from '@material-ui/core';
 import cn from 'classnames';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from '@material-ui/core/styles';
 import {observer} from 'mobx-react-lite';
@@ -13,6 +12,7 @@ import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
 import ValidatorName from 'v2/components/UI/ValidatorName';
 import TableCard from 'v2/components/UI/TableCard';
+import asTime from 'v2/utils/asTime';
 
 import useStyles from './styles';
 
@@ -65,10 +65,6 @@ const BlocksTable = ({
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-
-  const asTime = x => {
-    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
-  };
 
   const renderRow = ({data: block}) => {
     return (

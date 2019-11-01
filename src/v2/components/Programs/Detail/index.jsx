@@ -11,11 +11,11 @@ import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import Loader from 'v2/components/UI/Loader';
 import ProgramDetailStore from 'v2/stores/programs/detail';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import AddToFavorites from 'v2/components/AddToFavorites';
 import InfoRow from 'v2/components/InfoRow';
 import TabNav from 'v2/components/UI/TabNav';
+import asTime from 'v2/utils/asTime';
 
 import ProgramDetails from './Details';
 import ProgramCode from './Code';
@@ -35,10 +35,6 @@ const ProgramDetail = ({match}: {match: Match}) => {
   if (programId !== match.params.id) {
     ProgramDetailStore.init({programId: match.params.id});
   }
-
-  const asTime = x => {
-    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
-  };
 
   const [tab, setTab] = useState(0);
   const theme = useTheme();
@@ -82,7 +78,7 @@ const ProgramDetail = ({match}: {match: Match}) => {
     {
       label: 'Last Called',
       hint: '',
-      value: timestamp && asTime(timestamp),
+      value: asTime(timestamp),
     },
   ];
 
