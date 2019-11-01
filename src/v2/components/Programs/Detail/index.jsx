@@ -2,8 +2,8 @@
 import {observer} from 'mobx-react-lite';
 import {Container, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
-import {map, eq} from 'lodash/fp';
-import React, {useState} from 'react';
+import {map} from 'lodash/fp';
+import React, {useEffect, useState} from 'react';
 import {Match} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import TypeLabel from 'v2/components/UI/TypeLabel';
@@ -11,7 +11,6 @@ import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import Loader from 'v2/components/UI/Loader';
 import ProgramDetailStore from 'v2/stores/programs/detail';
-import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import AddToFavorites from 'v2/components/AddToFavorites';
 import InfoRow from 'v2/components/InfoRow';
 import TabNav from 'v2/components/UI/TabNav';
@@ -31,18 +30,23 @@ const ProgramDetail = ({match}: {match: Match}) => {
     programAccounts,
     programView,
     timestamp,
+    init,
   } = ProgramDetailStore;
 
-  if (programId !== match.params.id) {
-    ProgramDetailStore.init({programId: match.params.id});
-  }
+  useEffect(() => {
+    init({programId: match.params.id});
+  }, [init, match.params.id]);
 
   const [tab, setTab] = useState(0);
   const theme = useTheme();
   const verticalTable = useMediaQuery(theme.breakpoints.down('xs'));
 
   if (isLoading) {
-    return <Loader width="533" height="290" />;
+    return (
+      <Container className={classes.loader}>
+        <Loader width="533" height="290" />
+      </Container>
+    );
   }
 
   if (!accountInfo) return null;
@@ -53,7 +57,7 @@ const ProgramDetail = ({match}: {match: Match}) => {
     {
       label: 'Balance',
       hint: '',
-      value: `${(accountInfo.lamports * LAMPORT_SOL_RATIO).toFixed(8)} SOL`,
+      value: `${accountInfo.balance} SOL`,
     },
     {
       label: 'Type',
@@ -86,7 +90,10 @@ const ProgramDetail = ({match}: {match: Match}) => {
   const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   const tabNav = ['Accounts', 'code/source'];
-
+  const tabs = {
+    0: <ProgramDetails programAccounts={programAccounts} />,
+    1: <ProgramCode programView={programView} />,
+  };
   const renderTabNav = label => <TabNav key={label} label={label} />;
   const url = currentURL();
   const favoritesData = {
@@ -96,31 +103,28 @@ const ProgramDetail = ({match}: {match: Match}) => {
 
   return (
     <Container>
-      <div className={classes.root}>
-        <SectionHeader title="Program Detail">
-          <div className={classes.programTitle}>
-            <span>{programId}</span>
-            <CopyBtn text={programId} />
-            <QRPopup url={url} />
-            <AddToFavorites item={favoritesData} type="programs" />
-          </div>
-        </SectionHeader>
-        <div className={classes.body}>
-          <div className={classes.spec}>{map(renderSpec)(specs)}</div>
+      <SectionHeader title="Program Detail">
+        <div className={classes.programTitle}>
+          <span>{programId}</span>
+          <CopyBtn text={programId} />
+          <QRPopup url={url} />
+          <AddToFavorites item={favoritesData} type="programs" />
         </div>
-        <Tabs
-          orientation={verticalTable ? 'vertical' : 'horizontal'}
-          className={classes.tabs}
-          classes={{indicator: classes.indicator}}
-          value={tab}
-          variant="fullWidth"
-          onChange={handleTabChange}
-        >
-          {map(renderTabNav)(tabNav)}
-        </Tabs>
-        {eq(0, tab) && <ProgramDetails programAccounts={programAccounts} />}
-        {eq(1, tab) && <ProgramCode programView={programView} />}
+      </SectionHeader>
+      <div className={classes.body}>
+        <div className={classes.spec}>{map(renderSpec)(specs)}</div>
       </div>
+      <Tabs
+        orientation={verticalTable ? 'vertical' : 'horizontal'}
+        className={classes.tabs}
+        classes={{indicator: classes.indicator}}
+        value={tab}
+        variant="fullWidth"
+        onChange={handleTabChange}
+      >
+        {map(renderTabNav)(tabNav)}
+      </Tabs>
+      {tabs[tab]}
     </Container>
   );
 };

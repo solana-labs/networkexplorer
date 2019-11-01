@@ -41,4 +41,7 @@ export default makeStyles(theme => ({
   indicator: {
     display: 'none',
   },
+  loader: {
+    marginTop: 40,
+  },
 }));
