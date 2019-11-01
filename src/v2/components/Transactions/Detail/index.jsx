@@ -12,8 +12,8 @@ import CopyBtn from 'v2/components/UI/CopyBtn';
 import {observer} from 'mobx-react-lite';
 import _ from 'lodash';
 import TransactionDetailStore from 'v2/stores/transactions/detail';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {Link, Match} from 'react-router-dom';
+import asTime from 'v2/utils/asTime';
 
 import ProgramsTab from './ProgramsTab';
 import ProgramStatus from './Status';
@@ -42,15 +42,11 @@ const TransactionDetail = ({match}: {match: Match}) => {
     return <Loader width="533" height="290" />;
   }
 
-  const asTime = x => {
-    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
-  };
-
   const specs = [
     {
       label: 'Time',
       hint: transaction.timestamp,
-      value: transaction.timestamp && asTime(transaction.timestamp),
+      value: asTime(transaction.timestamp),
     },
     {
       label: 'Fee',

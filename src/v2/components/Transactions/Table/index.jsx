@@ -11,8 +11,8 @@ import {map} from 'lodash/fp';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import Table from 'v2/components/UI/Table';
 import type {TableHeadProps} from 'v2/@types/table';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import TableCard from 'v2/components/UI/TableCard';
+import asTime from 'v2/utils/asTime';
 
 import useStyles from './styles';
 
@@ -65,10 +65,6 @@ const TransactionsTable = ({
   const classes = useStyles();
   const theme = useTheme();
   const showTable = useMediaQuery(theme.breakpoints.up('md'));
-
-  const asTime = x => {
-    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
-  };
 
   const renderRow = ({data: transaction}) => {
     return (

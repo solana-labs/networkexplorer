@@ -19,10 +19,10 @@ import Table from 'v2/components/UI/Table';
 import TypeLabel from 'v2/components/UI/TypeLabel';
 import {ReactComponent as WarnIcon} from 'v2/assets/icons/warn.svg';
 import FavoritesStore from 'v2/stores/favorites';
+import asTime from 'v2/utils/asTime';
+import {Link} from 'react-router-dom';
 
 import useStyles from './styles';
-import {Link} from 'react-router-dom';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const fields: TableHeadProps[] = [
   {
@@ -77,10 +77,6 @@ const FavoritesPage = () => {
     removeFavorites(id, tab);
   };
 
-  const asTime = x => {
-    return formatDistanceToNow(Date.parse(x), {addSuffix: true});
-  };
-
   const renderRow = ({data: row}) => {
     const {id, type, timestamp} = row;
 
@@ -95,7 +91,7 @@ const FavoritesPage = () => {
           </div>
         </TableCell>
         <TableCell width={135} title={timestamp}>
-          {(timestamp && asTime(timestamp)) || 'Unknown'}
+          {asTime(timestamp) || 'Unknown'}
         </TableCell>
         <TableCell width={30} title="Remove this item">
           <Button color="primary" onClick={remove(id)}>
