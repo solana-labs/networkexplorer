@@ -2,15 +2,14 @@
 import {observer} from 'mobx-react-lite';
 import {Container, Tabs, useTheme} from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery';
-import {map, eq} from 'lodash/fp';
-import React, {useState} from 'react';
+import {map} from 'lodash/fp';
+import React, {useEffect, useState} from 'react';
 import {Match} from 'react-router-dom';
 import SectionHeader from 'v2/components/UI/SectionHeader';
 import QRPopup from 'v2/components/QRPopup';
 import CopyBtn from 'v2/components/UI/CopyBtn';
 import Loader from 'v2/components/UI/Loader';
 import AccountDetailStore from 'v2/stores/accounts/detail';
-import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import TabNav from 'v2/components/UI/TabNav';
 import AddToFavorites from 'v2/components/AddToFavorites';
 import InfoRow from 'v2/components/InfoRow';
@@ -26,20 +25,25 @@ const AccountDetail = ({match}: {match: Match}) => {
   const {
     isLoading,
     accountId,
-    accountInfo = {},
+    accountInfo,
     accountView,
+    init,
   } = AccountDetailStore;
 
-  if (accountId !== match.params.id) {
-    AccountDetailStore.init({accountId: match.params.id});
-  }
+  useEffect(() => {
+    init({accountId: match.params.id});
+  }, [init, match.params.id]);
 
   const [tab, setTab] = useState(0);
   const theme = useTheme();
   const verticalTable = useMediaQuery(theme.breakpoints.down('xs'));
 
   if (isLoading) {
-    return <Loader width="533" height="290" />;
+    return (
+      <Container className={classes.loader}>
+        <Loader width="533" height="290" />
+      </Container>
+    );
   }
 
   const handleTabChange = (event, tab) => setTab(tab);
@@ -48,9 +52,7 @@ const AccountDetail = ({match}: {match: Match}) => {
     {
       label: 'Balance',
       hint: '',
-      value: `${((accountInfo.lamports || 0) * LAMPORT_SOL_RATIO).toFixed(
-        8,
-      )} SOL`,
+      value: `${accountInfo.balance} SOL`,
     },
     {
       label: 'Transactions',
@@ -72,7 +74,11 @@ const AccountDetail = ({match}: {match: Match}) => {
   const renderSpec = info => <InfoRow key={info.label} {...info} />;
 
   const tabNav = ['transaction', 'analytics', 'code/source'];
-
+  const tabs = {
+    0: <Transactions transactions={[]} />,
+    1: <Chart />,
+    2: <AccountCode accountView={accountView} />,
+  };
   const renderTabNav = label => <TabNav key={label} label={label} />;
   const url = currentURL();
   const favoritesData = {
@@ -82,32 +88,28 @@ const AccountDetail = ({match}: {match: Match}) => {
 
   return (
     <Container>
-      <div className={classes.root}>
-        <SectionHeader title="Account Detail">
-          <div className={classes.programTitle}>
-            <span>{accountId}</span>
-            <CopyBtn text={accountId} />
-            <QRPopup url={url} />
-            <AddToFavorites item={favoritesData} type="accounts" />
-          </div>
-        </SectionHeader>
-        <div className={classes.body}>
-          <div className={classes.spec}>{map(renderSpec)(specs)}</div>
+      <SectionHeader title="Account Detail">
+        <div className={classes.programTitle}>
+          <span>{accountId}</span>
+          <CopyBtn text={accountId} />
+          <QRPopup url={url} />
+          <AddToFavorites item={favoritesData} type="accounts" />
         </div>
-        <Tabs
-          orientation={verticalTable ? 'vertical' : 'horizontal'}
-          className={classes.tabs}
-          classes={{indicator: classes.indicator}}
-          value={tab}
-          variant="fullWidth"
-          onChange={handleTabChange}
-        >
-          {map(renderTabNav)(tabNav)}
-        </Tabs>
-        {eq(0, tab) && <Transactions transactions={[]} />}
-        {eq(1, tab) && <Chart />}
-        {eq(2, tab) && <AccountCode accountView={accountView} />}
+      </SectionHeader>
+      <div className={classes.body}>
+        <div className={classes.spec}>{map(renderSpec)(specs)}</div>
       </div>
+      <Tabs
+        orientation={verticalTable ? 'vertical' : 'horizontal'}
+        className={classes.tabs}
+        classes={{indicator: classes.indicator}}
+        value={tab}
+        variant="fullWidth"
+        onChange={handleTabChange}
+      >
+        {map(renderTabNav)(tabNav)}
+      </Tabs>
+      {tabs[tab]}
     </Container>
   );
 };
