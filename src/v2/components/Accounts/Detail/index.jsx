@@ -14,6 +14,7 @@ import {LAMPORT_SOL_RATIO} from 'v2/constants';
 import TabNav from 'v2/components/UI/TabNav';
 import AddToFavorites from 'v2/components/AddToFavorites';
 import InfoRow from 'v2/components/InfoRow';
+import currentURL from 'v2/utils/currentURL';
 
 import Chart from './Chart';
 import Transactions from './Transactions';
@@ -73,7 +74,7 @@ const AccountDetail = ({match}: {match: Match}) => {
   const tabNav = ['transaction', 'analytics', 'code/source'];
 
   const renderTabNav = label => <TabNav key={label} label={label} />;
-  const url = window.location.href;
+  const url = currentURL();
   const favoritesData = {
     id: accountId,
     type: accountInfo.type,
