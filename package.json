@@ -32,7 +32,7 @@
     "lodash": "^4.17.15",
     "material-table": "^1.53.0",
     "mixpanel-browser": "^2.30.1",
-    "mobx": "^5.14.2",
+    "mobx": "^5.15.0",
     "mobx-react-lite": "^1.5.0",
     "nocache": "^2.1.0",
     "notistack": "^0.9.5",
