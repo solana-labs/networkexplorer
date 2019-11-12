@@ -35,7 +35,7 @@
     "mobx": "^5.15.0",
     "mobx-react-lite": "^1.5.0",
     "nocache": "^2.1.0",
-    "notistack": "^0.9.5",
+    "notistack": "^0.9.6",
     "pem": "^1.14.3",
     "promise.allsettled": "^1.0.1",
     "prop-types": "^15.7.2",
