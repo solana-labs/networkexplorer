@@ -14,7 +14,7 @@
   "dependencies": {
     "@nivo/bar": "^0.59.2",
     "@nivo/line": "^0.59.3",
-    "@solana/web3.js": "^0.26.0",
+    "@solana/web3.js": "^0.26.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "base-58": "^0.0.1",
     "classnames": "^2.2.6",
