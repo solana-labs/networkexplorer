@@ -2170,10 +2170,10 @@
     lodash "^4.17.11"
     recompose "^0.30.0"
 
-"@nivo/line@^0.60.0":
-  version "0.60.0"
-  resolved "https://registry.yarnpkg.com/@nivo/line/-/line-0.60.0.tgz#678837cb84d526dda5d27c5f1617fb0918b4c885"
-  integrity sha512-hsFQDb2aPqGWXZnJ9NFVgC3HAtwuH/iMuFCXVgHOF+aTtjkxgQOHIWGKZ4fMGChSwskEWsDuNzVD33WlTltGWw==
+"@nivo/line@^0.60.1":
+  version "0.60.1"
+  resolved "https://registry.yarnpkg.com/@nivo/line/-/line-0.60.1.tgz#c3447a1e1bf788864b7873d01f29cf349f74e80a"
+  integrity sha512-mch/Kpk/vFV6aJ/TW1tKo5/hamSbPMoit/gO91G7qkI1LJkrdBtGPWTBnfe2AX2fv731aT3Gz1+eKEaro7PS/g==
   dependencies:
     "@nivo/annotations" "0.60.0"
     "@nivo/axes" "0.60.0"
