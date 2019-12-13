@@ -2113,10 +2113,10 @@
     lodash "^4.17.11"
     react-motion "^0.5.2"
 
-"@nivo/bar@^0.60.0":
-  version "0.60.0"
-  resolved "https://registry.yarnpkg.com/@nivo/bar/-/bar-0.60.0.tgz#e052d5343385c0b5942b7d0c4b03bdc08778d523"
-  integrity sha512-EgcZzrL79UO2Bvu38PrcVSRx55Z7Yib63DPsaeMSTCD9NlVAOrcC1Jf9qysU6BFPSLzABqNGgfhMgw0xbTO8kQ==
+"@nivo/bar@^0.60.1":
+  version "0.60.1"
+  resolved "https://registry.yarnpkg.com/@nivo/bar/-/bar-0.60.1.tgz#4e164b77cd65cc0322df1a804386c90cf237d635"
+  integrity sha512-OR8T3i3FObfhpogy3sNhGL/HX1A75UxcbR+Q/8Z39+xO7k0aTud2fEasEpC+FXT/6lQhJYDdnbsSVNtpalymKQ==
   dependencies:
     "@nivo/annotations" "0.60.0"
     "@nivo/axes" "0.60.0"
