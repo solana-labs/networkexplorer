@@ -37,7 +37,7 @@
     "nocache": "^2.1.0",
     "notistack": "^0.9.7",
     "pem": "^1.14.3",
-    "promise.allsettled": "^1.0.1",
+    "promise.allsettled": "^1.0.2",
     "prop-types": "^15.7.2",
     "react-content-loader": "^4.3.3",
     "react-copy-to-clipboard": "^5.0.2",
