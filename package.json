@@ -33,7 +33,7 @@
     "material-table": "^1.54.2",
     "mixpanel-browser": "^2.32.0",
     "mobx": "^5.15.1",
-    "mobx-react-lite": "^1.5.1",
+    "mobx-react-lite": "^1.5.2",
     "nocache": "^2.1.0",
     "notistack": "^0.9.7",
     "pem": "^1.14.3",
