@@ -12,7 +12,7 @@
     "url": "http://github.com/solana-labs/blockexplorer/issues"
   },
   "dependencies": {
-    "@nivo/bar": "^0.60.1",
+    "@nivo/bar": "^0.61.0",
     "@nivo/line": "^0.60.1",
     "@solana/web3.js": "^0.27.4",
     "babel-plugin-transform-runtime": "^6.23.0",
