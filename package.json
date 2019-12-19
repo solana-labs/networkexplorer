@@ -49,7 +49,7 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "@babel/register": "^7.7.4",
+    "@babel/register": "^7.7.7",
     "@commitlint/config-conventional": "^8.2.0",
     "@commitlint/travis-cli": "^8.2.0",
     "@material-ui/core": "^4.8.0",
