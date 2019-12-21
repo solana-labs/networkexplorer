@@ -2170,16 +2170,25 @@
     lodash "^4.17.11"
     recompose "^0.30.0"
 
-"@nivo/line@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@nivo/line/-/line-0.61.0.tgz#75eec84d8f526b966be91ee0ddcb0a8c341b478b"
-  integrity sha512-ybwL+3S0ORHQwG8U5LhzsuQaSwTNZqUNfwebkVCucLHtv/9FQj0oPc1ijjCBo24ypNlUXaNAjqiXbO7nJ4TWYg==
+"@nivo/legends@0.61.1":
+  version "0.61.1"
+  resolved "https://registry.yarnpkg.com/@nivo/legends/-/legends-0.61.1.tgz#54ac123b25449e7663067b3e019c7d3a9429a6f9"
+  integrity sha512-bKVXffFwTKGySZRUf6sdVzWUb5jjGffuvRczs0giQCu8OUgeJIi0IOOyYhHtww+rTVGIKAi0xPGQTQnF4kpufA==
+  dependencies:
+    "@nivo/core" "0.61.0"
+    lodash "^4.17.11"
+    recompose "^0.30.0"
+
+"@nivo/line@^0.61.1":
+  version "0.61.1"
+  resolved "https://registry.yarnpkg.com/@nivo/line/-/line-0.61.1.tgz#7e857c4abababef3e019211deff9feb347cec788"
+  integrity sha512-PZFGgcj+IlDtZG6kTdBrGJ5cJvs1w5kaAI86IaH5AXJ0MQqVIZYWgbXdf5Vg6Hv2ouLmwNwONA/ORACKVkG+YA==
   dependencies:
     "@nivo/annotations" "0.61.0"
     "@nivo/axes" "0.61.0"
     "@nivo/colors" "0.61.0"
     "@nivo/core" "0.61.0"
-    "@nivo/legends" "0.61.0"
+    "@nivo/legends" "0.61.1"
     "@nivo/scales" "0.61.0"
     "@nivo/tooltip" "0.61.0"
     "@nivo/voronoi" "0.61.0"
