@@ -2113,16 +2113,16 @@
     lodash "^4.17.11"
     react-motion "^0.5.2"
 
-"@nivo/bar@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@nivo/bar/-/bar-0.61.0.tgz#13313fa146cb135fee5a1b84b900583fa2e941d9"
-  integrity sha512-ZBDyy4VQ1EjNQy6OkfWRDY64gL57nJae/mWgnXH+W++Wo2MjE2fRawuzwB40m/4usO5/WN6Zkt9r62MnWvD3Hg==
+"@nivo/bar@^0.61.1":
+  version "0.61.1"
+  resolved "https://registry.yarnpkg.com/@nivo/bar/-/bar-0.61.1.tgz#c29579b4018954a1c7a93d2d365c7878de4396f6"
+  integrity sha512-MYdjeFt6HqEyIBFwbVHKPjpw8+DPirAZwJDZi7dPXT0F7WcwJOnRITlRHhmQEGq5u71h26UN+M0z/ZQkB54mvw==
   dependencies:
     "@nivo/annotations" "0.61.0"
     "@nivo/axes" "0.61.0"
     "@nivo/colors" "0.61.0"
     "@nivo/core" "0.61.0"
-    "@nivo/legends" "0.61.0"
+    "@nivo/legends" "0.61.1"
     "@nivo/tooltip" "0.61.0"
     d3-scale "^3.0.0"
     d3-shape "^1.2.2"
@@ -2159,15 +2159,6 @@
     lodash "^4.17.11"
     react-measure "^2.2.4"
     react-motion "^0.5.2"
-    recompose "^0.30.0"
-
-"@nivo/legends@0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@nivo/legends/-/legends-0.61.0.tgz#3d5b05c862ff0b9ec445e57963144f6a14ba9526"
-  integrity sha512-zAdjkxGuNTN5Z646VF5JZW8sIJGhMCEPuTEydalCTBQ7pE5OXvINY+O0NGBjQzfc2Cq1ndzVug2NkmSFEwACAw==
-  dependencies:
-    "@nivo/core" "0.61.0"
-    lodash "^4.17.11"
     recompose "^0.30.0"
 
 "@nivo/legends@0.61.1":
