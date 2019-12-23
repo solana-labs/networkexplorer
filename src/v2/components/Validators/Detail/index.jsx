@@ -15,6 +15,7 @@ import ValidatorsMap from 'v2/components/ValidatorsMap';
 import InfoRow from 'v2/components/InfoRow';
 
 import useStyles from './styles';
+import Uptime from '../../UI/Uptime';
 
 const ValidatorsDetail = ({match}: {match: Match}) => {
   const {validators, inactiveValidators} = NodesStore;
@@ -42,8 +43,15 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     identity = {},
     stakedSol,
     stakedSolPercent,
-    calcUptime,
+    uptimeStats,
   } = node;
+
+  const {
+    lastEpochUptimePercent,
+    cumulativeUptimePercent,
+    uptimeEpochs,
+    uptimeComplete,
+  } = uptimeStats || {};
 
   const specs = [
     {
@@ -73,7 +81,14 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'Uptime',
       hint: '',
-      value: `${calcUptime}%`,
+      value: (
+        <Uptime
+          lastEpochUptimePercent={lastEpochUptimePercent}
+          cumulativeUptimePercent={cumulativeUptimePercent}
+          uptimeEpochs={uptimeEpochs}
+          uptimeComplete={uptimeComplete}
+        />
+      ),
     },
     {
       label: 'keybase',

@@ -5,6 +5,7 @@ import Avatar from 'v2/components/UI/Avatar';
 import ValidatorName from 'v2/components//UI/ValidatorName';
 
 import useStyles from './styles';
+import Uptime from '../UI/Uptime';
 
 const Marker = ({scale, marker}: {scale: number, marker: any}) => {
   const classes = useStyles();
@@ -13,11 +14,16 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
     nodePubkey,
     identity = {},
     calcCommission,
-    calcUptime,
+    uptimeStats,
     stakedSol,
     stakedSolPercent,
   } = marker;
-
+  const {
+    lastEpochUptimePercent,
+    cumulativeUptimePercent,
+    uptimeEpochs,
+    uptimeComplete,
+  } = uptimeStats || {};
   return (
     <MapTooltip
       classes={{tooltip: classes.tooltip}}
@@ -36,7 +42,16 @@ const Marker = ({scale, marker}: {scale: number, marker: any}) => {
             <div>
               Commission: {calcCommission ? `${calcCommission}%` : 'N/A'}
             </div>
-            <div>Uptime: {calcUptime ? `${calcUptime}%` : 'Unavailable'}</div>
+            <div>
+              {' '}
+              Uptime:{' '}
+              <Uptime
+                lastEpochUptimePercent={lastEpochUptimePercent}
+                cumulativeUptimePercent={cumulativeUptimePercent}
+                uptimeEpochs={uptimeEpochs}
+                uptimeComplete={uptimeComplete}
+              />
+            </div>
           </div>
         </div>
       )}

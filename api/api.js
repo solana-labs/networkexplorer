@@ -26,7 +26,7 @@ import {FriendlyGet} from './friendlyGet';
 import config from './config';
 import {addNetworkExplorerRoutes} from './network-explorer';
 import {FULLNODE_URL} from './fullnode-url';
-import {lamportsToSol} from './util';
+import {calculateUptimeValues, lamportsToSol} from './util';
 
 const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 5000;
@@ -579,6 +579,8 @@ async function getClusterInfo() {
     feeCalculator,
     inflation,
     currentSlot,
+    epochInfo,
+    epochSchedule,
     supply,
     clusterNodes,
     leader,
@@ -589,6 +591,8 @@ async function getClusterInfo() {
     .with('feeCalculator', connection.getRecentBlockhash())
     .with('inflation', connection.getInflation())
     .with('currentSlot', getAsync('!blk-last-slot'))
+    .with('epochInfo', connection.getEpochInfo())
+    .with('epochSchedule', connection.getEpochSchedule())
     .with('supply', connection.getTotalSupply())
     .with('clusterNodes', connection.getClusterNodes(), [])
     .with('leader', connection.getSlotLeader())
@@ -695,6 +699,11 @@ async function getClusterInfo() {
     node.votePubkey = votePubkey;
     node.identity = _.find(identities, x => x.pubkey === nodePubkey);
     node.uptime = _.find(uptime, x => x.nodePubkey === nodePubkey);
+    node.uptimeStats = calculateUptimeValues(
+      epochInfo,
+      epochSchedule,
+      node.uptime && node.uptime.uptime,
+    );
 
     node.voteStatus =
       _.find(voteAccounts.current, x => x.nodePubkey === nodePubkey) ||
