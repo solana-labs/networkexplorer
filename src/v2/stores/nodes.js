@@ -3,13 +3,8 @@ import {action, computed, decorate, observable, flow} from 'mobx';
 import * as API from 'v2/api/stats';
 import getUptime from 'v2/utils/getUptime';
 
-import {LAMPORT_SOL_RATIO} from '../constants';
-
-const addNetworkSolInfo = totalStaked => node => ({
+const addNetworkSolInfo = () => node => ({
   ...node,
-  stakedSol: (node.activatedStake * LAMPORT_SOL_RATIO).toFixed(8),
-  stakedSolPercent: (100 * (node.activatedStake / totalStaked)).toFixed(3),
-  calcCommission: (100 * (node.commission / 0xff)).toFixed(3),
   calcUptime: getUptime(node.uptime),
 });
 
@@ -24,6 +19,7 @@ class Store {
       ? map(addNetworkSolInfo(data.totalStaked))(data.network)
       : [];
     this.totalStaked = data.totalStaked;
+    this.totalStakedSol = data.totalStakedSol;
     this.supply = data.supply;
     this.networkInflationRate = data.networkInflationRate;
   };

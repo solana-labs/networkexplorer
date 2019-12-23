@@ -15,11 +15,10 @@ import HelpLink from 'v2/components/HelpLink';
 
 import ValidatorsTable from './Table';
 import useStyles from './styles';
-import {LAMPORT_SOL_RATIO} from '../../constants';
 
 const Validators = () => {
   const classes = useStyles();
-  const {supply, validators, fetchClusterInfo, totalStaked} = NodesStore;
+  const {supply, validators, fetchClusterInfo, totalStakedSol} = NodesStore;
   const {isLoading} = Socket;
   useEffect(() => {
     fetchClusterInfo();
@@ -36,7 +35,7 @@ const Validators = () => {
     },
     {
       title: 'Staked SOL',
-      value: (totalStaked * LAMPORT_SOL_RATIO).toFixed(8),
+      value: totalStakedSol.toFixed(8),
       changes: '',
       period: 'since yesterday',
       helpText: 'The total number of SOL staked to validators and activated.',
