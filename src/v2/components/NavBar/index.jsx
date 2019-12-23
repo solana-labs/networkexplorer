@@ -25,6 +25,7 @@ import {ReactComponent as transactions} from './assets/transactions.svg';
 import {ReactComponent as validators} from './assets/validators.svg';
 import {ReactComponent as tourdesol} from './assets/tourdesol.svg';
 import {ReactComponent as programs} from './assets/programs.svg';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import {ReactComponent as blocks} from './assets/blocks.svg';
 import {ReactComponent as favorites} from './assets/favorites.svg';
 import useStyles from './styles';
@@ -35,6 +36,9 @@ const icons = {
   validators,
   tourdesol,
   programs,
+  accounts: () => (
+    <AccountBalanceIcon style={{fill: 'none', width: 40, height: 40}} />
+  ),
   blocks,
   favorites,
 };
@@ -45,6 +49,7 @@ const navTracks = {
   validators: 'Clicked Validators Page',
   tourdesol: 'Clicked TDS Page',
   programs: 'Clicked Programs page',
+  accounts: 'Clicked Accounts page',
   blocks: 'Clicked Blocks page',
   favorites: 'Clicked Favorites page',
 };
@@ -61,7 +66,7 @@ const NavBar = ({
   toggleDrawer: (val: boolean) => void,
 }) => {
   const {endpointName} = socketActions;
-  const isTDS = eq('tds', endpointName);
+  const isTDS = eq('tds', endpointName) || eq('local', endpointName);
   const classes = useStyles();
   const theme = useTheme();
   const showDrawer = useMediaQuery(theme.breakpoints.up('md'));
@@ -85,6 +90,9 @@ const NavBar = ({
     },
     {
       link: 'programs',
+    },
+    {
+      link: 'accounts',
     },
     {
       link: 'favorites',
