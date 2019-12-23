@@ -29,9 +29,7 @@ const Stage = ({className, activeClass, stage, activeStage}: StageProps) => {
   const stageDateStart = stage.isTbd
     ? 'SOON'
     : format(new Date(stage.startDate), 'P');
-  const stageDateEnd = stage.isTbd
-    ? 'SOON'
-    : format(new Date(stage.endDate), 'P');
+  const stageDateEnd = stage.isTbd ? '' : format(new Date(stage.endDate), 'P');
 
   return (
     <li className={cn(className, isActive && activeClass)}>
@@ -39,7 +37,9 @@ const Stage = ({className, activeClass, stage, activeStage}: StageProps) => {
         {stage.title} {isActive && '(LIVE!)'}
         {isActive && <img src={iconRight} width={47} height={13} alt="" />}
         <br />
-        {isFinished && <span>(finished {stageDateEnd})</span>}
+        {isFinished && (
+          <span>(finished{stageDateEnd && ' ' + stageDateEnd})</span>
+        )}
         {!isActive && !isFinished && <span>(coming {stageDateStart})</span>}
       </div>
     </li>
