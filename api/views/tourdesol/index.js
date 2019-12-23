@@ -1,6 +1,6 @@
 import {filter, reduce, orderBy} from 'lodash/fp';
 
-import {calculateUptimeValues, LAMPORT_SOL_RATIO} from '../../util';
+import {calculateUptimeValues, lamportsToSol} from '../../util';
 
 const SLOTS_PER_DAY = (1.0 * 24 * 60 * 60) / 0.8;
 const TDS_DEFAULT_STAGE_LENGTH_BLOCKS = SLOTS_PER_DAY * 5.0;
@@ -81,8 +81,8 @@ export class TourDeSolIndexView {
       daysLeftInStage,
       stageDurationBlocks: currentStage && currentStage.duration,
       networkInflationRate: clusterInfo && clusterInfo.networkInflationRate,
-      totalSupply: clusterInfo && clusterInfo.supply * LAMPORT_SOL_RATIO,
-      totalStaked: clusterInfo && clusterInfo.totalStaked * LAMPORT_SOL_RATIO,
+      totalSupply: lamportsToSol(clusterInfo && clusterInfo.supply),
+      totalStaked: lamportsToSol(clusterInfo && clusterInfo.totalStaked),
       activeValidators: activeValidatorsRaw && activeValidatorsRaw.length,
       inactiveValidators: inactiveValidatorsRaw && inactiveValidatorsRaw.length,
     };
@@ -99,7 +99,7 @@ export class TourDeSolIndexView {
       const slot = x.currentSlot;
       const name = x.identity && x.identity.name;
       const avatarUrl = x.identity && x.identity.avatarUrl;
-      const activatedStake = x.activatedStake * LAMPORT_SOL_RATIO;
+      const activatedStake = lamportsToSol(x.activatedStake);
       const activatedStakePercent =
         clusterInfo && 100.0 * (x.activatedStake / clusterInfo.totalStaked);
 

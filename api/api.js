@@ -26,6 +26,7 @@ import {FriendlyGet} from './friendlyGet';
 import config from './config';
 import {addNetworkExplorerRoutes} from './network-explorer';
 import {FULLNODE_URL} from './fullnode-url';
+import {lamportsToSol} from './util';
 
 const GLOBAL_STATS_BROADCAST_INTERVAL_MS = 2000;
 const CLUSTER_INFO_BROADCAST_INTERVAL_MS = 5000;
@@ -627,6 +628,7 @@ async function getClusterInfo() {
     },
     0,
   );
+  let totalStakedSol = lamportsToSol(totalStaked);
 
   const network = {};
 
@@ -699,6 +701,12 @@ async function getClusterInfo() {
       _.find(voteAccounts.delinquent, x => x.nodePubkey === nodePubkey);
     node.activatedStake = node.voteStatus && node.voteStatus.activatedStake;
     node.commission = node.voteStatus && node.voteStatus.commission;
+
+    node.stakedSol = lamportsToSol(node.activatedStake).toFixed(8);
+    node.stakedSolPercent = (100 * (node.activatedStake / totalStaked)).toFixed(
+      3,
+    );
+    node.calcCommission = (100 * (node.commission / 0xff)).toFixed(3);
   }
 
   for (const node of Object.keys(network).sort()) {
@@ -760,6 +768,7 @@ async function getClusterInfo() {
     inflation,
     networkInflationRate,
     totalStaked,
+    totalStakedSol,
     network,
     clusterNodes,
     identities,

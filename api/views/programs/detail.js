@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import Base58 from 'base-58';
+
+import {lamportsToSol} from '../../util';
 const b58e = Base58.encode;
 
 /**
@@ -25,6 +27,7 @@ export class ProgramDetailView {
       data: rawData.accountInfo.data.toString(),
       executable: rawData.accountInfo.executable,
       lamports: rawData.accountInfo.lamports,
+      balance: lamportsToSol(rawData.accountInfo.lamports).toFixed(8),
       owner: rawData.accountInfo.owner.toBase58(),
     };
 

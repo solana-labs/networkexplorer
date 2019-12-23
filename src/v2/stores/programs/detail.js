@@ -1,11 +1,5 @@
 import {action, flow, observable, decorate} from 'mobx';
 import {apiGetProgramDetail} from 'v2/api/programs';
-import {LAMPORT_SOL_RATIO} from 'v2/constants';
-
-const extendAccountInfo = (account = {}) => ({
-  ...account,
-  balance: ((account.lamports || 0) * LAMPORT_SOL_RATIO).toFixed(8),
-});
 
 class Store {
   isLoading = true;
@@ -23,7 +17,7 @@ class Store {
     const {accountInfo, programAccounts, timestamp} = res.data;
 
     this.programView = res.data;
-    this.accountInfo = extendAccountInfo(accountInfo);
+    this.accountInfo = accountInfo;
     this.programAccounts.replace(programAccounts);
     this.timestamp = timestamp;
     this.setLoading(false);

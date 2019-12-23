@@ -1,12 +1,14 @@
-import {Transaction} from '@solana/web3.js';
+import {SOL_LAMPORTS, Transaction} from '@solana/web3.js';
 import _ from 'lodash';
 import Base58 from 'base-58';
 const b58e = Base58.encode;
 
-export const LAMPORT_SOL_RATIO = 0.0000000000582;
-
 const DEFAULT_CUMULATIVE_UPTIME_EPOCHS = 64;
 const TDS_MAGIC_EPOCH = 10;
+
+export function lamportsToSol(lamports) {
+  return ((lamports || 0.0) * 1.0) / SOL_LAMPORTS;
+}
 
 export function calculateUptimeValues(epochInfo, epochSchedule, uptimeValues) {
   const {epoch} = epochInfo;
