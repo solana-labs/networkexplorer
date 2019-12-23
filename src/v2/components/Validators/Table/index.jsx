@@ -23,6 +23,7 @@ import ValidatorName from 'v2/components/UI/ValidatorName';
 import TableCard from 'v2/components/UI/TableCard';
 
 import useStyles from './styles';
+import Uptime from '../../UI/Uptime';
 
 const fields = [
   {
@@ -76,8 +77,14 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       stakedSol,
       stakedSolPercent,
       calcCommission,
-      calcUptime,
+      uptimeStats,
     } = row;
+    const {
+      lastEpochUptimePercent,
+      cumulativeUptimePercent,
+      uptimeEpochs,
+      uptimeComplete,
+    } = uptimeStats || {};
     return (
       <TableRow hover key={nodePubkey}>
         <TableCell>
@@ -91,7 +98,14 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
           <div>{stakedSol ? `${stakedSol} (${stakedSolPercent}%)` : 'N/A'}</div>
         </TableCell>
         <TableCell>{calcCommission ? `${calcCommission}%` : 'N/A'}</TableCell>
-        <TableCell>{calcUptime ? `${calcUptime}%` : 'Unavailable'}</TableCell>
+        <TableCell>
+          <Uptime
+            lastEpochUptimePercent={lastEpochUptimePercent}
+            cumulativeUptimePercent={cumulativeUptimePercent}
+            uptimeEpochs={uptimeEpochs}
+            uptimeComplete={uptimeComplete}
+          />
+        </TableCell>
       </TableRow>
     );
   };
@@ -102,8 +116,14 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       stakedSol,
       stakedSolPercent,
       calcCommission,
-      calcUptime,
+      uptimeStats,
     } = card;
+    const {
+      lastEpochUptimePercent,
+      cumulativeUptimePercent,
+      uptimeEpochs,
+      uptimeComplete,
+    } = uptimeStats || {};
     const data = [
       {
         label: 'Name',
@@ -125,7 +145,14 @@ const ValidatorsTable = ({separate}: {separate: boolean}) => {
       },
       {
         label: 'Uptime',
-        value: calcUptime ? `${calcUptime}%` : 'Unavailable',
+        value: (
+          <Uptime
+            lastEpochUptimePercent={lastEpochUptimePercent}
+            cumulativeUptimePercent={cumulativeUptimePercent}
+            uptimeEpochs={uptimeEpochs}
+            uptimeComplete={uptimeComplete}
+          />
+        ),
       },
     ];
     return <TableCard vertical={separate} key={nodePubkey} data={data} />;
