@@ -35,7 +35,7 @@ const Validators = () => {
     },
     {
       title: 'Staked SOL',
-      value: totalStakedSol.toFixed(8),
+      value: totalStakedSol && totalStakedSol.toFixed(8),
       changes: '',
       period: 'since yesterday',
       helpText: 'The total number of SOL staked to validators and activated.',

@@ -39,7 +39,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
 
   const {
     nodePubkey,
-    commission,
+    calcCommission,
     identity = {},
     stakedSol,
     stakedSolPercent,
@@ -116,7 +116,7 @@ const ValidatorsDetail = ({match}: {match: Match}) => {
     {
       label: 'commission',
       hint: '',
-      value: `${commission} (${(100 * (commission / 0xff)).toFixed(3)}%)`,
+      value: `${calcCommission}%`,
     },
   ];
 

@@ -709,13 +709,13 @@ async function getClusterInfo() {
       _.find(voteAccounts.current, x => x.nodePubkey === nodePubkey) ||
       _.find(voteAccounts.delinquent, x => x.nodePubkey === nodePubkey);
     node.activatedStake = node.voteStatus && node.voteStatus.activatedStake;
-    node.commission = node.voteStatus && node.voteStatus.commission;
+    node.commission = (node.voteStatus && node.voteStatus.commission) || 0.0;
 
     node.stakedSol = lamportsToSol(node.activatedStake).toFixed(8);
     node.stakedSolPercent = (100 * (node.activatedStake / totalStaked)).toFixed(
       3,
     );
-    node.calcCommission = (100 * (node.commission / 0xff)).toFixed(3);
+    node.calcCommission = node.commission.toFixed(3);
   }
 
   for (const node of Object.keys(network).sort()) {
