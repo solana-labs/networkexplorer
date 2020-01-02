@@ -43,7 +43,15 @@ const Avatar = ({
     backgroundPosition: `${x}px ${y}px`,
   };
 
-  return <BaseAvatar src={avatarUrl} style={avatarStyle} />;
+  return (
+    <BaseAvatar src={avatarUrl} style={avatarStyle}>
+      {
+        // explicit 'empty child' node to disable Avatar fallback
+        // see : https://github.com/mui-org/material-ui/pull/18711
+        ' '
+      }
+    </BaseAvatar>
+  );
 };
 
 export default observer(Avatar);
