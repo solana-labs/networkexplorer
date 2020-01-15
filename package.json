@@ -51,7 +51,7 @@
   "devDependencies": {
     "@babel/register": "^7.8.3",
     "@commitlint/config-conventional": "^8.3.4",
-    "@commitlint/travis-cli": "^8.3.4",
+    "@commitlint/travis-cli": "^8.3.5",
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
     "axios": "^0.19.1",
