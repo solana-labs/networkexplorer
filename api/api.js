@@ -576,7 +576,7 @@ async function getClusterInfo() {
   let ts = new Date().toISOString();
 
   let {
-    feeCalculator,
+    recentBlockhashAndfeeCalculator,
     inflation,
     currentSlot,
     epochInfo,
@@ -602,14 +602,17 @@ async function getClusterInfo() {
     })
     .with(
       'allVoteAccounts',
-      connection.getProgramAccounts(solanaWeb3.VOTE_ACCOUNT_KEY),
+      connection.getProgramAccounts(solanaWeb3.VOTE_PROGRAM_ID),
       [],
     )
     .with('uptimeJson', getAsync('!uptime'))
     .get();
 
-  feeCalculator =
-    feeCalculator && feeCalculator.length > 1 ? feeCalculator[1] : null;
+  let feeCalculator =
+    recentBlockhashAndfeeCalculator &&
+    recentBlockhashAndfeeCalculator.feeCalculator
+      ? recentBlockhashAndfeeCalculator.feeCalculator
+      : null;
 
   let networkInflationRate = getNetworkInflationRate(inflation, currentSlot);
 
@@ -665,7 +668,7 @@ async function getClusterInfo() {
     });
   }
 
-  for (let [votePubkey, voteAccountInfo] of allVoteAccounts) {
+  for (let {pubkey: votePubkey, account: voteAccountInfo} of allVoteAccounts) {
     voteAccountInfo.owner =
       voteAccountInfo.owner && voteAccountInfo.owner.toString();
 
