@@ -47,11 +47,7 @@ const Search = () => {
     const theQuery = toLower(value);
 
     const propertyMatch = propKey => {
-      const findProp = compose(
-        contains(theQuery),
-        toLower,
-        get(propKey),
-      );
+      const findProp = compose(contains(theQuery), toLower, get(propKey));
       return v => (findProp(v) ? {...v, findText: get(propKey)(v)} : null);
     };
 
