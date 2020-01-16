@@ -12,10 +12,7 @@ export function lamportsToSol(lamports) {
 
 export function calculateUptimeValues(epochInfo, epochSchedule, uptimeValues) {
   const {epoch} = epochInfo;
-  const {
-    first_normal_epoch: firstNormalEpoch,
-    slots_per_epoch: slotsPerEpoch,
-  } = epochSchedule;
+  const {firstNormalEpoch, slotsPerEpoch} = epochSchedule;
 
   const lastEpoch = epoch - 1;
   const firstEpoch = Math.max(firstNormalEpoch, TDS_MAGIC_EPOCH);

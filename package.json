@@ -14,7 +14,7 @@
   "dependencies": {
     "@nivo/bar": "^0.61.1",
     "@nivo/line": "^0.61.1",
-    "@solana/web3.js": "^0.27.7",
+    "@solana/web3.js": "^0.29.4",
     "babel-plugin-transform-runtime": "^6.23.0",
     "base-58": "^0.0.1",
     "classnames": "^2.2.6",
@@ -78,8 +78,8 @@
     "lint-staged": "^10.0.1",
     "moment": "^2.24.0",
     "prettier": "^1.19.1",
-    "query-string": "^6.10.1",
     "qrcode.react": "^1.0.0",
+    "query-string": "^6.10.1",
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
     "react-chartjs-2": "^2.8.0",
