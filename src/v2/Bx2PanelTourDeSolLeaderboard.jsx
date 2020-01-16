@@ -87,14 +87,17 @@ class Bx2PanelTourDeSolLeaderboard extends Component {
           <code>Current Block: {currentBlock}</code>
           <br />
           <ul>
-            {_.map(_.filter(stages, x => !x.is_prologue), x => (
-              <li key={x.title}>
-                <Button>
-                  {x.title} : block {x.start_height} to {x.end_height} =>{' '}
-                  {getIndicator(x)}
-                </Button>
-              </li>
-            ))}
+            {_.map(
+              _.filter(stages, x => !x.is_prologue),
+              x => (
+                <li key={x.title}>
+                  <Button>
+                    {x.title} : block {x.start_height} to {x.end_height} =>{' '}
+                    {getIndicator(x)}
+                  </Button>
+                </li>
+              ),
+            )}
           </ul>
         </div>
         <p />

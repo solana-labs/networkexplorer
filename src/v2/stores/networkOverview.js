@@ -83,10 +83,7 @@ class OverviewStore {
 
   getStats = flow(function* getStats() {
     const res = yield API.getStats();
-    const tpsCountField = compose(
-      find(includes('txnPerSec:')),
-      keys,
-    )(res.data);
+    const tpsCountField = compose(find(includes('txnPerSec:')), keys)(res.data);
     this.globalStats = {
       ...res.data,
       tpsCount: res.data[tpsCountField],
