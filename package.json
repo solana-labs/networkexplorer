@@ -54,7 +54,7 @@
     "@commitlint/travis-cli": "^8.3.5",
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
-    "axios": "^0.19.1",
+    "axios": "^0.19.2",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.3",
     "babel-plugin-date-fns": "^2.0.0",
