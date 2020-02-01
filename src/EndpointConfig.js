@@ -9,24 +9,18 @@ const endpointUrlMap = {
       ? `http://${window.location.hostname}:8443`
       : `http://${window.location.hostname}:8899`,
 
-  'testnet-edge': 'https://edge.testnet.solana.com:8443',
-  'testnet-beta': 'https://beta.testnet.solana.com:8443',
   testnet: 'https://testnet.solana.com:8443',
   tds: 'https://tds.solana.com:8443',
 };
 
 const endpointHostnameMap = {
-  'edge.testnet.solana.com': 'testnet-edge',
-  'beta.testnet.solana.com': 'testnet-beta',
   'testnet.solana.com': 'testnet',
   'tds.solana.com': 'tds',
   'explorer.solana.com': 'testnet', // Default endpoint for explorer.solana.com
-  'edge.explorer.solana.com': 'testnet-edge', // Default endpoint for edge.explorer.solana.com
+  'edge.explorer.solana.com': 'testnet', // Default endpoint for edge.explorer.solana.com
 };
 
 const endpointFriendlyNameMap = {
-  'testnet-edge': 'Edge Development Testnet',
-  'testnet-beta': 'Beta Development Testnet',
   testnet: 'Public Testnet',
   tds: 'Tour de SOL',
   local: 'Local Cluster',
