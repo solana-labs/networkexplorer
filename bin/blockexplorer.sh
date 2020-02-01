@@ -8,6 +8,11 @@ ui)
   runApi=0
   runProxy=0
   ;;
+apiNoProxy)
+  runUi=0
+  runApi=1
+  runProxy=0
+  ;;
 api)
   runUi=0
   runApi=1
