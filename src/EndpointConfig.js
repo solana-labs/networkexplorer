@@ -9,19 +9,21 @@ const endpointUrlMap = {
       ? `http://${window.location.hostname}:8443`
       : `http://${window.location.hostname}:8899`,
 
-  testnet: 'https://testnet.solana.com:8443',
+  devnet: 'https://devnet.solana.com:8443',
   tds: 'https://tds.solana.com:8443',
 };
 
 const endpointHostnameMap = {
-  'testnet.solana.com': 'testnet',
+  'devnet.solana.com': 'devnet',
+  'api.cluster.solana.com': 'cluster',
   'tds.solana.com': 'tds',
-  'explorer.solana.com': 'testnet', // Default endpoint for explorer.solana.com
-  'edge.explorer.solana.com': 'testnet', // Default endpoint for edge.explorer.solana.com
+  'explorer.solana.com': 'devnet', // Default endpoint for explorer.solana.com
+  'edge.explorer.solana.com': 'devnet', // Default endpoint for edge.explorer.solana.com
 };
 
 const endpointFriendlyNameMap = {
-  testnet: 'Public Testnet',
+  devnet: 'Developer Testnet',
+  cluster: 'Soft Launch',
   tds: 'Tour de SOL',
   local: 'Local Cluster',
 };
@@ -34,8 +36,7 @@ function getDefaultEndpointName() {
     return endpointName;
   }
 
-  // Default to the edge testnet when in dev mode.
-  return 'testnet-edge';
+  return 'devnet';
 }
 
 let endpointName = getDefaultEndpointName();
