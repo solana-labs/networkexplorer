@@ -57,7 +57,7 @@ const Header = () => {
             <div>Every 5 sec</div>
           </div>
           <div className={classes.endpointSelector}>
-            <div className={classes.selectTitle}>Network:</div>
+            <div className={classes.selectTitle}>Cluster:</div>
             <EndpointSelector />
           </div>
           <IconButton

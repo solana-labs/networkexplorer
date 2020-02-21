@@ -164,7 +164,7 @@ const NavBar = ({
         <List component="div" classes={{root: classes.listRoot}}>
           {map(renderLink)(routes)}
           <div className={classes.endpointSelector}>
-            <div className={classes.endpointSelectorTitle}>Network:</div>
+            <div className={classes.endpointSelectorTitle}>Cluster:</div>
             <EndpointSelector />
           </div>
         </List>

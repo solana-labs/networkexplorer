@@ -40,7 +40,7 @@ const NetworkOverview = () => {
       <SectionHeader
         title={
           <div>
-            Network Overview <div className={classes.betaLabel}>Beta</div>
+            Cluster Overview
           </div>
         }
       />
