@@ -24,8 +24,8 @@ const endpointHostnameMap = {
 
 const endpointFriendlyNameMap = {
   devnet: 'Developer Testnet',
-  slp: 'Soft Launch',
-  tds: 'Tour de SOL',
+  slp: 'Soft Launch Testnet',
+  tds: 'Tour de SOL Testnet',
   local: 'Local Cluster',
 };
 
