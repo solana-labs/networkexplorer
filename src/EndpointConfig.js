@@ -10,14 +10,14 @@ const endpointUrlMap = {
       : `http://${window.location.hostname}:8899`,
 
   devnet: 'https://devnet.solana.com:8443',
-  tds: 'https://tds.solana.com:8443',
+  tourdesol: 'https://tds.solana.com:8443',
   slp: 'https://api.mainnet-beta.solana.com',
 };
 
 const endpointHostnameMap = {
   'devnet.solana.com': 'devnet',
   'api.mainnet-beta.solana.com': 'slp',
-  'tds.solana.com': 'tds',
+  'tds.solana.com': 'tourdesol',
   'explorer.solana.com': 'devnet', // Default endpoint for explorer.solana.com
   'edge.explorer.solana.com': 'devnet', // Default endpoint for edge.explorer.solana.com
 };
@@ -25,7 +25,7 @@ const endpointHostnameMap = {
 const endpointFriendlyNameMap = {
   devnet: 'Developer Testnet',
   slp: 'Soft Launch Testnet',
-  tds: 'Tour de SOL Testnet',
+  tourdesol: 'Tour de SOL Testnet',
   local: 'Local Cluster',
 };
 
