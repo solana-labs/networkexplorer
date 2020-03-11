@@ -27,4 +27,4 @@ deploy:
       - npx semantic-release
     on:
       branch: master
-      node_js: "node"
+      node_js: "v13.9.0"
