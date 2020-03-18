@@ -79,7 +79,7 @@
     "moment": "^2.24.0",
     "prettier": "^1.19.1",
     "qrcode.react": "^1.0.0",
-    "query-string": "^6.10.1",
+    "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-app-rewired": "^2.1.5",
     "react-chartjs-2": "^2.9.0",
