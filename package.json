@@ -30,7 +30,7 @@
     "ip-geolocation-api-javascript-sdk": "^1.0.7",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
-    "material-table": "^1.56.1",
+    "material-table": "^1.57.2",
     "mixpanel-browser": "^2.35.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
