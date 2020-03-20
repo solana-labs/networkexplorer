@@ -1864,17 +1864,18 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-2.1.0.tgz#6ad4ca610f696098e92954ab431ff83bea0ce13f"
   integrity sha512-lXKXfypKo644k4Da4yXkPCrwcvn6SlUW2X2zFbuflKHNjf0w9htru01bo26uMhleMXsDmnZ12eJLdrAZa9MANg==
 
-"@solana/web3.js@^0.29.11":
-  version "0.29.11"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.29.11.tgz#be53ef59b59b92b0a34da001ce222ce928dfd5f0"
-  integrity sha512-ap4YkJoKepeD428raFEHiuspPJ84x2562CxJ7CkxMnAVg2/ObGlK7UOzlbBjZHsn8rpsSbn/s1kbAVRkrLUTJA==
+"@solana/web3.js@^0.35.1":
+  version "0.35.1"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.35.1.tgz#1869b3c8278ce19a3f5d3721eb045035824e7878"
+  integrity sha512-+erMcZdONCE1RkdONOQ6AAEahs6qTZtnMUnVYWE5+e8dyIYyCH38hYJSP9m2ErTH2QbtnakhjHw32x/TnJ+5Qg==
   dependencies:
     "@babel/runtime" "^7.3.1"
     bn.js "^5.0.0"
     bs58 "^4.0.1"
+    buffer "^5.4.3"
     buffer-layout "^1.2.0"
+    crypto-hash "^1.2.2"
     esdoc-inject-style-plugin "^1.0.0"
-    hasha "^5.1.0"
     jayson "^3.0.1"
     mz "^2.7.0"
     node-fetch "^2.2.0"
@@ -4027,6 +4028,14 @@ buffer@^4.3.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
+buffer@^5.4.3:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.5.0.tgz#9c3caa3d623c33dd1c7ef584b89b88bf9c9bc1ce"
+  integrity sha512-9FTEDjLjwoAkEwyMGDjYJQN2gfRgOKBKRfiglhvibGbpeeU/pQn1bJxQqm32OD/AIeEuHxU9roxXxg34Byp/Ww==
+  dependencies:
+    base64-js "^1.0.2"
+    ieee754 "^1.1.4"
+
 buffers@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/buffers/-/buffers-0.1.1.tgz#b24579c3bed4d6d396aeee6d9a8ae7f5482ab7bb"
@@ -5128,6 +5137,11 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-hash@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/crypto-hash/-/crypto-hash-1.2.2.tgz#7ccdbae8a89907d3774f9c7769798b9d3af2cc4d"
+  integrity sha512-rXXMXepuKg9gIfqE7I1jtVa6saLhzIkDQ2u3kTGUWYiUGsHcUa3LTsfrjPEdOY8kxKlryQtsOmJOU0F23yRJTg==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -7831,14 +7845,6 @@ hash.js@^1.0.0, hash.js@^1.0.3:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
-
-hasha@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/hasha/-/hasha-5.1.0.tgz#dd05ccdfcfe7dab626247ce2a58efe461922f4ca"
-  integrity sha512-OFPDWmzPN1l7atOV1TgBVmNtBxaIysToK6Ve9DK+vT6pYuklw/nPNT+HJbZi0KDcI6vWB+9tgvZ5YD7fA3CXcA==
-  dependencies:
-    is-stream "^2.0.0"
-    type-fest "^0.8.0"
 
 he@1.2.x:
   version "1.2.0"
@@ -15781,7 +15787,7 @@ type-fest@^0.6.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.6.0.tgz#8d2a2370d3df886eb5c90ada1c5bf6188acf838b"
   integrity sha512-q+MB8nYR1KDLrgr4G5yemftpMC7/QLqVndBmEEdqzmNj5dcFOO4Oo8qlwZE3ULT3+Zim1F8Kq4cBnikNhlCMlg==
 
-type-fest@^0.8.0, type-fest@^0.8.1:
+type-fest@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
