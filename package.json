@@ -87,7 +87,7 @@
     "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.19",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.0",
     "robust-websocket": "^1.0.0",
     "semantic-release": "^17.0.4",
     "watch": "^1.0.2",
