@@ -83,7 +83,7 @@
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.5",
     "react-chartjs-2": "^2.9.0",
-    "react-debounce-render": "^5.0.0",
+    "react-debounce-render": "^6.0.0",
     "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.19",
     "react-router-dom": "^5.1.2",
